@@ -9,7 +9,7 @@ export const Route = createFileRoute("/about")({
   head: () => ({
     meta: [
       { title: "About — Dibya Ranjan Mishra" },
-      { name: "description", content: "Executive profile of Dibya Ranjan Mishra — Technology & Engineering Leader with 19+ years across AI, Cloud, SaaS, and Enterprise Architecture." },
+      { name: "description", content: "Executive profile of Dibya Ranjan Mishra — Technology & Engineering Leader with 21+ years across AI, Cloud, SaaS, and Enterprise Architecture." },
       { property: "og:title", content: "About — Dibya Ranjan Mishra" },
       { property: "og:description", content: "Technology & Engineering Leader with 21+ years across AI, Cloud, SaaS, and Enterprise Architecture." },
       { property: "og:url", content: "/about" },
