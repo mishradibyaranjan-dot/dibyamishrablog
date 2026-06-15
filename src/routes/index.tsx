@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Section, SectionHeader } from "@/components/layout/Section";
 import { Badge } from "@/components/ui/badge";
 import { posts, projects } from "@/lib/content";
+import heroBanner from "@/assets/hero-banner.svg.asset.json";
 
 export const Route = createFileRoute("/")({
   head: () => ({
