@@ -2,15 +2,16 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { Section, SectionHeader } from "@/components/layout/Section";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Award, Briefcase, GraduationCap, Globe } from "lucide-react";
+import { Award, Briefcase, Download, GraduationCap, Globe } from "lucide-react";
+import resumeAsset from "@/assets/resume.pdf.asset.json";
 
 export const Route = createFileRoute("/about")({
   head: () => ({
     meta: [
       { title: "About — Dibya Ranjan Mishra" },
-      { name: "description", content: "Executive profile of Dibya Ranjan Mishra — Technology & Engineering Leader with 19+ years across AI, Cloud, SaaS, and Enterprise Architecture." },
+      { name: "description", content: "Executive profile of Dibya Ranjan Mishra — Technology & Engineering Leader with 21+ years across AI, Cloud, SaaS, and Enterprise Architecture." },
       { property: "og:title", content: "About — Dibya Ranjan Mishra" },
-      { property: "og:description", content: "Technology & Engineering Leader with 19+ years across AI, Cloud, SaaS, and Enterprise Architecture." },
+      { property: "og:description", content: "Technology & Engineering Leader with 21+ years across AI, Cloud, SaaS, and Enterprise Architecture." },
       { property: "og:url", content: "/about" },
     ],
     links: [{ rel: "canonical", href: "/about" }],
@@ -44,7 +45,7 @@ function About() {
               Technology leader building <span className="text-gradient">AI-native enterprises</span>
             </h1>
             <p className="mt-5 text-lg text-muted-foreground">
-              Dibya Ranjan Mishra is a Technology & Engineering Leader with 19+ years of experience
+              Dibya Ranjan Mishra is a Technology & Engineering Leader with 21+ years of experience
               architecting, scaling, and leading mission-critical platforms across Shipping, BFSI,
               Insurance, and Enterprise SaaS.
             </p>
@@ -60,6 +61,11 @@ function About() {
               </Button>
               <Button asChild variant="outline">
                 <Link to="/contact">Get in touch</Link>
+              </Button>
+              <Button asChild variant="outline">
+                <a href={resumeAsset.url} download>
+                  <Download className="mr-1.5 h-4 w-4" /> Download Resume
+                </a>
               </Button>
             </div>
           </div>
@@ -114,6 +120,22 @@ function About() {
             </li>
           ))}
         </ol>
+      </Section>
+
+      <Section className="border-t border-border">
+        <div className="flex flex-col items-center justify-between gap-6 rounded-3xl border border-border bg-card p-8 sm:flex-row sm:p-10">
+          <div>
+            <h3 className="text-2xl font-bold tracking-tight">Download my resume</h3>
+            <p className="mt-2 text-muted-foreground">
+              A concise overview of experience, skills, and key achievements.
+            </p>
+          </div>
+          <Button asChild className="bg-brand-gradient text-white">
+            <a href={resumeAsset.url} download>
+              <Download className="mr-2 h-4 w-4" /> Download Resume (PDF)
+            </a>
+          </Button>
+        </div>
       </Section>
     </>
   );

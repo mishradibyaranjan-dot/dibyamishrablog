@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
-import { Mail, Github, ExternalLink, Linkedin, Send, CheckCircle2 } from "lucide-react";
+import { Mail, Github, ExternalLink, Linkedin, Send, CheckCircle2, Download } from "lucide-react";
+import resumeAsset from "@/assets/resume.pdf.asset.json";
 import { Section, SectionHeader } from "@/components/layout/Section";
 import { Button } from "@/components/ui/button";
 
@@ -73,6 +74,19 @@ function Contact() {
           </div>
 
           <div className="space-y-4">
+            <a
+              href={resumeAsset.url}
+              download
+              className="flex items-start gap-4 rounded-2xl border border-border bg-card p-5 transition-all hover:-translate-y-0.5 hover:shadow-glow"
+            >
+              <div className="grid h-10 w-10 shrink-0 place-items-center rounded-lg bg-brand-gradient text-white">
+                <Download className="h-5 w-5" />
+              </div>
+              <div className="min-w-0">
+                <div className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Resume</div>
+                <div className="truncate text-sm font-medium">Download CV (PDF)</div>
+              </div>
+            </a>
             <a
               href="mailto:hello@example.com"
               className="flex items-start gap-4 rounded-2xl border border-border bg-card p-5 transition-all hover:-translate-y-0.5 hover:shadow-glow"
