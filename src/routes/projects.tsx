@@ -99,6 +99,9 @@ function Projects() {
               </div>
             );
           })}
+          {filtered.length === 0 && (
+            <p className="text-muted-foreground">No projects in this category yet.</p>
+          )}
         </div>
       </Section>
     </>
