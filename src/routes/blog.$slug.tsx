@@ -4,6 +4,7 @@ import { Section } from "@/components/layout/Section";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { posts } from "@/lib/content";
+import { postOgImages, pageOgImages, SITE_ORIGIN } from "@/lib/og-images";
 
 export const Route = createFileRoute("/blog/$slug")({
   loader: ({ params }) => {
@@ -15,6 +16,8 @@ export const Route = createFileRoute("/blog/$slug")({
     const post = loaderData?.post;
     const title = post ? `${post.title} — Dibya Ranjan Mishra` : "Article";
     const desc = post?.summary ?? "Article";
+    const url = `${SITE_ORIGIN}/blog/${params.slug}`;
+    const image = postOgImages[params.slug] ?? pageOgImages.blog;
     return {
       meta: [
         { title },
@@ -22,9 +25,16 @@ export const Route = createFileRoute("/blog/$slug")({
         { property: "og:title", content: title },
         { property: "og:description", content: desc },
         { property: "og:type", content: "article" },
-        { property: "og:url", content: `/blog/${params.slug}` },
+        { property: "og:url", content: url },
+        { property: "og:image", content: image },
+        { property: "og:image:width", content: "1200" },
+        { property: "og:image:height", content: "630" },
+        { name: "twitter:card", content: "summary_large_image" },
+        { name: "twitter:title", content: title },
+        { name: "twitter:description", content: desc },
+        { name: "twitter:image", content: image },
       ],
-      links: [{ rel: "canonical", href: `/blog/${params.slug}` }],
+      links: [{ rel: "canonical", href: url }],
     };
   },
   notFoundComponent: () => (

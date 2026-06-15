@@ -4,18 +4,30 @@ import { Section, SectionHeader } from "@/components/layout/Section";
 import { Badge } from "@/components/ui/badge";
 import { posts, categories } from "@/lib/content";
 import { cn } from "@/lib/utils";
+import { pageOgImages, SITE_ORIGIN } from "@/lib/og-images";
 
 export const Route = createFileRoute("/research")({
-  head: () => ({
-    meta: [
-      { title: "Research — Dibya Ranjan Mishra" },
-      { name: "description", content: "Research articles on Generative AI, Agentic AI, Cloud Architecture, SaaS, Data Science, and Engineering Leadership." },
-      { property: "og:title", content: "Research — Dibya Ranjan Mishra" },
-      { property: "og:description", content: "Research articles on AI, Cloud, SaaS, and Engineering Leadership." },
-      { property: "og:url", content: "/research" },
-    ],
-    links: [{ rel: "canonical", href: "/research" }],
-  }),
+  head: () => {
+    const url = `${SITE_ORIGIN}/research`;
+    const desc = "Research articles on AI, Cloud, SaaS, and Engineering Leadership.";
+    return {
+      meta: [
+        { title: "Research — Dibya Ranjan Mishra" },
+        { name: "description", content: "Research articles on Generative AI, Agentic AI, Cloud Architecture, SaaS, Data Science, and Engineering Leadership." },
+        { property: "og:title", content: "Research — Dibya Ranjan Mishra" },
+        { property: "og:description", content: desc },
+        { property: "og:url", content: url },
+        { property: "og:image", content: pageOgImages.research },
+        { property: "og:image:width", content: "1200" },
+        { property: "og:image:height", content: "630" },
+        { name: "twitter:card", content: "summary_large_image" },
+        { name: "twitter:title", content: "Research — Dibya Ranjan Mishra" },
+        { name: "twitter:description", content: desc },
+        { name: "twitter:image", content: pageOgImages.research },
+      ],
+      links: [{ rel: "canonical", href: url }],
+    };
+  },
   component: Research,
 });
 
