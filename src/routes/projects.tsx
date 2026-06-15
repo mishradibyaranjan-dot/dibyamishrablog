@@ -1,9 +1,11 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { useState } from "react";
 import { ArrowRight } from "lucide-react";
 import { Section, SectionHeader } from "@/components/layout/Section";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { projects, caseStudies } from "@/lib/content";
+import { projects, caseStudies, categories } from "@/lib/content";
+import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/projects")({
   head: () => ({
