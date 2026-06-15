@@ -92,6 +92,18 @@ function About() {
             </div>
           </div>
           <div className="grid gap-4">
+            <div className="overflow-hidden rounded-3xl border border-border bg-card shadow-lg">
+              <img
+                src={photoAsset.url}
+                alt="Dibya Ranjan Mishra — Technology & Engineering Leader"
+                className="aspect-square w-full object-cover"
+                loading="eager"
+              />
+              <div className="border-t border-border p-5">
+                <div className="font-display text-lg font-semibold">Dibya Ranjan Mishra</div>
+                <div className="text-sm text-muted-foreground">Head of Engineering · AI & Cloud Leader</div>
+              </div>
+            </div>
             {[
               { icon: Briefcase, k: "Industries", v: "Shipping · BFSI · Insurance · Enterprise SaaS" },
               { icon: Globe, k: "Reach", v: "Global engineering teams across 4 continents" },
