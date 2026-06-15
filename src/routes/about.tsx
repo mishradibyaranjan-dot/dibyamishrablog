@@ -11,7 +11,7 @@ export const Route = createFileRoute("/about")({
       { title: "About — Dibya Ranjan Mishra" },
       { name: "description", content: "Executive profile of Dibya Ranjan Mishra — Technology & Engineering Leader with 19+ years across AI, Cloud, SaaS, and Enterprise Architecture." },
       { property: "og:title", content: "About — Dibya Ranjan Mishra" },
-      { property: "og:description", content: "Technology & Engineering Leader with 19+ years across AI, Cloud, SaaS, and Enterprise Architecture." },
+      { property: "og:description", content: "Technology & Engineering Leader with 21+ years across AI, Cloud, SaaS, and Enterprise Architecture." },
       { property: "og:url", content: "/about" },
     ],
     links: [{ rel: "canonical", href: "/about" }],
@@ -45,7 +45,7 @@ function About() {
               Technology leader building <span className="text-gradient">AI-native enterprises</span>
             </h1>
             <p className="mt-5 text-lg text-muted-foreground">
-              Dibya Ranjan Mishra is a Technology & Engineering Leader with 19+ years of experience
+              Dibya Ranjan Mishra is a Technology & Engineering Leader with 21+ years of experience
               architecting, scaling, and leading mission-critical platforms across Shipping, BFSI,
               Insurance, and Enterprise SaaS.
             </p>
