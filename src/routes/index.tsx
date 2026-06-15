@@ -35,9 +35,9 @@ const expertise = [
 
 const highlights = [
   { k: "21+", v: "Years in technology leadership" },
-  { k: "500+", v: "Engineers led across geographies" },
-  { k: "40+", v: "Enterprise platforms shipped" },
-  { k: "$40M+", v: "Business impact delivered" },
+  { k: "450+", v: "Engineers led across 5 time zones" },
+  { k: "$28M+", v: "Combined budgets managed" },
+  { k: "$1M → $20M", v: "Revenue growth in 24 months" },
 ];
 
 function Home() {
@@ -203,10 +203,12 @@ function Home() {
         <SectionHeader eyebrow="Professional Highlights" title="Career at a glance" align="center" />
         <div className="mx-auto max-w-3xl space-y-5">
           {[
-            { year: "2022 — Present", text: "Leading AI, Cloud, and Platform initiatives for enterprise SaaS — Agentic AI, RAG, multi-tenant architectures." },
-            { year: "2018 — 2022", text: "Director of Engineering — global teams of 150+, cloud modernization, DevSecOps transformation." },
-            { year: "2012 — 2018", text: "Architecture & engineering leadership across BFSI, Insurance, and Shipping platforms." },
-            { year: "2006 — 2012", text: "Hands-on engineering across .NET, Java, distributed systems, and early cloud adoption." },
+            { year: "2022 — 2026 · Inchcape Shipping Services", text: "Head of Engineering & Global Application Support — led 40 engineers across 5 time zones delivering cloud-native vessel management; AI transformation cut incidents 76% and training effort 60%." },
+            { year: "2019 — 2022 · Centific India", text: "Director of Delivery — 450-person org, $8M budget; grew account revenue $1M → $20M in 24 months; Microsoft Office 365 & Data Platform programs for 10,000+ users." },
+            { year: "2017 — 2019 · Deloitte Support Services", text: "Delivery Manager — built unified web/mobile platform for Deloitte University (Texas), automating event lifecycle for 2,000+ annual guests with zero critical outages." },
+            { year: "2011 — 2017 · Capgemini", text: "Senior Consultant, BFSI SME — architected Biller Advantage platform compressing merchant onboarding from 3 months to 4 hours; Selective Insurance CLAS payment engines." },
+            { year: "2009 — 2011 · CGI", text: "Senior Software Engineer, Telecom SME — built Payment Engine for Bell Canada serving millions of subscribers with <4-hour P1 SLA." },
+            { year: "2006 — 2008 · Accenture India", text: "Software Engineer — Java & Python web applications for Aflac, AAA, and Auto Club across 3 concurrent client programs." },
           ].map((m) => (
             <div key={m.year} className="rounded-2xl border border-border bg-card p-5">
               <div className="text-xs font-semibold uppercase tracking-wider text-gradient">{m.year}</div>

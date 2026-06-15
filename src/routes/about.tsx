@@ -20,19 +20,35 @@ export const Route = createFileRoute("/about")({
 });
 
 const timeline = [
-  { year: "2022 — Present", role: "VP / Director — AI, Cloud & Platform Engineering", text: "Leading enterprise AI, Agentic AI, GenAI, and SaaS platform initiatives. Driving cloud modernization and platform engineering programs across global teams." },
-  { year: "2018 — 2022", role: "Director of Engineering", text: "Owned engineering for multi-tenant SaaS products. Led 150+ engineers across geographies; established DevSecOps and platform engineering practices." },
-  { year: "2014 — 2018", role: "Principal Architect / Engineering Manager", text: "Architected enterprise platforms across BFSI, Insurance, and Shipping. Spearheaded migrations to microservices and cloud-native architectures." },
-  { year: "2010 — 2014", role: "Senior Engineering Lead", text: "Led delivery of large enterprise applications across .NET, Java, and distributed systems. Established CI/CD and engineering excellence practices." },
-  { year: "2006 — 2010", role: "Software Engineer", text: "Hands-on engineering across application platforms, services, and early cloud adoption." },
+  { year: "Nov 2022 — Jun 2026", role: "Head of Engineering & Global Application Support — Inchcape Shipping Services, Hyderabad", text: "Led 2 cross-functional teams of 40 engineers across 5 time zones owning a cloud-native vessel management platform (onboarding, customs, prefunding, agent payments) with 5+ SaaS integrations (Unit4, Eye-share). Executed multi-year roadmap cutting time-to-market 35%; AI transformation reduced recurring incidents 76% (3,800 → 900) and manual training effort 60%; biweekly releases with <2% rollback." },
+  { year: "Dec 2019 — Jun 2022", role: "Director of Delivery — Centific India Pvt Ltd, Hyderabad", text: "Directed 450-person delivery org (15 Managers, 70 Tech Leads, 130 Senior Associates, 235 Junior Associates); $8M combined CAPEX+OPEX. Delivered Microsoft Office 365 / Office IP, Data Platform & BI programs for 10,000+ Microsoft employees. Grew account revenue $1M → $20M in 24 months. 200% delivery throughput, 300% performance uplift via Azure migration; ~$2M vendor savings at 99.5% SLA." },
+  { year: "Jul 2017 — Dec 2019", role: "Delivery Manager — Deloitte Support Services, Hyderabad", text: "Architected unified web + mobile platform for Deloitte University (Texas) replacing 5 third-party tools and automating 100% of event lifecycle for 2,000+ annual guests. Integrated AI automation and SaaS payments — eliminated ~15 hrs/week of manual entry, reduced booking errors 90%. 10+ weekly production deployments with zero critical outages for 2.5 years." },
+  { year: "Mar 2011 — Apr 2017", role: "Senior Consultant — BFSI Domain SME — Capgemini, Hyderabad", text: "SME for Banking & Payments across 6 engagements (Global Payments, Bank of America, Selective Insurance) covering 20+ US states. Architected Biller Advantage multi-portal payment platform — merchant onboarding cut from 3 months to 4 hours (98%). Delivered Boarding & Servicing platform at 99.9% uptime and core Payment Engines for Selective Insurance CLAS." },
+  { year: "Jan 2009 — Dec 2011", role: "Senior Software Engineer — Telecom SME — CGI, Bangalore", text: "SME for Telecom domain. Designed and developed the Payment Engine for Bell Canada serving millions of subscribers. Led production support with <4-hour P1 resolution SLA across full defect lifecycle." },
+  { year: "Jun 2006 — Dec 2008", role: "Software Engineer — Accenture India, Bangalore", text: "Built web applications for Aflac, AAA, and Auto Club. Delivered production support and enhancements across 3 concurrent client programs using Java and Python." },
 ];
 
 const skillGroups = [
-  { title: "AI & Data", items: ["GenAI / LLMs", "Agentic AI", "RAG Systems", "MLOps", "Data Science", "Snowflake / dbt", "Streaming Analytics"] },
-  { title: "Cloud & Platform", items: ["AWS", "Azure", "Kubernetes", "Terraform", "ArgoCD", "Istio", "FinOps"] },
-  { title: "Architecture", items: ["Microservices", "Event-Driven", "Multi-Tenant SaaS", "Cell-Based", "DDD", "Enterprise Architecture"] },
-  { title: "Engineering", items: [".NET", "Python", "Node.js", "React", "Go", "DevSecOps"] },
+  { title: "AI, ML & Agentic AI", items: ["LLM Integration & Prompt Engineering", "Agentic AI System Design", "Model Context Protocol (MCP)", "AI Product Strategy & Roadmap", "MLOps & AI Automation Pipelines", "GenAI Platforms", "Human Action Detection"] },
+  { title: "Cloud & Infrastructure", items: ["AWS", "Azure", "GCP", "Cloud-Native Architecture", "DevSecOps & MLOps Pipelines", "CI/CD & Release Engineering", "Microservices & API Design", "Infrastructure as Code (IaC)", "Docker", "Kubernetes", "GitHub"] },
+  { title: "Technology Stack", items: [".NET Core / C#", "React", "Angular", "TypeScript", "Node.js", "Python", "SQL / NoSQL / Data Platforms", "REST APIs", "BI & Analytics", "Mobile App Development"] },
+  { title: "Leadership & Delivery", items: ["P&L Management", "OKR Cascading", "Talent & Succession Planning", "C-Suite Engagement", "Vendor & Contract Mgmt", "Product Roadmap Ownership", "SAFe 6.0", "Scrum", "ITIL Service Mgmt", "Enterprise Architecture", "Lean Six Sigma", "Presales & Bid Mgmt"] },
 ];
+
+const education = [
+  { school: "Utkal University", degree: "Master of Computer Applications (MCA)", year: "2006" },
+  { school: "Utkal University", degree: "Bachelor of Computer Applications (BCA)", year: "2004" },
+];
+
+const certifications = [
+  "AWS Cloud Practitioner Prep (CLF-C02) — AWS, 2025",
+  "AWS Cloud Computing — AWS, 2024",
+  "Google Cloud Foundations — Google, 2026",
+  "SAFe 6.0 — Scaled Agile Framework Complete Course, 2026",
+  "CSM — Certified Scrum Master, Scrum Alliance, 2017",
+];
+
+const languages = ["English", "Hindi", "Bengali", "Punjabi"];
 
 function About() {
   return (
@@ -45,15 +61,17 @@ function About() {
               Technology leader building <span className="text-gradient">AI-native enterprises</span>
             </h1>
             <p className="mt-5 text-lg text-muted-foreground">
-              Dibya Ranjan Mishra is a Technology & Engineering Leader with 21+ years of experience
-              architecting, scaling, and leading mission-critical platforms across Shipping, BFSI,
-              Insurance, and Enterprise SaaS.
+              Results-driven technology executive with 21+ years of progressive leadership across
+              Shipping, BFSI, Insurance, and Enterprise SaaS. Track record of growing revenue from
+              $1M to $20M in 24 months, managing $28M+ combined budgets, and leading 450+ engineers
+              across 5 time zones.
             </p>
             <p className="mt-4 text-muted-foreground">
-              His work centers on AI/ML, Generative AI, Agentic AI, Cloud-Native Platforms, SaaS
-              Architecture, Data Science, and Enterprise Architecture. He has led global engineering
-              organizations, transformed legacy estates into cloud-native platforms, and stood up
-              AI-first programs that deliver measurable business outcomes.
+              Expert at delivering cloud-native platforms (AWS, Azure, GCP), embedding AI/ML and
+              Agentic AI at scale, and translating business strategy into executable technology
+              roadmaps. Deep technical fluency in .NET Core, React, Node.js, Python, DevSecOps,
+              and MLOps — with proven impact across enterprise architecture, change management,
+              and digital transformation.
             </p>
             <div className="mt-7 flex flex-wrap gap-2">
               <Button asChild className="bg-brand-gradient text-white">
@@ -120,6 +138,48 @@ function About() {
             </li>
           ))}
         </ol>
+      </Section>
+
+      <Section className="border-t border-border">
+        <SectionHeader eyebrow="Education & Certifications" title="Academic background & credentials" />
+        <div className="grid gap-6 lg:grid-cols-2">
+          <div className="rounded-2xl border border-border bg-card p-6">
+            <div className="mb-4 flex items-center gap-2 text-sm font-semibold uppercase tracking-wider text-gradient">
+              <GraduationCap className="h-4 w-4" /> Education
+            </div>
+            <ul className="space-y-4">
+              {education.map((e) => (
+                <li key={e.degree} className="border-l-2 border-border pl-4">
+                  <div className="font-semibold">{e.degree}</div>
+                  <div className="text-sm text-muted-foreground">{e.school} · {e.year}</div>
+                </li>
+              ))}
+            </ul>
+          </div>
+          <div className="rounded-2xl border border-border bg-card p-6">
+            <div className="mb-4 flex items-center gap-2 text-sm font-semibold uppercase tracking-wider text-gradient">
+              <Award className="h-4 w-4" /> Certifications
+            </div>
+            <ul className="space-y-2">
+              {certifications.map((c) => (
+                <li key={c} className="flex items-start gap-2 text-sm">
+                  <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-brand-gradient" />
+                  <span>{c}</span>
+                </li>
+              ))}
+            </ul>
+            <div className="mt-6 border-t border-border pt-4">
+              <div className="mb-2 flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                <Globe className="h-4 w-4" /> Languages
+              </div>
+              <div className="flex flex-wrap gap-1.5">
+                {languages.map((l) => (
+                  <span key={l} className="rounded-full bg-accent px-2.5 py-1 text-xs font-medium">{l}</span>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
       </Section>
 
       <Section className="border-t border-border">
