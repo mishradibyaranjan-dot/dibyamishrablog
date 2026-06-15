@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import type {} from "@tanstack/react-start";
 
-const BASE_URL = "";
+const BASE_URL = "https://dibyamishrablog.lovable.app";
 
 const paths = [
   "/", "/about", "/research", "/blog", "/projects", "/case-studies", "/contact",
