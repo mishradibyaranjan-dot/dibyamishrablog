@@ -156,7 +156,7 @@ function Footer() {
               </a>
             </Button>
             <Button variant="outline" size="icon" asChild>
-              <a href="#" aria-label="LinkedIn">
+              <a href="https://www.linkedin.com/in/dibya-mishra-55b94654" target="_blank" rel="noreferrer" aria-label="LinkedIn">
                 <Linkedin className="h-4 w-4" />
               </a>
             </Button>
