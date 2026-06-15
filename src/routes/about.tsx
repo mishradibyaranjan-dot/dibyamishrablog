@@ -4,11 +4,12 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Award, Briefcase, Download, GraduationCap, Globe } from "lucide-react";
 import resumeAsset from "@/assets/resume.pdf.asset.json";
+import photoAsset from "@/assets/dibya-mishra.png.asset.json";
 
 export const Route = createFileRoute("/about")({
   head: () => ({
     meta: [
-      { title: "About — Dibya Ranjan Mishra" },
+      { title: "About me — Dibya Ranjan Mishra" },
       { name: "description", content: "Executive profile of Dibya Ranjan Mishra — Technology & Engineering Leader with 21+ years across AI, Cloud, SaaS, and Enterprise Architecture." },
       { property: "og:title", content: "About — Dibya Ranjan Mishra" },
       { property: "og:description", content: "Technology & Engineering Leader with 21+ years across AI, Cloud, SaaS, and Enterprise Architecture." },
@@ -56,10 +57,13 @@ function About() {
       <Section className="pb-8 pt-16 lg:pt-24">
         <div className="grid items-start gap-10 lg:grid-cols-[1.4fr_1fr]">
           <div>
-            <Badge variant="secondary" className="mb-4">About</Badge>
+            <Badge variant="secondary" className="mb-4">About me</Badge>
             <h1 className="font-display text-4xl font-bold tracking-tight sm:text-5xl">
-              Technology leader building <span className="text-gradient">AI-native enterprises</span>
+              Dibya Ranjan Mishra
             </h1>
+            <p className="mt-3 text-lg font-medium text-gradient">
+              Technology leader building AI-native enterprises
+            </p>
             <p className="mt-5 text-lg text-muted-foreground">
               Results-driven technology executive with 21+ years of progressive leadership across
               Shipping, BFSI, Insurance, and Enterprise SaaS. Track record of growing revenue from
@@ -88,6 +92,18 @@ function About() {
             </div>
           </div>
           <div className="grid gap-4">
+            <div className="overflow-hidden rounded-3xl border border-border bg-card shadow-lg">
+              <img
+                src={photoAsset.url}
+                alt="Dibya Ranjan Mishra — Technology & Engineering Leader"
+                className="aspect-square w-full object-cover"
+                loading="eager"
+              />
+              <div className="border-t border-border p-5">
+                <div className="font-display text-lg font-semibold">Dibya Ranjan Mishra</div>
+                <div className="text-sm text-muted-foreground">Head of Engineering · AI & Cloud Leader</div>
+              </div>
+            </div>
             {[
               { icon: Briefcase, k: "Industries", v: "Shipping · BFSI · Insurance · Enterprise SaaS" },
               { icon: Globe, k: "Reach", v: "Global engineering teams across 4 continents" },
