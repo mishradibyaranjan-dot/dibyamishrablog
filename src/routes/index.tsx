@@ -48,8 +48,8 @@ function Home() {
   return (
     <>
       {/* HERO */}
-      <section className="relative overflow-hidden bg-hero">
-        <div className="absolute inset-0 grid-pattern opacity-40" />
+      <section className="relative overflow-hidden bg-hero-image">
+        <div className="absolute inset-0 grid-pattern opacity-25" />
         <div className="relative mx-auto max-w-7xl px-4 pb-24 pt-20 sm:px-6 lg:pt-32">
           <div className="mx-auto max-w-4xl text-center">
             <div className="mx-auto mb-6 inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-4 py-1.5 text-xs font-medium text-white/80 backdrop-blur">
@@ -84,10 +84,10 @@ function Home() {
             {highlights.map((h) => (
               <div
                 key={h.v}
-                className="rounded-2xl border border-white/10 bg-white/5 p-5 text-center backdrop-blur"
+                className="card-flashy rounded-2xl border border-white/10 bg-white/5 p-5 text-center backdrop-blur"
               >
-                <div className="text-2xl font-bold text-white sm:text-3xl">{h.k}</div>
-                <div className="mt-1 text-xs text-white/60 sm:text-sm">{h.v}</div>
+                <div className="relative z-[3] text-2xl font-bold text-white sm:text-3xl">{h.k}</div>
+                <div className="relative z-[3] mt-1 text-xs text-white/60 sm:text-sm">{h.v}</div>
               </div>
             ))}
           </div>
@@ -105,13 +105,13 @@ function Home() {
           {expertise.map((e) => (
             <div
               key={e.title}
-              className="group relative overflow-hidden rounded-2xl border border-border bg-card p-6 shadow-card-soft transition-all hover:-translate-y-0.5 hover:shadow-glow"
+              className="card-flashy group rounded-2xl border border-border bg-card p-6 shadow-card-soft"
             >
-              <div className="mb-4 grid h-11 w-11 place-items-center rounded-xl bg-brand-gradient text-white">
+              <div className="relative z-[3] mb-4 grid h-11 w-11 place-items-center rounded-xl bg-brand-gradient text-white">
                 <e.icon className="h-5 w-5" />
               </div>
-              <h3 className="text-lg font-semibold">{e.title}</h3>
-              <p className="mt-1.5 text-sm text-muted-foreground">{e.desc}</p>
+              <h3 className="relative z-[3] text-lg font-semibold">{e.title}</h3>
+              <p className="relative z-[3] mt-1.5 text-sm text-muted-foreground">{e.desc}</p>
             </div>
           ))}
         </div>
@@ -131,12 +131,12 @@ function Home() {
               key={p.slug}
               to="/blog/$slug"
               params={{ slug: p.slug }}
-              className="group flex flex-col overflow-hidden rounded-2xl border border-border bg-card p-6 transition-all hover:-translate-y-0.5 hover:shadow-glow"
+              className="card-flashy group flex flex-col rounded-2xl border border-border bg-card p-6"
             >
-              <Badge variant="secondary" className="w-fit">{p.category}</Badge>
-              <h3 className="mt-4 text-lg font-semibold group-hover:text-gradient">{p.title}</h3>
-              <p className="mt-2 line-clamp-3 text-sm text-muted-foreground">{p.summary}</p>
-              <div className="mt-4 flex items-center justify-between text-xs text-muted-foreground">
+              <Badge variant="secondary" className="relative z-[3] w-fit">{p.category}</Badge>
+              <h3 className="relative z-[3] mt-4 text-lg font-semibold group-hover:text-gradient">{p.title}</h3>
+              <p className="relative z-[3] mt-2 line-clamp-3 text-sm text-muted-foreground">{p.summary}</p>
+              <div className="relative z-[3] mt-4 flex items-center justify-between text-xs text-muted-foreground">
                 <span>{new Date(p.date).toLocaleDateString("en", { month: "short", day: "numeric", year: "numeric" })}</span>
                 <span>{p.readingTime}</span>
               </div>
@@ -179,16 +179,16 @@ function Home() {
         />
         <div className="grid gap-5 md:grid-cols-3">
           {showcase.map((p) => (
-            <div key={p.slug} className="flex flex-col rounded-2xl border border-border bg-card p-6 shadow-card-soft">
-              <Badge variant="secondary" className="w-fit">{p.area}</Badge>
-              <h3 className="mt-3 text-lg font-semibold">{p.name}</h3>
-              <p className="mt-2 text-sm text-muted-foreground">{p.solution}</p>
-              <div className="mt-4 flex flex-wrap gap-1.5">
+            <div key={p.slug} className="card-flashy flex flex-col rounded-2xl border border-border bg-card p-6 shadow-card-soft">
+              <Badge variant="secondary" className="relative z-[3] w-fit">{p.area}</Badge>
+              <h3 className="relative z-[3] mt-3 text-lg font-semibold">{p.name}</h3>
+              <p className="relative z-[3] mt-2 text-sm text-muted-foreground">{p.solution}</p>
+              <div className="relative z-[3] mt-4 flex flex-wrap gap-1.5">
                 {p.metrics.map((m) => (
                   <span key={m} className="rounded-full bg-accent px-2.5 py-1 text-xs font-medium">{m}</span>
                 ))}
               </div>
-              <div className="mt-5">
+              <div className="relative z-[3] mt-5">
                 <Button asChild variant="outline" size="sm">
                   <Link to="/projects">View details</Link>
                 </Button>
@@ -210,9 +210,9 @@ function Home() {
             { year: "2009 — 2011 · CGI", text: "Senior Software Engineer, Telecom SME — built Payment Engine for Bell Canada serving millions of subscribers with <4-hour P1 SLA." },
             { year: "2006 — 2008 · Accenture India", text: "Software Engineer — Java & Python web applications for Aflac, AAA, and Auto Club across 3 concurrent client programs." },
           ].map((m) => (
-            <div key={m.year} className="rounded-2xl border border-border bg-card p-5">
-              <div className="text-xs font-semibold uppercase tracking-wider text-gradient">{m.year}</div>
-              <p className="mt-1 text-sm text-foreground">{m.text}</p>
+            <div key={m.year} className="card-flashy rounded-2xl border border-border bg-card p-5">
+              <div className="relative z-[3] text-xs font-semibold uppercase tracking-wider text-gradient">{m.year}</div>
+              <p className="relative z-[3] mt-1 text-sm text-foreground">{m.text}</p>
             </div>
           ))}
         </div>

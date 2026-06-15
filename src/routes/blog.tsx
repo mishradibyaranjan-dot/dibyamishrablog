@@ -132,7 +132,7 @@ function Blog() {
               key={p.slug}
               to="/blog/$slug"
               params={{ slug: p.slug }}
-              className="group flex flex-col rounded-2xl border border-border bg-card p-6 transition-all hover:-translate-y-0.5 hover:shadow-glow"
+              className="card-flashy group flex flex-col rounded-2xl border border-border bg-card p-6 transition-all hover:-translate-y-0.5 hover:shadow-glow"
             >
               <Badge variant="secondary" className="w-fit">{p.category}</Badge>
               <h3 className="mt-4 text-lg font-semibold group-hover:text-gradient">{p.title}</h3>
