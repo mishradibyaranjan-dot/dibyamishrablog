@@ -1,19 +1,64 @@
-export type Category =
-  | "Generative AI"
-  | "Agentic AI"
-  | "Cloud Architecture"
-  | "SaaS Platforms"
-  | "Data Science"
-  | "Engineering Leadership"
-  | "Digital Transformation"
-  | "Enterprise Architecture"
-  | "Program Delivery";
+// Shared taxonomy — used by Projects (area + filter), Case Studies (tags),
+// and Research (category filter). All values come from the resume's skill
+// groups so filters/tags stay consistent across pages.
+export const categories = [
+  "AI & Agentic AI",
+  "Cloud & DevSecOps",
+  "SaaS Platforms",
+  "Data & Analytics",
+  "BFSI & Payments",
+  "Engineering Leadership",
+] as const;
+
+export type Category = (typeof categories)[number];
+
+// Canonical technology tags pulled from the resume — re-used as `tech` on
+// projects and `stack` on case studies so the same chips appear everywhere.
+export const techTags = {
+  ai: [
+    "LLM Integration",
+    "Prompt Engineering",
+    "Agentic AI",
+    "Model Context Protocol",
+    "MLOps",
+    "GenAI Platforms",
+  ],
+  cloud: [
+    "AWS",
+    "Azure",
+    "GCP",
+    "Kubernetes",
+    "Docker",
+    "Terraform (IaC)",
+    "GitHub Actions",
+    "DevSecOps",
+  ],
+  stack: [
+    ".NET Core / C#",
+    "React",
+    "Angular",
+    "TypeScript",
+    "Node.js",
+    "Python",
+    "SQL / NoSQL",
+    "REST APIs",
+    "Mobile",
+  ],
+  data: ["BI & Analytics", "Snowflake", "dbt", "Kafka", "Power BI"],
+  delivery: [
+    "SAFe 6.0",
+    "Scrum",
+    "ITIL",
+    "Lean Six Sigma",
+    "Enterprise Architecture",
+  ],
+} as const;
 
 export interface Post {
   slug: string;
   title: string;
   summary: string;
-  category: Category | string;
+  category: Category;
   readingTime: string;
   date: string;
   featured?: boolean;
@@ -27,7 +72,7 @@ export const posts: Post[] = [
     title: "How Agentic AI Is Changing Enterprise Automation",
     summary:
       "Autonomous agents are moving from research to production. A look at how Agentic AI patterns are reshaping enterprise workflows, governance, and ROI.",
-    category: "Agentic AI",
+    category: "AI & Agentic AI",
     readingTime: "8 min",
     date: "2025-09-12",
     featured: true,
@@ -44,7 +89,7 @@ export const posts: Post[] = [
     title: "Building Scalable RAG Systems for Enterprise Knowledge",
     summary:
       "A practitioner's guide to designing retrieval-augmented generation pipelines that survive real enterprise data — messy, multilingual, and regulated.",
-    category: "Generative AI",
+    category: "AI & Agentic AI",
     readingTime: "10 min",
     date: "2025-08-28",
     featured: true,
@@ -77,7 +122,7 @@ export const posts: Post[] = [
     slug: "engineering-leadership-global-teams",
     title: "Engineering Leadership Lessons from Managing Large Global Teams",
     summary:
-      "What I've learned leading distributed teams across time zones, cultures, and business contexts — and the operating rhythms that actually work.",
+      "What I've learned leading 450+ engineers across time zones, cultures, and business contexts — and the operating rhythms that actually work.",
     category: "Engineering Leadership",
     readingTime: "7 min",
     date: "2025-07-22",
@@ -87,14 +132,14 @@ export const posts: Post[] = [
       "Promote outcomes, not output.",
     ],
     content:
-      "Leading global engineering organizations is a craft of clarity, cadence, and care. This piece distills the operating system I've refined over 19+ years — from squad design to skip-levels, from OKRs to engineering excellence reviews.",
+      "Leading global engineering organizations is a craft of clarity, cadence, and care. This piece distills the operating system I've refined over 21+ years — from squad design to skip-levels, from OKRs to engineering excellence reviews.",
   },
   {
     slug: "ai-delivery-predictability",
     title: "How AI Can Improve Delivery Predictability and Operational Efficiency",
     summary:
       "Using AI signals on engineering telemetry to forecast delivery risk, reduce escapes, and improve flow — without surveillance theatre.",
-    category: "Program Delivery",
+    category: "Engineering Leadership",
     readingTime: "9 min",
     date: "2025-07-05",
     takeaways: [
@@ -105,18 +150,38 @@ export const posts: Post[] = [
     content:
       "Program delivery is a forecasting problem. AI applied to engineering telemetry — PRs, deploys, incidents, work-item flow — can surface risk early and free leaders to coach instead of chase.",
   },
-];
-
-export const categories: string[] = [
-  "Generative AI",
-  "Agentic AI",
-  "Cloud Architecture",
-  "SaaS Platforms",
-  "Data Science",
-  "Engineering Leadership",
-  "Digital Transformation",
-  "Enterprise Architecture",
-  "Program Delivery",
+  {
+    slug: "payments-platform-modernization",
+    title: "Modernizing Enterprise Payment Platforms",
+    summary:
+      "Lessons from architecting Biller Advantage and Bell Canada's payment engine — onboarding, reliability, and the discipline of 99.9% uptime.",
+    category: "BFSI & Payments",
+    readingTime: "8 min",
+    date: "2025-06-18",
+    takeaways: [
+      "Merchant onboarding is a product, not a project.",
+      "Idempotency and retries are the heart of payments reliability.",
+      "Compress feedback loops before scaling volume.",
+    ],
+    content:
+      "Payments platforms live or die by reliability and onboarding velocity. This piece distills patterns from BFSI engagements — multi-portal architectures, payment engine design, and the operating model that holds 99.9% uptime under real traffic.",
+  },
+  {
+    slug: "data-platform-bi-at-scale",
+    title: "Designing Data Platforms & BI for Enterprise Scale",
+    summary:
+      "A blueprint for unified semantic layers, governed BI, and AI-ready data products — built on lessons from Microsoft Data Platform programs.",
+    category: "Data & Analytics",
+    readingTime: "9 min",
+    date: "2025-06-02",
+    takeaways: [
+      "One semantic layer beats ten dashboards.",
+      "Governance is a product surface, not a checklist.",
+      "AI summaries only work on trusted data.",
+    ],
+    content:
+      "Enterprise BI is shifting from dashboards to decision systems. This piece outlines the architecture patterns — lakehouse, semantic layer, governed metrics, AI narratives — that turn data platforms into leverage.",
+  },
 ];
 
 export interface Project {
@@ -127,7 +192,7 @@ export interface Project {
   tech: string[];
   impact: string;
   metrics: string[];
-  area: string;
+  area: Category;
 }
 
 export const projects: Project[] = [
@@ -138,10 +203,22 @@ export const projects: Project[] = [
       "Manual back-office workflows across finance and operations caused multi-day cycle times and inconsistent quality.",
     solution:
       "Designed an agentic automation platform combining LLM planners, deterministic tools, and human-in-the-loop approvals.",
-    tech: ["Python", "LangGraph", "Azure OpenAI", "Kubernetes", "Postgres", "Kafka"],
+    tech: ["Agentic AI", "LLM Integration", "Python", "Azure", "Kubernetes", "MLOps"],
     impact: "Cut cycle time by 72% and reclaimed 18,000+ analyst hours annually.",
     metrics: ["-72% cycle time", "+99.2% accuracy", "$4.1M annual savings"],
-    area: "Agentic AI",
+    area: "AI & Agentic AI",
+  },
+  {
+    slug: "vessel-management-platform",
+    name: "Cloud-Native Vessel Management Platform — Inchcape",
+    problem:
+      "Legacy port operations across onboarding, customs, prefunding, and agent payments lacked a unified, AI-assisted platform.",
+    solution:
+      "Led a 40-engineer org across 5 time zones to deliver a cloud-native SaaS with 5+ integrations (Unit4, Eye-share) and embedded AI for incident reduction.",
+    tech: [".NET Core / C#", "React", "Azure", "Kubernetes", "DevSecOps", "REST APIs"],
+    impact: "Time-to-market down 35%; recurring incidents 3,800 → 900; manual training effort -60%.",
+    metrics: ["-76% recurring incidents", "-35% time-to-market", "<2% rollback rate"],
+    area: "SaaS Platforms",
   },
   {
     slug: "genai-knowledge-assistant",
@@ -150,10 +227,10 @@ export const projects: Project[] = [
       "Distributed enterprise knowledge across 14 systems made expert answers slow and inconsistent.",
     solution:
       "Built a hybrid-retrieval RAG platform with semantic chunking, reranking, and per-tenant guardrails.",
-    tech: ["Azure AI Search", "OpenAI", "FastAPI", "React", "Redis"],
+    tech: ["GenAI Platforms", "LLM Integration", "Python", "React", "Azure"],
     impact: "Reduced time-to-answer from 14 min to 28 sec for 9,000+ users.",
     metrics: ["-96% time to answer", "92% answer satisfaction", "14 sources unified"],
-    area: "Generative AI",
+    area: "AI & Agentic AI",
   },
   {
     slug: "cloud-platform-modernization",
@@ -162,21 +239,45 @@ export const projects: Project[] = [
       "Legacy monoliths on-prem limited release velocity and pushed infrastructure costs above industry benchmarks.",
     solution:
       "Led a cell-based AWS migration with strangler-fig refactoring, IaC, and an internal developer platform.",
-    tech: ["AWS", "EKS", "Terraform", "ArgoCD", ".NET", "Node.js"],
+    tech: ["AWS", "Kubernetes", "Terraform (IaC)", "GitHub Actions", ".NET Core / C#", "Node.js"],
     impact: "Deploy frequency moved from monthly to 40+ per day; infra cost down 38%.",
     metrics: ["40x deploy frequency", "-38% infra cost", "99.99% availability"],
-    area: "Cloud Architecture",
+    area: "Cloud & DevSecOps",
   },
   {
-    slug: "saas-multitenant",
-    name: "Multi-Tenant SaaS Architecture",
+    slug: "office365-delivery-program",
+    name: "Microsoft Office 365 & Data Platform Delivery — Centific",
     problem:
-      "Per-customer forks of a B2B product were slowing innovation and inflating maintenance load.",
+      "A $1M account needed a scaled delivery engine to ship Office 365 / Office IP, Data Platform, and BI to 10,000+ Microsoft employees.",
     solution:
-      "Re-architected to a pool-with-bridge tenancy model with per-tenant SLOs and cell isolation.",
-    tech: ["Kubernetes", "Istio", "Postgres (RLS)", "React", "Go"],
-    impact: "Onboarded 5x more tenants on the same cost base with stronger isolation.",
-    metrics: ["5x tenant density", "-60% support tickets", "Zero noisy-neighbor incidents"],
+      "Directed a 450-person org (15 Managers, 70 Tech Leads); rebuilt delivery on Azure with BI and governance.",
+    tech: ["Azure", "Power BI", "BI & Analytics", "SAFe 6.0", "Enterprise Architecture"],
+    impact: "Account revenue grew $1M → $20M in 24 months; 200% delivery throughput; ~$2M vendor savings at 99.5% SLA.",
+    metrics: ["$1M → $20M revenue", "+200% throughput", "99.5% SLA"],
+    area: "Data & Analytics",
+  },
+  {
+    slug: "biller-advantage-payments",
+    name: "Biller Advantage Multi-Portal Payments — Capgemini",
+    problem:
+      "Merchant onboarding for a BFSI payments platform took 3 months, blocking growth across 20+ US states.",
+    solution:
+      "Architected a multi-portal payment platform with automated merchant onboarding and a hardened core payment engine.",
+    tech: [".NET Core / C#", "SQL / NoSQL", "REST APIs", "Azure"],
+    impact: "Merchant onboarding compressed from 3 months to 4 hours; Boarding & Servicing delivered at 99.9% uptime.",
+    metrics: ["-98% onboarding time", "99.9% uptime", "20+ US states"],
+    area: "BFSI & Payments",
+  },
+  {
+    slug: "deloitte-university-platform",
+    name: "Deloitte University Unified Web + Mobile Platform",
+    problem:
+      "Five third-party tools and manual workflows ran the event lifecycle for 2,000+ annual guests at Deloitte University, Texas.",
+    solution:
+      "Architected a unified web + mobile platform with AI automation and SaaS payments, retiring all five tools.",
+    tech: ["React", "Mobile", "Node.js", "SQL / NoSQL", "REST APIs"],
+    impact: "100% event lifecycle automated; -15 hrs/week manual entry; booking errors -90%; zero critical outages for 2.5 years.",
+    metrics: ["-90% booking errors", "10+ deploys/week", "0 critical outages (2.5 yrs)"],
     area: "SaaS Platforms",
   },
   {
@@ -186,10 +287,10 @@ export const projects: Project[] = [
       "Security was a release blocker; pipelines were fragmented across teams.",
     solution:
       "Shifted security left with policy-as-code, SBOMs, and a paved-road CI/CD platform.",
-    tech: ["GitHub Actions", "OPA", "Trivy", "Sigstore", "Argo"],
+    tech: ["GitHub Actions", "DevSecOps", "Kubernetes", "Terraform (IaC)"],
     impact: "Mean time to remediate critical CVEs dropped from 21 days to 36 hours.",
     metrics: ["-94% MTTR for criticals", "100% SBOM coverage", "0 prod escapes (Q4)"],
-    area: "Digital Transformation",
+    area: "Cloud & DevSecOps",
   },
   {
     slug: "intelligent-analytics",
@@ -198,10 +299,10 @@ export const projects: Project[] = [
       "Executives lacked a real-time view of operations across geographies.",
     solution:
       "Built a streaming analytics platform with AI-summarized narratives over a unified semantic layer.",
-    tech: ["Snowflake", "dbt", "Kafka", "Next.js", "OpenAI"],
+    tech: ["Snowflake", "dbt", "Kafka", "BI & Analytics", "LLM Integration"],
     impact: "Decisions accelerated by 5x with a single source of truth.",
     metrics: ["5x faster decisions", "1 semantic layer", "8 geographies live"],
-    area: "Data Science",
+    area: "Data & Analytics",
   },
 ];
 
@@ -215,17 +316,19 @@ export interface CaseStudy {
   components: string[];
   outcome: string;
   lessons: string[];
+  area: Category;
 }
 
 export const caseStudies: CaseStudy[] = [
   {
     slug: "enterprise-agentic-automation",
     title: "Enterprise Agentic Automation at Scale",
+    area: "AI & Agentic AI",
     challenge:
       "A multinational needed to automate 40+ back-office workflows under strict compliance and audit constraints.",
     architecture:
       "Cell-based agent runtime with planner/executor agents, deterministic tool layer, policy guardrails, and full observability.",
-    stack: ["Azure OpenAI", "LangGraph", "Kubernetes", "Kafka", "Postgres", "OpenTelemetry"],
+    stack: ["Agentic AI", "LLM Integration", "Azure", "Kubernetes", "Python", "MLOps"],
     execution:
       "Quarterly thin-slice releases; each workflow shipped behind a kill switch with shadow-mode and progressive rollout.",
     components: [
@@ -245,11 +348,12 @@ export const caseStudies: CaseStudy[] = [
   {
     slug: "saas-cloud-modernization",
     title: "SaaS Cloud Modernization for a Global ISV",
+    area: "Cloud & DevSecOps",
     challenge:
       "Legacy monolith couldn't meet enterprise SLAs or regional data residency demands.",
     architecture:
       "Strangler-fig decomposition into bounded contexts, cell-based deployment per region, IDP for product teams.",
-    stack: ["AWS EKS", "Terraform", "ArgoCD", ".NET 8", "Node.js", "Postgres"],
+    stack: ["AWS", "Kubernetes", "Terraform (IaC)", "GitHub Actions", ".NET Core / C#", "Node.js"],
     execution:
       "18-month program with parallel runs, automated data migration, and weekly stakeholder demos.",
     components: [
@@ -264,6 +368,31 @@ export const caseStudies: CaseStudy[] = [
       "Modernization is an organizational change as much as a technical one.",
       "Pay down platform debt early to unlock product velocity.",
       "Treat cells as a product with versioned contracts.",
+    ],
+  },
+  {
+    slug: "biller-advantage-bfsi",
+    title: "Biller Advantage — BFSI Payments Onboarding at Scale",
+    area: "BFSI & Payments",
+    challenge:
+      "Merchant onboarding took 3 months across 20+ US states, capping growth for a multi-portal payments platform.",
+    architecture:
+      "Multi-portal platform sharing a hardened payment engine; automated merchant onboarding pipeline with rules-driven KYC and routing.",
+    stack: [".NET Core / C#", "SQL / NoSQL", "REST APIs", "Azure", "DevSecOps"],
+    execution:
+      "Domain-driven slices per portal; release trains aligned to regulator windows; SRE-led reliability program targeting 99.9% uptime.",
+    components: [
+      "Merchant onboarding pipeline",
+      "Core payment engine",
+      "Boarding & Servicing platform",
+      "Reconciliation & audit",
+    ],
+    outcome:
+      "Merchant onboarding compressed from 3 months to 4 hours (-98%); 99.9% uptime on Boarding & Servicing across the engagement.",
+    lessons: [
+      "Onboarding velocity is a product KPI — instrument it end-to-end.",
+      "Idempotency and retries belong in the platform, not the apps.",
+      "Regulator-aligned release trains beat ad-hoc deployments in BFSI.",
     ],
   },
 ];

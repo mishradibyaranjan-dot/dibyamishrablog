@@ -1,8 +1,10 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { useState } from "react";
 import { Section, SectionHeader } from "@/components/layout/Section";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { caseStudies } from "@/lib/content";
+import { caseStudies, categories } from "@/lib/content";
+import { cn } from "@/lib/utils";
 import { CheckCircle2 } from "lucide-react";
 
 export const Route = createFileRoute("/case-studies")({
@@ -20,6 +22,9 @@ export const Route = createFileRoute("/case-studies")({
 });
 
 function CaseStudies() {
+  const [active, setActive] = useState<string>("All");
+  const filtered = active === "All" ? caseStudies : caseStudies.filter((c) => c.area === active);
+
   return (
     <>
       <Section className="pb-6 pt-16 lg:pt-24">
@@ -28,13 +33,29 @@ function CaseStudies() {
           title="Programs that moved the needle"
           description="Selected case studies with the architecture choices, execution strategy, and business outcomes that defined them."
         />
+        <div className="flex flex-wrap gap-2">
+          {["All", ...categories].map((c) => (
+            <button
+              key={c}
+              onClick={() => setActive(c)}
+              className={cn(
+                "rounded-full border px-3 py-1.5 text-xs font-medium transition-colors",
+                active === c
+                  ? "border-transparent bg-brand-gradient text-white"
+                  : "border-border bg-card hover:bg-accent",
+              )}
+            >
+              {c}
+            </button>
+          ))}
+        </div>
       </Section>
 
       <Section className="space-y-10 pt-0">
-        {caseStudies.map((c) => (
+        {filtered.map((c) => (
           <article key={c.slug} className="overflow-hidden rounded-3xl border border-border bg-card shadow-card-soft">
             <div className="bg-hero p-8 sm:p-10">
-              <Badge className="bg-white/10 text-white hover:bg-white/15">Case Study</Badge>
+              <Badge className="bg-white/10 text-white hover:bg-white/15">{c.area}</Badge>
               <h2 className="mt-3 font-display text-2xl font-bold text-white sm:text-3xl">{c.title}</h2>
               <p className="mt-3 max-w-3xl text-white/70">{c.challenge}</p>
             </div>
