@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Section, SectionHeader } from "@/components/layout/Section";
 import { Badge } from "@/components/ui/badge";
 import { posts, projects } from "@/lib/content";
-import heroBanner from "@/assets/hero-banner.svg.asset.json";
+
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -48,10 +48,7 @@ function Home() {
   return (
     <>
       {/* HERO */}
-      <section
-        className="relative overflow-hidden bg-cover bg-center bg-no-repeat"
-        style={{ backgroundImage: `url(${heroBanner.url})` }}
-      >
+      <section className="relative overflow-hidden bg-hero">
         <div className="absolute inset-0 grid-pattern opacity-40" />
         <div className="relative mx-auto max-w-7xl px-4 pb-24 pt-20 sm:px-6 lg:pt-32">
           <div className="mx-auto max-w-4xl text-center">
