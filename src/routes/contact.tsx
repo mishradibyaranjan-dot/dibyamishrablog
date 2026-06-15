@@ -100,7 +100,7 @@ function Contact() {
               </div>
             </a>
             <a
-              href="https://github.com/mishradibyaranjan-dot/Dibyatraining"
+              href="https://github.com/mishradibyaranjan-dot/"
               target="_blank"
               rel="noreferrer"
               className="flex items-start gap-4 rounded-2xl border border-border bg-card p-5 transition-all hover:-translate-y-0.5 hover:shadow-glow"
@@ -110,7 +110,7 @@ function Contact() {
               </div>
               <div className="min-w-0">
                 <div className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">GitHub</div>
-                <div className="truncate text-sm font-medium">mishradibyaranjan-dot/Dibyatraining</div>
+                <div className="truncate text-sm font-medium">mishradibyaranjan-dot</div>
               </div>
             </a>
             <a
