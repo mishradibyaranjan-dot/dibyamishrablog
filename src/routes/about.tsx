@@ -3,6 +3,7 @@ import { Section, SectionHeader } from "@/components/layout/Section";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Award, Briefcase, Download, GraduationCap, Globe } from "lucide-react";
+import resumeAsset from "@/assets/resume.pdf.asset.json";
 
 export const Route = createFileRoute("/about")({
   head: () => ({
