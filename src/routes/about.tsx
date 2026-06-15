@@ -4,11 +4,12 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Award, Briefcase, Download, GraduationCap, Globe } from "lucide-react";
 import resumeAsset from "@/assets/resume.pdf.asset.json";
+import photoAsset from "@/assets/dibya-mishra.png.asset.json";
 
 export const Route = createFileRoute("/about")({
   head: () => ({
     meta: [
-      { title: "About — Dibya Ranjan Mishra" },
+      { title: "About me — Dibya Ranjan Mishra" },
       { name: "description", content: "Executive profile of Dibya Ranjan Mishra — Technology & Engineering Leader with 21+ years across AI, Cloud, SaaS, and Enterprise Architecture." },
       { property: "og:title", content: "About — Dibya Ranjan Mishra" },
       { property: "og:description", content: "Technology & Engineering Leader with 21+ years across AI, Cloud, SaaS, and Enterprise Architecture." },
