@@ -132,7 +132,7 @@ function About() {
             </div>
           </div>
           <div className="grid gap-4">
-            <div className="overflow-hidden rounded-3xl border border-border bg-card shadow-lg">
+            <div className="card-flashy overflow-hidden rounded-3xl border border-border bg-card shadow-lg">
               <img
                 src={photoAsset.url}
                 alt="Dibya Ranjan Mishra — Technology & Engineering Leader"
@@ -150,7 +150,7 @@ function About() {
               { icon: Award, k: "Focus", v: "AI Strategy · Platform · Architecture · Delivery" },
               { icon: GraduationCap, k: "Approach", v: "Research-driven, outcome-obsessed leadership" },
             ].map((c) => (
-              <div key={c.k} className="flex items-start gap-4 rounded-2xl border border-border bg-card p-5">
+              <div key={c.k} className="card-flashy flex items-start gap-4 rounded-2xl border border-border bg-card p-5">
                 <div className="grid h-10 w-10 shrink-0 place-items-center rounded-lg bg-brand-gradient text-white">
                   <c.icon className="h-5 w-5" />
                 </div>
@@ -168,7 +168,7 @@ function About() {
         <SectionHeader eyebrow="Capabilities" title="Skills & technology stack" />
         <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
           {skillGroups.map((g) => (
-            <div key={g.title} className="rounded-2xl border border-border bg-card p-6">
+            <div key={g.title} className="card-flashy rounded-2xl border border-border bg-card p-6">
               <h3 className="text-sm font-semibold uppercase tracking-wider text-gradient">{g.title}</h3>
               <div className="mt-3 flex flex-wrap gap-1.5">
                 {g.items.map((s) => (
@@ -186,7 +186,7 @@ function About() {
           {timeline.map((t) => (
             <li key={t.year} className="relative">
               <span className="absolute -left-[33px] top-1.5 grid h-4 w-4 place-items-center rounded-full bg-brand-gradient ring-4 ring-background" />
-              <div className="rounded-2xl border border-border bg-card p-5">
+              <div className="card-flashy rounded-2xl border border-border bg-card p-5">
                 <div className="text-xs font-semibold uppercase tracking-wider text-gradient">{t.year}</div>
                 <div className="mt-1 font-semibold">{t.role}</div>
                 <p className="mt-1 text-sm text-muted-foreground">{t.text}</p>
@@ -199,7 +199,7 @@ function About() {
       <Section className="border-t border-border">
         <SectionHeader eyebrow="Education & Certifications" title="Academic background & credentials" />
         <div className="grid gap-6 lg:grid-cols-2">
-          <div className="rounded-2xl border border-border bg-card p-6">
+          <div className="card-flashy rounded-2xl border border-border bg-card p-6">
             <div className="mb-4 flex items-center gap-2 text-sm font-semibold uppercase tracking-wider text-gradient">
               <GraduationCap className="h-4 w-4" /> Education
             </div>
@@ -212,7 +212,7 @@ function About() {
               ))}
             </ul>
           </div>
-          <div className="rounded-2xl border border-border bg-card p-6">
+          <div className="card-flashy rounded-2xl border border-border bg-card p-6">
             <div className="mb-4 flex items-center gap-2 text-sm font-semibold uppercase tracking-wider text-gradient">
               <Award className="h-4 w-4" /> Certifications
             </div>
@@ -239,7 +239,7 @@ function About() {
       </Section>
 
       <Section className="border-t border-border">
-        <div className="flex flex-col items-center justify-between gap-6 rounded-3xl border border-border bg-card p-8 sm:flex-row sm:p-10">
+        <div className="card-flashy flex flex-col items-center justify-between gap-6 rounded-3xl border border-border bg-card p-8 sm:flex-row sm:p-10">
           <div>
             <h3 className="text-2xl font-bold tracking-tight">Download my resume</h3>
             <p className="mt-2 text-muted-foreground">
