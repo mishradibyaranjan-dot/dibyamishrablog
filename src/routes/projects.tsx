@@ -22,20 +22,39 @@ export const Route = createFileRoute("/projects")({
 });
 
 function Projects() {
+  const [active, setActive] = useState<string>("All");
+  const filtered = active === "All" ? projects : projects.filter((p) => p.area === active);
+
   return (
     <>
       <Section className="pb-6 pt-16 lg:pt-24">
         <SectionHeader
           eyebrow="Projects"
           title="Selected technical & leadership work"
-          description="A portfolio of platforms, programs, and transformations spanning AI, Cloud, SaaS, Data, and DevSecOps."
+          description="A portfolio of platforms, programs, and transformations spanning AI, Cloud, SaaS, Data, BFSI, and Engineering Leadership."
         />
+        <div className="flex flex-wrap gap-2">
+          {["All", ...categories].map((c) => (
+            <button
+              key={c}
+              onClick={() => setActive(c)}
+              className={cn(
+                "rounded-full border px-3 py-1.5 text-xs font-medium transition-colors",
+                active === c
+                  ? "border-transparent bg-brand-gradient text-white"
+                  : "border-border bg-card hover:bg-accent",
+              )}
+            >
+              {c}
+            </button>
+          ))}
+        </div>
       </Section>
 
       <Section className="pt-0">
         <div className="grid gap-6 lg:grid-cols-2">
-          {projects.map((p) => {
-            const cs = caseStudies.find((c) => c.title.toLowerCase().includes(p.area.toLowerCase().split(" ")[0]));
+          {filtered.map((p) => {
+            const cs = caseStudies.find((c) => c.area === p.area);
             return (
               <div key={p.slug} className="flex flex-col rounded-3xl border border-border bg-card p-7 shadow-card-soft transition-all hover:-translate-y-0.5 hover:shadow-glow">
                 <div className="flex items-center justify-between gap-3">
