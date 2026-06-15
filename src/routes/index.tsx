@@ -34,8 +34,8 @@ const expertise = [
 ];
 
 const highlights = [
-  { k: "19+", v: "Years in technology leadership" },
-  { k: "200+", v: "Engineers led across geographies" },
+  { k: "21+", v: "Years in technology leadership" },
+  { k: "500+", v: "Engineers led across geographies" },
   { k: "40+", v: "Enterprise platforms shipped" },
   { k: "$40M+", v: "Business impact delivered" },
 ];
@@ -57,7 +57,7 @@ function Home() {
           <div className="mx-auto max-w-4xl text-center">
             <div className="mx-auto mb-6 inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-4 py-1.5 text-xs font-medium text-white/80 backdrop-blur">
               <span className="h-1.5 w-1.5 rounded-full bg-white/80" />
-              Technology & Engineering Leader · 19+ years
+              Technology & Engineering Leader · 21+ years
             </div>
             <h1 className="font-display text-4xl font-bold leading-[1.05] tracking-tight text-white sm:text-6xl lg:text-7xl">
               Exploring <span className="text-gradient">AI, Cloud, Architecture</span> &
