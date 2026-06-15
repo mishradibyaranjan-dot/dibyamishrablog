@@ -125,7 +125,7 @@ function About() {
       <Section className="border-t border-border">
         <div className="flex flex-col items-center justify-between gap-6 rounded-3xl border border-border bg-card p-8 sm:flex-row sm:p-10">
           <div>
-            <h2: className="text-2xl font-bold tracking-tight">Download my resume</h3>
+            <h3 className="text-2xl font-bold tracking-tight">Download my resume</h3>
             <p className="mt-2 text-muted-foreground">
               A concise overview of experience, skills, and key achievements.
             </p>
