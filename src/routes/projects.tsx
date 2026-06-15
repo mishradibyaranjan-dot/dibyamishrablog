@@ -1,0 +1,85 @@
+import { createFileRoute, Link } from "@tanstack/react-router";
+import { ArrowRight } from "lucide-react";
+import { Section, SectionHeader } from "@/components/layout/Section";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { projects, caseStudies } from "@/lib/content";
+
+export const Route = createFileRoute("/projects")({
+  head: () => ({
+    meta: [
+      { title: "Projects — Dibya Ranjan Mishra" },
+      { name: "description", content: "Portfolio of technical and leadership work — AI platforms, cloud modernization, SaaS architecture, DevSecOps, and analytics." },
+      { property: "og:title", content: "Projects — Dibya Ranjan Mishra" },
+      { property: "og:description", content: "AI platforms, cloud modernization, SaaS architecture, DevSecOps, and analytics work." },
+      { property: "og:url", content: "/projects" },
+    ],
+    links: [{ rel: "canonical", href: "/projects" }],
+  }),
+  component: Projects,
+});
+
+function Projects() {
+  return (
+    <>
+      <Section className="pb-6 pt-16 lg:pt-24">
+        <SectionHeader
+          eyebrow="Projects"
+          title="Selected technical & leadership work"
+          description="A portfolio of platforms, programs, and transformations spanning AI, Cloud, SaaS, Data, and DevSecOps."
+        />
+      </Section>
+
+      <Section className="pt-0">
+        <div className="grid gap-6 lg:grid-cols-2">
+          {projects.map((p) => {
+            const cs = caseStudies.find((c) => c.title.toLowerCase().includes(p.area.toLowerCase().split(" ")[0]));
+            return (
+              <div key={p.slug} className="flex flex-col rounded-3xl border border-border bg-card p-7 shadow-card-soft transition-all hover:-translate-y-0.5 hover:shadow-glow">
+                <div className="flex items-center justify-between gap-3">
+                  <Badge variant="secondary">{p.area}</Badge>
+                  <div className="text-xs font-medium text-muted-foreground">Case study</div>
+                </div>
+                <h3 className="mt-3 text-xl font-bold">{p.name}</h3>
+                <div className="mt-4 space-y-3 text-sm">
+                  <div>
+                    <div className="text-xs font-semibold uppercase tracking-wider text-gradient">Problem</div>
+                    <p className="mt-1 text-muted-foreground">{p.problem}</p>
+                  </div>
+                  <div>
+                    <div className="text-xs font-semibold uppercase tracking-wider text-gradient">Solution</div>
+                    <p className="mt-1 text-muted-foreground">{p.solution}</p>
+                  </div>
+                  <div>
+                    <div className="text-xs font-semibold uppercase tracking-wider text-gradient">Impact</div>
+                    <p className="mt-1 text-muted-foreground">{p.impact}</p>
+                  </div>
+                </div>
+                <div className="mt-5 flex flex-wrap gap-1.5">
+                  {p.tech.map((t) => (
+                    <span key={t} className="rounded-full border border-border bg-background px-2.5 py-1 text-xs">{t}</span>
+                  ))}
+                </div>
+                <div className="mt-5 flex flex-wrap gap-2">
+                  {p.metrics.map((m) => (
+                    <span key={m} className="rounded-full bg-brand-gradient px-3 py-1 text-xs font-semibold text-white">{m}</span>
+                  ))}
+                </div>
+                <div className="mt-6">
+                  <Button asChild variant="outline">
+                    <Link to="/case-studies">
+                      Read related case study <ArrowRight className="ml-1 h-4 w-4" />
+                    </Link>
+                  </Button>
+                </div>
+                {cs && (
+                  <div className="sr-only">Related: {cs.title}</div>
+                )}
+              </div>
+            );
+          })}
+        </div>
+      </Section>
+    </>
+  );
+}
