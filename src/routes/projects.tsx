@@ -6,18 +6,30 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { projects, caseStudies, categories } from "@/lib/content";
 import { cn } from "@/lib/utils";
+import { pageOgImages, SITE_ORIGIN } from "@/lib/og-images";
 
 export const Route = createFileRoute("/projects")({
-  head: () => ({
-    meta: [
-      { title: "Projects — Dibya Ranjan Mishra" },
-      { name: "description", content: "Portfolio of technical and leadership work — AI platforms, cloud modernization, SaaS architecture, DevSecOps, and analytics." },
-      { property: "og:title", content: "Projects — Dibya Ranjan Mishra" },
-      { property: "og:description", content: "AI platforms, cloud modernization, SaaS architecture, DevSecOps, and analytics work." },
-      { property: "og:url", content: "/projects" },
-    ],
-    links: [{ rel: "canonical", href: "/projects" }],
-  }),
+  head: () => {
+    const url = `${SITE_ORIGIN}/projects`;
+    const desc = "AI platforms, cloud modernization, SaaS architecture, DevSecOps, and analytics work.";
+    return {
+      meta: [
+        { title: "Projects — Dibya Ranjan Mishra" },
+        { name: "description", content: "Portfolio of technical and leadership work — AI platforms, cloud modernization, SaaS architecture, DevSecOps, and analytics." },
+        { property: "og:title", content: "Projects — Dibya Ranjan Mishra" },
+        { property: "og:description", content: desc },
+        { property: "og:url", content: url },
+        { property: "og:image", content: pageOgImages.projects },
+        { property: "og:image:width", content: "1200" },
+        { property: "og:image:height", content: "630" },
+        { name: "twitter:card", content: "summary_large_image" },
+        { name: "twitter:title", content: "Projects — Dibya Ranjan Mishra" },
+        { name: "twitter:description", content: desc },
+        { name: "twitter:image", content: pageOgImages.projects },
+      ],
+      links: [{ rel: "canonical", href: url }],
+    };
+  },
   component: Projects,
 });
 

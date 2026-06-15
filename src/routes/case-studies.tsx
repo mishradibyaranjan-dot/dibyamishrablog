@@ -6,18 +6,30 @@ import { Button } from "@/components/ui/button";
 import { caseStudies, categories } from "@/lib/content";
 import { cn } from "@/lib/utils";
 import { CheckCircle2 } from "lucide-react";
+import { pageOgImages, SITE_ORIGIN } from "@/lib/og-images";
 
 export const Route = createFileRoute("/case-studies")({
-  head: () => ({
-    meta: [
-      { title: "Case Studies — Dibya Ranjan Mishra" },
-      { name: "description", content: "Detailed case studies on enterprise AI, cloud modernization, SaaS architecture, and program execution." },
-      { property: "og:title", content: "Case Studies — Dibya Ranjan Mishra" },
-      { property: "og:description", content: "Enterprise AI, cloud modernization, and SaaS case studies." },
-      { property: "og:url", content: "/case-studies" },
-    ],
-    links: [{ rel: "canonical", href: "/case-studies" }],
-  }),
+  head: () => {
+    const url = `${SITE_ORIGIN}/case-studies`;
+    const desc = "Enterprise AI, cloud modernization, and SaaS case studies.";
+    return {
+      meta: [
+        { title: "Case Studies — Dibya Ranjan Mishra" },
+        { name: "description", content: "Detailed case studies on enterprise AI, cloud modernization, SaaS architecture, and program execution." },
+        { property: "og:title", content: "Case Studies — Dibya Ranjan Mishra" },
+        { property: "og:description", content: desc },
+        { property: "og:url", content: url },
+        { property: "og:image", content: pageOgImages.caseStudies },
+        { property: "og:image:width", content: "1200" },
+        { property: "og:image:height", content: "630" },
+        { name: "twitter:card", content: "summary_large_image" },
+        { name: "twitter:title", content: "Case Studies — Dibya Ranjan Mishra" },
+        { name: "twitter:description", content: desc },
+        { name: "twitter:image", content: pageOgImages.caseStudies },
+      ],
+      links: [{ rel: "canonical", href: url }],
+    };
+  },
   component: CaseStudies,
 });
 

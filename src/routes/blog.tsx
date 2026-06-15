@@ -5,18 +5,30 @@ import { Section, SectionHeader } from "@/components/layout/Section";
 import { Badge } from "@/components/ui/badge";
 import { posts, categories } from "@/lib/content";
 import { cn } from "@/lib/utils";
+import { pageOgImages, SITE_ORIGIN } from "@/lib/og-images";
 
 export const Route = createFileRoute("/blog")({
-  head: () => ({
-    meta: [
-      { title: "Blog — Dibya Ranjan Mishra" },
-      { name: "description", content: "Articles on AI Strategy, LLMs and RAG, Cloud Modernization, Microservices, Engineering Management, and more." },
-      { property: "og:title", content: "Blog — Dibya Ranjan Mishra" },
-      { property: "og:description", content: "Articles on AI, Cloud, SaaS, and Engineering Leadership." },
-      { property: "og:url", content: "/blog" },
-    ],
-    links: [{ rel: "canonical", href: "/blog" }],
-  }),
+  head: () => {
+    const url = `${SITE_ORIGIN}/blog`;
+    const desc = "Articles on AI, Cloud, SaaS, and Engineering Leadership.";
+    return {
+      meta: [
+        { title: "Blog — Dibya Ranjan Mishra" },
+        { name: "description", content: "Articles on AI Strategy, LLMs and RAG, Cloud Modernization, Microservices, Engineering Management, and more." },
+        { property: "og:title", content: "Blog — Dibya Ranjan Mishra" },
+        { property: "og:description", content: desc },
+        { property: "og:url", content: url },
+        { property: "og:image", content: pageOgImages.blog },
+        { property: "og:image:width", content: "1200" },
+        { property: "og:image:height", content: "630" },
+        { name: "twitter:card", content: "summary_large_image" },
+        { name: "twitter:title", content: "Blog — Dibya Ranjan Mishra" },
+        { name: "twitter:description", content: desc },
+        { name: "twitter:image", content: pageOgImages.blog },
+      ],
+      links: [{ rel: "canonical", href: url }],
+    };
+  },
   component: Blog,
 });
 
