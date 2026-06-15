@@ -1,0 +1,269 @@
+export type Category =
+  | "Generative AI"
+  | "Agentic AI"
+  | "Cloud Architecture"
+  | "SaaS Platforms"
+  | "Data Science"
+  | "Engineering Leadership"
+  | "Digital Transformation"
+  | "Enterprise Architecture"
+  | "Program Delivery";
+
+export interface Post {
+  slug: string;
+  title: string;
+  summary: string;
+  category: Category | string;
+  readingTime: string;
+  date: string;
+  featured?: boolean;
+  content: string;
+  takeaways: string[];
+}
+
+export const posts: Post[] = [
+  {
+    slug: "agentic-ai-enterprise-automation",
+    title: "How Agentic AI Is Changing Enterprise Automation",
+    summary:
+      "Autonomous agents are moving from research to production. A look at how Agentic AI patterns are reshaping enterprise workflows, governance, and ROI.",
+    category: "Agentic AI",
+    readingTime: "8 min",
+    date: "2025-09-12",
+    featured: true,
+    takeaways: [
+      "Agentic systems shift automation from rules to goals.",
+      "Memory, tools, and planning loops are the new building blocks.",
+      "Governance, observability, and guardrails are non-negotiable in production.",
+    ],
+    content:
+      "Enterprises are moving beyond chatbots toward goal-driven agents that plan, reason, and act across systems. In this article we explore the architecture patterns — planner-executor, multi-agent orchestration, and tool-augmented retrieval — that make Agentic AI deployable at scale. We discuss the operational backbone: identity, policy, observability, and human-in-the-loop checkpoints. Finally we walk through ROI levers across finance ops, customer service, and engineering productivity.",
+  },
+  {
+    slug: "scalable-rag-enterprise",
+    title: "Building Scalable RAG Systems for Enterprise Knowledge",
+    summary:
+      "A practitioner's guide to designing retrieval-augmented generation pipelines that survive real enterprise data — messy, multilingual, and regulated.",
+    category: "Generative AI",
+    readingTime: "10 min",
+    date: "2025-08-28",
+    featured: true,
+    takeaways: [
+      "Chunking strategy matters more than model size.",
+      "Hybrid retrieval (BM25 + dense) outperforms vector-only in most enterprise corpora.",
+      "Evaluation harnesses must be built before, not after, the pipeline.",
+    ],
+    content:
+      "RAG looks deceptively simple in demos. Production RAG is an engineering discipline. We cover ingestion pipelines, semantic chunking, hybrid retrieval, reranking, prompt assembly, and continuous evaluation. We also discuss cost optimization, caching, and the hidden tax of stale embeddings.",
+  },
+  {
+    slug: "cloud-native-saas-patterns",
+    title: "Cloud-Native Architecture Patterns for Modern SaaS Platforms",
+    summary:
+      "Multi-tenant isolation, cell-based architectures, and platform engineering — patterns I've used to scale SaaS from MVP to enterprise.",
+    category: "SaaS Platforms",
+    readingTime: "12 min",
+    date: "2025-08-10",
+    featured: true,
+    takeaways: [
+      "Choose tenancy model before product-market fit hardens.",
+      "Cells contain blast radius and unlock per-tenant SLOs.",
+      "Platform teams accelerate product teams only with paved roads.",
+    ],
+    content:
+      "Modern SaaS lives on Kubernetes, service meshes, and managed data planes. We unpack tenancy models (silo, pool, bridge), cell-based architectures, and how platform engineering converts infrastructure into developer leverage.",
+  },
+  {
+    slug: "engineering-leadership-global-teams",
+    title: "Engineering Leadership Lessons from Managing Large Global Teams",
+    summary:
+      "What I've learned leading distributed teams across time zones, cultures, and business contexts — and the operating rhythms that actually work.",
+    category: "Engineering Leadership",
+    readingTime: "7 min",
+    date: "2025-07-22",
+    takeaways: [
+      "Clarity beats charisma at scale.",
+      "Async-first writing culture is a leadership multiplier.",
+      "Promote outcomes, not output.",
+    ],
+    content:
+      "Leading global engineering organizations is a craft of clarity, cadence, and care. This piece distills the operating system I've refined over 19+ years — from squad design to skip-levels, from OKRs to engineering excellence reviews.",
+  },
+  {
+    slug: "ai-delivery-predictability",
+    title: "How AI Can Improve Delivery Predictability and Operational Efficiency",
+    summary:
+      "Using AI signals on engineering telemetry to forecast delivery risk, reduce escapes, and improve flow — without surveillance theatre.",
+    category: "Program Delivery",
+    readingTime: "9 min",
+    date: "2025-07-05",
+    takeaways: [
+      "Flow metrics + AI > status meetings.",
+      "Predictive risk models depend on clean DORA data.",
+      "Trust is the precondition for telemetry.",
+    ],
+    content:
+      "Program delivery is a forecasting problem. AI applied to engineering telemetry — PRs, deploys, incidents, work-item flow — can surface risk early and free leaders to coach instead of chase.",
+  },
+];
+
+export const categories: string[] = [
+  "Generative AI",
+  "Agentic AI",
+  "Cloud Architecture",
+  "SaaS Platforms",
+  "Data Science",
+  "Engineering Leadership",
+  "Digital Transformation",
+  "Enterprise Architecture",
+  "Program Delivery",
+];
+
+export interface Project {
+  slug: string;
+  name: string;
+  problem: string;
+  solution: string;
+  tech: string[];
+  impact: string;
+  metrics: string[];
+  area: string;
+}
+
+export const projects: Project[] = [
+  {
+    slug: "ai-enterprise-automation",
+    name: "AI-Powered Enterprise Automation Suite",
+    problem:
+      "Manual back-office workflows across finance and operations caused multi-day cycle times and inconsistent quality.",
+    solution:
+      "Designed an agentic automation platform combining LLM planners, deterministic tools, and human-in-the-loop approvals.",
+    tech: ["Python", "LangGraph", "Azure OpenAI", "Kubernetes", "Postgres", "Kafka"],
+    impact: "Cut cycle time by 72% and reclaimed 18,000+ analyst hours annually.",
+    metrics: ["-72% cycle time", "+99.2% accuracy", "$4.1M annual savings"],
+    area: "Agentic AI",
+  },
+  {
+    slug: "genai-knowledge-assistant",
+    name: "GenAI Knowledge Assistant (RAG)",
+    problem:
+      "Distributed enterprise knowledge across 14 systems made expert answers slow and inconsistent.",
+    solution:
+      "Built a hybrid-retrieval RAG platform with semantic chunking, reranking, and per-tenant guardrails.",
+    tech: ["Azure AI Search", "OpenAI", "FastAPI", "React", "Redis"],
+    impact: "Reduced time-to-answer from 14 min to 28 sec for 9,000+ users.",
+    metrics: ["-96% time to answer", "92% answer satisfaction", "14 sources unified"],
+    area: "Generative AI",
+  },
+  {
+    slug: "cloud-platform-modernization",
+    name: "Cloud Migration & Platform Modernization",
+    problem:
+      "Legacy monoliths on-prem limited release velocity and pushed infrastructure costs above industry benchmarks.",
+    solution:
+      "Led a cell-based AWS migration with strangler-fig refactoring, IaC, and an internal developer platform.",
+    tech: ["AWS", "EKS", "Terraform", "ArgoCD", ".NET", "Node.js"],
+    impact: "Deploy frequency moved from monthly to 40+ per day; infra cost down 38%.",
+    metrics: ["40x deploy frequency", "-38% infra cost", "99.99% availability"],
+    area: "Cloud Architecture",
+  },
+  {
+    slug: "saas-multitenant",
+    name: "Multi-Tenant SaaS Architecture",
+    problem:
+      "Per-customer forks of a B2B product were slowing innovation and inflating maintenance load.",
+    solution:
+      "Re-architected to a pool-with-bridge tenancy model with per-tenant SLOs and cell isolation.",
+    tech: ["Kubernetes", "Istio", "Postgres (RLS)", "React", "Go"],
+    impact: "Onboarded 5x more tenants on the same cost base with stronger isolation.",
+    metrics: ["5x tenant density", "-60% support tickets", "Zero noisy-neighbor incidents"],
+    area: "SaaS Platforms",
+  },
+  {
+    slug: "devsecops-transformation",
+    name: "DevSecOps & CI/CD Transformation",
+    problem:
+      "Security was a release blocker; pipelines were fragmented across teams.",
+    solution:
+      "Shifted security left with policy-as-code, SBOMs, and a paved-road CI/CD platform.",
+    tech: ["GitHub Actions", "OPA", "Trivy", "Sigstore", "Argo"],
+    impact: "Mean time to remediate critical CVEs dropped from 21 days to 36 hours.",
+    metrics: ["-94% MTTR for criticals", "100% SBOM coverage", "0 prod escapes (Q4)"],
+    area: "Digital Transformation",
+  },
+  {
+    slug: "intelligent-analytics",
+    name: "Intelligent Analytics & Dashboards",
+    problem:
+      "Executives lacked a real-time view of operations across geographies.",
+    solution:
+      "Built a streaming analytics platform with AI-summarized narratives over a unified semantic layer.",
+    tech: ["Snowflake", "dbt", "Kafka", "Next.js", "OpenAI"],
+    impact: "Decisions accelerated by 5x with a single source of truth.",
+    metrics: ["5x faster decisions", "1 semantic layer", "8 geographies live"],
+    area: "Data Science",
+  },
+];
+
+export interface CaseStudy {
+  slug: string;
+  title: string;
+  challenge: string;
+  architecture: string;
+  stack: string[];
+  execution: string;
+  components: string[];
+  outcome: string;
+  lessons: string[];
+}
+
+export const caseStudies: CaseStudy[] = [
+  {
+    slug: "enterprise-agentic-automation",
+    title: "Enterprise Agentic Automation at Scale",
+    challenge:
+      "A multinational needed to automate 40+ back-office workflows under strict compliance and audit constraints.",
+    architecture:
+      "Cell-based agent runtime with planner/executor agents, deterministic tool layer, policy guardrails, and full observability.",
+    stack: ["Azure OpenAI", "LangGraph", "Kubernetes", "Kafka", "Postgres", "OpenTelemetry"],
+    execution:
+      "Quarterly thin-slice releases; each workflow shipped behind a kill switch with shadow-mode and progressive rollout.",
+    components: [
+      "Multi-agent orchestration",
+      "Hybrid RAG over policy corpora",
+      "Human-in-the-loop approvals",
+      "Audit-grade traceability",
+    ],
+    outcome:
+      "72% cycle-time reduction, $4.1M annual savings, zero compliance incidents across 11 months in production.",
+    lessons: [
+      "Start with workflows where humans already follow checklists.",
+      "Invest in evaluation infrastructure before scaling agents.",
+      "Guardrails are a product surface, not a bolt-on.",
+    ],
+  },
+  {
+    slug: "saas-cloud-modernization",
+    title: "SaaS Cloud Modernization for a Global ISV",
+    challenge:
+      "Legacy monolith couldn't meet enterprise SLAs or regional data residency demands.",
+    architecture:
+      "Strangler-fig decomposition into bounded contexts, cell-based deployment per region, IDP for product teams.",
+    stack: ["AWS EKS", "Terraform", "ArgoCD", ".NET 8", "Node.js", "Postgres"],
+    execution:
+      "18-month program with parallel runs, automated data migration, and weekly stakeholder demos.",
+    components: [
+      "Internal developer platform",
+      "Region-aware data plane",
+      "Progressive delivery",
+      "FinOps guardrails",
+    ],
+    outcome:
+      "40x deploy frequency, 38% infra cost reduction, 99.99% availability, 7 new regions in 12 months.",
+    lessons: [
+      "Modernization is an organizational change as much as a technical one.",
+      "Pay down platform debt early to unlock product velocity.",
+      "Treat cells as a product with versioned contracts.",
+    ],
+  },
+];
