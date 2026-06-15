@@ -62,6 +62,11 @@ function About() {
               <Button asChild variant="outline">
                 <Link to="/contact">Get in touch</Link>
               </Button>
+              <Button asChild variant="outline">
+                <a href={resumeAsset.url} download>
+                  <Download className="mr-1.5 h-4 w-4" /> Download Resume
+                </a>
+              </Button>
             </div>
           </div>
           <div className="grid gap-4">
