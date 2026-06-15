@@ -48,8 +48,8 @@ function Home() {
   return (
     <>
       {/* HERO */}
-      <section className="relative overflow-hidden bg-hero">
-        <div className="absolute inset-0 grid-pattern opacity-40" />
+      <section className="relative overflow-hidden bg-hero-image">
+        <div className="absolute inset-0 grid-pattern opacity-25" />
         <div className="relative mx-auto max-w-7xl px-4 pb-24 pt-20 sm:px-6 lg:pt-32">
           <div className="mx-auto max-w-4xl text-center">
             <div className="mx-auto mb-6 inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-4 py-1.5 text-xs font-medium text-white/80 backdrop-blur">
