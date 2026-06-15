@@ -1,0 +1,21 @@
+# Dibya Ranjan Mishra
+
+> Technology & Engineering Leader with 19+ years of experience in AI, GenAI, Cloud Transformation, Enterprise Architecture, SaaS Platforms, Data Science, and Engineering Leadership. This site shares research, essays, projects, and case studies.
+
+## Pages
+
+- [Home](/): Overview, expertise, and featured work.
+- [About](/about): Executive profile and professional timeline.
+- [Research](/research): Research notes on AI, Cloud, and Engineering.
+- [Blog](/blog): Practitioner essays on AI, Cloud, SaaS, and Leadership.
+- [Projects](/projects): Portfolio of AI, Cloud, and SaaS initiatives with impact metrics.
+- [Case Studies](/case-studies): Deep-dive architectures and execution stories.
+- [Contact](/contact): Get in touch.
+
+## Blog
+
+- [How Agentic AI Is Changing Enterprise Automation](/blog/agentic-ai-enterprise-automation): Patterns, governance, and ROI of agentic systems in production.
+- [Building Scalable RAG Systems for Enterprise Knowledge](/blog/scalable-rag-enterprise): A practitioner's guide to production RAG.
+- [Cloud-Native Architecture Patterns for Modern SaaS Platforms](/blog/cloud-native-saas-patterns): Multi-tenancy, cells, and platform engineering.
+- [Engineering Leadership Lessons from Managing Large Global Teams](/blog/engineering-leadership-global-teams): Operating rhythms for distributed engineering orgs.
+- [How AI Can Improve Delivery Predictability and Operational Efficiency](/blog/ai-delivery-predictability): Using AI on engineering telemetry to forecast risk.
