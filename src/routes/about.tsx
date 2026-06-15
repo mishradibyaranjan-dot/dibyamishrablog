@@ -2,7 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { Section, SectionHeader } from "@/components/layout/Section";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Award, Briefcase, GraduationCap, Globe } from "lucide-react";
+import { Award, Briefcase, Download, GraduationCap, Globe } from "lucide-react";
 
 export const Route = createFileRoute("/about")({
   head: () => ({
