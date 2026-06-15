@@ -34,8 +34,8 @@ const expertise = [
 ];
 
 const highlights = [
-  { k: "19+", v: "Years in technology leadership" },
-  { k: "200+", v: "Engineers led across geographies" },
+  { k: "21+", v: "Years in technology leadership" },
+  { k: "500+", v: "Engineers led across geographies" },
   { k: "40+", v: "Enterprise platforms shipped" },
   { k: "$40M+", v: "Business impact delivered" },
 ];
