@@ -57,10 +57,13 @@ function About() {
       <Section className="pb-8 pt-16 lg:pt-24">
         <div className="grid items-start gap-10 lg:grid-cols-[1.4fr_1fr]">
           <div>
-            <Badge variant="secondary" className="mb-4">About</Badge>
+            <Badge variant="secondary" className="mb-4">About me</Badge>
             <h1 className="font-display text-4xl font-bold tracking-tight sm:text-5xl">
-              Technology leader building <span className="text-gradient">AI-native enterprises</span>
+              Dibya Ranjan Mishra
             </h1>
+            <p className="mt-3 text-lg font-medium text-gradient">
+              Technology leader building AI-native enterprises
+            </p>
             <p className="mt-5 text-lg text-muted-foreground">
               Results-driven technology executive with 21+ years of progressive leadership across
               Shipping, BFSI, Insurance, and Enterprise SaaS. Track record of growing revenue from
