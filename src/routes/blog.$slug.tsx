@@ -87,7 +87,7 @@ function BlogPost() {
           <div id="key-takeaways" className="rounded-2xl border border-border bg-card p-6">
             <h3 className="text-lg font-semibold">Key takeaways</h3>
             <ul className="mt-4 space-y-2.5">
-              {post.takeaways.map((t) => (
+              {post.takeaways.map((t: string) => (
                 <li key={t} className="flex items-start gap-3 text-sm">
                   <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
                   <span>{t}</span>
