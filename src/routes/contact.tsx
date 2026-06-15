@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
-import { Mail, Github, ExternalLink, Linkedin, Send, CheckCircle2 } from "lucide-react";
+import { Mail, Github, ExternalLink, Linkedin, Send, CheckCircle2, Download, FileText } from "lucide-react";
+import resumeAsset from "@/assets/resume.pdf.asset.json";
 import { Section, SectionHeader } from "@/components/layout/Section";
 import { Button } from "@/components/ui/button";
 

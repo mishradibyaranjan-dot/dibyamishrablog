@@ -121,6 +121,22 @@ function About() {
           ))}
         </ol>
       </Section>
+
+      <Section className="border-t border-border">
+        <div className="flex flex-col items-center justify-between gap-6 rounded-3xl border border-border bg-card p-8 sm:flex-row sm:p-10">
+          <div>
+            <h2: className="text-2xl font-bold tracking-tight">Download my resume</h3>
+            <p className="mt-2 text-muted-foreground">
+              A concise overview of experience, skills, and key achievements.
+            </p>
+          </div>
+          <Button asChild className="bg-brand-gradient text-white">
+            <a href={resumeAsset.url} download>
+              <Download className="mr-2 h-4 w-4" /> Download Resume (PDF)
+            </a>
+          </Button>
+        </div>
+      </Section>
     </>
   );
 }
