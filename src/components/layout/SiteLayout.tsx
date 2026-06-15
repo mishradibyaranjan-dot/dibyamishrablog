@@ -137,7 +137,7 @@ function Footer() {
           <div className="mt-4 flex items-center gap-2">
             <Button variant="outline" size="icon" asChild>
               <a
-                href="https://github.com/mishradibyaranjan-dot/Dibyatraining"
+                href="https://github.com/mishradibyaranjan-dot/"
                 target="_blank"
                 rel="noreferrer"
                 aria-label="GitHub"
