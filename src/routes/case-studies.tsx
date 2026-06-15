@@ -1,8 +1,10 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { useState } from "react";
 import { Section, SectionHeader } from "@/components/layout/Section";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { caseStudies } from "@/lib/content";
+import { caseStudies, categories } from "@/lib/content";
+import { cn } from "@/lib/utils";
 import { CheckCircle2 } from "lucide-react";
 
 export const Route = createFileRoute("/case-studies")({
