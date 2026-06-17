@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { Moon, Sun, Menu, X, Github, Linkedin, ExternalLink } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { SmoothCursor } from "@/components/SmoothCursor";
+
 import drmLogo from "@/assets/drm-logo.png.asset.json";
 
 const NAV = [
@@ -211,7 +211,6 @@ function Footer() {
 export function SiteLayout() {
   return (
     <div className="flex min-h-screen flex-col">
-      <SmoothCursor />
       <Header />
       <main className="flex-1">
         <Outlet />
