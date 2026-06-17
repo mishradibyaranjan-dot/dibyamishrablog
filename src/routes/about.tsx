@@ -134,7 +134,7 @@ function About() {
             </div>
           </div>
           <div className="grid gap-4">
-            <div className="card-flashy overflow-hidden rounded-3xl border border-border bg-card shadow-lg">
+            <div className="card-flashy mx-auto max-w-xs overflow-hidden rounded-3xl border border-border bg-card shadow-lg">
               <img
                 src={photoAsset.url}
                 alt="Dibya Ranjan Mishra — Technology & Engineering Leader"
