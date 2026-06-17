@@ -146,7 +146,7 @@ function About() {
                 <div className="text-sm text-muted-foreground">Head of Engineering · AI & Cloud Leader</div>
               </div>
             </div>
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-4 gap-4">
               {[
                 { icon: Briefcase, k: "Industries", v: "Payments · Retail · Supply Chain · Healthcare" },
                 { icon: Globe, k: "Reach", v: "Global engineering teams across 4 continents" },
