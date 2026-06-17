@@ -8,17 +8,18 @@ import photoAsset from "@/assets/dibya-mishra.png.asset.json";
 export const Route = createFileRoute("/about")({
   head: () => ({
     meta: [
-      { title: "About Dibya Ranjan Mishra | AI, Cloud & Engineering Leader" },
-      { name: "description", content: "Dibya Ranjan Mishra is a technology executive with 21+ years leading AI, cloud, and engineering teams. Former Head of Engineering at Inchcape and Director at Centific. Expert in Agentic AI, SaaS platforms, and enterprise digital transformation." },
-      { property: "og:title", content: "About Dibya Ranjan Mishra | AI, Cloud & Engineering Leader" },
-      { property: "og:description", content: "Dibya Ranjan Mishra is a technology executive with 21+ years leading AI, cloud, and engineering teams. Former Head of Engineering at Inchcape and Director at Centific. Expert in Agentic AI, SaaS platforms, and enterprise digital transformation." },
+      { title: "About Dibya Ranjan Mishra | Head of Engineering · VP · AI & Cloud Leader" },
+      { name: "description", content: "Dibya Ranjan Mishra — Head of Engineering / Senior Director / VP Engineering with 20+ years across Shipping, BFSI, Insurance and Enterprise SaaS. Led 500+ engineers, managed $28M+ budgets, scaled revenue $1M → $20M, and 42 certifications across AI, Cloud and Agile." },
+      { property: "og:title", content: "About Dibya Ranjan Mishra | Head of Engineering · VP · AI & Cloud Leader" },
+      { property: "og:description", content: "Technology executive with 20+ years leading 500+ engineers, $28M+ budgets, AI/Agentic AI transformation, and cloud-native SaaS platforms across global enterprises." },
       { property: "og:url", content: "https://dibyamishrablog.lovable.app/about" },
       { property: "og:type", content: "profile" },
       { property: "og:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/pI8mCXobICTShgzD4uthW89NKmv1/social-images/social-1781504443585-picofme_(4).webp" },
       { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:title", content: "About Dibya Ranjan Mishra | AI, Cloud & Engineering Leader" },
-      { name: "twitter:description", content: "Dibya Ranjan Mishra is a technology executive with 21+ years leading AI, cloud, and engineering teams. Former Head of Engineering at Inchcape and Director at Centific. Expert in Agentic AI, SaaS platforms, and enterprise digital transformation." },
+      { name: "twitter:title", content: "About Dibya Ranjan Mishra | Head of Engineering · VP · AI & Cloud Leader" },
+      { name: "twitter:description", content: "Technology executive with 20+ years leading 500+ engineers, $28M+ budgets, AI/Agentic AI transformation, and cloud-native SaaS platforms across global enterprises." },
       { name: "twitter:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/pI8mCXobICTShgzD4uthW89NKmv1/social-images/social-1781504443585-picofme_(4).webp" },
+
     ],
     links: [{ rel: "canonical", href: "https://dibyamishrablog.lovable.app/about" }],
     scripts: [{
