@@ -8,17 +8,18 @@ import photoAsset from "@/assets/dibya-mishra.png.asset.json";
 export const Route = createFileRoute("/about")({
   head: () => ({
     meta: [
-      { title: "About Dibya Ranjan Mishra | AI, Cloud & Engineering Leader" },
-      { name: "description", content: "Dibya Ranjan Mishra is a technology executive with 21+ years leading AI, cloud, and engineering teams. Former Head of Engineering at Inchcape and Director at Centific. Expert in Agentic AI, SaaS platforms, and enterprise digital transformation." },
-      { property: "og:title", content: "About Dibya Ranjan Mishra | AI, Cloud & Engineering Leader" },
-      { property: "og:description", content: "Dibya Ranjan Mishra is a technology executive with 21+ years leading AI, cloud, and engineering teams. Former Head of Engineering at Inchcape and Director at Centific. Expert in Agentic AI, SaaS platforms, and enterprise digital transformation." },
+      { title: "About Dibya Ranjan Mishra | Head of Engineering · VP · AI & Cloud Leader" },
+      { name: "description", content: "Dibya Ranjan Mishra — Head of Engineering / Senior Director / VP Engineering with 20+ years across Shipping, BFSI, Insurance and Enterprise SaaS. Led 500+ engineers, managed $28M+ budgets, scaled revenue $1M → $20M, and 42 certifications across AI, Cloud and Agile." },
+      { property: "og:title", content: "About Dibya Ranjan Mishra | Head of Engineering · VP · AI & Cloud Leader" },
+      { property: "og:description", content: "Technology executive with 20+ years leading 500+ engineers, $28M+ budgets, AI/Agentic AI transformation, and cloud-native SaaS platforms across global enterprises." },
       { property: "og:url", content: "https://dibyamishrablog.lovable.app/about" },
       { property: "og:type", content: "profile" },
       { property: "og:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/pI8mCXobICTShgzD4uthW89NKmv1/social-images/social-1781504443585-picofme_(4).webp" },
       { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:title", content: "About Dibya Ranjan Mishra | AI, Cloud & Engineering Leader" },
-      { name: "twitter:description", content: "Dibya Ranjan Mishra is a technology executive with 21+ years leading AI, cloud, and engineering teams. Former Head of Engineering at Inchcape and Director at Centific. Expert in Agentic AI, SaaS platforms, and enterprise digital transformation." },
+      { name: "twitter:title", content: "About Dibya Ranjan Mishra | Head of Engineering · VP · AI & Cloud Leader" },
+      { name: "twitter:description", content: "Technology executive with 20+ years leading 500+ engineers, $28M+ budgets, AI/Agentic AI transformation, and cloud-native SaaS platforms across global enterprises." },
       { name: "twitter:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/pI8mCXobICTShgzD4uthW89NKmv1/social-images/social-1781504443585-picofme_(4).webp" },
+
     ],
     links: [{ rel: "canonical", href: "https://dibyamishrablog.lovable.app/about" }],
     scripts: [{
@@ -27,8 +28,9 @@ export const Route = createFileRoute("/about")({
         "@context": "https://schema.org",
         "@type": "Person",
         name: "Dibya Ranjan Mishra",
-        jobTitle: "Head of Engineering & Global AI Leader",
-        description: "Technology executive with 21+ years leading AI, cloud, and engineering teams across Shipping, BFSI, Insurance, and Enterprise SaaS.",
+        jobTitle: "Head of Engineering | Senior Director | Vice President of Engineering",
+        description: "Technology executive with 20+ years leading 500+ engineers, $28M+ budgets, and cloud-native AI/SaaS platforms across Shipping, BFSI, Insurance and Enterprise SaaS.",
+
         url: "https://dibyamishrablog.lovable.app/about",
         image: "https://storage.googleapis.com/gpt-engineer-file-uploads/pI8mCXobICTShgzD4uthW89NKmv1/social-images/social-1781504443585-picofme_(4).webp",
         sameAs: [
@@ -81,12 +83,27 @@ const education = [
 ];
 
 const certifications = [
-  "AWS Cloud Practitioner Prep (CLF-C02) — AWS, 2025",
+  "Getting Started with Generative AI in Azure — Microsoft, 2026",
+  "Google Cloud Foundations — LinkedIn, 2026",
+  "AWS Certified Cloud Practitioner (CLF-C02) Cert Prep — AWS, 2025",
   "AWS Cloud Computing — AWS, 2024",
-  "Google Cloud Foundations — Google, 2026",
+  "Model Context Protocol (MCP): Hands-On with Agentic AI — 2026",
+  "Agentic AI: Build Your First Agentic AI System — LinkedIn, 2026",
+  "Agentic AI Fundamentals: Architectures, Frameworks & Applications — LinkedIn, 2026",
+  "Claude 101 / Claude Code / Claude Code 101 — Anthropic, 2026",
+  "Deep Learning: Getting Started — 2026",
+  "Generative AI — Art of the Possible — AWS, 2026",
+  "Advanced AI Analytics on AWS: Bedrock, Q, SageMaker & QuickSight — AWS, 2026",
+  "Learning Amazon Bedrock — AWS, 2026",
+  "Learning Amazon SageMaker AI — AWS, 2026",
+  "Apache Kafka Essential Training — 2026",
   "SAFe 6.0 — Scaled Agile Framework Complete Course, 2026",
+  "Lean Six Sigma Foundations — PMIEF & LinkedIn, 2026",
   "CSM — Certified Scrum Master, Scrum Alliance, 2017",
+  "MCP / MCAD / MCPDEA — Microsoft, 2008",
+  "42 total certifications across AI, Cloud, Leadership & Delivery",
 ];
+
 
 const languages = ["English", "Hindi", "Bengali", "Punjabi"];
 
@@ -101,21 +118,24 @@ function About() {
               Dibya Ranjan Mishra
             </h1>
             <p className="mt-3 text-lg font-medium text-gradient">
-              Technology leader building AI-native enterprises
+              Head of Engineering · Senior Director · Vice President of Engineering
             </p>
             <p className="mt-5 text-lg text-muted-foreground">
-              Results-driven technology executive with 21+ years of progressive leadership across
+              Results-driven technology executive with 20+ years of progressive leadership across
               Shipping, BFSI, Insurance, and Enterprise SaaS. Track record of growing revenue from
-              $1M to $20M in 24 months, managing $28M+ combined budgets, and leading 450+ engineers
-              across 5 time zones.
+              $1M to $20M within 24 months, managing $28M+ combined budgets, and leading 500+
+              engineers across 5 time zones — backed by 42 certifications spanning AI, Cloud, and
+              Agile delivery.
             </p>
             <p className="mt-4 text-muted-foreground">
               Expert at delivering cloud-native platforms (AWS, Azure, GCP), embedding AI/ML and
               Agentic AI at scale, and translating business strategy into executable technology
               roadmaps. Deep technical fluency in .NET Core, React, Node.js, Python, DevSecOps,
               and MLOps — with proven impact across enterprise architecture, change management,
-              and digital transformation.
+              and digital transformation. Seeking a VP Engineering or Senior Director role to
+              drive transformational impact through engineering excellence and AI-first thinking.
             </p>
+
             <div className="mt-7 flex flex-wrap gap-2">
               <Button asChild className="bg-brand-gradient text-white">
                 <a href="https://bold.pro/my/dibya-mishra-260203120923" target="_blank" rel="noreferrer">Full Portfolio</a>
