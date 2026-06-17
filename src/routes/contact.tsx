@@ -5,7 +5,7 @@ import { Mail, Github, ExternalLink, Linkedin, Send, CheckCircle2, Download, Loa
 import resumeAsset from "@/assets/resume.pdf.asset.json";
 import { Section, SectionHeader } from "@/components/layout/Section";
 import { Button } from "@/components/ui/button";
-import { sendContactMessage } from "@/lib/contact.functions";
+import { sendContactMessage, verifyContactPipeline } from "@/lib/contact.functions";
 
 export const Route = createFileRoute("/contact")({
   head: () => ({
