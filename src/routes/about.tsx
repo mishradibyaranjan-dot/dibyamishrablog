@@ -62,12 +62,12 @@ export const Route = createFileRoute("/about")({
 });
 
 const timeline = [
-  { year: "Nov 2022 — Jun 2026", role: "Head of Engineering & Global Application Support — Inchcape Shipping Services, Hyderabad", text: "Led 2 cross-functional teams of 40 engineers across 5 time zones owning a cloud-native vessel management platform (onboarding, customs, prefunding, agent payments) with 5+ SaaS integrations (Unit4, Eye-share). Executed multi-year roadmap cutting time-to-market 35%; AI transformation reduced recurring incidents 76% (3,800 → 900) and manual training effort 60%; biweekly releases with <2% rollback." },
-  { year: "Dec 2019 — Jun 2022", role: "Director of Delivery — Centific India Pvt Ltd, Hyderabad", text: "Directed 450-person delivery org (15 Managers, 70 Tech Leads, 130 Senior Associates, 235 Junior Associates); $8M combined CAPEX+OPEX. Delivered Microsoft Office 365 / Office IP, Data Platform & BI programs for 10,000+ Microsoft employees. Grew account revenue $1M → $20M in 24 months. 200% delivery throughput, 300% performance uplift via Azure migration; ~$2M vendor savings at 99.5% SLA." },
-  { year: "Jul 2017 — Dec 2019", role: "Delivery Manager — Deloitte Support Services, Hyderabad", text: "Architected unified web + mobile platform for Deloitte University (Texas) replacing 5 third-party tools and automating 100% of event lifecycle for 2,000+ annual guests. Integrated AI automation and SaaS payments — eliminated ~15 hrs/week of manual entry, reduced booking errors 90%. 10+ weekly production deployments with zero critical outages for 2.5 years." },
-  { year: "Mar 2011 — Apr 2017", role: "Senior Consultant — BFSI Domain SME — Capgemini, Hyderabad", text: "SME for Banking & Payments across 6 engagements (Global Payments, Bank of America, Selective Insurance) covering 20+ US states. Architected Biller Advantage multi-portal payment platform — merchant onboarding cut from 3 months to 4 hours (98%). Delivered Boarding & Servicing platform at 99.9% uptime and core Payment Engines for Selective Insurance CLAS." },
-  { year: "Jan 2009 — Dec 2011", role: "Senior Software Engineer — Telecom SME — CGI, Bangalore", text: "SME for Telecom domain. Designed and developed the Payment Engine for Bell Canada serving millions of subscribers. Led production support with <4-hour P1 resolution SLA across full defect lifecycle." },
-  { year: "Jun 2006 — Dec 2008", role: "Software Engineer — Accenture India, Bangalore", text: "Built web applications for Aflac, AAA, and Auto Club. Delivered production support and enhancements across 3 concurrent client programs using Java and Python." },
+  { year: "2022 — 2026", role: "Head of Engineering & Global Application Support — Inchcape Shipping Services", text: "Led 40 engineers across 5 time zones on a cloud-native vessel management platform. Cut time-to-market 35%; AI transformation reduced incidents 76% (3,800 → 900) and training effort 60%." },
+  { year: "2019 — 2022", role: "Director of Delivery — Centific India", text: "Ran a 450-person delivery org with $8M budget. Delivered Microsoft 365 and Data Platform programs for 10,000+ users. Grew revenue $1M → $20M in 24 months." },
+  { year: "2017 — 2019", role: "Delivery Manager — Deloitte Support Services", text: "Built a unified web/mobile platform for Deloitte University, replacing 5 tools and automating event lifecycle for 2,000+ guests. Zero critical outages over 2.5 years." },
+  { year: "2011 — 2017", role: "Senior Consultant — BFSI Domain SME — Capgemini", text: "Banking & Payments SME across 6 engagements. Architected Biller Advantage platform — cut merchant onboarding from 3 months to 4 hours (98%)." },
+  { year: "2009 — 2011", role: "Senior Software Engineer — Telecom SME — CGI", text: "Designed the Payment Engine for Bell Canada serving millions of subscribers. Maintained <4-hour P1 SLA." },
+  { year: "2006 — 2008", role: "Software Engineer — Accenture India", text: "Built web apps for Aflac, AAA, and Auto Club across concurrent client programs." },
 ];
 
 const skillGroups = [
@@ -83,22 +83,15 @@ const education = [
 ];
 
 const certifications = [
-  "Getting Started with Generative AI in Azure — Microsoft, 2026",
-  "Google Cloud Foundations — LinkedIn, 2026",
-  "AWS Certified Cloud Practitioner (CLF-C02) Cert Prep — AWS, 2025",
-  "AWS Cloud Computing — AWS, 2024",
-  "Model Context Protocol (MCP): Hands-On with Agentic AI — 2026",
-  "Agentic AI: Build Your First Agentic AI System — LinkedIn, 2026",
-  "Agentic AI Fundamentals: Architectures, Frameworks & Applications — LinkedIn, 2026",
-  "Claude 101 / Claude Code / Claude Code 101 — Anthropic, 2026",
-  "Deep Learning: Getting Started — 2026",
-  "Generative AI — Art of the Possible — AWS, 2026",
-  "Advanced AI Analytics on AWS: Bedrock, Q, SageMaker & QuickSight — AWS, 2026",
-  "Learning Amazon Bedrock — AWS, 2026",
-  "Learning Amazon SageMaker AI — AWS, 2026",
-  "Apache Kafka Essential Training — 2026",
-  "SAFe 6.0 — Scaled Agile Framework Complete Course, 2026",
-  "Lean Six Sigma Foundations — PMIEF & LinkedIn, 2026",
+  "Model Context Protocol (MCP) — Agentic AI, 2026",
+  "Agentic AI System Design — LinkedIn, 2026",
+  "Generative AI on Azure — Microsoft, 2026",
+  "Advanced AI Analytics on AWS — Bedrock, SageMaker, QuickSight, 2026",
+  "Claude 101 — Anthropic, 2026",
+  "Apache Kafka Essential Training, 2026",
+  "SAFe 6.0 — Scaled Agile Framework, 2026",
+  "Lean Six Sigma Foundations — PMIEF, 2026",
+  "AWS Cloud Practitioner (CLF-C02), 2025",
   "CSM — Certified Scrum Master, Scrum Alliance, 2017",
   "MCP / MCAD / MCPDEA — Microsoft, 2008",
   "42 total certifications across AI, Cloud, Leadership & Delivery",
@@ -121,19 +114,14 @@ function About() {
               Head of Engineering · Senior Director · Vice President of Engineering
             </p>
             <p className="mt-5 text-lg text-muted-foreground">
-              Results-driven technology executive with 20+ years of progressive leadership across
-              Shipping, BFSI, Insurance, and Enterprise SaaS. Track record of growing revenue from
-              $1M to $20M within 24 months, managing $28M+ combined budgets, and leading 500+
-              engineers across 5 time zones — backed by 42 certifications spanning AI, Cloud, and
-              Agile delivery.
+              Technology executive with 20+ years leading 500+ engineers, $28M+ budgets, and
+              cloud-native platforms across Shipping, BFSI, Insurance, and SaaS. Grew revenue
+              $1M → $20M in 24 months. 42 certifications spanning AI, Cloud, and Agile.
             </p>
             <p className="mt-4 text-muted-foreground">
-              Expert at delivering cloud-native platforms (AWS, Azure, GCP), embedding AI/ML and
-              Agentic AI at scale, and translating business strategy into executable technology
-              roadmaps. Deep technical fluency in .NET Core, React, Node.js, Python, DevSecOps,
-              and MLOps — with proven impact across enterprise architecture, change management,
-              and digital transformation. Seeking a VP Engineering or Senior Director role to
-              drive transformational impact through engineering excellence and AI-first thinking.
+              Delivers AI/ML and Agentic AI at scale, translating strategy into executable roadmaps.
+              Deep fluency in .NET Core, React, Node.js, Python, DevSecOps, and MLOps. Seeking
+              a VP Engineering or Senior Director role to drive transformational impact.
             </p>
 
             <div className="mt-7 flex flex-wrap gap-2">
