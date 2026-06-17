@@ -28,8 +28,9 @@ export const Route = createFileRoute("/about")({
         "@context": "https://schema.org",
         "@type": "Person",
         name: "Dibya Ranjan Mishra",
-        jobTitle: "Head of Engineering & Global AI Leader",
-        description: "Technology executive with 21+ years leading AI, cloud, and engineering teams across Shipping, BFSI, Insurance, and Enterprise SaaS.",
+        jobTitle: "Head of Engineering | Senior Director | Vice President of Engineering",
+        description: "Technology executive with 20+ years leading 500+ engineers, $28M+ budgets, and cloud-native AI/SaaS platforms across Shipping, BFSI, Insurance and Enterprise SaaS.",
+
         url: "https://dibyamishrablog.lovable.app/about",
         image: "https://storage.googleapis.com/gpt-engineer-file-uploads/pI8mCXobICTShgzD4uthW89NKmv1/social-images/social-1781504443585-picofme_(4).webp",
         sameAs: [
