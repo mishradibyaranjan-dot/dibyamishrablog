@@ -25,7 +25,14 @@ function Contact() {
   const [sent, setSent] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [testMode, setTestMode] = useState(false);
+  const [verifyResult, setVerifyResult] = useState<{
+    ok: boolean;
+    steps: Array<{ step: string; ok: boolean; detail?: string }>;
+  } | null>(null);
+  const [verifying, setVerifying] = useState(false);
   const send = useServerFn(sendContactMessage);
+  const verify = useServerFn(verifyContactPipeline);
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -36,6 +43,7 @@ function Contact() {
       email: String(fd.get("email") ?? ""),
       subject: String(fd.get("subject") ?? ""),
       message: String(fd.get("message") ?? ""),
+      testMode,
     };
     setSubmitting(true);
     setError(null);
@@ -48,6 +56,23 @@ function Contact() {
       setError("Sorry — something went wrong sending your message. Please try again or email directly.");
     } finally {
       setSubmitting(false);
+    }
+  }
+
+  async function handleVerify() {
+    setVerifying(true);
+    setVerifyResult(null);
+    try {
+      const result = await verify();
+      setVerifyResult(result);
+    } catch (err) {
+      console.error(err);
+      setVerifyResult({
+        ok: false,
+        steps: [{ step: "Pipeline call", ok: false, detail: (err as Error).message }],
+      });
+    } finally {
+      setVerifying(false);
     }
   }
 
