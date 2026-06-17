@@ -1,5 +1,5 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
-import { ArrowLeft, Share2, Linkedin, Twitter, CheckCircle2 } from "lucide-react";
+import { ArrowLeft, CheckCircle2 } from "lucide-react";
 import { Section } from "@/components/layout/Section";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -64,7 +64,7 @@ function BlogPost() {
     { id: "related", title: "Related reading" },
   ];
 
-  const shareUrl = typeof window !== "undefined" ? window.location.href : "";
+  
 
   return (
     <article>
@@ -106,19 +106,6 @@ function BlogPost() {
             </ul>
           </div>
 
-          <div className="flex flex-wrap items-center gap-2">
-            <span className="mr-1 text-sm text-muted-foreground"><Share2 className="inline h-4 w-4" /> Share:</span>
-            <Button asChild variant="outline" size="sm">
-              <a target="_blank" rel="noreferrer" href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(shareUrl)}`}>
-                <Linkedin className="mr-1 h-4 w-4" /> LinkedIn
-              </a>
-            </Button>
-            <Button asChild variant="outline" size="sm">
-              <a target="_blank" rel="noreferrer" href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(post.title)}&url=${encodeURIComponent(shareUrl)}`}>
-                <Twitter className="mr-1 h-4 w-4" /> Share on X
-              </a>
-            </Button>
-          </div>
 
           {related.length > 0 && (
             <div id="related">
