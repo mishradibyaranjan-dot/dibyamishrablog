@@ -11,6 +11,7 @@ import { useEffect, type ReactNode } from "react";
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { SiteLayout } from "../components/layout/SiteLayout";
+import drmLogo from "../assets/drm-logo.png.asset.json";
 
 function NotFoundComponent() {
   return (
@@ -97,6 +98,8 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     ],
     links: [
       { rel: "stylesheet", href: appCss },
+      { rel: "icon", type: "image/png", href: drmLogo.url },
+      { rel: "apple-touch-icon", href: drmLogo.url },
       {
         rel: "preconnect",
         href: "https://fonts.googleapis.com",

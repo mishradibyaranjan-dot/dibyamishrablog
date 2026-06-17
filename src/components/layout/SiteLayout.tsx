@@ -1,8 +1,10 @@
 import { Link, Outlet, useRouterState } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { Moon, Sun, Menu, X, Github, Linkedin, ExternalLink, Sparkles } from "lucide-react";
+import { Moon, Sun, Menu, X, Github, Linkedin, ExternalLink } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { SmoothCursor } from "@/components/SmoothCursor";
+import drmLogo from "@/assets/drm-logo.png.asset.json";
 
 const NAV = [
   { to: "/", label: "Home" },
@@ -59,9 +61,7 @@ function Header() {
     >
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-4 px-4 sm:px-6">
         <Link to="/" className="flex items-center gap-2 font-display text-lg font-bold">
-          <span className="grid h-8 w-8 shrink-0 place-items-center rounded-lg bg-brand-gradient shadow-glow">
-            <Sparkles className="h-4 w-4 text-white" />
-          </span>
+          <img src={drmLogo.url} alt="DRM logo" className="h-9 w-9 shrink-0 rounded-lg object-contain shadow-glow" />
           <span className="truncate">Dibya R. Mishra</span>
         </Link>
 
@@ -124,9 +124,7 @@ function Footer() {
       <div className="mx-auto grid max-w-7xl gap-10 px-4 py-14 sm:px-6 md:grid-cols-4">
         <div className="md:col-span-2">
           <div className="flex items-center gap-2 font-display text-lg font-bold">
-            <span className="grid h-8 w-8 place-items-center rounded-lg bg-brand-gradient">
-              <Sparkles className="h-4 w-4 text-white" />
-            </span>
+            <img src={drmLogo.url} alt="DRM logo" className="h-9 w-9 rounded-lg object-contain" />
             Dibya Ranjan Mishra
           </div>
           <p className="mt-3 max-w-md text-sm text-muted-foreground">
@@ -213,6 +211,7 @@ function Footer() {
 export function SiteLayout() {
   return (
     <div className="flex min-h-screen flex-col">
+      <SmoothCursor />
       <Header />
       <main className="flex-1">
         <Outlet />
