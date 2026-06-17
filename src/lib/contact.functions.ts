@@ -8,6 +8,7 @@ const ContactSchema = z.object({
   email: z.string().trim().email("Invalid email").max(255),
   subject: z.string().trim().min(1, "Subject is required").max(200),
   message: z.string().trim().min(1, "Message is required").max(5000),
+  testMode: z.boolean().optional(),
 });
 
 export type ContactInput = z.infer<typeof ContactSchema>;
