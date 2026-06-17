@@ -118,21 +118,24 @@ function About() {
               Dibya Ranjan Mishra
             </h1>
             <p className="mt-3 text-lg font-medium text-gradient">
-              Technology leader building AI-native enterprises
+              Head of Engineering · Senior Director · Vice President of Engineering
             </p>
             <p className="mt-5 text-lg text-muted-foreground">
-              Results-driven technology executive with 21+ years of progressive leadership across
+              Results-driven technology executive with 20+ years of progressive leadership across
               Shipping, BFSI, Insurance, and Enterprise SaaS. Track record of growing revenue from
-              $1M to $20M in 24 months, managing $28M+ combined budgets, and leading 450+ engineers
-              across 5 time zones.
+              $1M to $20M within 24 months, managing $28M+ combined budgets, and leading 500+
+              engineers across 5 time zones — backed by 42 certifications spanning AI, Cloud, and
+              Agile delivery.
             </p>
             <p className="mt-4 text-muted-foreground">
               Expert at delivering cloud-native platforms (AWS, Azure, GCP), embedding AI/ML and
               Agentic AI at scale, and translating business strategy into executable technology
               roadmaps. Deep technical fluency in .NET Core, React, Node.js, Python, DevSecOps,
               and MLOps — with proven impact across enterprise architecture, change management,
-              and digital transformation.
+              and digital transformation. Seeking a VP Engineering or Senior Director role to
+              drive transformational impact through engineering excellence and AI-first thinking.
             </p>
+
             <div className="mt-7 flex flex-wrap gap-2">
               <Button asChild className="bg-brand-gradient text-white">
                 <a href="https://bold.pro/my/dibya-mishra-260203120923" target="_blank" rel="noreferrer">Full Portfolio</a>
