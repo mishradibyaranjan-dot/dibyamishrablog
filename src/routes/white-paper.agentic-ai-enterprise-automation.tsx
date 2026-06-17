@@ -370,8 +370,12 @@ function WhitePaper() {
               Let's discuss how Agentic AI can unlock measurable ROI in your organization.
             </p>
             <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
-              <Button asChild size="lg" className="bg-white text-primary hover:bg-white/90">
-                <a href="#executive-summary"><Download className="mr-1 h-4 w-4" /> Download White Paper</a>
+              <Button
+                size="lg"
+                className="bg-white text-primary hover:bg-white/90"
+                onClick={() => typeof window !== "undefined" && window.print()}
+              >
+                <Download className="mr-1 h-4 w-4" /> Download White Paper
               </Button>
               <Button asChild size="lg" variant="outline" className="border-white/20 bg-white/5 text-white hover:bg-white/10">
                 <a href="https://bold.pro/my/dibya-mishra-260203120923" target="_blank" rel="noopener noreferrer">
