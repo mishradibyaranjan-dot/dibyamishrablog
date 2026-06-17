@@ -145,41 +145,12 @@ function Home() {
         </div>
       </Section>
 
-      {/* FEATURED RESEARCH & THOUGHT LEADERSHIP */}
-      <Section className="border-t border-border">
-        <SectionHeader
-          eyebrow="Featured Research & Thought Leadership"
-          title="White papers shaping enterprise AI"
-        />
-        <Link
-          to="/white-paper/agentic-ai-enterprise-automation"
-          className="card-flashy group block rounded-3xl border border-border bg-card p-8 shadow-card-soft sm:p-10"
-        >
-          <div className="relative z-[3] flex flex-col gap-6 sm:flex-row sm:items-center">
-            <div className="grid h-14 w-14 shrink-0 place-items-center rounded-2xl bg-brand-gradient text-white">
-              <Sparkles className="h-6 w-6" />
-            </div>
-            <div className="min-w-0 flex-1">
-              <Badge variant="secondary" className="w-fit">White Paper · Agentic AI</Badge>
-              <h3 className="mt-3 text-2xl font-bold group-hover:text-gradient sm:text-3xl">
-                How Agentic AI Is Changing Enterprise Automation
-              </h3>
-              <p className="mt-2 text-sm text-muted-foreground sm:text-base">
-                Autonomous agents are moving from research to production. A look at how Agentic AI
-                patterns are reshaping enterprise workflows, governance, and ROI.
-              </p>
-            </div>
-            <ArrowRight className="hidden h-6 w-6 shrink-0 text-muted-foreground sm:block" />
-          </div>
-        </Link>
-      </Section>
-
-      {/* LATEST BLOG */}
+      {/* LATEST POSTS */}
       <Section className="border-t border-border">
         <div className="flex items-end justify-between gap-4">
-          <SectionHeader eyebrow="Latest Posts" title="From the blog" />
+          <SectionHeader eyebrow="Latest Posts" title="From research & blog" />
           <Button asChild variant="ghost" className="hidden shrink-0 sm:inline-flex">
-            <Link to="/blog">All posts <ArrowRight className="ml-1 h-4 w-4" /></Link>
+            <Link to="/research">All articles <ArrowRight className="ml-1 h-4 w-4" /></Link>
           </Button>
         </div>
         <div className="divide-y divide-border rounded-2xl border border-border bg-card">
@@ -199,6 +170,7 @@ function Home() {
           ))}
         </div>
       </Section>
+
 
       {/* PROJECT SHOWCASE */}
       <Section className="border-t border-border">
