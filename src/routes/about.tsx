@@ -2,8 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { Section, SectionHeader } from "@/components/layout/Section";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Award, Briefcase, Download, GraduationCap, Globe } from "lucide-react";
-import resumeAsset from "@/assets/resume.pdf.asset.json";
+import { Award, Briefcase, GraduationCap, Globe } from "lucide-react";
 import photoAsset from "@/assets/dibya-mishra.png.asset.json";
 
 export const Route = createFileRoute("/about")({
@@ -124,11 +123,6 @@ function About() {
               <Button asChild variant="outline">
                 <Link to="/contact">Get in touch</Link>
               </Button>
-              <Button asChild variant="outline">
-                <a href={resumeAsset.url} download>
-                  <Download className="mr-1.5 h-4 w-4" /> Download Resume
-                </a>
-              </Button>
             </div>
           </div>
           <div className="grid gap-4">
@@ -238,21 +232,6 @@ function About() {
         </div>
       </Section>
 
-      <Section className="border-t border-border">
-        <div className="card-flashy flex flex-col items-center justify-between gap-6 rounded-3xl border border-border bg-card p-8 sm:flex-row sm:p-10">
-          <div>
-            <h3 className="text-2xl font-bold tracking-tight">Download my resume</h3>
-            <p className="mt-2 text-muted-foreground">
-              A concise overview of experience, skills, and key achievements.
-            </p>
-          </div>
-          <Button asChild className="bg-brand-gradient text-white">
-            <a href={resumeAsset.url} download>
-              <Download className="mr-2 h-4 w-4" /> Download Resume (PDF)
-            </a>
-          </Button>
-        </div>
-      </Section>
     </>
   );
 }

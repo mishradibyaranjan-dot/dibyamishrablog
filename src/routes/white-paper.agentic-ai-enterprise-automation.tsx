@@ -24,7 +24,7 @@ import {
   Shield,
   UserCheck,
   Truck,
-  Download,
+  
   Github,
   Mail,
   Briefcase,
@@ -330,14 +330,6 @@ function WhitePaper() {
             <div className="no-print mt-9 flex flex-wrap items-center justify-center gap-3">
               <Button asChild size="lg" className="bg-brand-gradient text-white shadow-glow hover:opacity-90">
                 <a href="#executive-summary">Read White Paper <ArrowRight className="ml-1 h-4 w-4" /></a>
-              </Button>
-              <Button
-                size="lg"
-                variant="outline"
-                className="border-white/20 bg-white/5 text-white hover:bg-white/10"
-                onClick={() => typeof window !== "undefined" && window.print()}
-              >
-                <Download className="mr-1 h-4 w-4" /> Download PDF
               </Button>
               <Button asChild size="lg" variant="outline" className="border-white/20 bg-white/5 text-white hover:bg-white/10">
                 <Link to="/contact">Connect with Dibya</Link>
@@ -748,13 +740,6 @@ function WhitePaper() {
               Let's discuss how Agentic AI can unlock outcomes across your enterprise workflows.
             </p>
             <div className="no-print mt-8 flex flex-wrap items-center justify-center gap-3">
-              <Button
-                size="lg"
-                className="bg-white text-primary hover:bg-white/90"
-                onClick={() => typeof window !== "undefined" && window.print()}
-              >
-                <Download className="mr-1 h-4 w-4" /> Download White Paper
-              </Button>
               <Button asChild size="lg" variant="outline" className="border-white/20 bg-white/5 text-white hover:bg-white/10">
                 <a href="https://bold.pro/my/dibya-mishra-260203120923" target="_blank" rel="noopener noreferrer">
                   <Briefcase className="mr-1 h-4 w-4" /> View Portfolio
