@@ -41,6 +41,41 @@ async function getOwnerEmail(headers: HeadersInit): Promise<string> {
   return data.emailAddress;
 }
 
+function buildRfcHeaders(opts: {
+  from: string;
+  to: string;
+  subject: string;
+  replyTo?: string;
+  contentType: string;
+  testMode?: boolean;
+}): string[] {
+  const domain = opts.from.split("@")[1] ?? "localhost";
+  const messageId = `<${Date.now()}.${Math.random().toString(36).slice(2)}@${domain}>`;
+  const headers = [
+    `From: ${opts.from}`,
+    `To: ${opts.to}`,
+    `Date: ${new Date().toUTCString()}`,
+    `Message-ID: ${messageId}`,
+    `Subject: ${opts.subject}`,
+    "MIME-Version: 1.0",
+    `Content-Type: ${opts.contentType}`,
+    "X-Mailer: Portfolio Contact (Lovable)",
+    `X-Entity-Ref-ID: ${messageId}`,
+  ];
+  if (opts.replyTo) headers.splice(3, 0, `Reply-To: ${opts.replyTo}`);
+  if (opts.testMode) {
+    // Suppress vacation responders / auto-replies and mark test traffic so
+    // Gmail's loop-prevention does not bounce or rate-limit repeated runs.
+    headers.push(
+      "Auto-Submitted: auto-generated",
+      "X-Auto-Response-Suppress: All",
+      "Precedence: bulk",
+      "X-Lovable-Test: true",
+    );
+  }
+  return headers;
+}
+
 export const sendContactMessage = createServerFn({ method: "POST" })
   .inputValidator((data: unknown) => ContactSchema.parse(data))
   .handler(async ({ data }) => {
@@ -83,12 +118,14 @@ export const sendContactMessage = createServerFn({ method: "POST" })
 
     const boundary = `bnd_${Math.random().toString(36).slice(2)}`;
     const raw = [
-      `From: ${owner}`,
-      `To: ${owner}`,
-      `Reply-To: ${replyTo}`,
-      `Subject: ${subject}`,
-      "MIME-Version: 1.0",
-      `Content-Type: multipart/alternative; boundary="${boundary}"`,
+      ...buildRfcHeaders({
+        from: owner,
+        to: owner,
+        replyTo,
+        subject,
+        contentType: `multipart/alternative; boundary="${boundary}"`,
+        testMode: data.testMode,
+      }),
       "",
       `--${boundary}`,
       'Content-Type: text/plain; charset="UTF-8"',
@@ -167,11 +204,13 @@ export const verifyContactPipeline = createServerFn({ method: "POST" })
     const testSubject = `[TEST] Portfolio pipeline check (test-${stamp})`;
     const textBody = "Automated verification — please ignore.";
     const raw = [
-      `From: ${owner}`,
-      `To: ${owner}`,
-      `Subject: ${testSubject}`,
-      "MIME-Version: 1.0",
-      'Content-Type: text/plain; charset="UTF-8"',
+      ...buildRfcHeaders({
+        from: owner,
+        to: owner,
+        subject: testSubject,
+        contentType: 'text/plain; charset="UTF-8"',
+        testMode: true,
+      }),
       "Content-Transfer-Encoding: 7bit",
       "",
       textBody,
