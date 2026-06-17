@@ -169,9 +169,17 @@ function WhitePaper() {
               Autonomous agents are moving from research to production. A look at how Agentic AI
               patterns are reshaping enterprise workflows, governance, and ROI.
             </p>
-            <div className="mt-9 flex flex-wrap items-center justify-center gap-3">
+            <div className="no-print mt-9 flex flex-wrap items-center justify-center gap-3">
               <Button asChild size="lg" className="bg-brand-gradient text-white shadow-glow hover:opacity-90">
                 <a href="#executive-summary">Read White Paper <ArrowRight className="ml-1 h-4 w-4" /></a>
+              </Button>
+              <Button
+                size="lg"
+                variant="outline"
+                className="border-white/20 bg-white/5 text-white hover:bg-white/10"
+                onClick={() => typeof window !== "undefined" && window.print()}
+              >
+                <Download className="mr-1 h-4 w-4" /> Download PDF
               </Button>
               <Button asChild size="lg" variant="outline" className="border-white/20 bg-white/5 text-white hover:bg-white/10">
                 <Link to="/contact">Connect with Dibya</Link>
