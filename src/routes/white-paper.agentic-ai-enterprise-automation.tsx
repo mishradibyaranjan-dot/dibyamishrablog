@@ -369,7 +369,7 @@ function WhitePaper() {
             <p className="mx-auto mt-3 max-w-xl text-white/70">
               Let's discuss how Agentic AI can unlock measurable ROI in your organization.
             </p>
-            <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
+            <div className="no-print mt-8 flex flex-wrap items-center justify-center gap-3">
               <Button
                 size="lg"
                 className="bg-white text-primary hover:bg-white/90"
