@@ -111,7 +111,7 @@ function About() {
               Dibya Ranjan Mishra
             </h1>
             <p className="mt-3 text-lg font-medium text-gradient">
-              Head of Engineering · Senior Director · Vice President of Engineering
+              Technology & Engineering Leader - AI - Cloud - SaaS Platform
             </p>
             <p className="mt-5 text-lg text-muted-foreground">
               Technology executive with 20+ years leading 500+ engineers, $28M+ budgets, and
