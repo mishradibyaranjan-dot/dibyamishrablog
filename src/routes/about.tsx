@@ -154,7 +154,7 @@ function About() {
         <SectionHeader eyebrow="Overview" title="At a glance" />
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {[
-            { icon: Briefcase, k: "Industries", v: "Payments · Retail · Supply Chain · Healthcare" },
+            { icon: Briefcase, k: "Industries", v: "BFSI · Telecom · Payments · Supply Chain · Retail · Health Care · Automobile" },
             { icon: Globe, k: "Reach", v: "Global engineering teams across 4 continents" },
             { icon: Award, k: "Focus", v: "AI Strategy · Platform · Architecture · Delivery" },
             { icon: GraduationCap, k: "Approach", v: "Research-driven, outcome-obsessed leadership" },
