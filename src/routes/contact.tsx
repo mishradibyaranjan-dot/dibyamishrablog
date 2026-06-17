@@ -72,13 +72,7 @@ function Contact() {
                 <Button className="mt-6" variant="outline" onClick={() => setSent(false)}>Send another</Button>
               </div>
             ) : (
-              <form
-                onSubmit={(e) => {
-                  e.preventDefault();
-                  setSent(true);
-                }}
-                className="space-y-4"
-              >
+              <form onSubmit={handleSubmit} className="space-y-4">
                 <div className="grid gap-4 sm:grid-cols-2">
                   <Field label="Name" name="name" placeholder="Your name" required />
                   <Field label="Email" name="email" type="email" placeholder="you@company.com" required />
@@ -95,8 +89,15 @@ function Contact() {
                     className="mt-1.5 w-full rounded-md border border-input bg-background px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-ring"
                   />
                 </div>
-                <Button type="submit" className="bg-brand-gradient text-white">
-                  <Send className="mr-1 h-4 w-4" /> Send message
+                {error && (
+                  <p className="text-sm text-destructive" role="alert">{error}</p>
+                )}
+                <Button type="submit" disabled={submitting} className="bg-brand-gradient text-white">
+                  {submitting ? (
+                    <><Loader2 className="mr-1 h-4 w-4 animate-spin" /> Sending…</>
+                  ) : (
+                    <><Send className="mr-1 h-4 w-4" /> Send message</>
+                  )}
                 </Button>
               </form>
             )}
