@@ -3,10 +3,11 @@ import { z } from "zod";
 
 const GATEWAY_URL = "https://connector-gateway.lovable.dev/google_mail/gmail/v1";
 
+const noCRLF = /^[^\r\n]*$/;
 const ContactSchema = z.object({
-  name: z.string().trim().min(1, "Name is required").max(100),
-  email: z.string().trim().email("Invalid email").max(255),
-  subject: z.string().trim().min(1, "Subject is required").max(200),
+  name: z.string().trim().min(1, "Name is required").max(100).regex(noCRLF, "Invalid characters"),
+  email: z.string().trim().email("Invalid email").max(255).regex(noCRLF, "Invalid characters"),
+  subject: z.string().trim().min(1, "Subject is required").max(200).regex(noCRLF, "Invalid characters"),
   message: z.string().trim().min(1, "Message is required").max(5000),
   testMode: z.boolean().optional(),
 });
