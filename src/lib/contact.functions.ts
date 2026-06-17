@@ -204,11 +204,13 @@ export const verifyContactPipeline = createServerFn({ method: "POST" })
     const testSubject = `[TEST] Portfolio pipeline check (test-${stamp})`;
     const textBody = "Automated verification — please ignore.";
     const raw = [
-      `From: ${owner}`,
-      `To: ${owner}`,
-      `Subject: ${testSubject}`,
-      "MIME-Version: 1.0",
-      'Content-Type: text/plain; charset="UTF-8"',
+      ...buildRfcHeaders({
+        from: owner,
+        to: owner,
+        subject: testSubject,
+        contentType: 'text/plain; charset="UTF-8"',
+        testMode: true,
+      }),
       "Content-Transfer-Encoding: 7bit",
       "",
       textBody,
