@@ -41,6 +41,41 @@ async function getOwnerEmail(headers: HeadersInit): Promise<string> {
   return data.emailAddress;
 }
 
+function buildRfcHeaders(opts: {
+  from: string;
+  to: string;
+  subject: string;
+  replyTo?: string;
+  contentType: string;
+  testMode?: boolean;
+}): string[] {
+  const domain = opts.from.split("@")[1] ?? "localhost";
+  const messageId = `<${Date.now()}.${Math.random().toString(36).slice(2)}@${domain}>`;
+  const headers = [
+    `From: ${opts.from}`,
+    `To: ${opts.to}`,
+    `Date: ${new Date().toUTCString()}`,
+    `Message-ID: ${messageId}`,
+    `Subject: ${opts.subject}`,
+    "MIME-Version: 1.0",
+    `Content-Type: ${opts.contentType}`,
+    "X-Mailer: Portfolio Contact (Lovable)",
+    `X-Entity-Ref-ID: ${messageId}`,
+  ];
+  if (opts.replyTo) headers.splice(3, 0, `Reply-To: ${opts.replyTo}`);
+  if (opts.testMode) {
+    // Suppress vacation responders / auto-replies and mark test traffic so
+    // Gmail's loop-prevention does not bounce or rate-limit repeated runs.
+    headers.push(
+      "Auto-Submitted: auto-generated",
+      "X-Auto-Response-Suppress: All",
+      "Precedence: bulk",
+      "X-Lovable-Test: true",
+    );
+  }
+  return headers;
+}
+
 export const sendContactMessage = createServerFn({ method: "POST" })
   .inputValidator((data: unknown) => ContactSchema.parse(data))
   .handler(async ({ data }) => {
