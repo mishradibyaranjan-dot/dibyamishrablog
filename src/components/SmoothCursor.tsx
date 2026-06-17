@@ -49,8 +49,7 @@ export function SmoothCursor() {
     <div aria-hidden className="pointer-events-none fixed inset-0 z-[9999] hidden md:block">
       <div
         ref={ringRef}
-        className="absolute left-0 top-0 h-9 w-9 rounded-full border border-primary/60 transition-[opacity] duration-200"
-        style={{ boxShadow: "0 0 24px hsl(var(--primary) / 0.35)" }}
+        className="absolute left-0 top-0 h-9 w-9 rounded-full border-2 border-primary text-primary shadow-glow transition-[opacity] duration-200"
       />
       <div
         ref={dotRef}
