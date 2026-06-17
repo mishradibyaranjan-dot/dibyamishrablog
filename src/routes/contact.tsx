@@ -1,9 +1,11 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { useServerFn } from "@tanstack/react-start";
 import { useState } from "react";
-import { Mail, Github, ExternalLink, Linkedin, Send, CheckCircle2, Download } from "lucide-react";
+import { Mail, Github, ExternalLink, Linkedin, Send, CheckCircle2, Download, Loader2 } from "lucide-react";
 import resumeAsset from "@/assets/resume.pdf.asset.json";
 import { Section, SectionHeader } from "@/components/layout/Section";
 import { Button } from "@/components/ui/button";
+import { sendContactMessage } from "@/lib/contact.functions";
 
 export const Route = createFileRoute("/contact")({
   head: () => ({
@@ -21,6 +23,33 @@ export const Route = createFileRoute("/contact")({
 
 function Contact() {
   const [sent, setSent] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const send = useServerFn(sendContactMessage);
+
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    const form = e.currentTarget;
+    const fd = new FormData(form);
+    const payload = {
+      name: String(fd.get("name") ?? ""),
+      email: String(fd.get("email") ?? ""),
+      subject: String(fd.get("subject") ?? ""),
+      message: String(fd.get("message") ?? ""),
+    };
+    setSubmitting(true);
+    setError(null);
+    try {
+      await send({ data: payload });
+      setSent(true);
+      form.reset();
+    } catch (err) {
+      console.error(err);
+      setError("Sorry — something went wrong sending your message. Please try again or email directly.");
+    } finally {
+      setSubmitting(false);
+    }
+  }
 
   return (
     <>
@@ -43,13 +72,7 @@ function Contact() {
                 <Button className="mt-6" variant="outline" onClick={() => setSent(false)}>Send another</Button>
               </div>
             ) : (
-              <form
-                onSubmit={(e) => {
-                  e.preventDefault();
-                  setSent(true);
-                }}
-                className="space-y-4"
-              >
+              <form onSubmit={handleSubmit} className="space-y-4">
                 <div className="grid gap-4 sm:grid-cols-2">
                   <Field label="Name" name="name" placeholder="Your name" required />
                   <Field label="Email" name="email" type="email" placeholder="you@company.com" required />
@@ -66,8 +89,15 @@ function Contact() {
                     className="mt-1.5 w-full rounded-md border border-input bg-background px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-ring"
                   />
                 </div>
-                <Button type="submit" className="bg-brand-gradient text-white">
-                  <Send className="mr-1 h-4 w-4" /> Send message
+                {error && (
+                  <p className="text-sm text-destructive" role="alert">{error}</p>
+                )}
+                <Button type="submit" disabled={submitting} className="bg-brand-gradient text-white">
+                  {submitting ? (
+                    <><Loader2 className="mr-1 h-4 w-4 animate-spin" /> Sending…</>
+                  ) : (
+                    <><Send className="mr-1 h-4 w-4" /> Send message</>
+                  )}
                 </Button>
               </form>
             )}
