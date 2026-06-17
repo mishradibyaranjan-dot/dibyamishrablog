@@ -11,7 +11,6 @@ import { useEffect, type ReactNode } from "react";
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { SiteLayout } from "../components/layout/SiteLayout";
-import drmLogo from "../assets/drm-logo.png.asset.json";
 
 function NotFoundComponent() {
   return (
@@ -93,13 +92,11 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "description", content: "Dibya's Tech Hub is a professional blog and portfolio website showcasing AI, cloud, architecture, and engineering leadership expertise." },
       { property: "og:description", content: "Dibya's Tech Hub is a professional blog and portfolio website showcasing AI, cloud, architecture, and engineering leadership expertise." },
       { name: "twitter:description", content: "Dibya's Tech Hub is a professional blog and portfolio website showcasing AI, cloud, architecture, and engineering leadership expertise." },
-      { property: "og:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/pI8mCXobICTShgzD4uthW89NKmv1/social-images/social-1781504443585-picofme_(4).webp" },
-      { name: "twitter:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/pI8mCXobICTShgzD4uthW89NKmv1/social-images/social-1781504443585-picofme_(4).webp" },
+      { property: "og:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/attachments/og-images/62feb90f-3c19-4765-9fa6-9b7f7701a7c6" },
+      { name: "twitter:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/attachments/og-images/62feb90f-3c19-4765-9fa6-9b7f7701a7c6" },
     ],
     links: [
       { rel: "stylesheet", href: appCss },
-      { rel: "icon", type: "image/png", href: drmLogo.url },
-      { rel: "apple-touch-icon", href: drmLogo.url },
       {
         rel: "preconnect",
         href: "https://fonts.googleapis.com",
