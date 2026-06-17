@@ -23,6 +23,33 @@ export const Route = createFileRoute("/contact")({
 
 function Contact() {
   const [sent, setSent] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const send = useServerFn(sendContactMessage);
+
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    const form = e.currentTarget;
+    const fd = new FormData(form);
+    const payload = {
+      name: String(fd.get("name") ?? ""),
+      email: String(fd.get("email") ?? ""),
+      subject: String(fd.get("subject") ?? ""),
+      message: String(fd.get("message") ?? ""),
+    };
+    setSubmitting(true);
+    setError(null);
+    try {
+      await send({ data: payload });
+      setSent(true);
+      form.reset();
+    } catch (err) {
+      console.error(err);
+      setError("Sorry — something went wrong sending your message. Please try again or email directly.");
+    } finally {
+      setSubmitting(false);
+    }
+  }
 
   return (
     <>
