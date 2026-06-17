@@ -1,9 +1,11 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { useServerFn } from "@tanstack/react-start";
 import { useState } from "react";
-import { Mail, Github, ExternalLink, Linkedin, Send, CheckCircle2, Download } from "lucide-react";
+import { Mail, Github, ExternalLink, Linkedin, Send, CheckCircle2, Download, Loader2 } from "lucide-react";
 import resumeAsset from "@/assets/resume.pdf.asset.json";
 import { Section, SectionHeader } from "@/components/layout/Section";
 import { Button } from "@/components/ui/button";
+import { sendContactMessage } from "@/lib/contact.functions";
 
 export const Route = createFileRoute("/contact")({
   head: () => ({
