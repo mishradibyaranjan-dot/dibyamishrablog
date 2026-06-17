@@ -114,19 +114,14 @@ function About() {
               Head of Engineering · Senior Director · Vice President of Engineering
             </p>
             <p className="mt-5 text-lg text-muted-foreground">
-              Results-driven technology executive with 20+ years of progressive leadership across
-              Shipping, BFSI, Insurance, and Enterprise SaaS. Track record of growing revenue from
-              $1M to $20M within 24 months, managing $28M+ combined budgets, and leading 500+
-              engineers across 5 time zones — backed by 42 certifications spanning AI, Cloud, and
-              Agile delivery.
+              Technology executive with 20+ years leading 500+ engineers, $28M+ budgets, and
+              cloud-native platforms across Shipping, BFSI, Insurance, and SaaS. Grew revenue
+              $1M → $20M in 24 months. 42 certifications spanning AI, Cloud, and Agile.
             </p>
             <p className="mt-4 text-muted-foreground">
-              Expert at delivering cloud-native platforms (AWS, Azure, GCP), embedding AI/ML and
-              Agentic AI at scale, and translating business strategy into executable technology
-              roadmaps. Deep technical fluency in .NET Core, React, Node.js, Python, DevSecOps,
-              and MLOps — with proven impact across enterprise architecture, change management,
-              and digital transformation. Seeking a VP Engineering or Senior Director role to
-              drive transformational impact through engineering excellence and AI-first thinking.
+              Delivers AI/ML and Agentic AI at scale, translating strategy into executable roadmaps.
+              Deep fluency in .NET Core, React, Node.js, Python, DevSecOps, and MLOps. Seeking
+              a VP Engineering or Senior Director role to drive transformational impact.
             </p>
 
             <div className="mt-7 flex flex-wrap gap-2">
