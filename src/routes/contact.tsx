@@ -91,50 +91,14 @@ function Contact() {
                 {error && (
                   <p className="text-sm text-destructive" role="alert">{error}</p>
                 )}
-                <div className="flex flex-wrap items-center justify-between gap-3 border-t border-border pt-4">
-                  <label className="flex items-center gap-2 text-sm text-muted-foreground">
-                    <input
-                      type="checkbox"
-                      checked={testMode}
-                      onChange={(e) => setTestMode(e.target.checked)}
-                      className="h-4 w-4 rounded border-input"
-                    />
-                    Test mode (sends a marked test email)
-                  </label>
+                <div className="flex flex-wrap items-center justify-end gap-3 border-t border-border pt-4">
                   <Button type="submit" disabled={submitting} className="bg-brand-gradient text-white">
                     {submitting ? (
                       <><Loader2 className="mr-1 h-4 w-4 animate-spin" /> Sending…</>
                     ) : (
-                      <><Send className="mr-1 h-4 w-4" /> {testMode ? "Send test" : "Send message"}</>
+                      <><Send className="mr-1 h-4 w-4" /> Send message</>
                     )}
                   </Button>
-                </div>
-                <div className="rounded-lg border border-dashed border-border bg-muted/30 p-4">
-                  <div className="flex items-center justify-between gap-3">
-                    <div>
-                      <p className="text-sm font-medium">Gmail delivery check</p>
-                      <p className="text-xs text-muted-foreground">Sends a test email and confirms it arrived in the connected inbox.</p>
-                    </div>
-                    <Button type="button" variant="outline" size="sm" disabled={verifying} onClick={handleVerify}>
-                      {verifying ? <><Loader2 className="mr-1 h-4 w-4 animate-spin" /> Checking…</> : "Run verification"}
-                    </Button>
-                  </div>
-                  {verifyResult && (
-                    <ul className="mt-3 space-y-1.5 text-xs">
-                      {verifyResult.steps.map((s, i) => (
-                        <li key={i} className="flex items-start gap-2">
-                          <span className={s.ok ? "text-emerald-500" : "text-destructive"}>{s.ok ? "✓" : "✗"}</span>
-                          <span className="flex-1">
-                            <span className="font-medium">{s.step}</span>
-                            {s.detail && <span className="text-muted-foreground"> — {s.detail}</span>}
-                          </span>
-                        </li>
-                      ))}
-                      <li className={`mt-2 font-medium ${verifyResult.ok ? "text-emerald-600" : "text-destructive"}`}>
-                        {verifyResult.ok ? "✅ Gmail is receiving submissions." : "❌ Verification failed — see steps above."}
-                      </li>
-                    </ul>
-                  )}
                 </div>
               </form>
             )}
