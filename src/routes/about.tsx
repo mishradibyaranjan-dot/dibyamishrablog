@@ -146,25 +146,29 @@ function About() {
                 <div className="text-sm text-muted-foreground">Head of Engineering · AI & Cloud Leader</div>
               </div>
             </div>
-            <div className="grid grid-cols-2 gap-4">
-              {[
-                { icon: Briefcase, k: "Industries", v: "Payments · Retail · Supply Chain · Healthcare" },
-                { icon: Globe, k: "Reach", v: "Global engineering teams across 4 continents" },
-                { icon: Award, k: "Focus", v: "AI Strategy · Platform · Architecture · Delivery" },
-                { icon: GraduationCap, k: "Approach", v: "Research-driven, outcome-obsessed leadership" },
-              ].map((c) => (
-                <div key={c.k} className="card-flashy flex items-start gap-4 rounded-2xl border border-border bg-card p-5">
-                  <div className="grid h-10 w-10 shrink-0 place-items-center rounded-lg bg-brand-gradient text-white">
-                    <c.icon className="h-5 w-5" />
-                  </div>
-                  <div className="min-w-0">
-                    <div className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">{c.k}</div>
-                    <div className="mt-0.5 text-sm font-medium">{c.v}</div>
-                  </div>
-                </div>
-              ))}
-            </div>
           </div>
+        </div>
+      </Section>
+
+      <Section className="border-t border-border pb-8">
+        <SectionHeader eyebrow="Overview" title="At a glance" />
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          {[
+            { icon: Briefcase, k: "Industries", v: "Payments · Retail · Supply Chain · Healthcare" },
+            { icon: Globe, k: "Reach", v: "Global engineering teams across 4 continents" },
+            { icon: Award, k: "Focus", v: "AI Strategy · Platform · Architecture · Delivery" },
+            { icon: GraduationCap, k: "Approach", v: "Research-driven, outcome-obsessed leadership" },
+          ].map((c) => (
+            <div key={c.k} className="card-flashy flex items-start gap-4 rounded-2xl border border-border bg-card p-5">
+              <div className="grid h-10 w-10 shrink-0 place-items-center rounded-lg bg-brand-gradient text-white">
+                <c.icon className="h-5 w-5" />
+              </div>
+              <div className="min-w-0">
+                <div className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">{c.k}</div>
+                <div className="mt-0.5 text-sm font-medium">{c.v}</div>
+              </div>
+            </div>
+          ))}
         </div>
       </Section>
 
