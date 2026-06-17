@@ -118,12 +118,14 @@ export const sendContactMessage = createServerFn({ method: "POST" })
 
     const boundary = `bnd_${Math.random().toString(36).slice(2)}`;
     const raw = [
-      `From: ${owner}`,
-      `To: ${owner}`,
-      `Reply-To: ${replyTo}`,
-      `Subject: ${subject}`,
-      "MIME-Version: 1.0",
-      `Content-Type: multipart/alternative; boundary="${boundary}"`,
+      ...buildRfcHeaders({
+        from: owner,
+        to: owner,
+        replyTo,
+        subject,
+        contentType: `multipart/alternative; boundary="${boundary}"`,
+        testMode: data.testMode,
+      }),
       "",
       `--${boundary}`,
       'Content-Type: text/plain; charset="UTF-8"',
