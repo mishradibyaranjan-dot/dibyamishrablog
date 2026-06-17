@@ -34,11 +34,12 @@ const expertise = [
 ];
 
 const highlights = [
-  { k: "21+", v: "Years in technology leadership" },
-  { k: "450+", v: "Engineers led across 5 time zones" },
+  { k: "20+", v: "Years in technology leadership" },
+  { k: "500+", v: "Engineers led across 5 time zones" },
   { k: "$28M+", v: "Combined budgets managed" },
   { k: "$1M → $20M", v: "Revenue growth in 24 months" },
 ];
+
 
 function Home() {
   const featured = posts.filter((p) => p.featured).slice(0, 3);
