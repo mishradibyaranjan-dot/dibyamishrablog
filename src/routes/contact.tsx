@@ -106,7 +106,7 @@ function Contact() {
 
           <div className="space-y-4">
             <a
-              href="mailto:hello@example.com"
+              href="mailto:mishra.dibyaranajan@gmail.com"
               className="card-flashy flex items-start gap-4 rounded-2xl border border-border bg-card p-5 transition-all hover:-translate-y-0.5 hover:shadow-glow"
             >
               <div className="grid h-10 w-10 shrink-0 place-items-center rounded-lg bg-brand-gradient text-white">
@@ -114,7 +114,7 @@ function Contact() {
               </div>
               <div className="min-w-0">
                 <div className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Email</div>
-                <div className="truncate text-sm font-medium">Send a direct note</div>
+                <div className="truncate text-sm font-medium">mishra.dibyaranajan@gmail.com</div>
               </div>
             </a>
             <a
