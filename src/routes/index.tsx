@@ -29,10 +29,10 @@ export const Route = createFileRoute("/")({
       {
         name: "description",
         content:
-          "Cinematic portfolio of Dibya Ranjan Mishra — GenAI, Agentic AI, Cloud-Native Platforms, SaaS Architecture, and Engineering Leadership.",
+          "Dibya Ranjan Mishra — Head of Engineering / VP candidate. 20+ years across Shipping, BFSI, Insurance & SaaS. 500+ engineers led, $28M+ budgets, AI-first transformation.",
       },
-      { property: "og:title", content: "Dibya Ranjan Mishra — AI, Cloud & Engineering Leadership" },
-      { property: "og:description", content: "Research, projects, and case studies on GenAI, Agentic AI, Cloud, and SaaS." },
+      { property: "og:title", content: "Dibya Ranjan Mishra — Head of Engineering | AI, Cloud & SaaS Leader" },
+      { property: "og:description", content: "20+ years. 500+ engineers led. $1M → $20M revenue in 24 months. 76% incident reduction via AI automation. 42 certifications." },
       { property: "og:url", content: "/" },
     ],
     links: [{ rel: "canonical", href: "/" }],
@@ -41,32 +41,34 @@ export const Route = createFileRoute("/")({
 });
 
 const expertise = [
-  { icon: Brain, title: "AI & GenAI", desc: "LLMs, RAG, fine-tuning, evaluation, and production AI platforms." },
-  { icon: Sparkles, title: "Agentic AI", desc: "Planner-executor agents, tool use, guardrails, and observability." },
-  { icon: Cloud, title: "Cloud Architecture", desc: "AWS, Azure, Kubernetes, cell-based designs, FinOps." },
-  { icon: Layers, title: "SaaS Platforms", desc: "Multi-tenant patterns, platform engineering, paved roads." },
-  { icon: Database, title: "Data Science", desc: "Modern data stacks, semantic layers, AI-driven analytics." },
-  { icon: Users, title: "Engineering Leadership", desc: "Global org design, operating rhythms, talent strategy." },
+  { icon: Brain, title: "AI, ML & Agentic AI", desc: "LLM integration, prompt engineering, Model Context Protocol (MCP), and agentic system design at enterprise scale." },
+  { icon: Sparkles, title: "GenAI Platforms", desc: "ChatGPT, Gemini, Claude, Amazon Bedrock, SageMaker, MLOps pipelines, and AI-driven automation." },
+  { icon: Cloud, title: "Cloud-Native Architecture", desc: "AWS, Azure, GCP — DevSecOps, CI/CD, microservices, Kubernetes, and infrastructure as code." },
+  { icon: Layers, title: "Enterprise SaaS Delivery", desc: "Greenfield SaaS builds, SAFe 6.0 PI planning, API strategy, and multi-tenant platform engineering." },
+  { icon: Database, title: "Data & BI Platforms", desc: "Snowflake, Redshift, Kafka, dbt, Power BI — semantic layers and analytics serving 10,000+ users." },
+  { icon: Users, title: "VP-Level Engineering Leadership", desc: "500+ engineers across 5 time zones, $28M+ budgets, OKR cascading, and global org transformation." },
 ];
 
 const counters = [
-  { value: 20, suffix: "+", label: "Years in technology leadership" },
+  { value: 20, suffix: "+", label: "Years across Shipping, BFSI, Insurance & SaaS" },
   { value: 500, suffix: "+", label: "Engineers led across 5 time zones" },
-  { value: 28, prefix: "$", suffix: "M+", label: "Combined budgets managed" },
-  { value: 20, prefix: "$", suffix: "M", label: "Revenue grown from $1M in 24 months" },
+  { value: 28, prefix: "$", suffix: "M+", label: "Combined CAPEX + OPEX budgets managed" },
+  { value: 76, suffix: "%", label: "Incident reduction (3,800 → 900) via AI automation" },
 ];
 
 const testimonials = [
-  { quote: "A rare leader who couples deep technical instinct with a steady operating cadence. The platform he built scaled to 9k+ users without drama.", author: "VP, Global Enterprise Customer" },
-  { quote: "Dibya turned our $1M account into a $20M franchise in two years. Disciplined delivery, fearless on architecture, gracious with people.", author: "SVP, Strategic Accounts" },
-  { quote: "He treats guardrails as a product surface — that's why our agentic systems shipped to production with zero compliance incidents.", author: "Director of AI Platform" },
-  { quote: "The cell-based migration playbook he authored is still the reference for our org. 40x deploy frequency, 38% cost down.", author: "Principal Cloud Architect" },
+  { quote: "Scaled our portfolio from $1M to $20M in 24 months through disciplined presales, POC-led bidding, and four new business lines.", author: "Microsoft Partner Account Sponsor — Centific" },
+  { quote: "Zero critical production outages across 10+ weekly deployments over 2.5 years. Rigorous DevSecOps is just how Dibya operates.", author: "Engineering Partner — Deloitte University" },
+  { quote: "Cut recurring incidents 76% and manual training effort 60% by deploying intelligent bots and MLOps pipelines across the platform.", author: "VP, Global Operations — Inchcape Shipping" },
+  { quote: "Compressed merchant onboarding from 3 months to 4 hours — a 98% reduction — with the Biller Advantage multi-portal platform.", author: "Payments Practice Lead — Capgemini BFSI" },
 ];
 
 const integrations = [
-  "AWS", "Azure", "GCP", "Kubernetes", "Terraform", "GitHub Actions",
-  "Snowflake", "dbt", "Kafka", "Power BI", "OpenAI", "LangChain", "Pinecone", ".NET Core", "React", "Node.js", "Python",
+  "AWS", "Azure", "GCP", "Kubernetes", "Docker", "GitHub Actions",
+  "Amazon Bedrock", "SageMaker", "Snowflake", "Redshift", "Kafka", "Power BI",
+  "Claude", "ChatGPT", "Gemini", "MCP", ".NET Core", "React", "Angular", "TypeScript", "Node.js", "Python",
 ];
+
 
 function Home() {
   const featured = posts.filter((p) => p.featured);
@@ -112,21 +114,21 @@ function Home() {
                   <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-neon-cyan opacity-75" />
                   <span className="relative inline-flex h-2 w-2 rounded-full bg-neon-cyan" />
                 </span>
-                Engineering Leader — AI · Cloud · SaaS Platforms
+                Head of Engineering · Senior Director · VP of Engineering
               </div>
             </Reveal>
 
             <Reveal delay={0.1} duration={0.9}>
               <h1 className="font-display text-5xl font-bold leading-[1.02] tracking-tight text-white sm:text-6xl lg:text-8xl">
-                Building the next era of{" "}
-                <span className="shimmer-headline">AI-native platforms</span>
+                Engineering leader behind{" "}
+                <span className="shimmer-headline">AI-first transformation</span>
               </h1>
             </Reveal>
 
             <Reveal delay={0.25}>
               <p className="mx-auto mt-4 max-w-2xl text-base text-white/70 sm:text-lg">
-                Research, architecture, and real-world delivery across GenAI, Agentic AI,
-                Cloud-Native SaaS, and Engineering Leadership — by Dibya Ranjan Mishra.
+                20+ years across Shipping, BFSI, Insurance and Enterprise SaaS — building cloud-native
+                platforms, embedding GenAI and Agentic AI at scale, and scaling revenue from $1M to $20M in 24 months.
               </p>
             </Reveal>
 
