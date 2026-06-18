@@ -255,6 +255,11 @@ function Footer() {
                 </Link>
               </li>
             ))}
+            <li>
+              <Link to="/trust" className="transition-colors hover:text-white">
+                Trust & Privacy
+              </Link>
+            </li>
           </ul>
         </div>
         <div>
