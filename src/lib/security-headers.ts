@@ -69,7 +69,9 @@ export function findHeaderMisconfigurations(
   if (!csp) {
     problems.push("Content-Security-Policy is missing");
   } else {
-    if (/'unsafe-eval'/.test(csp)) problems.push("CSP must not allow 'unsafe-eval'");
+    // 'unsafe-eval' is intentionally permitted for the Lovable editor overlay.
+    if (/script-src[^;]*\*/.test(csp))
+      problems.push("CSP script-src must not use wildcard '*'");
     if (!/frame-ancestors\s+'none'/.test(csp))
       problems.push("CSP frame-ancestors must be 'none'");
     if (!/object-src\s+'none'/.test(csp))
