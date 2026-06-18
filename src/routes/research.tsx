@@ -62,7 +62,7 @@ function Research() {
         {/* WHITE PAPER FEATURE */}
         <Link
           to="/white-paper/agentic-ai-enterprise-automation"
-          className="card-flashy group mb-10 block rounded-3xl border border-border bg-hero p-8 shadow-glow sm:p-10"
+          className="card-flashy group mb-10 block rounded-3xl glass-strong p-8 shadow-glow sm:p-10"
         >
           <div className="relative z-[3] flex flex-col gap-6 sm:flex-row sm:items-center">
             <div className="grid h-14 w-14 shrink-0 place-items-center rounded-2xl bg-white/10 text-white backdrop-blur">
@@ -89,7 +89,7 @@ function Research() {
           <Link
             to="/blog/$slug"
             params={{ slug: featured.slug }}
-            className="group mb-10 grid items-stretch overflow-hidden rounded-3xl border border-border bg-card shadow-card-soft lg:grid-cols-2"
+            className="group mb-10 grid items-stretch overflow-hidden rounded-3xl glass-strong lg:grid-cols-2"
           >
             <div className="grid place-items-center p-8 sm:p-10">
               <div className="grid-pattern h-full w-full rounded-2xl border border-border bg-accent/30 p-8" />
@@ -151,7 +151,7 @@ function Research() {
               key={p.slug}
               to="/blog/$slug"
               params={{ slug: p.slug }}
-              className="card-flashy group flex flex-col rounded-2xl border border-border bg-card p-6 transition-all hover:-translate-y-0.5 hover:shadow-glow"
+              className="card-flashy group flex flex-col rounded-2xl glass-strong p-6 transition-all hover:-translate-y-0.5 hover:shadow-glow"
             >
               <Badge variant="secondary" className="relative z-[3] w-fit">
                 {p.category}

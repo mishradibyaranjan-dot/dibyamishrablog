@@ -307,7 +307,7 @@ function WhitePaper() {
 
       {/* RESEARCH SCOPE */}
       <Section id="scope">
-        <div className="card-flashy rounded-2xl border border-border bg-card p-6 shadow-card-soft sm:p-8">
+        <div className="card-flashy rounded-2xl glass-strong p-6 sm:p-8">
           <div className="relative z-[3]">
             <Badge variant="secondary" className="mb-3">Research scope</Badge>
             <p className="text-sm leading-relaxed text-muted-foreground sm:text-base">
@@ -327,7 +327,7 @@ function WhitePaper() {
           eyebrow="Executive Summary"
           title="From scripted automation to goal-driven autonomy"
         />
-        <div className="card-flashy rounded-2xl border border-border bg-card p-8 shadow-card-soft">
+        <div className="card-flashy rounded-2xl glass-strong p-8">
           <div className="relative z-[3] space-y-5 text-base leading-relaxed text-foreground sm:text-lg">
             <p>
               Agentic AI represents the next major phase of enterprise automation. Unlike
@@ -357,7 +357,7 @@ function WhitePaper() {
         <SectionHeader eyebrow="The Core Thesis" title="Five shifts reshaping enterprise automation" />
         <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
           {fiveShifts.map((c) => (
-            <div key={c.title} className="card-flashy rounded-2xl border border-border bg-card p-6 shadow-card-soft">
+            <div key={c.title} className="card-flashy rounded-2xl glass-strong p-6">
               <div className="relative z-[3] mb-4 grid h-11 w-11 place-items-center rounded-xl bg-brand-gradient text-white">
                 <c.icon className="h-5 w-5" />
               </div>
@@ -383,7 +383,7 @@ function WhitePaper() {
         </p>
         <div className="grid gap-5 md:grid-cols-2">
           {marketSignals.map((s, i) => (
-            <div key={i} className="card-flashy rounded-2xl border border-border bg-card p-6 shadow-card-soft">
+            <div key={i} className="card-flashy rounded-2xl glass-strong p-6">
               <div className="relative z-[3] text-xs font-semibold uppercase tracking-wider text-gradient">
                 Signal {String(i + 1).padStart(2, "0")}
               </div>
@@ -402,7 +402,7 @@ function WhitePaper() {
         />
         <div className="grid gap-4 md:grid-cols-2">
           {generations.map((g) => (
-            <div key={g.name} className="card-flashy rounded-2xl border border-border bg-card p-6 shadow-card-soft">
+            <div key={g.name} className="card-flashy rounded-2xl glass-strong p-6">
               <div className="relative z-[3]">
                 <h3 className="text-lg font-semibold">{g.name}</h3>
                 <dl className="mt-3 space-y-2 text-sm">
@@ -438,7 +438,7 @@ function WhitePaper() {
         />
         <div className="grid gap-4 md:grid-cols-2">
           {archLayers.map((l) => (
-            <div key={l.title} className="card-flashy rounded-2xl border border-border bg-card p-5 shadow-card-soft">
+            <div key={l.title} className="card-flashy rounded-2xl glass-strong p-5">
               <div className="relative z-[3] flex items-start gap-4">
                 <div className="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-brand-gradient text-white">
                   <l.icon className="h-5 w-5" />
@@ -458,7 +458,7 @@ function WhitePaper() {
         <SectionHeader eyebrow="Agentic Patterns" title="Seven patterns enterprises actually deploy" />
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {patterns.map((p) => (
-            <div key={p.title} className="card-flashy rounded-2xl border border-border bg-card p-5 shadow-card-soft">
+            <div key={p.title} className="card-flashy rounded-2xl glass-strong p-5">
               <div className="relative z-[3] mb-3 grid h-10 w-10 place-items-center rounded-xl bg-accent text-foreground">
                 <p.icon className="h-5 w-5" />
               </div>
@@ -474,7 +474,7 @@ function WhitePaper() {
         <SectionHeader eyebrow="4 · High-Impact Use Cases" title="Where Agentic AI delivers value" />
         <div className="grid gap-4 md:grid-cols-2">
           {useCases.map((u) => (
-            <div key={u.title} className="card-flashy rounded-2xl border border-border bg-card p-6 shadow-card-soft">
+            <div key={u.title} className="card-flashy rounded-2xl glass-strong p-6">
               <div className="relative z-[3] flex items-start gap-4">
                 <div className="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-brand-gradient text-white">
                   <u.icon className="h-5 w-5" />
@@ -506,7 +506,7 @@ function WhitePaper() {
         </p>
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {governance.map((g) => (
-            <div key={g.label} className="card-flashy rounded-2xl border border-border bg-card p-5 shadow-card-soft">
+            <div key={g.label} className="card-flashy rounded-2xl glass-strong p-5">
               <div className="relative z-[3] mb-3 grid h-10 w-10 place-items-center rounded-xl bg-accent text-foreground">
                 <g.icon className="h-5 w-5" />
               </div>
@@ -519,7 +519,7 @@ function WhitePaper() {
       {/* ROI */}
       <Section className="border-t border-border">
         <SectionHeader eyebrow="6 · ROI Framework" title="Measure value at workflow level" />
-        <div className="card-flashy mb-8 rounded-2xl border border-border bg-card p-6 shadow-card-soft sm:p-8">
+        <div className="card-flashy mb-8 rounded-2xl glass-strong p-6 sm:p-8">
           <div className="relative z-[3]">
             <Badge variant="secondary" className="mb-3">ROI Formula</Badge>
             <p className="text-base leading-relaxed text-foreground sm:text-lg">
@@ -536,7 +536,7 @@ function WhitePaper() {
         </div>
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {valueLevers.map((r) => (
-            <div key={r.label} className="card-flashy rounded-2xl border border-border bg-card p-6 shadow-card-soft">
+            <div key={r.label} className="card-flashy rounded-2xl glass-strong p-6">
               <div className="relative z-[3] mb-3 grid h-11 w-11 place-items-center rounded-xl bg-brand-gradient text-white">
                 <r.icon className="h-5 w-5" />
               </div>
@@ -560,7 +560,7 @@ function WhitePaper() {
         </p>
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {roles.map((r) => (
-            <div key={r.title} className="card-flashy rounded-2xl border border-border bg-card p-5 shadow-card-soft">
+            <div key={r.title} className="card-flashy rounded-2xl glass-strong p-5">
               <div className="relative z-[3]">
                 <h3 className="text-base font-semibold">{r.title}</h3>
                 <p className="mt-2 text-sm text-muted-foreground">{r.desc}</p>
@@ -578,7 +578,7 @@ function WhitePaper() {
         />
         <div className="mx-auto max-w-4xl space-y-4">
           {roadmap.map((r) => (
-            <div key={r.step} className="card-flashy rounded-2xl border border-border bg-card p-6 shadow-card-soft">
+            <div key={r.step} className="card-flashy rounded-2xl glass-strong p-6">
               <div className="relative z-[3] flex flex-col items-start gap-4 sm:flex-row sm:gap-6">
                 <div className="font-display text-xl font-bold text-gradient sm:w-32 sm:shrink-0">
                   {r.step}
@@ -598,7 +598,7 @@ function WhitePaper() {
         <SectionHeader eyebrow="9 · Key Recommendations" title="What leaders should do now" />
         <div className="mx-auto grid max-w-5xl gap-3 sm:grid-cols-2">
           {recommendations.map((r, i) => (
-            <div key={i} className="card-flashy flex items-start gap-3 rounded-xl border border-border bg-card p-4 shadow-card-soft">
+            <div key={i} className="card-flashy flex items-start gap-3 rounded-xl glass-strong p-4">
               <div className="relative z-[3] grid h-7 w-7 shrink-0 place-items-center rounded-lg bg-brand-gradient text-xs font-bold text-white">
                 {String(i + 1).padStart(2, "0")}
               </div>
@@ -616,7 +616,7 @@ function WhitePaper() {
         />
         <div className="mx-auto max-w-4xl space-y-3">
           {autonomyLevels.map((l) => (
-            <div key={l.level} className="card-flashy rounded-xl border border-border bg-card p-5 shadow-card-soft">
+            <div key={l.level} className="card-flashy rounded-xl glass-strong p-5">
               <div className="relative z-[3] flex items-start gap-4">
                 <div className="grid h-10 w-12 shrink-0 place-items-center rounded-lg bg-brand-gradient font-mono text-sm font-bold text-white">
                   {l.level}
@@ -634,7 +634,7 @@ function WhitePaper() {
       {/* CONCLUSION */}
       <Section className="border-t border-border">
         <SectionHeader eyebrow="10 · Conclusion" title="A hybrid operating model wins" />
-        <div className="card-flashy rounded-2xl border border-border bg-card p-8 shadow-card-soft">
+        <div className="card-flashy rounded-2xl glass-strong p-8">
           <p className="relative z-[3] text-base leading-relaxed text-foreground sm:text-lg">
             Enterprises that win with Agentic AI will not be those with the most agents. They will
             be those that redesign high-value workflows, govern autonomy at runtime, build strong
@@ -653,7 +653,7 @@ function WhitePaper() {
         <SectionHeader eyebrow="References" title="Sources cited in this white paper" />
         <ol className="mx-auto max-w-4xl space-y-2 text-sm">
           {references.map((r) => (
-            <li key={r.n} className="flex gap-3 rounded-lg border border-border bg-card/40 p-3">
+            <li key={r.n} className="flex gap-3 rounded-lg glass-strong/40 p-3">
               <span className="font-mono text-xs font-semibold text-gradient">[{r.n}]</span>
               <a
                 href={r.url}
@@ -670,7 +670,7 @@ function WhitePaper() {
 
       {/* AUTHOR */}
       <Section className="border-t border-border">
-        <div className="card-flashy rounded-3xl border border-border bg-card p-8 shadow-card-soft sm:p-10">
+        <div className="card-flashy rounded-3xl glass-strong p-8 sm:p-10">
           <div className="relative z-[3] flex flex-col gap-6 sm:flex-row sm:items-start">
             <div className="grid h-20 w-20 shrink-0 place-items-center rounded-2xl bg-brand-gradient text-2xl font-bold text-white">
               DM

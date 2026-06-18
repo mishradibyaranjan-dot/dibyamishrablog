@@ -62,7 +62,7 @@ function Contact() {
 
       <Section className="pt-0">
         <div className="grid gap-8 lg:grid-cols-[1.3fr_1fr]">
-          <div className="card-flashy rounded-3xl border border-border bg-card p-7 shadow-card-soft">
+          <div className="card-flashy rounded-3xl glass-strong p-7">
             {sent ? (
               <div className="flex flex-col items-center justify-center py-12 text-center">
                 <CheckCircle2 className="h-12 w-12 text-primary" />
@@ -107,7 +107,7 @@ function Contact() {
           <div className="space-y-4">
             <a
               href="mailto:mishra.dibyaranajan@gmail.com"
-              className="card-flashy flex items-start gap-4 rounded-2xl border border-border bg-card p-5 transition-all hover:-translate-y-0.5 hover:shadow-glow"
+              className="card-flashy flex items-start gap-4 rounded-2xl glass-strong p-5 transition-all hover:-translate-y-0.5 hover:shadow-glow"
             >
               <div className="grid h-10 w-10 shrink-0 place-items-center rounded-lg bg-brand-gradient text-white">
                 <Mail className="h-5 w-5" />
@@ -121,7 +121,7 @@ function Contact() {
               href="https://bold.pro/my/dibya-mishra-260203120923"
               target="_blank"
               rel="noreferrer"
-              className="card-flashy flex items-start gap-4 rounded-2xl border border-border bg-card p-5 transition-all hover:-translate-y-0.5 hover:shadow-glow"
+              className="card-flashy flex items-start gap-4 rounded-2xl glass-strong p-5 transition-all hover:-translate-y-0.5 hover:shadow-glow"
             >
               <div className="grid h-10 w-10 shrink-0 place-items-center rounded-lg bg-brand-gradient text-white">
                 <ExternalLink className="h-5 w-5" />
@@ -135,7 +135,7 @@ function Contact() {
               href="https://github.com/mishradibyaranjan-dot/"
               target="_blank"
               rel="noreferrer"
-              className="card-flashy flex items-start gap-4 rounded-2xl border border-border bg-card p-5 transition-all hover:-translate-y-0.5 hover:shadow-glow"
+              className="card-flashy flex items-start gap-4 rounded-2xl glass-strong p-5 transition-all hover:-translate-y-0.5 hover:shadow-glow"
             >
               <div className="grid h-10 w-10 shrink-0 place-items-center rounded-lg bg-brand-gradient text-white">
                 <ExternalLink className="h-5 w-5" />
@@ -149,7 +149,7 @@ function Contact() {
               href="https://www.linkedin.com/in/dibya-mishra-55b94654"
               target="_blank"
               rel="noreferrer"
-              className="card-flashy flex items-start gap-4 rounded-2xl border border-border bg-card p-5 transition-all hover:-translate-y-0.5 hover:shadow-glow"
+              className="card-flashy flex items-start gap-4 rounded-2xl glass-strong p-5 transition-all hover:-translate-y-0.5 hover:shadow-glow"
             >
               <div className="grid h-10 w-10 shrink-0 place-items-center rounded-lg bg-brand-gradient text-white">
                 <ExternalLink className="h-5 w-5" />
