@@ -50,10 +50,10 @@ const expertise = [
 ];
 
 const counters = [
-  { value: 20, suffix: "+", label: "Years across Shipping, BFSI, Insurance & SaaS" },
-  { value: 500, suffix: "+", label: "Engineers led across 5 time zones" },
-  { value: 28, prefix: "$", suffix: "M+", label: "Combined CAPEX + OPEX budgets managed" },
-  { value: 76, suffix: "%", label: "Incident reduction (3,800 → 900) via AI automation" },
+  { value: 20, suffix: "+", label: "Years" },
+  { value: 500, suffix: "+", label: "Engineers" },
+  { value: 28, prefix: "$", suffix: "M+", label: "Budget Managed" },
+  { value: 76, suffix: "%", label: "Incident Reduction" },
 ];
 
 const testimonials = [
