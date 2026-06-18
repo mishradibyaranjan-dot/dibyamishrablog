@@ -24,6 +24,7 @@ export const SECURITY_HEADERS: Readonly<Record<string, string>> = Object.freeze(
     "font-src 'self' https://fonts.gstatic.com https://cdn.gpteng.co data:",
     "img-src 'self' data: blob: https:",
     "connect-src 'self' https: wss:",
+    "media-src 'self' blob: data:",
     "upgrade-insecure-requests",
   ].join("; "),
 
