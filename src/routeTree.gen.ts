@@ -19,6 +19,7 @@ import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as WhitePaperAgenticAiEnterpriseAutomationRouteImport } from './routes/white-paper.agentic-ai-enterprise-automation'
 import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
+import { Route as ApiPublicTtsRouteImport } from './routes/api/public/tts'
 import { Route as ApiPublicNewsletterRouteImport } from './routes/api/public/newsletter'
 import { Route as ApiPublicContactRouteImport } from './routes/api/public/contact'
 import { Route as ApiPublicChatRouteImport } from './routes/api/public/chat'
@@ -74,6 +75,11 @@ const BlogSlugRoute = BlogSlugRouteImport.update({
   path: '/$slug',
   getParentRoute: () => BlogRoute,
 } as any)
+const ApiPublicTtsRoute = ApiPublicTtsRouteImport.update({
+  id: '/api/public/tts',
+  path: '/api/public/tts',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiPublicNewsletterRoute = ApiPublicNewsletterRouteImport.update({
   id: '/api/public/newsletter',
   path: '/api/public/newsletter',
@@ -104,6 +110,7 @@ export interface FileRoutesByFullPath {
   '/api/public/chat': typeof ApiPublicChatRoute
   '/api/public/contact': typeof ApiPublicContactRoute
   '/api/public/newsletter': typeof ApiPublicNewsletterRoute
+  '/api/public/tts': typeof ApiPublicTtsRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -119,6 +126,7 @@ export interface FileRoutesByTo {
   '/api/public/chat': typeof ApiPublicChatRoute
   '/api/public/contact': typeof ApiPublicContactRoute
   '/api/public/newsletter': typeof ApiPublicNewsletterRoute
+  '/api/public/tts': typeof ApiPublicTtsRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -135,6 +143,7 @@ export interface FileRoutesById {
   '/api/public/chat': typeof ApiPublicChatRoute
   '/api/public/contact': typeof ApiPublicContactRoute
   '/api/public/newsletter': typeof ApiPublicNewsletterRoute
+  '/api/public/tts': typeof ApiPublicTtsRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -152,6 +161,7 @@ export interface FileRouteTypes {
     | '/api/public/chat'
     | '/api/public/contact'
     | '/api/public/newsletter'
+    | '/api/public/tts'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -167,6 +177,7 @@ export interface FileRouteTypes {
     | '/api/public/chat'
     | '/api/public/contact'
     | '/api/public/newsletter'
+    | '/api/public/tts'
   id:
     | '__root__'
     | '/'
@@ -182,6 +193,7 @@ export interface FileRouteTypes {
     | '/api/public/chat'
     | '/api/public/contact'
     | '/api/public/newsletter'
+    | '/api/public/tts'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -197,6 +209,7 @@ export interface RootRouteChildren {
   ApiPublicChatRoute: typeof ApiPublicChatRoute
   ApiPublicContactRoute: typeof ApiPublicContactRoute
   ApiPublicNewsletterRoute: typeof ApiPublicNewsletterRoute
+  ApiPublicTtsRoute: typeof ApiPublicTtsRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -271,6 +284,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof BlogSlugRouteImport
       parentRoute: typeof BlogRoute
     }
+    '/api/public/tts': {
+      id: '/api/public/tts'
+      path: '/api/public/tts'
+      fullPath: '/api/public/tts'
+      preLoaderRoute: typeof ApiPublicTtsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/public/newsletter': {
       id: '/api/public/newsletter'
       path: '/api/public/newsletter'
@@ -319,6 +339,7 @@ const rootRouteChildren: RootRouteChildren = {
   ApiPublicChatRoute: ApiPublicChatRoute,
   ApiPublicContactRoute: ApiPublicContactRoute,
   ApiPublicNewsletterRoute: ApiPublicNewsletterRoute,
+  ApiPublicTtsRoute: ApiPublicTtsRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
