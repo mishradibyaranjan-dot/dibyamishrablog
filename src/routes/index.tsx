@@ -17,7 +17,7 @@ import { useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Reveal } from "@/components/cinematic/Reveal";
-import { HorizontalRail } from "@/components/cinematic/HorizontalRail";
+
 
 import { Marquee } from "@/components/cinematic/Marquee";
 import { posts, projects, caseStudies } from "@/lib/content";
