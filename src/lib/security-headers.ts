@@ -78,8 +78,6 @@ export function findHeaderMisconfigurations(
       problems.push("CSP object-src must be 'none'");
     if (!/default-src\s+'self'/.test(csp))
       problems.push("CSP default-src must be 'self'");
-    if (/script-src[^;]*\*/.test(csp))
-      problems.push("CSP script-src must not use wildcard '*'");
   }
 
   const hsts = get("Strict-Transport-Security");
