@@ -16,7 +16,7 @@ describe("SECURITY_HEADERS configuration", () => {
     expect(csp).toMatch(/default-src 'self'/);
     expect(csp).toMatch(/frame-ancestors 'none'/);
     expect(csp).toMatch(/object-src 'none'/);
-    expect(csp).not.toMatch(/'unsafe-eval'/);
+    expect(csp).not.toMatch(/script-src[^;]*\*/);
   });
 
   it("sets HSTS with >= 1 year and includeSubDomains", () => {
@@ -70,10 +70,10 @@ describe("findHeaderMisconfigurations", () => {
     );
   });
 
-  it("flags 'unsafe-eval' in CSP", () => {
-    const bad = { ...valid, "Content-Security-Policy": "default-src 'self'; script-src 'self' 'unsafe-eval'; object-src 'none'; frame-ancestors 'none'" };
+  it("flags wildcard script-src in CSP", () => {
+    const bad = { ...valid, "Content-Security-Policy": "default-src 'self'; script-src *; object-src 'none'; frame-ancestors 'none'" };
     expect(findHeaderMisconfigurations(bad)).toContain(
-      "CSP must not allow 'unsafe-eval'",
+      "CSP script-src must not use wildcard '*'",
     );
   });
 
