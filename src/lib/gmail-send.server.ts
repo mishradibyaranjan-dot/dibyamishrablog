@@ -33,10 +33,14 @@ function gatewayHeaders() {
 async function getOwnerEmail(headers: HeadersInit): Promise<string> {
   const res = await fetch(`${GATEWAY_URL}/users/me/profile`, { headers });
   if (!res.ok) {
-    throw new Error(`Gmail profile lookup failed: ${res.status} ${await res.text()}`);
+    console.error("Gmail profile lookup failed", res.status, await res.text().catch(() => ""));
+    throw new Error("mail_send_failed");
   }
   const data = (await res.json()) as { emailAddress?: string };
-  if (!data.emailAddress) throw new Error("Gmail profile missing emailAddress");
+  if (!data.emailAddress) {
+    console.error("Gmail profile missing emailAddress");
+    throw new Error("mail_send_failed");
+  }
   return data.emailAddress;
 }
 
@@ -90,7 +94,8 @@ export async function sendGmail(opts: {
   });
 
   if (!res.ok) {
-    throw new Error(`Gmail send failed: ${res.status} ${await res.text()}`);
+    console.error("Gmail send failed", res.status, await res.text().catch(() => ""));
+    throw new Error("mail_send_failed");
   }
   const sent = (await res.json()) as { id?: string; threadId?: string };
   return { id: sent.id, threadId: sent.threadId, recipient: owner };

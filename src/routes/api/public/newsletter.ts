@@ -44,7 +44,7 @@ export const Route = createFileRoute("/api/public/newsletter")({
         } catch (err) {
           console.error("newsletter subscribe failed", err);
           return Response.json(
-            { error: err instanceof Error ? err.message : "Subscribe failed" },
+            { error: "Subscribe failed" },
             { status: 500, headers: cors },
           );
         }
