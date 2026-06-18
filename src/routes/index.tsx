@@ -49,12 +49,6 @@ const expertise = [
   { icon: Users, title: "VP-Level Engineering Leadership", desc: "500+ engineers across 5 time zones, $28M+ budgets, OKR cascading, and global org transformation." },
 ];
 
-const counters = [
-  { value: 20, suffix: "+", label: "Years" },
-  { value: 500, suffix: "+", label: "Engineers" },
-  { value: 28, prefix: "$", suffix: "M+", label: "Budget Managed" },
-  { value: 76, suffix: "%", label: "Incident Reduction" },
-];
 
 const testimonials = [
   { quote: "Scaled our portfolio from $1M to $20M in 24 months through disciplined presales, POC-led bidding, and four new business lines.", author: "Microsoft Partner Account Sponsor — Centific" },
