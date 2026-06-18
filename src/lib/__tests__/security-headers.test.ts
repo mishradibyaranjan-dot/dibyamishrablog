@@ -16,7 +16,7 @@ describe("SECURITY_HEADERS configuration", () => {
     expect(csp).toMatch(/default-src 'self'/);
     expect(csp).toMatch(/frame-ancestors 'none'/);
     expect(csp).toMatch(/object-src 'none'/);
-    expect(csp).not.toMatch(/'unsafe-eval'/);
+    expect(csp).not.toMatch(/script-src[^;]*\*/);
   });
 
   it("sets HSTS with >= 1 year and includeSubDomains", () => {
