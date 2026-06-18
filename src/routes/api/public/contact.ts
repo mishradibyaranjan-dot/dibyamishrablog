@@ -57,7 +57,7 @@ export const Route = createFileRoute("/api/public/contact")({
         } catch (err) {
           console.error("contact send failed", err);
           return Response.json(
-            { error: err instanceof Error ? err.message : "Send failed" },
+            { error: "Send failed" },
             { status: 500, headers: cors },
           );
         }

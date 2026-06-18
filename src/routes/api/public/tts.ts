@@ -1,22 +1,22 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { z } from "zod";
+import { corsHeadersFor, isAllowedOrigin } from "@/lib/origin.server";
 
 const Body = z.object({
   text: z.string().trim().min(1).max(2000),
   voice: z.string().trim().max(40).optional(),
 });
 
-const cors = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Methods": "POST, OPTIONS",
-  "Access-Control-Allow-Headers": "Content-Type",
-};
-
 export const Route = createFileRoute("/api/public/tts")({
   server: {
     handlers: {
-      OPTIONS: async () => new Response(null, { status: 204, headers: cors }),
+      OPTIONS: async ({ request }) =>
+        new Response(null, { status: 204, headers: corsHeadersFor(request) }),
       POST: async ({ request }) => {
+        const cors = corsHeadersFor(request);
+        if (!isAllowedOrigin(request)) {
+          return new Response("Forbidden", { status: 403, headers: cors });
+        }
         let json: unknown;
         try {
           json = await request.json();
@@ -46,11 +46,11 @@ export const Route = createFileRoute("/api/public/tts")({
             }),
           });
           if (!res.ok) {
-            const body = await res.text().catch(() => "");
-            return new Response(body || "TTS upstream error", {
-              status: res.status,
-              headers: { ...cors, "Content-Type": "text/plain" },
-            });
+            console.error("TTS upstream error", res.status, await res.text().catch(() => ""));
+            return Response.json(
+              { error: "TTS failed" },
+              { status: 502, headers: cors },
+            );
           }
           const buf = await res.arrayBuffer();
           return new Response(buf, {
@@ -62,8 +62,9 @@ export const Route = createFileRoute("/api/public/tts")({
             },
           });
         } catch (err) {
+          console.error("TTS request failed", err);
           return Response.json(
-            { error: err instanceof Error ? err.message : "TTS failed" },
+            { error: "TTS failed" },
             { status: 500, headers: cors },
           );
         }
