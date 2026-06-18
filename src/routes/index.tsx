@@ -84,7 +84,7 @@ function Home() {
       {/* ===================== HERO ===================== */}
       <section
         ref={heroRef}
-        className="relative isolate flex min-h-[78vh] items-center overflow-hidden"
+        className="relative isolate flex min-h-0 items-center overflow-hidden"
       >
         {/* Local hero spotlight on top of global aurora */}
         <div className="pointer-events-none absolute inset-0 bg-hero opacity-90" />
@@ -103,11 +103,11 @@ function Home() {
 
         <motion.div
           style={{ y: heroY, opacity: heroOpacity }}
-          className="relative mx-auto w-full max-w-[1400px] px-4 py-12 sm:px-6 lg:py-16"
+          className="relative mx-auto w-full max-w-[1400px] px-4 py-6 sm:px-6 lg:py-6"
         >
           <div className="mx-auto max-w-4xl text-center">
             <Reveal direction="down" duration={0.5}>
-              <div className="mx-auto mb-7 inline-flex items-center gap-2 rounded-full glass px-4 py-1.5 text-xs font-medium text-white/85">
+              <div className="mx-auto mb-4 inline-flex items-center gap-2 rounded-full glass px-4 py-1.5 text-xs font-medium text-white/85">
                 <span className="relative flex h-2 w-2">
                   <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-neon-cyan opacity-75" />
                   <span className="relative inline-flex h-2 w-2 rounded-full bg-neon-cyan" />
@@ -124,14 +124,14 @@ function Home() {
             </Reveal>
 
             <Reveal delay={0.25}>
-              <p className="mx-auto mt-7 max-w-2xl text-base text-white/70 sm:text-lg">
+              <p className="mx-auto mt-4 max-w-2xl text-base text-white/70 sm:text-lg">
                 Research, architecture, and real-world delivery across GenAI, Agentic AI,
                 Cloud-Native SaaS, and Engineering Leadership — by Dibya Ranjan Mishra.
               </p>
             </Reveal>
 
             <Reveal delay={0.4}>
-              <div className="mt-10 flex flex-wrap items-center justify-center gap-3">
+              <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
                 <Button
                   asChild
                   size="lg"
@@ -157,7 +157,7 @@ function Home() {
 
             {/* Counter row */}
             <Reveal delay={0.55}>
-              <div className="mx-auto mt-8 grid max-w-5xl grid-cols-2 gap-4 sm:grid-cols-4">
+              <div className="mx-auto mt-6 grid max-w-5xl grid-cols-2 gap-4 sm:grid-cols-4">
                 {counters.map((c) => (
                   <div
                     key={c.label}
@@ -192,7 +192,7 @@ function Home() {
       </section>
 
       {/* ===================== INTEGRATIONS MARQUEE ===================== */}
-      <section className="border-y border-border/40 bg-background/40 py-8 backdrop-blur">
+      <section className="border-y border-border/40 bg-background/40 py-6 backdrop-blur">
         <div className="mx-auto max-w-[1400px] px-4 sm:px-6">
           <p className="mb-5 text-center text-xs uppercase tracking-[0.3em] text-white/40">
             Stack & ecosystem
@@ -211,7 +211,7 @@ function Home() {
       </section>
 
       {/* ===================== EXPERTISE BENTO ===================== */}
-      <section className="relative mx-auto max-w-[1400px] px-4 py-12 sm:px-6 lg:py-16">
+      <section className="relative mx-auto max-w-[1400px] px-4 py-6 sm:px-6 lg:py-6">
         <Reveal>
           <div className="mx-auto max-w-2xl text-center">
             <p className="text-xs uppercase tracking-[0.3em] text-neon-cyan/80">Key Expertise</p>
@@ -224,7 +224,7 @@ function Home() {
           </div>
         </Reveal>
 
-        <div className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="mt-6 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
           {expertise.map((e, i) => (
             <Reveal key={e.title} delay={i * 0.08}>
               <motion.div
@@ -244,10 +244,10 @@ function Home() {
       </section>
 
       {/* ===================== FEATURED RESEARCH RAIL (Netflix-style) ===================== */}
-      <section className="relative py-10">
+      <section className="relative py-6">
         <div className="mx-auto max-w-[1400px] px-4 sm:px-6">
           <Reveal>
-            <div className="mb-8 flex items-end justify-between gap-4">
+            <div className="mb-5 flex items-end justify-between gap-4">
               <div>
                 <p className="text-xs uppercase tracking-[0.3em] text-neon-purple/80">
                   Featured Research
@@ -300,10 +300,10 @@ function Home() {
       </section>
 
       {/* ===================== PROJECT SHOWCASE RAIL ===================== */}
-      <section className="relative py-10">
+      <section className="relative py-6">
         <div className="mx-auto max-w-[1400px] px-4 sm:px-6">
           <Reveal>
-            <div className="mb-8 flex items-end justify-between gap-4">
+            <div className="mb-5 flex items-end justify-between gap-4">
               <div>
                 <p className="text-xs uppercase tracking-[0.3em] text-neon-cyan/80">
                   Selected Projects
@@ -364,7 +364,7 @@ function Home() {
       </section>
 
       {/* ===================== CASE STUDIES TIMELINE ===================== */}
-      <section className="relative py-12">
+      <section className="relative py-6">
         <div className="mx-auto max-w-[1400px] px-4 sm:px-6">
           <Reveal>
             <div className="mx-auto max-w-2xl text-center">
@@ -429,7 +429,7 @@ function Home() {
       </section>
 
       {/* ===================== TESTIMONIALS MARQUEE ===================== */}
-      <section className="relative py-10">
+      <section className="relative py-6">
         <div className="mx-auto max-w-[1400px] px-4 sm:px-6">
           <Reveal>
             <div className="mx-auto max-w-2xl text-center">
@@ -440,7 +440,7 @@ function Home() {
             </div>
           </Reveal>
 
-          <div className="mt-12">
+          <div className="mt-6">
             <Marquee>
               {testimonials.map((t) => (
                 <div
@@ -460,10 +460,10 @@ function Home() {
       </section>
 
       {/* ===================== LATEST POSTS GRID ===================== */}
-      <section className="relative py-10">
+      <section className="relative py-6">
         <div className="mx-auto max-w-[1400px] px-4 sm:px-6">
           <Reveal>
-            <div className="mb-8 flex items-end justify-between gap-4">
+            <div className="mb-5 flex items-end justify-between gap-4">
               <div>
                 <p className="text-xs uppercase tracking-[0.3em] text-neon-blue/80">Latest Posts</p>
                 <h2 className="mt-3 font-display text-3xl font-bold text-white sm:text-4xl">
@@ -516,7 +516,7 @@ function Home() {
       </section>
 
       {/* ===================== CTA ===================== */}
-      <section className="relative px-4 py-12 sm:px-6">
+      <section className="relative px-4 py-6 sm:px-6">
         <div className="mx-auto max-w-6xl">
           <Reveal>
             <div className="card-flashy relative overflow-hidden rounded-[2rem] glass-strong p-10 text-center shadow-neon sm:p-16">
@@ -532,7 +532,7 @@ function Home() {
                   Advisory, architecture reviews, or a conversation about AI and engineering
                   leadership.
                 </p>
-                <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
+                <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
                   <Button
                     asChild
                     size="lg"
