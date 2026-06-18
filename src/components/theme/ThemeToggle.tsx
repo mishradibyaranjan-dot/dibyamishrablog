@@ -12,16 +12,29 @@ import { THEMES, useTheme } from "./ThemeProvider";
 
 export function ThemeToggle() {
   const { theme, setTheme } = useTheme();
+  const active = THEMES.find((t) => t.id === theme);
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button
           variant="ghost"
-          size="icon"
+          size="sm"
           aria-label="Change theme"
-          className="text-foreground/80 hover:bg-foreground/10"
+          className="gap-1.5 text-foreground/80 hover:bg-foreground/10"
         >
-          <Palette className="h-5 w-5" />
+          <span className="relative inline-flex">
+            <Palette className="h-4 w-4" />
+            {active && (
+              <span
+                className="absolute -right-0.5 -top-0.5 h-2 w-2 rounded-full ring-1 ring-black/30"
+                style={{ background: active.swatches[0] }}
+              />
+            )}
+          </span>
+          <span className="hidden text-xs font-medium sm:inline">
+            {active?.label ?? "Theme"}
+          </span>
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-52">
