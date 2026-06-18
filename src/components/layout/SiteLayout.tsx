@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { Moon, Sun, Menu, X, ExternalLink } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { FloatingChat } from "@/components/chat/FloatingChat";
 
 import drmLogo from "@/assets/drm-logo.png.asset.json";
 
@@ -216,6 +217,8 @@ export function SiteLayout() {
         <Outlet />
       </main>
       <Footer />
+      <FloatingChat />
     </div>
   );
 }
+
