@@ -293,13 +293,11 @@ function Home() {
             </div>
           </Reveal>
 
-          <HorizontalRail ariaLabel="Selected projects">
+          <Marquee>
             {showcase.map((p) => (
-              <motion.div
+              <div
                 key={p.slug}
-                whileHover={{ scale: 1.02 }}
-                transition={{ type: "spring", stiffness: 280, damping: 22 }}
-                className="card-flashy relative h-[22rem] w-[82vw] shrink-0 snap-start overflow-hidden rounded-2xl glass-strong p-7 sm:w-[420px]"
+                className="card-flashy relative h-[22rem] w-[420px] shrink-0 overflow-hidden rounded-2xl glass-strong p-7"
               >
                 <div className="relative z-[3] flex h-full flex-col">
                   <Badge variant="secondary" className="w-fit bg-white/10 text-white/85">
@@ -330,9 +328,9 @@ function Home() {
                     </Button>
                   </div>
                 </div>
-              </motion.div>
+              </div>
             ))}
-          </HorizontalRail>
+          </Marquee>
         </div>
       </section>
 
