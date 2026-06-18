@@ -276,25 +276,17 @@ function Footer() {
 }
 
 export function SiteLayout() {
-  // Force dark theme site-wide.
-  useEffect(() => {
-    document.documentElement.classList.add("dark");
-    try {
-      localStorage.setItem("theme", "dark");
-    } catch {
-      // ignore
-    }
-  }, []);
-
   return (
-    <div className="relative flex min-h-screen flex-col">
-      <AuroraBackground />
-      <Header />
-      <main className="relative flex-1">
-        <PageTransition />
-      </main>
-      <Footer />
-      <FloatingChat />
-    </div>
+    <ThemeProvider>
+      <div className="relative flex min-h-screen flex-col">
+        <AuroraBackground />
+        <Header />
+        <main className="relative flex-1">
+          <PageTransition />
+        </main>
+        <Footer />
+        <FloatingChat />
+      </div>
+    </ThemeProvider>
   );
 }
