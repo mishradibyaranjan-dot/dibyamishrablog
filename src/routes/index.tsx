@@ -237,13 +237,13 @@ function Home() {
             </div>
           </Reveal>
 
-          <HorizontalRail ariaLabel="Featured research">
+          <Marquee>
             {featured.map((p) => (
               <Link
                 key={p.slug}
                 to="/blog/$slug"
                 params={{ slug: p.slug }}
-                className="group card-flashy relative h-72 w-[78vw] shrink-0 snap-start overflow-hidden rounded-2xl glass-strong p-7 sm:w-[440px]"
+                className="group card-flashy relative h-72 w-[440px] shrink-0 overflow-hidden rounded-2xl glass-strong p-7"
               >
                 <div className="relative z-[3] flex h-full flex-col">
                   <Badge variant="secondary" className="w-fit bg-white/10 text-white/85">
@@ -268,7 +268,7 @@ function Home() {
                 </div>
               </Link>
             ))}
-          </HorizontalRail>
+          </Marquee>
         </div>
       </section>
 
