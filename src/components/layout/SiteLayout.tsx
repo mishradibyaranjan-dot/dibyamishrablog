@@ -196,26 +196,7 @@ function Footer() {
           <p className="mt-3 text-sm text-white/65">
             Monthly research notes on AI, Cloud, and Engineering Leadership.
           </p>
-          <form
-            className="mt-3 flex gap-2"
-            onSubmit={(e) => {
-              e.preventDefault();
-              const input = e.currentTarget.elements.namedItem("email") as HTMLInputElement;
-              if (input?.value) {
-                alert("Thanks for subscribing!");
-                input.value = "";
-              }
-            }}
-          >
-            <input
-              name="email"
-              type="email"
-              required
-              placeholder="you@company.com"
-              className="w-full rounded-md border border-white/15 bg-white/5 px-3 py-2 text-sm text-white placeholder:text-white/40 outline-none focus:border-neon-cyan focus:ring-2 focus:ring-neon-cyan/40"
-            />
-            <Button size="sm" className="bg-brand-gradient text-white shadow-neon">Join</Button>
-          </form>
+          <NewsletterForm />
         </div>
       </div>
       <div className="border-t border-white/10">
