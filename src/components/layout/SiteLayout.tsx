@@ -1,43 +1,24 @@
 import { Link, Outlet, useRouterState } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { Moon, Sun, Menu, X, ExternalLink } from "lucide-react";
+import { Menu, X, ExternalLink } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { FloatingChat } from "@/components/chat/FloatingChat";
+import { AuroraBackground } from "@/components/cinematic/AuroraBackground";
 
 import drmLogo from "@/assets/drm-logo.png.asset.json";
 
 const NAV = [
   { to: "/", label: "Home" },
-  { to: "/about", label: "About me" },
-  { to: "/research", label: "Research & Blog" },
+  { to: "/about", label: "About" },
+  { to: "/research", label: "Research" },
   { to: "/projects", label: "Projects" },
   { to: "/case-studies", label: "Case Studies" },
   { to: "/contact", label: "Contact" },
 ] as const;
 
-function useTheme() {
-  const [theme, setTheme] = useState<"light" | "dark">("dark");
-  useEffect(() => {
-    const stored = (typeof window !== "undefined" && localStorage.getItem("theme")) as
-      | "light"
-      | "dark"
-      | null;
-    const initial = stored ?? "dark";
-    setTheme(initial);
-    document.documentElement.classList.toggle("dark", initial === "dark");
-  }, []);
-  const toggle = () => {
-    const next = theme === "dark" ? "light" : "dark";
-    setTheme(next);
-    document.documentElement.classList.toggle("dark", next === "dark");
-    localStorage.setItem("theme", next);
-  };
-  return { theme, toggle };
-}
-
 function Header() {
-  const { theme, toggle } = useTheme();
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const pathname = useRouterState({ select: (s) => s.location.pathname });
@@ -53,44 +34,67 @@ function Header() {
 
   return (
     <header
+      data-site-header
       className={cn(
-        "sticky top-0 z-50 w-full transition-all",
+        "sticky top-0 z-50 w-full transition-all duration-500",
         scrolled
-          ? "border-b border-border/60 bg-background/80 backdrop-blur-xl"
+          ? "border-b border-white/10 bg-background/60 backdrop-blur-xl shadow-[0_8px_30px_-15px_oklch(0_0_0/0.6)]"
           : "bg-transparent",
       )}
     >
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-4 px-4 sm:px-6">
-        <Link to="/" className="flex items-center gap-2 font-display text-lg font-bold">
-          <img src={drmLogo.url} alt="DRM logo" className="h-9 w-9 shrink-0 rounded-lg object-contain shadow-glow" />
-          <span className="truncate">Dibya R. Mishra</span>
+        <Link to="/" className="group flex items-center gap-2 font-display text-lg font-bold">
+          <motion.img
+            whileHover={{ rotate: 8, scale: 1.06 }}
+            transition={{ type: "spring", stiffness: 280, damping: 18 }}
+            src={drmLogo.url}
+            alt="DRM logo"
+            className="h-9 w-9 shrink-0 rounded-lg object-contain shadow-neon"
+          />
+          <span className="truncate text-white">Dibya R. Mishra</span>
         </Link>
 
-        <nav className="hidden items-center gap-1 lg:flex">
-          {NAV.map((item) => (
-            <Link
-              key={item.to}
-              to={item.to}
-              className="rounded-md px-3 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
-              activeProps={{ className: "text-foreground bg-accent" }}
-              activeOptions={{ exact: item.to === "/" }}
-            >
-              {item.label}
-            </Link>
-          ))}
+        <nav className="hidden items-center gap-1 lg:flex" data-site-nav>
+          {NAV.map((item) => {
+            const active =
+              item.to === "/"
+                ? pathname === "/"
+                : pathname.startsWith(item.to);
+            return (
+              <Link
+                key={item.to}
+                to={item.to}
+                className={cn(
+                  "relative rounded-md px-3 py-2 text-sm font-medium transition-colors",
+                  active ? "text-white" : "text-white/65 hover:text-white",
+                )}
+                activeOptions={{ exact: item.to === "/" }}
+              >
+                {item.label}
+                {active && (
+                  <motion.span
+                    layoutId="nav-underline"
+                    className="absolute inset-x-2 -bottom-0.5 h-0.5 rounded-full bg-brand-gradient shadow-neon"
+                    transition={{ type: "spring", stiffness: 360, damping: 28 }}
+                  />
+                )}
+              </Link>
+            );
+          })}
         </nav>
 
         <div className="flex items-center gap-2">
-          <Button variant="ghost" size="icon" onClick={toggle} aria-label="Toggle theme">
-            {theme === "dark" ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
-          </Button>
-          <Button asChild size="sm" className="hidden sm:inline-flex bg-brand-gradient text-white hover:opacity-90">
+          <Button
+            asChild
+            size="sm"
+            className="hidden bg-brand-gradient text-white shadow-neon hover:opacity-90 sm:inline-flex"
+          >
             <Link to="/contact">Connect</Link>
           </Button>
           <Button
             variant="ghost"
             size="icon"
-            className="lg:hidden"
+            className="text-white hover:bg-white/10 lg:hidden"
             onClick={() => setOpen((o) => !o)}
             aria-label="Menu"
           >
@@ -98,42 +102,51 @@ function Header() {
           </Button>
         </div>
       </div>
-      {open && (
-        <div className="border-t border-border bg-background lg:hidden">
-          <nav className="mx-auto flex max-w-7xl flex-col px-4 py-3 sm:px-6">
-            {NAV.map((item) => (
-              <Link
-                key={item.to}
-                to={item.to}
-                className="rounded-md px-3 py-2 text-sm font-medium text-muted-foreground hover:bg-accent hover:text-foreground"
-                activeProps={{ className: "text-foreground bg-accent" }}
-                activeOptions={{ exact: item.to === "/" }}
-              >
-                {item.label}
-              </Link>
-            ))}
-          </nav>
-        </div>
-      )}
+
+      <AnimatePresence>
+        {open && (
+          <motion.div
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: "auto", opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
+            className="overflow-hidden border-t border-white/10 bg-background/85 backdrop-blur-xl lg:hidden"
+          >
+            <nav className="mx-auto flex max-w-7xl flex-col px-4 py-3 sm:px-6">
+              {NAV.map((item) => (
+                <Link
+                  key={item.to}
+                  to={item.to}
+                  className="rounded-md px-3 py-2.5 text-sm font-medium text-white/75 hover:bg-white/10 hover:text-white"
+                  activeProps={{ className: "text-white bg-white/10" }}
+                  activeOptions={{ exact: item.to === "/" }}
+                >
+                  {item.label}
+                </Link>
+              ))}
+            </nav>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </header>
   );
 }
 
 function Footer() {
   return (
-    <footer className="border-t border-border bg-muted/30">
-      <div className="mx-auto grid max-w-7xl gap-10 px-4 py-14 sm:px-6 md:grid-cols-4">
+    <footer data-site-footer className="relative border-t border-white/10 bg-background/60 backdrop-blur">
+      <div className="mx-auto grid max-w-7xl gap-10 px-4 py-16 sm:px-6 md:grid-cols-4">
         <div className="md:col-span-2">
-          <div className="flex items-center gap-2 font-display text-lg font-bold">
-            <img src={drmLogo.url} alt="DRM logo" className="h-9 w-9 rounded-lg object-contain" />
+          <div className="flex items-center gap-2 font-display text-lg font-bold text-white">
+            <img src={drmLogo.url} alt="DRM logo" className="h-9 w-9 rounded-lg object-contain shadow-neon" />
             Dibya Ranjan Mishra
           </div>
-          <p className="mt-3 max-w-md text-sm text-muted-foreground">
+          <p className="mt-3 max-w-md text-sm text-white/65">
             Research, insights, and real-world technology work on GenAI, Agentic AI,
             Cloud-Native Platforms, SaaS Architecture, and Engineering Leadership.
           </p>
-          <div className="mt-4 flex items-center gap-2">
-            <Button variant="outline" size="icon" asChild>
+          <div className="mt-5 flex items-center gap-2">
+            <Button variant="outline" size="icon" asChild className="border-white/15 bg-white/5 text-white hover:bg-white/10">
               <a
                 href="https://github.com/mishradibyaranjan-dot/"
                 target="_blank"
@@ -143,7 +156,7 @@ function Footer() {
                 <ExternalLink className="h-4 w-4" />
               </a>
             </Button>
-            <Button variant="outline" size="icon" asChild>
+            <Button variant="outline" size="icon" asChild className="border-white/15 bg-white/5 text-white hover:bg-white/10">
               <a
                 href="https://bold.pro/my/dibya-mishra-260203120923"
                 target="_blank"
@@ -153,19 +166,24 @@ function Footer() {
                 <ExternalLink className="h-4 w-4" />
               </a>
             </Button>
-            <Button variant="outline" size="icon" asChild>
-              <a href="https://www.linkedin.com/in/dibya-mishra-55b94654" target="_blank" rel="noreferrer" aria-label="LinkedIn">
+            <Button variant="outline" size="icon" asChild className="border-white/15 bg-white/5 text-white hover:bg-white/10">
+              <a
+                href="https://www.linkedin.com/in/dibya-mishra-55b94654"
+                target="_blank"
+                rel="noreferrer"
+                aria-label="LinkedIn"
+              >
                 <ExternalLink className="h-4 w-4" />
               </a>
             </Button>
           </div>
         </div>
         <div>
-          <h4 className="text-sm font-semibold">Explore</h4>
-          <ul className="mt-3 space-y-2 text-sm text-muted-foreground">
+          <h4 className="text-sm font-semibold text-white">Explore</h4>
+          <ul className="mt-3 space-y-2 text-sm text-white/65">
             {NAV.slice(1).map((n) => (
               <li key={n.to}>
-                <Link to={n.to} className="hover:text-foreground">
+                <Link to={n.to} className="transition-colors hover:text-white">
                   {n.label}
                 </Link>
               </li>
@@ -173,15 +191,15 @@ function Footer() {
           </ul>
         </div>
         <div>
-          <h4 className="text-sm font-semibold">Newsletter</h4>
-          <p className="mt-3 text-sm text-muted-foreground">
-            Get monthly research notes on AI, Cloud, and Engineering Leadership.
+          <h4 className="text-sm font-semibold text-white">Newsletter</h4>
+          <p className="mt-3 text-sm text-white/65">
+            Monthly research notes on AI, Cloud, and Engineering Leadership.
           </p>
           <form
             className="mt-3 flex gap-2"
             onSubmit={(e) => {
               e.preventDefault();
-              const input = (e.currentTarget.elements.namedItem("email") as HTMLInputElement);
+              const input = e.currentTarget.elements.namedItem("email") as HTMLInputElement;
               if (input?.value) {
                 alert("Thanks for subscribing!");
                 input.value = "";
@@ -193,14 +211,14 @@ function Footer() {
               type="email"
               required
               placeholder="you@company.com"
-              className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-ring"
+              className="w-full rounded-md border border-white/15 bg-white/5 px-3 py-2 text-sm text-white placeholder:text-white/40 outline-none focus:border-neon-cyan focus:ring-2 focus:ring-neon-cyan/40"
             />
-            <Button size="sm" className="bg-brand-gradient text-white">Join</Button>
+            <Button size="sm" className="bg-brand-gradient text-white shadow-neon">Join</Button>
           </form>
         </div>
       </div>
-      <div className="border-t border-border">
-        <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-2 px-4 py-5 text-xs text-muted-foreground sm:flex-row sm:px-6">
+      <div className="border-t border-white/10">
+        <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-2 px-4 py-5 text-xs text-white/50 sm:flex-row sm:px-6">
           <p>© {new Date().getFullYear()} Dibya Ranjan Mishra. All rights reserved.</p>
           <p>Built with research, rigor, and a bias for clarity.</p>
         </div>
@@ -210,10 +228,21 @@ function Footer() {
 }
 
 export function SiteLayout() {
+  // Force dark theme site-wide.
+  useEffect(() => {
+    document.documentElement.classList.add("dark");
+    try {
+      localStorage.setItem("theme", "dark");
+    } catch {
+      // ignore
+    }
+  }, []);
+
   return (
-    <div className="flex min-h-screen flex-col">
+    <div className="relative flex min-h-screen flex-col">
+      <AuroraBackground />
       <Header />
-      <main className="flex-1">
+      <main className="relative flex-1">
         <Outlet />
       </main>
       <Footer />
@@ -221,4 +250,3 @@ export function SiteLayout() {
     </div>
   );
 }
-
