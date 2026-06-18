@@ -45,7 +45,7 @@ export function FloatingChat() {
   const { messages, sendMessage, status, setMessages, stop } = useChat({
     id: "floating-chat",
     messages: initialMessages,
-    transport: new DefaultChatTransport({ api: "/api/chat" }),
+    transport: new DefaultChatTransport({ api: "/api/public/chat" }),
   });
 
   // Persist to localStorage
