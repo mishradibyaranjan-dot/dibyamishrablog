@@ -94,7 +94,7 @@ function BlogPost() {
             </p>
           </div>
 
-          <div id="key-takeaways" className="card-flashy rounded-2xl border border-border bg-card p-6">
+          <div id="key-takeaways" className="card-flashy rounded-2xl glass-strong p-6">
             <h3 className="text-lg font-semibold">Key takeaways</h3>
             <ul className="mt-4 space-y-2.5">
               {post.takeaways.map((t: string) => (
@@ -116,7 +116,7 @@ function BlogPost() {
                     key={r.slug}
                     to="/blog/$slug"
                     params={{ slug: r.slug }}
-                    className="card-flashy rounded-2xl border border-border bg-card p-5 transition-all hover:-translate-y-0.5 hover:shadow-glow"
+                    className="card-flashy rounded-2xl glass-strong p-5 transition-all hover:-translate-y-0.5 hover:shadow-glow"
                   >
                     <Badge variant="secondary" className="mb-2">{r.category}</Badge>
                     <div className="font-semibold">{r.title}</div>
@@ -129,7 +129,7 @@ function BlogPost() {
         </div>
 
         <aside className="hidden lg:block">
-          <div className="card-flashy sticky top-24 rounded-2xl border border-border bg-card p-5">
+          <div className="card-flashy sticky top-24 rounded-2xl glass-strong p-5">
             <div className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">On this page</div>
             <ul className="mt-3 space-y-2 text-sm">
               {sections.map((s) => (

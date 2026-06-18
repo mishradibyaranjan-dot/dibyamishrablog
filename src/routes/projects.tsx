@@ -68,7 +68,7 @@ function Projects() {
           {filtered.map((p) => {
             const cs = caseStudies.find((c) => c.area === p.area);
             return (
-              <div key={p.slug} className="card-flashy flex flex-col rounded-3xl border border-border bg-card p-7 shadow-card-soft transition-all hover:-translate-y-0.5 hover:shadow-glow">
+              <div key={p.slug} className="card-flashy flex flex-col rounded-3xl glass-strong p-7 transition-all hover:-translate-y-0.5 hover:shadow-glow">
                 <div className="flex items-center justify-between gap-3">
                   <Badge variant="secondary">{p.area}</Badge>
                   <div className="text-xs font-medium text-muted-foreground">Case study</div>
