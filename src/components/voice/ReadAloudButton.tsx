@@ -46,25 +46,38 @@ function collectPageText(): string {
 
 export function ReadAloudButton() {
   const [state, setState] = useState<"idle" | "loading" | "playing">("idle");
-  const [volume, setVolume] = useState<number>(() => {
-    if (typeof window === "undefined") return 0.9;
-    const stored = Number(window.localStorage.getItem(VOLUME_KEY));
-    return Number.isFinite(stored) && stored >= 0 && stored <= 1 ? stored : 0.9;
-  });
+  // Initialize with a stable default so SSR and first client render match.
+  // The persisted value is loaded from localStorage after mount.
+  const [volume, setVolume] = useState<number>(0.9);
+  const [hydrated, setHydrated] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const abortRef = useRef<AbortController | null>(null);
   const stoppedRef = useRef(false);
 
-  // Keep current audio volume in sync with slider
+  // Load persisted volume after mount to avoid SSR/client hydration mismatch.
+  useEffect(() => {
+    try {
+      const stored = Number(window.localStorage.getItem(VOLUME_KEY));
+      if (Number.isFinite(stored) && stored >= 0 && stored <= 1) {
+        setVolume(stored);
+      }
+    } catch {
+      // ignore
+    }
+    setHydrated(true);
+  }, []);
+
+  // Keep current audio volume in sync with slider; persist after hydration.
   useEffect(() => {
     if (audioRef.current) audioRef.current.volume = volume;
+    if (!hydrated) return;
     try {
       window.localStorage.setItem(VOLUME_KEY, String(volume));
     } catch {
       // ignore
     }
-  }, [volume]);
+  }, [volume, hydrated]);
 
   const stop = useCallback(() => {
     stoppedRef.current = true;
