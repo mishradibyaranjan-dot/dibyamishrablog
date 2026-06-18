@@ -17,7 +17,7 @@ import { useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Reveal } from "@/components/cinematic/Reveal";
-import { HorizontalRail } from "@/components/cinematic/HorizontalRail";
+
 
 import { Marquee } from "@/components/cinematic/Marquee";
 import { posts, projects, caseStudies } from "@/lib/content";
@@ -237,13 +237,13 @@ function Home() {
             </div>
           </Reveal>
 
-          <HorizontalRail ariaLabel="Featured research">
+          <Marquee>
             {featured.map((p) => (
               <Link
                 key={p.slug}
                 to="/blog/$slug"
                 params={{ slug: p.slug }}
-                className="group card-flashy relative h-72 w-[78vw] shrink-0 snap-start overflow-hidden rounded-2xl glass-strong p-7 sm:w-[440px]"
+                className="group card-flashy relative h-72 w-[440px] shrink-0 overflow-hidden rounded-2xl glass-strong p-7"
               >
                 <div className="relative z-[3] flex h-full flex-col">
                   <Badge variant="secondary" className="w-fit bg-white/10 text-white/85">
@@ -268,7 +268,7 @@ function Home() {
                 </div>
               </Link>
             ))}
-          </HorizontalRail>
+          </Marquee>
         </div>
       </section>
 
@@ -293,13 +293,11 @@ function Home() {
             </div>
           </Reveal>
 
-          <HorizontalRail ariaLabel="Selected projects">
+          <Marquee>
             {showcase.map((p) => (
-              <motion.div
+              <div
                 key={p.slug}
-                whileHover={{ scale: 1.02 }}
-                transition={{ type: "spring", stiffness: 280, damping: 22 }}
-                className="card-flashy relative h-[22rem] w-[82vw] shrink-0 snap-start overflow-hidden rounded-2xl glass-strong p-7 sm:w-[420px]"
+                className="card-flashy relative h-[22rem] w-[420px] shrink-0 overflow-hidden rounded-2xl glass-strong p-7"
               >
                 <div className="relative z-[3] flex h-full flex-col">
                   <Badge variant="secondary" className="w-fit bg-white/10 text-white/85">
@@ -330,9 +328,9 @@ function Home() {
                     </Button>
                   </div>
                 </div>
-              </motion.div>
+              </div>
             ))}
-          </HorizontalRail>
+          </Marquee>
         </div>
       </section>
 
@@ -451,40 +449,39 @@ function Home() {
             </div>
           </Reveal>
 
-          <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
-            {latest.map((p, i) => (
-              <Reveal key={p.slug} delay={i * 0.06}>
-                <Link
-                  to="/blog/$slug"
-                  params={{ slug: p.slug }}
-                  className="group card-flashy flex h-full flex-col rounded-2xl glass p-6"
-                >
-                  <div className="relative z-[3] flex items-center justify-between text-xs text-white/55">
-                    <span className="rounded-full border border-white/15 px-2 py-0.5 text-neon-cyan">
-                      {p.category}
-                    </span>
-                    <span>{p.readingTime}</span>
-                  </div>
-                  <h3 className="relative z-[3] mt-4 text-lg font-semibold text-white group-hover:text-neon transition-colors">
-                    {p.title}
-                  </h3>
-                  <p className="relative z-[3] mt-2 line-clamp-3 text-sm text-white/65">
-                    {p.summary}
-                  </p>
-                  <div className="relative z-[3] mt-auto flex items-center justify-between pt-4 text-xs text-white/50">
-                    <span>
-                      {new Date(p.date).toLocaleDateString("en", {
-                        month: "short",
-                        day: "numeric",
-                        year: "numeric",
-                      })}
-                    </span>
-                    <ArrowRight className="h-4 w-4 text-neon-cyan transition-transform group-hover:translate-x-1" />
-                  </div>
-                </Link>
-              </Reveal>
+          <Marquee>
+            {latest.map((p) => (
+              <Link
+                key={p.slug}
+                to="/blog/$slug"
+                params={{ slug: p.slug }}
+                className="group card-flashy flex h-72 w-[400px] shrink-0 flex-col rounded-2xl glass p-6"
+              >
+                <div className="relative z-[3] flex items-center justify-between text-xs text-white/55">
+                  <span className="rounded-full border border-white/15 px-2 py-0.5 text-neon-cyan">
+                    {p.category}
+                  </span>
+                  <span>{p.readingTime}</span>
+                </div>
+                <h3 className="relative z-[3] mt-4 text-lg font-semibold text-white group-hover:text-neon transition-colors">
+                  {p.title}
+                </h3>
+                <p className="relative z-[3] mt-2 line-clamp-3 text-sm text-white/65">
+                  {p.summary}
+                </p>
+                <div className="relative z-[3] mt-auto flex items-center justify-between pt-4 text-xs text-white/50">
+                  <span>
+                    {new Date(p.date).toLocaleDateString("en", {
+                      month: "short",
+                      day: "numeric",
+                      year: "numeric",
+                    })}
+                  </span>
+                  <ArrowRight className="h-4 w-4 text-neon-cyan transition-transform group-hover:translate-x-1" />
+                </div>
+              </Link>
             ))}
-          </div>
+          </Marquee>
         </div>
       </section>
 

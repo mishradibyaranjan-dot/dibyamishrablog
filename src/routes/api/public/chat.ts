@@ -53,7 +53,7 @@ function isAllowedOrigin(request: Request): boolean {
   );
 }
 
-export const Route = createFileRoute("/api/chat")({
+export const Route = createFileRoute("/api/public/chat")({
   server: {
     handlers: {
       POST: async ({ request }) => {
