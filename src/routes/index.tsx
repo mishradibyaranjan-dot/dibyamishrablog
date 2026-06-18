@@ -151,29 +151,6 @@ function Home() {
               </div>
             </Reveal>
 
-            {/* Counter row */}
-            <Reveal delay={0.55}>
-              <div className="mx-auto mt-6 grid max-w-5xl grid-cols-2 gap-4 sm:grid-cols-4">
-                {counters.map((c) => (
-                  <div
-                    key={c.label}
-                    className="card-flashy rounded-2xl glass p-5 text-center"
-                  >
-                    <div className="relative z-[3] text-3xl font-bold text-white sm:text-4xl">
-                      <AnimatedCounter
-                        to={c.value}
-                        prefix={c.prefix}
-                        suffix={c.suffix}
-                        className="shimmer-headline"
-                      />
-                    </div>
-                    <div className="relative z-[3] mt-1.5 text-xs text-white/65 sm:text-sm">
-                      {c.label}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </Reveal>
           </div>
         </motion.div>
 
