@@ -114,21 +114,21 @@ function Home() {
                   <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-neon-cyan opacity-75" />
                   <span className="relative inline-flex h-2 w-2 rounded-full bg-neon-cyan" />
                 </span>
-                Engineering Leader — AI · Cloud · SaaS Platforms
+                Head of Engineering · Senior Director · VP of Engineering
               </div>
             </Reveal>
 
             <Reveal delay={0.1} duration={0.9}>
               <h1 className="font-display text-5xl font-bold leading-[1.02] tracking-tight text-white sm:text-6xl lg:text-8xl">
-                Building the next era of{" "}
-                <span className="shimmer-headline">AI-native platforms</span>
+                Engineering leader behind{" "}
+                <span className="shimmer-headline">AI-first transformation</span>
               </h1>
             </Reveal>
 
             <Reveal delay={0.25}>
               <p className="mx-auto mt-4 max-w-2xl text-base text-white/70 sm:text-lg">
-                Research, architecture, and real-world delivery across GenAI, Agentic AI,
-                Cloud-Native SaaS, and Engineering Leadership — by Dibya Ranjan Mishra.
+                20+ years across Shipping, BFSI, Insurance and Enterprise SaaS — building cloud-native
+                platforms, embedding GenAI and Agentic AI at scale, and scaling revenue from $1M to $20M in 24 months.
               </p>
             </Reveal>
 
