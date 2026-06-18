@@ -110,6 +110,12 @@ export function ReadAloudButton() {
     const ctrl = new AbortController();
     abortRef.current = ctrl;
 
+    // Pre-create the Audio element inside the user gesture so subsequent
+    // .play() calls aren't blocked by autoplay policy after async awaits.
+    const audio = new Audio();
+    audio.volume = volume;
+    audioRef.current = audio;
+
     try {
       for (let i = 0; i < chunks.length; i++) {
         if (stoppedRef.current) return;
@@ -123,9 +129,7 @@ export function ReadAloudButton() {
         const blob = await res.blob();
         if (stoppedRef.current) return;
         const url = URL.createObjectURL(blob);
-        const audio = new Audio(url);
-        audio.volume = volume;
-        audioRef.current = audio;
+        audio.src = url;
         setState("playing");
         await new Promise<void>((resolve, reject) => {
           audio.onended = () => {
