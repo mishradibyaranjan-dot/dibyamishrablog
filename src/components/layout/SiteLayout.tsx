@@ -10,6 +10,67 @@ import { PageTransition } from "@/components/cinematic/PageTransition";
 
 import drmLogo from "@/assets/drm-logo.png.asset.json";
 
+function NewsletterForm() {
+  const [status, setStatus] = useState<"idle" | "sending" | "ok" | "error">("idle");
+  const [error, setError] = useState<string | null>(null);
+  return (
+    <form
+      className="mt-3 flex gap-2"
+      onSubmit={async (e) => {
+        e.preventDefault();
+        const input = e.currentTarget.elements.namedItem("email") as HTMLInputElement;
+        const email = input?.value?.trim();
+        if (!email) return;
+        setStatus("sending");
+        setError(null);
+        try {
+          const res = await fetch("/api/public/newsletter", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ email }),
+          });
+          if (!res.ok) {
+            const b = await res.json().catch(() => ({}));
+            throw new Error(b?.error ?? `Failed (${res.status})`);
+          }
+          setStatus("ok");
+          input.value = "";
+        } catch (err) {
+          setStatus("error");
+          setError(err instanceof Error ? err.message : "Subscription failed");
+        }
+      }}
+    >
+      <div className="flex w-full flex-col gap-2">
+        <div className="flex gap-2">
+          <input
+            name="email"
+            type="email"
+            required
+            disabled={status === "sending"}
+            placeholder="you@company.com"
+            className="w-full rounded-md border border-white/15 bg-white/5 px-3 py-2 text-sm text-white placeholder:text-white/40 outline-none focus:border-neon-cyan focus:ring-2 focus:ring-neon-cyan/40 disabled:opacity-60"
+          />
+          <Button
+            size="sm"
+            type="submit"
+            disabled={status === "sending"}
+            className="bg-brand-gradient text-white shadow-neon"
+          >
+            {status === "sending" ? "…" : "Join"}
+          </Button>
+        </div>
+        {status === "ok" && (
+          <p className="text-xs text-emerald-400">Thanks — you're subscribed!</p>
+        )}
+        {status === "error" && (
+          <p className="text-xs text-red-400">{error ?? "Something went wrong."}</p>
+        )}
+      </div>
+    </form>
+  );
+}
+
 const NAV = [
   { to: "/", label: "Home" },
   { to: "/about", label: "About" },
@@ -196,26 +257,7 @@ function Footer() {
           <p className="mt-3 text-sm text-white/65">
             Monthly research notes on AI, Cloud, and Engineering Leadership.
           </p>
-          <form
-            className="mt-3 flex gap-2"
-            onSubmit={(e) => {
-              e.preventDefault();
-              const input = e.currentTarget.elements.namedItem("email") as HTMLInputElement;
-              if (input?.value) {
-                alert("Thanks for subscribing!");
-                input.value = "";
-              }
-            }}
-          >
-            <input
-              name="email"
-              type="email"
-              required
-              placeholder="you@company.com"
-              className="w-full rounded-md border border-white/15 bg-white/5 px-3 py-2 text-sm text-white placeholder:text-white/40 outline-none focus:border-neon-cyan focus:ring-2 focus:ring-neon-cyan/40"
-            />
-            <Button size="sm" className="bg-brand-gradient text-white shadow-neon">Join</Button>
-          </form>
+          <NewsletterForm />
         </div>
       </div>
       <div className="border-t border-white/10">

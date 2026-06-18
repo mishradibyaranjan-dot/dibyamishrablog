@@ -19,6 +19,8 @@ import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as WhitePaperAgenticAiEnterpriseAutomationRouteImport } from './routes/white-paper.agentic-ai-enterprise-automation'
 import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
+import { Route as ApiPublicNewsletterRouteImport } from './routes/api/public/newsletter'
+import { Route as ApiPublicContactRouteImport } from './routes/api/public/contact'
 import { Route as ApiPublicChatRouteImport } from './routes/api/public/chat'
 
 const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
@@ -72,6 +74,16 @@ const BlogSlugRoute = BlogSlugRouteImport.update({
   path: '/$slug',
   getParentRoute: () => BlogRoute,
 } as any)
+const ApiPublicNewsletterRoute = ApiPublicNewsletterRouteImport.update({
+  id: '/api/public/newsletter',
+  path: '/api/public/newsletter',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiPublicContactRoute = ApiPublicContactRouteImport.update({
+  id: '/api/public/contact',
+  path: '/api/public/contact',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiPublicChatRoute = ApiPublicChatRouteImport.update({
   id: '/api/public/chat',
   path: '/api/public/chat',
@@ -90,6 +102,8 @@ export interface FileRoutesByFullPath {
   '/blog/$slug': typeof BlogSlugRoute
   '/white-paper/agentic-ai-enterprise-automation': typeof WhitePaperAgenticAiEnterpriseAutomationRoute
   '/api/public/chat': typeof ApiPublicChatRoute
+  '/api/public/contact': typeof ApiPublicContactRoute
+  '/api/public/newsletter': typeof ApiPublicNewsletterRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -103,6 +117,8 @@ export interface FileRoutesByTo {
   '/blog/$slug': typeof BlogSlugRoute
   '/white-paper/agentic-ai-enterprise-automation': typeof WhitePaperAgenticAiEnterpriseAutomationRoute
   '/api/public/chat': typeof ApiPublicChatRoute
+  '/api/public/contact': typeof ApiPublicContactRoute
+  '/api/public/newsletter': typeof ApiPublicNewsletterRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -117,6 +133,8 @@ export interface FileRoutesById {
   '/blog/$slug': typeof BlogSlugRoute
   '/white-paper/agentic-ai-enterprise-automation': typeof WhitePaperAgenticAiEnterpriseAutomationRoute
   '/api/public/chat': typeof ApiPublicChatRoute
+  '/api/public/contact': typeof ApiPublicContactRoute
+  '/api/public/newsletter': typeof ApiPublicNewsletterRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -132,6 +150,8 @@ export interface FileRouteTypes {
     | '/blog/$slug'
     | '/white-paper/agentic-ai-enterprise-automation'
     | '/api/public/chat'
+    | '/api/public/contact'
+    | '/api/public/newsletter'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -145,6 +165,8 @@ export interface FileRouteTypes {
     | '/blog/$slug'
     | '/white-paper/agentic-ai-enterprise-automation'
     | '/api/public/chat'
+    | '/api/public/contact'
+    | '/api/public/newsletter'
   id:
     | '__root__'
     | '/'
@@ -158,6 +180,8 @@ export interface FileRouteTypes {
     | '/blog/$slug'
     | '/white-paper/agentic-ai-enterprise-automation'
     | '/api/public/chat'
+    | '/api/public/contact'
+    | '/api/public/newsletter'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -171,6 +195,8 @@ export interface RootRouteChildren {
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   WhitePaperAgenticAiEnterpriseAutomationRoute: typeof WhitePaperAgenticAiEnterpriseAutomationRoute
   ApiPublicChatRoute: typeof ApiPublicChatRoute
+  ApiPublicContactRoute: typeof ApiPublicContactRoute
+  ApiPublicNewsletterRoute: typeof ApiPublicNewsletterRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -245,6 +271,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof BlogSlugRouteImport
       parentRoute: typeof BlogRoute
     }
+    '/api/public/newsletter': {
+      id: '/api/public/newsletter'
+      path: '/api/public/newsletter'
+      fullPath: '/api/public/newsletter'
+      preLoaderRoute: typeof ApiPublicNewsletterRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/contact': {
+      id: '/api/public/contact'
+      path: '/api/public/contact'
+      fullPath: '/api/public/contact'
+      preLoaderRoute: typeof ApiPublicContactRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/public/chat': {
       id: '/api/public/chat'
       path: '/api/public/chat'
@@ -277,6 +317,8 @@ const rootRouteChildren: RootRouteChildren = {
   WhitePaperAgenticAiEnterpriseAutomationRoute:
     WhitePaperAgenticAiEnterpriseAutomationRoute,
   ApiPublicChatRoute: ApiPublicChatRoute,
+  ApiPublicContactRoute: ApiPublicContactRoute,
+  ApiPublicNewsletterRoute: ApiPublicNewsletterRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
