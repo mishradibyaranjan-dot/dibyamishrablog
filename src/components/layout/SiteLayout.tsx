@@ -1,8 +1,9 @@
 import { Link, Outlet, useRouterState } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { Moon, Sun, Menu, X, Github, Linkedin, ExternalLink } from "lucide-react";
+import { Moon, Sun, Menu, X, ExternalLink } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { FloatingChat } from "@/components/chat/FloatingChat";
 
 import drmLogo from "@/assets/drm-logo.png.asset.json";
 
@@ -139,7 +140,7 @@ function Footer() {
                 rel="noreferrer"
                 aria-label="GitHub"
               >
-                <Github className="h-4 w-4" />
+                <ExternalLink className="h-4 w-4" />
               </a>
             </Button>
             <Button variant="outline" size="icon" asChild>
@@ -154,7 +155,7 @@ function Footer() {
             </Button>
             <Button variant="outline" size="icon" asChild>
               <a href="https://www.linkedin.com/in/dibya-mishra-55b94654" target="_blank" rel="noreferrer" aria-label="LinkedIn">
-                <Linkedin className="h-4 w-4" />
+                <ExternalLink className="h-4 w-4" />
               </a>
             </Button>
           </div>
@@ -216,6 +217,8 @@ export function SiteLayout() {
         <Outlet />
       </main>
       <Footer />
+      <FloatingChat />
     </div>
   );
 }
+

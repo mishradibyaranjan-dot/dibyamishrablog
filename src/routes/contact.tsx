@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { useState } from "react";
-import { Mail, Github, ExternalLink, Linkedin, Send, CheckCircle2, Loader2 } from "lucide-react";
+import { Mail, ExternalLink, Send, CheckCircle2, Loader2 } from "lucide-react";
 import { Section, SectionHeader } from "@/components/layout/Section";
 import { Button } from "@/components/ui/button";
 import { sendContactMessage } from "@/lib/contact.functions";
@@ -138,7 +138,7 @@ function Contact() {
               className="card-flashy flex items-start gap-4 rounded-2xl border border-border bg-card p-5 transition-all hover:-translate-y-0.5 hover:shadow-glow"
             >
               <div className="grid h-10 w-10 shrink-0 place-items-center rounded-lg bg-brand-gradient text-white">
-                <Github className="h-5 w-5" />
+                <ExternalLink className="h-5 w-5" />
               </div>
               <div className="min-w-0">
                 <div className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">GitHub</div>
@@ -152,7 +152,7 @@ function Contact() {
               className="card-flashy flex items-start gap-4 rounded-2xl border border-border bg-card p-5 transition-all hover:-translate-y-0.5 hover:shadow-glow"
             >
               <div className="grid h-10 w-10 shrink-0 place-items-center rounded-lg bg-brand-gradient text-white">
-                <Linkedin className="h-5 w-5" />
+                <ExternalLink className="h-5 w-5" />
               </div>
               <div className="min-w-0">
                 <div className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">LinkedIn</div>
