@@ -154,14 +154,6 @@ function Home() {
           </div>
         </motion.div>
 
-        {/* Scroll cue */}
-        <motion.div
-          className="absolute bottom-6 left-1/2 -translate-x-1/2 text-xs uppercase tracking-[0.3em] text-white/50"
-          animate={{ y: [0, 6, 0] }}
-          transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-        >
-          Scroll
-        </motion.div>
       </section>
 
       {/* ===================== INTEGRATIONS MARQUEE ===================== */}
