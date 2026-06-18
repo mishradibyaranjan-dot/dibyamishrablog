@@ -8,19 +8,22 @@
 
 export const SECURITY_HEADERS: Readonly<Record<string, string>> = Object.freeze({
   // Content Security Policy — covers script, style, image, font, connect, frame.
-  // Inline styles are allowed for Tailwind's runtime CSS variables / shadcn.
-  // 'unsafe-eval' MUST NOT appear; frame-ancestors locked to 'none'.
+  // Inline styles + scripts are allowed because TanStack Start emits inline
+  // hydration scripts and shadcn/Tailwind emit inline style attrs.
+  // 'unsafe-eval' + cdn.gpteng.co are allowed for the Lovable preview/editor
+  // overlay widget; these are no-ops on the published site.
+  // frame-ancestors locked to 'none'.
   "Content-Security-Policy": [
     "default-src 'self'",
     "base-uri 'self'",
     "object-src 'none'",
     "frame-ancestors 'none'",
     "form-action 'self'",
-    "script-src 'self'",
+    "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.gpteng.co",
     "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
-    "font-src 'self' https://fonts.gstatic.com data:",
+    "font-src 'self' https://fonts.gstatic.com https://cdn.gpteng.co data:",
     "img-src 'self' data: blob: https:",
-    "connect-src 'self' https:",
+    "connect-src 'self' https: wss:",
     "upgrade-insecure-requests",
   ].join("; "),
 
