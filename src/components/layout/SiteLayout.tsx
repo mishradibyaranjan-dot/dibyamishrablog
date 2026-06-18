@@ -7,6 +7,9 @@ import { cn } from "@/lib/utils";
 import { FloatingChat } from "@/components/chat/FloatingChat";
 import { AuroraBackground } from "@/components/cinematic/AuroraBackground";
 import { PageTransition } from "@/components/cinematic/PageTransition";
+import { ThemeProvider } from "@/components/theme/ThemeProvider";
+import { ThemeToggle } from "@/components/theme/ThemeToggle";
+import { ReadAloudButton } from "@/components/voice/ReadAloudButton";
 
 import drmLogo from "@/assets/drm-logo.png.asset.json";
 
@@ -145,7 +148,9 @@ function Header() {
           })}
         </nav>
 
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-1 sm:gap-2">
+          <ReadAloudButton />
+          <ThemeToggle />
           <Button
             asChild
             size="sm"
@@ -271,25 +276,17 @@ function Footer() {
 }
 
 export function SiteLayout() {
-  // Force dark theme site-wide.
-  useEffect(() => {
-    document.documentElement.classList.add("dark");
-    try {
-      localStorage.setItem("theme", "dark");
-    } catch {
-      // ignore
-    }
-  }, []);
-
   return (
-    <div className="relative flex min-h-screen flex-col">
-      <AuroraBackground />
-      <Header />
-      <main className="relative flex-1">
-        <PageTransition />
-      </main>
-      <Footer />
-      <FloatingChat />
-    </div>
+    <ThemeProvider>
+      <div className="relative flex min-h-screen flex-col">
+        <AuroraBackground />
+        <Header />
+        <main className="relative flex-1">
+          <PageTransition />
+        </main>
+        <Footer />
+        <FloatingChat />
+      </div>
+    </ThemeProvider>
   );
 }
