@@ -1,39 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import {
-  ArrowRight,
-  Bot,
-  Workflow,
-  Brain,
-  ShieldCheck,
-  Sparkles,
-  Network,
-  Cog,
-  Database,
-  Users,
-  Activity,
-  Lock,
-  Eye,
-  FileCheck,
-  DollarSign,
-  Gauge,
-  Headphones,
-  ServerCog,
-  Receipt,
-  ShoppingCart,
-  Code2,
-  Shield,
-  UserCheck,
-  Truck,
-  
-  Github,
-  Mail,
-  Briefcase,
-  TrendingUp,
-  Layers,
-  Target,
-  GitBranch,
-  BookOpen,
-} from "lucide-react";
+import { ArrowRight, Bot, Workflow, Brain, ShieldCheck, Sparkles, Network, Cog, Database, Users, Activity, Lock, Eye, FileCheck, DollarSign, Gauge, Headphones, ServerCog, Receipt, ShoppingCart, Code2, Shield, UserCheck, Truck, ExternalLink, Mail, Briefcase, TrendingUp, Layers, Target, GitBranch, BookOpen } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Section, SectionHeader } from "@/components/layout/Section";
 import { Badge } from "@/components/ui/badge";
@@ -747,7 +713,7 @@ function WhitePaper() {
               </Button>
               <Button asChild size="lg" variant="outline" className="border-white/20 bg-white/5 text-white hover:bg-white/10">
                 <a href="https://github.com/mishradibyaranjan-dot/Dibyatraining#dibyatraining" target="_blank" rel="noopener noreferrer">
-                  <Github className="mr-1 h-4 w-4" /> Connect on GitHub
+                  <ExternalLink className="mr-1 h-4 w-4" /> Connect on GitHub
                 </a>
               </Button>
               <Button asChild size="lg" variant="ghost" className="text-white hover:bg-white/10">
