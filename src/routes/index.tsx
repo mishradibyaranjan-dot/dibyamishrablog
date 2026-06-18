@@ -29,10 +29,10 @@ export const Route = createFileRoute("/")({
       {
         name: "description",
         content:
-          "Cinematic portfolio of Dibya Ranjan Mishra — GenAI, Agentic AI, Cloud-Native Platforms, SaaS Architecture, and Engineering Leadership.",
+          "Dibya Ranjan Mishra — Head of Engineering / VP candidate. 20+ years across Shipping, BFSI, Insurance & SaaS. 500+ engineers led, $28M+ budgets, AI-first transformation.",
       },
-      { property: "og:title", content: "Dibya Ranjan Mishra — AI, Cloud & Engineering Leadership" },
-      { property: "og:description", content: "Research, projects, and case studies on GenAI, Agentic AI, Cloud, and SaaS." },
+      { property: "og:title", content: "Dibya Ranjan Mishra — Head of Engineering | AI, Cloud & SaaS Leader" },
+      { property: "og:description", content: "20+ years. 500+ engineers led. $1M → $20M revenue in 24 months. 76% incident reduction via AI automation. 42 certifications." },
       { property: "og:url", content: "/" },
     ],
     links: [{ rel: "canonical", href: "/" }],
