@@ -31,18 +31,47 @@ export function HorizontalRail({ children, className, ariaLabel }: HorizontalRai
     const ro = new ResizeObserver(updateBounds);
     ro.observe(el);
     el.addEventListener("scroll", updateBounds, { passive: true });
-    // Translate vertical wheel to horizontal scroll for mouse users
+    // Handle wheel / trackpad / magic-mouse gestures
     const onWheel = (e: WheelEvent) => {
-      if (e.deltaY === 0 || e.shiftKey) return;
-      if (Math.abs(e.deltaY) <= Math.abs(e.deltaX)) return;
+      if (e.shiftKey) return;
+      const hasX = Math.abs(e.deltaX) > 0.5;
+      const hasY = Math.abs(e.deltaY) > 0.5;
+      if (!hasX && !hasY) return;
       e.preventDefault();
-      el.scrollBy({ left: e.deltaY, behavior: "auto" });
+      el.scrollBy({ left: hasX ? e.deltaX : e.deltaY, behavior: "auto" });
     };
     el.addEventListener("wheel", onWheel, { passive: false });
+
+    // Touch drag for mobile
+    let startX = 0;
+    let startScroll = 0;
+    let isDragging = false;
+    const onTouchStart = (e: TouchEvent) => {
+      if (e.touches.length !== 1) return;
+      isDragging = true;
+      startX = e.touches[0].clientX;
+      startScroll = el.scrollLeft;
+    };
+    const onTouchMove = (e: TouchEvent) => {
+      if (!isDragging || e.touches.length !== 1) return;
+      el.scrollLeft = startScroll + (startX - e.touches[0].clientX);
+    };
+    const onTouchEnd = () => {
+      isDragging = false;
+    };
+    el.addEventListener("touchstart", onTouchStart, { passive: true });
+    el.addEventListener("touchmove", onTouchMove, { passive: true });
+    el.addEventListener("touchend", onTouchEnd);
+    el.addEventListener("touchcancel", onTouchEnd);
+
     return () => {
       ro.disconnect();
       el.removeEventListener("scroll", updateBounds);
       el.removeEventListener("wheel", onWheel);
+      el.removeEventListener("touchstart", onTouchStart);
+      el.removeEventListener("touchmove", onTouchMove);
+      el.removeEventListener("touchend", onTouchEnd);
+      el.removeEventListener("touchcancel", onTouchEnd);
     };
   }, [updateBounds]);
 
@@ -80,7 +109,7 @@ export function HorizontalRail({ children, className, ariaLabel }: HorizontalRai
       <div
         ref={ref}
         className="no-scrollbar flex snap-x snap-mandatory gap-5 overflow-x-auto scroll-smooth pb-4"
-        style={{ scrollPaddingInline: "1rem" }}
+        style={{ scrollPaddingInline: "1rem", touchAction: "pan-x" }}
       >
         {children}
       </div>
