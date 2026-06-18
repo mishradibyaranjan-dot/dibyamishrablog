@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { FloatingChat } from "@/components/chat/FloatingChat";
 import { AuroraBackground } from "@/components/cinematic/AuroraBackground";
+import { PageTransition } from "@/components/cinematic/PageTransition";
 
 import drmLogo from "@/assets/drm-logo.png.asset.json";
 
@@ -243,7 +244,7 @@ export function SiteLayout() {
       <AuroraBackground />
       <Header />
       <main className="relative flex-1">
-        <Outlet />
+        <PageTransition />
       </main>
       <Footer />
       <FloatingChat />
