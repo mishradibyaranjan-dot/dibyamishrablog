@@ -84,7 +84,7 @@ function Home() {
       {/* ===================== HERO ===================== */}
       <section
         ref={heroRef}
-        className="relative isolate flex min-h-[92vh] items-center overflow-hidden"
+        className="relative isolate flex min-h-[78vh] items-center overflow-hidden"
       >
         {/* Local hero spotlight on top of global aurora */}
         <div className="pointer-events-none absolute inset-0 bg-hero opacity-90" />
@@ -103,7 +103,7 @@ function Home() {
 
         <motion.div
           style={{ y: heroY, opacity: heroOpacity }}
-          className="relative mx-auto w-full max-w-7xl px-4 py-24 sm:px-6 lg:py-32"
+          className="relative mx-auto w-full max-w-[1400px] px-4 py-12 sm:px-6 lg:py-16"
         >
           <div className="mx-auto max-w-4xl text-center">
             <Reveal direction="down" duration={0.5}>
@@ -157,7 +157,7 @@ function Home() {
 
             {/* Counter row */}
             <Reveal delay={0.55}>
-              <div className="mx-auto mt-16 grid max-w-5xl grid-cols-2 gap-4 sm:grid-cols-4">
+              <div className="mx-auto mt-8 grid max-w-5xl grid-cols-2 gap-4 sm:grid-cols-4">
                 {counters.map((c) => (
                   <div
                     key={c.label}
@@ -193,7 +193,7 @@ function Home() {
 
       {/* ===================== INTEGRATIONS MARQUEE ===================== */}
       <section className="border-y border-border/40 bg-background/40 py-8 backdrop-blur">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6">
+        <div className="mx-auto max-w-[1400px] px-4 sm:px-6">
           <p className="mb-5 text-center text-xs uppercase tracking-[0.3em] text-white/40">
             Stack & ecosystem
           </p>
@@ -211,7 +211,7 @@ function Home() {
       </section>
 
       {/* ===================== EXPERTISE BENTO ===================== */}
-      <section className="relative mx-auto max-w-7xl px-4 py-24 sm:px-6 lg:py-32">
+      <section className="relative mx-auto max-w-[1400px] px-4 py-12 sm:px-6 lg:py-16">
         <Reveal>
           <div className="mx-auto max-w-2xl text-center">
             <p className="text-xs uppercase tracking-[0.3em] text-neon-cyan/80">Key Expertise</p>
@@ -224,7 +224,7 @@ function Home() {
           </div>
         </Reveal>
 
-        <div className="mt-14 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
           {expertise.map((e, i) => (
             <Reveal key={e.title} delay={i * 0.08}>
               <motion.div
@@ -244,8 +244,8 @@ function Home() {
       </section>
 
       {/* ===================== FEATURED RESEARCH RAIL (Netflix-style) ===================== */}
-      <section className="relative py-20">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6">
+      <section className="relative py-10">
+        <div className="mx-auto max-w-[1400px] px-4 sm:px-6">
           <Reveal>
             <div className="mb-8 flex items-end justify-between gap-4">
               <div>
@@ -300,8 +300,8 @@ function Home() {
       </section>
 
       {/* ===================== PROJECT SHOWCASE RAIL ===================== */}
-      <section className="relative py-20">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6">
+      <section className="relative py-10">
+        <div className="mx-auto max-w-[1400px] px-4 sm:px-6">
           <Reveal>
             <div className="mb-8 flex items-end justify-between gap-4">
               <div>
@@ -364,8 +364,8 @@ function Home() {
       </section>
 
       {/* ===================== CASE STUDIES TIMELINE ===================== */}
-      <section className="relative py-24">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6">
+      <section className="relative py-12">
+        <div className="mx-auto max-w-[1400px] px-4 sm:px-6">
           <Reveal>
             <div className="mx-auto max-w-2xl text-center">
               <p className="text-xs uppercase tracking-[0.3em] text-neon-purple/80">
@@ -377,11 +377,11 @@ function Home() {
             </div>
           </Reveal>
 
-          <div className="relative mt-16">
+          <div className="relative mt-8">
             {/* Vertical neon line */}
             <div className="pointer-events-none absolute left-1/2 top-0 hidden h-full w-px -translate-x-1/2 bg-gradient-to-b from-neon-blue/0 via-neon-purple/60 to-neon-cyan/0 md:block" />
 
-            <div className="space-y-12">
+            <div className="space-y-6">
               {studies.map((s, i) => (
                 <Reveal key={s.slug} direction={i % 2 === 0 ? "right" : "left"}>
                   <div className={`grid items-center gap-6 md:grid-cols-2 ${i % 2 === 0 ? "" : "md:[&>*:first-child]:order-2"}`}>
@@ -420,7 +420,7 @@ function Home() {
             </div>
           </div>
 
-          <div className="mt-12 text-center">
+          <div className="mt-6 text-center">
             <Button asChild size="lg" className="bg-brand-gradient text-white shadow-neon hover:opacity-90">
               <Link to="/case-studies">All case studies <ArrowRight className="ml-1 h-4 w-4" /></Link>
             </Button>
@@ -429,8 +429,8 @@ function Home() {
       </section>
 
       {/* ===================== TESTIMONIALS MARQUEE ===================== */}
-      <section className="relative py-20">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6">
+      <section className="relative py-10">
+        <div className="mx-auto max-w-[1400px] px-4 sm:px-6">
           <Reveal>
             <div className="mx-auto max-w-2xl text-center">
               <p className="text-xs uppercase tracking-[0.3em] text-neon-cyan/80">Testimonials</p>
@@ -460,8 +460,8 @@ function Home() {
       </section>
 
       {/* ===================== LATEST POSTS GRID ===================== */}
-      <section className="relative py-20">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6">
+      <section className="relative py-10">
+        <div className="mx-auto max-w-[1400px] px-4 sm:px-6">
           <Reveal>
             <div className="mb-8 flex items-end justify-between gap-4">
               <div>
@@ -516,7 +516,7 @@ function Home() {
       </section>
 
       {/* ===================== CTA ===================== */}
-      <section className="relative px-4 py-24 sm:px-6">
+      <section className="relative px-4 py-12 sm:px-6">
         <div className="mx-auto max-w-6xl">
           <Reveal>
             <div className="card-flashy relative overflow-hidden rounded-[2rem] glass-strong p-10 text-center shadow-neon sm:p-16">
