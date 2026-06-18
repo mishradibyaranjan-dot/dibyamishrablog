@@ -48,6 +48,7 @@ function isAllowedOrigin(request: Request): boolean {
   return (
     host.endsWith(".lovable.app") ||
     host.endsWith(".lovable.dev") ||
+    host.endsWith(".lovableproject.com") ||
     host === "dibyamishrablog.lovable.app"
   );
 }
