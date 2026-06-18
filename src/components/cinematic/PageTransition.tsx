@@ -42,7 +42,7 @@ export function PageTransition() {
       <motion.div
         key={`sweep-${pathname}`}
         aria-hidden
-        className="pointer-events-none fixed inset-0 z-[60]"
+        className="pointer-events-none fixed inset-0 z-[60] overflow-hidden"
         initial={{ opacity: 1 }}
         animate={{ opacity: 0, transition: { duration: 0.1, delay: 0.85 } }}
         exit={{ opacity: 0 }}
