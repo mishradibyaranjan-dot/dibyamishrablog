@@ -31,9 +31,18 @@ export function HorizontalRail({ children, className, ariaLabel }: HorizontalRai
     const ro = new ResizeObserver(updateBounds);
     ro.observe(el);
     el.addEventListener("scroll", updateBounds, { passive: true });
+    // Translate vertical wheel to horizontal scroll for mouse users
+    const onWheel = (e: WheelEvent) => {
+      if (e.deltaY === 0 || e.shiftKey) return;
+      if (Math.abs(e.deltaY) <= Math.abs(e.deltaX)) return;
+      e.preventDefault();
+      el.scrollBy({ left: e.deltaY, behavior: "auto" });
+    };
+    el.addEventListener("wheel", onWheel, { passive: false });
     return () => {
       ro.disconnect();
       el.removeEventListener("scroll", updateBounds);
+      el.removeEventListener("wheel", onWheel);
     };
   }, [updateBounds]);
 
