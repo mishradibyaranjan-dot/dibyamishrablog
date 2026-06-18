@@ -18,7 +18,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Reveal } from "@/components/cinematic/Reveal";
 import { HorizontalRail } from "@/components/cinematic/HorizontalRail";
-import { AnimatedCounter } from "@/components/cinematic/AnimatedCounter";
+
 import { Marquee } from "@/components/cinematic/Marquee";
 import { posts, projects, caseStudies } from "@/lib/content";
 
@@ -49,12 +49,6 @@ const expertise = [
   { icon: Users, title: "VP-Level Engineering Leadership", desc: "500+ engineers across 5 time zones, $28M+ budgets, OKR cascading, and global org transformation." },
 ];
 
-const counters = [
-  { value: 20, suffix: "+", label: "Years" },
-  { value: 500, suffix: "+", label: "Engineers" },
-  { value: 28, prefix: "$", suffix: "M+", label: "Budget Managed" },
-  { value: 76, suffix: "%", label: "Incident Reduction" },
-];
 
 const testimonials = [
   { quote: "Scaled our portfolio from $1M to $20M in 24 months through disciplined presales, POC-led bidding, and four new business lines.", author: "Microsoft Partner Account Sponsor — Centific" },
@@ -157,29 +151,6 @@ function Home() {
               </div>
             </Reveal>
 
-            {/* Counter row */}
-            <Reveal delay={0.55}>
-              <div className="mx-auto mt-6 grid max-w-5xl grid-cols-2 gap-4 sm:grid-cols-4">
-                {counters.map((c) => (
-                  <div
-                    key={c.label}
-                    className="card-flashy rounded-2xl glass p-5 text-center"
-                  >
-                    <div className="relative z-[3] text-3xl font-bold text-white sm:text-4xl">
-                      <AnimatedCounter
-                        to={c.value}
-                        prefix={c.prefix}
-                        suffix={c.suffix}
-                        className="shimmer-headline"
-                      />
-                    </div>
-                    <div className="relative z-[3] mt-1.5 text-xs text-white/65 sm:text-sm">
-                      {c.label}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </Reveal>
           </div>
         </motion.div>
 
