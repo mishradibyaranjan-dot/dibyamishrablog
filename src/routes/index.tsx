@@ -246,13 +246,6 @@ function Home() {
                   </h3>
                   <p className="mt-3 line-clamp-3 text-sm text-white/65">{p.summary}</p>
                   <div className="mt-auto flex items-center justify-between text-xs text-white/50">
-                    <span>
-                      {new Date(p.date).toLocaleDateString("en", {
-                        month: "short",
-                        day: "numeric",
-                        year: "numeric",
-                      })}
-                    </span>
                     <span className="inline-flex items-center gap-1 text-neon-cyan">
                       Read <ArrowRight className="h-3.5 w-3.5" />
                     </span>
@@ -461,14 +454,7 @@ function Home() {
                 <p className="relative z-[3] mt-2 line-clamp-3 text-sm text-white/65">
                   {p.summary}
                 </p>
-                <div className="relative z-[3] mt-auto flex items-center justify-between pt-4 text-xs text-white/50">
-                  <span>
-                    {new Date(p.date).toLocaleDateString("en", {
-                      month: "short",
-                      day: "numeric",
-                      year: "numeric",
-                    })}
-                  </span>
+                <div className="relative z-[3] mt-auto flex items-center justify-end pt-4 text-xs text-white/50">
                   <ArrowRight className="h-4 w-4 text-neon-cyan transition-transform group-hover:translate-x-1" />
                 </div>
               </Link>
