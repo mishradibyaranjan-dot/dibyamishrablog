@@ -229,30 +229,6 @@ export const projects: Project[] = [
     area: "Cloud & DevSecOps",
   },
   {
-    slug: "office365-delivery-program",
-    name: "Microsoft Office 365 & Data Platform Delivery — Centific",
-    problem:
-      "A $1M account needed a scaled delivery engine to ship Office 365 / Office IP, Data Platform, and BI to 10,000+ Microsoft employees.",
-    solution:
-      "Directed a 450-person org (15 Managers, 70 Tech Leads); rebuilt delivery on Azure with BI and governance.",
-    tech: ["Azure", "Power BI", "BI & Analytics", "SAFe 6.0", "Enterprise Architecture"],
-    impact: "Account revenue grew $1M → $20M in 24 months; 200% delivery throughput; ~$2M vendor savings at 99.5% SLA.",
-    metrics: ["$1M → $20M revenue", "+200% throughput", "99.5% SLA"],
-    area: "Data & Analytics",
-  },
-  {
-    slug: "deloitte-university-platform",
-    name: "Deloitte University Unified Web + Mobile Platform",
-    problem:
-      "Five third-party tools and manual workflows ran the event lifecycle for 2,000+ annual guests at Deloitte University, Texas.",
-    solution:
-      "Architected a unified web + mobile platform with AI automation and SaaS payments, retiring all five tools.",
-    tech: ["React", "Mobile", "Node.js", "SQL / NoSQL", "REST APIs"],
-    impact: "100% event lifecycle automated; -15 hrs/week manual entry; booking errors -90%; zero critical outages for 2.5 years.",
-    metrics: ["-90% booking errors", "10+ deploys/week", "0 critical outages (2.5 yrs)"],
-    area: "SaaS Platforms",
-  },
-  {
     slug: "devsecops-transformation",
     name: "DevSecOps & CI/CD Transformation",
     problem:
