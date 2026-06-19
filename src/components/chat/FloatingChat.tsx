@@ -137,7 +137,7 @@ export function FloatingChat() {
           <header className="flex items-center justify-between border-b border-border bg-muted/40 px-4 py-3">
             <div className="flex items-center gap-2">
               <div className="h-2 w-2 rounded-full bg-emerald-500" />
-              <p className="text-sm font-semibold">Ask Dibya's AI</p>
+              <p className="text-sm font-semibold">Learning Assistant</p>
             </div>
             <div className="flex items-center gap-1">
               {messages.length > 0 && (
@@ -157,8 +157,8 @@ export function FloatingChat() {
             <ConversationContent className="px-3">
               {messages.length === 0 ? (
                 <ConversationEmptyState
-                  title="How can I help?"
-                  description="Ask about research, projects, case studies, or how to get in touch."
+                  title="Hi! I'm your Learning Assistant"
+                  description="Ask me about AI, Cloud, SaaS, research articles, projects, or case studies — I'll point you to the right section."
                 />
               ) : (
                 messages.map((m) => {
