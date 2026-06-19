@@ -30,6 +30,7 @@ import { Route as ApiPublicTtsRouteImport } from './routes/api/public/tts'
 import { Route as ApiPublicNewsletterRouteImport } from './routes/api/public/newsletter'
 import { Route as ApiPublicContactRouteImport } from './routes/api/public/contact'
 import { Route as ApiPublicChatRouteImport } from './routes/api/public/chat'
+import { Route as AuthenticatedLearnTopicLessonRouteImport } from './routes/_authenticated/learn.$topic.$lesson'
 
 const TrustRoute = TrustRouteImport.update({
   id: '/trust',
@@ -136,6 +137,12 @@ const ApiPublicChatRoute = ApiPublicChatRouteImport.update({
   path: '/api/public/chat',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedLearnTopicLessonRoute =
+  AuthenticatedLearnTopicLessonRouteImport.update({
+    id: '/$topic/$lesson',
+    path: '/$topic/$lesson',
+    getParentRoute: () => AuthenticatedLearnRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -150,7 +157,7 @@ export interface FileRoutesByFullPath {
   '/reset-password': typeof ResetPasswordRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/trust': typeof TrustRoute
-  '/learn': typeof AuthenticatedLearnRoute
+  '/learn': typeof AuthenticatedLearnRouteWithChildren
   '/reports': typeof AuthenticatedReportsRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/white-paper/agentic-ai-enterprise-automation': typeof WhitePaperAgenticAiEnterpriseAutomationRoute
@@ -158,6 +165,7 @@ export interface FileRoutesByFullPath {
   '/api/public/contact': typeof ApiPublicContactRoute
   '/api/public/newsletter': typeof ApiPublicNewsletterRoute
   '/api/public/tts': typeof ApiPublicTtsRoute
+  '/learn/$topic/$lesson': typeof AuthenticatedLearnTopicLessonRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -172,7 +180,7 @@ export interface FileRoutesByTo {
   '/reset-password': typeof ResetPasswordRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/trust': typeof TrustRoute
-  '/learn': typeof AuthenticatedLearnRoute
+  '/learn': typeof AuthenticatedLearnRouteWithChildren
   '/reports': typeof AuthenticatedReportsRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/white-paper/agentic-ai-enterprise-automation': typeof WhitePaperAgenticAiEnterpriseAutomationRoute
@@ -180,6 +188,7 @@ export interface FileRoutesByTo {
   '/api/public/contact': typeof ApiPublicContactRoute
   '/api/public/newsletter': typeof ApiPublicNewsletterRoute
   '/api/public/tts': typeof ApiPublicTtsRoute
+  '/learn/$topic/$lesson': typeof AuthenticatedLearnTopicLessonRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -196,7 +205,7 @@ export interface FileRoutesById {
   '/reset-password': typeof ResetPasswordRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/trust': typeof TrustRoute
-  '/_authenticated/learn': typeof AuthenticatedLearnRoute
+  '/_authenticated/learn': typeof AuthenticatedLearnRouteWithChildren
   '/_authenticated/reports': typeof AuthenticatedReportsRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/white-paper/agentic-ai-enterprise-automation': typeof WhitePaperAgenticAiEnterpriseAutomationRoute
@@ -204,6 +213,7 @@ export interface FileRoutesById {
   '/api/public/contact': typeof ApiPublicContactRoute
   '/api/public/newsletter': typeof ApiPublicNewsletterRoute
   '/api/public/tts': typeof ApiPublicTtsRoute
+  '/_authenticated/learn/$topic/$lesson': typeof AuthenticatedLearnTopicLessonRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -228,6 +238,7 @@ export interface FileRouteTypes {
     | '/api/public/contact'
     | '/api/public/newsletter'
     | '/api/public/tts'
+    | '/learn/$topic/$lesson'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -250,6 +261,7 @@ export interface FileRouteTypes {
     | '/api/public/contact'
     | '/api/public/newsletter'
     | '/api/public/tts'
+    | '/learn/$topic/$lesson'
   id:
     | '__root__'
     | '/'
@@ -273,6 +285,7 @@ export interface FileRouteTypes {
     | '/api/public/contact'
     | '/api/public/newsletter'
     | '/api/public/tts'
+    | '/_authenticated/learn/$topic/$lesson'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -445,16 +458,34 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPublicChatRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated/learn/$topic/$lesson': {
+      id: '/_authenticated/learn/$topic/$lesson'
+      path: '/$topic/$lesson'
+      fullPath: '/learn/$topic/$lesson'
+      preLoaderRoute: typeof AuthenticatedLearnTopicLessonRouteImport
+      parentRoute: typeof AuthenticatedLearnRoute
+    }
   }
 }
 
+interface AuthenticatedLearnRouteChildren {
+  AuthenticatedLearnTopicLessonRoute: typeof AuthenticatedLearnTopicLessonRoute
+}
+
+const AuthenticatedLearnRouteChildren: AuthenticatedLearnRouteChildren = {
+  AuthenticatedLearnTopicLessonRoute: AuthenticatedLearnTopicLessonRoute,
+}
+
+const AuthenticatedLearnRouteWithChildren =
+  AuthenticatedLearnRoute._addFileChildren(AuthenticatedLearnRouteChildren)
+
 interface AuthenticatedRouteRouteChildren {
-  AuthenticatedLearnRoute: typeof AuthenticatedLearnRoute
+  AuthenticatedLearnRoute: typeof AuthenticatedLearnRouteWithChildren
   AuthenticatedReportsRoute: typeof AuthenticatedReportsRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
-  AuthenticatedLearnRoute: AuthenticatedLearnRoute,
+  AuthenticatedLearnRoute: AuthenticatedLearnRouteWithChildren,
   AuthenticatedReportsRoute: AuthenticatedReportsRoute,
 }
 

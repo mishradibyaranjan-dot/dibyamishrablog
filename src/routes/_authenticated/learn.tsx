@@ -1,4 +1,6 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
+import { ArrowRight, Clock } from "lucide-react";
+import { LESSONS, type TopicKey } from "@/lib/lessons";
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import {
@@ -76,13 +78,16 @@ function Learn() {
           <TabPill value="saas" icon={<Layers className="h-4 w-4" />} label="Intro to SaaS" />
         </TabsList>
 
-        <TabsContent value="ai" className="mt-8">
+        <TabsContent value="ai" className="mt-8 space-y-12">
+          <LessonsIndex topic="ai" />
           <IntroAI />
         </TabsContent>
-        <TabsContent value="cloud" className="mt-8">
+        <TabsContent value="cloud" className="mt-8 space-y-12">
+          <LessonsIndex topic="cloud" />
           <IntroCloud />
         </TabsContent>
-        <TabsContent value="saas" className="mt-8">
+        <TabsContent value="saas" className="mt-8 space-y-12">
+          <LessonsIndex topic="saas" />
           <IntroSaaS />
         </TabsContent>
       </Tabs>
@@ -99,6 +104,48 @@ function TabPill({ value, icon, label }: { value: string; icon: React.ReactNode;
       <span className="grid h-7 w-7 place-items-center rounded-lg bg-white/10 text-white">{icon}</span>
       {label}
     </TabsTrigger>
+  );
+}
+
+function LessonsIndex({ topic }: { topic: TopicKey }) {
+  const lessons = LESSONS[topic];
+  return (
+    <div>
+      <div className="mb-4 flex items-baseline justify-between">
+        <div>
+          <p className="text-xs font-semibold uppercase tracking-widest text-neon-cyan">Lessons</p>
+          <h3 className="mt-1 font-display text-xl font-bold text-white sm:text-2xl">
+            Jump straight into a lesson
+          </h3>
+        </div>
+        <p className="hidden text-sm text-white/55 sm:block">Each lesson includes a diagram walkthrough and detailed summary.</p>
+      </div>
+      <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+        {lessons.map((l, i) => (
+          <Link
+            key={l.slug}
+            to="/learn/$topic/$lesson"
+            params={{ topic, lesson: l.slug }}
+            className="card-flashy group flex h-full flex-col rounded-2xl border border-white/10 bg-white/5 p-5 backdrop-blur-xl transition-shadow hover:shadow-glow"
+          >
+            <div className="relative z-[3] flex items-center justify-between text-xs text-white/55">
+              <span className="font-mono">{String(i + 1).padStart(2, "0")}</span>
+              <span className="inline-flex items-center gap-1">
+                <Clock className="h-3 w-3" />
+                {l.duration}
+              </span>
+            </div>
+            <h4 className="relative z-[3] mt-3 text-base font-semibold text-white group-hover:text-gradient">
+              {l.title}
+            </h4>
+            <p className="relative z-[3] mt-2 line-clamp-3 text-sm text-white/65">{l.summary}</p>
+            <span className="relative z-[3] mt-4 inline-flex items-center gap-1.5 text-xs font-semibold text-neon-cyan">
+              Open lesson <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
+            </span>
+          </Link>
+        ))}
+      </div>
+    </div>
   );
 }
 
