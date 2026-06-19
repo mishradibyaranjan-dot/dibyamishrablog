@@ -284,6 +284,12 @@ function TrackerMount() {
   return null;
 }
 
+function GuestAccessStrip() {
+  const { user, loading } = useAuth();
+  if (loading || user) return null;
+  return <AccessBanner variant="inline" />;
+}
+
 export function SiteLayout() {
   return (
     <ThemeProvider>
@@ -292,6 +298,7 @@ export function SiteLayout() {
         <div className="relative flex min-h-screen flex-col">
           <AuroraBackground />
           <Header />
+          <GuestAccessStrip />
           <main className="relative flex-1">
             <PageTransition />
           </main>
