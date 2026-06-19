@@ -22,6 +22,8 @@ import {
 import { Shimmer } from "@/components/ai-elements/shimmer";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/lib/auth";
 
 const STORAGE_KEY = "drm-floating-chat:v1";
 
@@ -41,12 +43,37 @@ export function FloatingChat() {
   const [open, setOpen] = useState(false);
   const [initialMessages] = useState<UIMessage[]>(() => loadInitialMessages());
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
+  const { user } = useAuth();
+  const conversationIdRef = useRef<string>(
+    (typeof crypto !== "undefined" && "randomUUID" in crypto
+      ? crypto.randomUUID()
+      : `c-${Date.now()}-${Math.random().toString(36).slice(2)}`),
+  );
+  const loggedIdsRef = useRef<Set<string>>(new Set());
 
   const { messages, sendMessage, status, setMessages, stop } = useChat({
     id: "floating-chat",
     messages: initialMessages,
     transport: new DefaultChatTransport({ api: "/api/public/chat" }),
   });
+
+  // Log completed messages to the database (auth users only)
+  useEffect(() => {
+    if (!user) return;
+    if (status === "streaming" || status === "submitted") return;
+    for (const m of messages) {
+      if (loggedIdsRef.current.has(m.id)) continue;
+      const text = m.parts.map((p) => (p.type === "text" ? p.text : "")).join("").trim();
+      if (!text) continue;
+      loggedIdsRef.current.add(m.id);
+      void supabase.from("chatbot_messages").insert({
+        user_id: user.id,
+        conversation_id: conversationIdRef.current,
+        role: m.role === "assistant" ? "assistant" : "user",
+        content: text.slice(0, 4000),
+      });
+    }
+  }, [messages, status, user]);
 
   // Persist to localStorage
   useEffect(() => {
