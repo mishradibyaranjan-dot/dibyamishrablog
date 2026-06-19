@@ -95,7 +95,7 @@ function LessonPage() {
     if (!user) return;
     supabase.from("page_visits").insert({
       user_id: user.id,
-      page: `/learn/${t}/${slug}`,
+      path: `/learn/${t}/${slug}`,
       referrer: typeof document !== "undefined" ? document.referrer : null,
     });
   }, [user, t, slug]);
@@ -874,7 +874,7 @@ function SaasPricing() {
           <FeatureCard
             icon={<DollarSign className="h-5 w-5" />}
             title="Match the metric to value AND cost"
-            box=""
+            
             body="Commercial packaging defines what a customer buys; entitlement logic defines what the software actually enables. The technically sound pattern is to choose a pricing metric that maps to customer value and to your internal cost drivers. Collaboration tools fit per-seat or tiered pricing naturally. Infra, API, and AI-heavy products often need usage-based or hybrid pricing so margin doesn't collapse on a usage spike."
           />
         </SubSection>
