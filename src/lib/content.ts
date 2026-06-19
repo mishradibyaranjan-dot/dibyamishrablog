@@ -154,7 +154,7 @@ export const posts: Post[] = [
     slug: "payments-platform-modernization",
     title: "Modernizing Enterprise Payment Platforms",
     summary:
-      "Lessons from architecting Biller Advantage and Bell Canada's payment engine — onboarding, reliability, and the discipline of 99.9% uptime.",
+      "Lessons from architecting a BFSI multi-portal payment engine — onboarding, reliability, and the discipline of 99.9% uptime.",
     category: "BFSI & Payments",
     readingTime: "8 min",
     date: "2025-06-18",
@@ -210,7 +210,7 @@ export const projects: Project[] = [
   },
   {
     slug: "vessel-management-platform",
-    name: "Cloud-Native Vessel Management Platform — Inchcape",
+    name: "Cloud-Native Vessel Management Platform",
     problem:
       "Legacy port operations across onboarding, customs, prefunding, and agent payments lacked a unified, AI-assisted platform.",
     solution:
@@ -246,7 +246,7 @@ export const projects: Project[] = [
   },
   {
     slug: "office365-delivery-program",
-    name: "Microsoft Office 365 & Data Platform Delivery — Centific",
+    name: "Microsoft Office 365 & Data Platform Delivery",
     problem:
       "A $1M account needed a scaled delivery engine to ship Office 365 / Office IP, Data Platform, and BI to 10,000+ Microsoft employees.",
     solution:
@@ -258,9 +258,9 @@ export const projects: Project[] = [
   },
   {
     slug: "deloitte-university-platform",
-    name: "Deloitte University Unified Web + Mobile Platform",
+    name: "Unified Web + Mobile Platform",
     problem:
-      "Five third-party tools and manual workflows ran the event lifecycle for 2,000+ annual guests at Deloitte University, Texas.",
+      "Five third-party tools and manual workflows ran the event lifecycle for 2,000+ annual guests at a corporate campus, Texas.",
     solution:
       "Architected a unified web + mobile platform with AI automation and SaaS payments, retiring all five tools.",
     tech: ["React", "Mobile", "Node.js", "SQL / NoSQL", "REST APIs"],
@@ -360,7 +360,7 @@ export const caseStudies: CaseStudy[] = [
   },
   {
     slug: "biller-advantage-bfsi",
-    title: "Biller Advantage — BFSI Payments Onboarding at Scale",
+    title: "BFSI Payments Onboarding at Scale",
     area: "BFSI & Payments",
     challenge:
       "Merchant onboarding took 3 months across 20+ US states, capping growth for a multi-portal payments platform.",
