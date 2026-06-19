@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { projects, caseStudies, categories } from "@/lib/content";
 import { cn } from "@/lib/utils";
 import { pageOgImages, SITE_ORIGIN } from "@/lib/og-images";
+import { RequireAuth } from "@/components/auth/RequireAuth";
 
 export const Route = createFileRoute("/projects")({
   head: () => {
@@ -30,7 +31,11 @@ export const Route = createFileRoute("/projects")({
       links: [{ rel: "canonical", href: url }],
     };
   },
-  component: Projects,
+  component: () => (
+    <RequireAuth>
+      <Projects />
+    </RequireAuth>
+  ),
 });
 
 function Projects() {
