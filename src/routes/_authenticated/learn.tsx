@@ -76,13 +76,16 @@ function Learn() {
           <TabPill value="saas" icon={<Layers className="h-4 w-4" />} label="Intro to SaaS" />
         </TabsList>
 
-        <TabsContent value="ai" className="mt-8">
+        <TabsContent value="ai" className="mt-8 space-y-12">
+          <LessonsIndex topic="ai" />
           <IntroAI />
         </TabsContent>
-        <TabsContent value="cloud" className="mt-8">
+        <TabsContent value="cloud" className="mt-8 space-y-12">
+          <LessonsIndex topic="cloud" />
           <IntroCloud />
         </TabsContent>
-        <TabsContent value="saas" className="mt-8">
+        <TabsContent value="saas" className="mt-8 space-y-12">
+          <LessonsIndex topic="saas" />
           <IntroSaaS />
         </TabsContent>
       </Tabs>
