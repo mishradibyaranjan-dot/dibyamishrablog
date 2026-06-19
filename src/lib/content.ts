@@ -246,7 +246,7 @@ export const projects: Project[] = [
   },
   {
     slug: "office365-delivery-program",
-    name: "Microsoft Office 365 & Data Platform Delivery",
+    name: "Data Platform & BI Delivery",
     problem:
       "A $1M account needed a scaled delivery engine to ship Office 365 / Office IP, Data Platform, and BI to 10,000+ Microsoft employees.",
     solution:
