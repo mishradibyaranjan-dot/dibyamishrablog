@@ -74,7 +74,10 @@ export const Route = createFileRoute("/api/public/chat")({
         const messages = parsed.data.messages as unknown as UIMessage[];
 
         const key = process.env.LOVABLE_API_KEY;
-        if (!key) return new Response("Missing LOVABLE_API_KEY", { status: 500 });
+        if (!key) {
+          console.error("LOVABLE_API_KEY is not configured");
+          return new Response("Service unavailable", { status: 503 });
+        }
 
         const gateway = createLovableAiGatewayProvider(key);
         const result = streamText({
