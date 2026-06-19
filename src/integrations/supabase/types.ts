@@ -14,16 +14,279 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      chatbot_messages: {
+        Row: {
+          content: string
+          conversation_id: string
+          created_at: string
+          id: string
+          role: string
+          sources: Json | null
+          user_id: string | null
+        }
+        Insert: {
+          content: string
+          conversation_id: string
+          created_at?: string
+          id?: string
+          role: string
+          sources?: Json | null
+          user_id?: string | null
+        }
+        Update: {
+          content?: string
+          conversation_id?: string
+          created_at?: string
+          id?: string
+          role?: string
+          sources?: Json | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
+      failed_login_attempts: {
+        Row: {
+          attempted_at: string
+          email: string | null
+          id: string
+          ip: string | null
+          reason: string | null
+        }
+        Insert: {
+          attempted_at?: string
+          email?: string | null
+          id?: string
+          ip?: string | null
+          reason?: string | null
+        }
+        Update: {
+          attempted_at?: string
+          email?: string | null
+          id?: string
+          ip?: string | null
+          reason?: string | null
+        }
+        Relationships: []
+      }
+      login_sessions: {
+        Row: {
+          duration_seconds: number | null
+          ended_at: string | null
+          id: string
+          ip: string | null
+          started_at: string
+          user_agent: string | null
+          user_id: string
+        }
+        Insert: {
+          duration_seconds?: number | null
+          ended_at?: string | null
+          id?: string
+          ip?: string | null
+          started_at?: string
+          user_agent?: string | null
+          user_id: string
+        }
+        Update: {
+          duration_seconds?: number | null
+          ended_at?: string | null
+          id?: string
+          ip?: string | null
+          started_at?: string
+          user_agent?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
+      page_visits: {
+        Row: {
+          duration_seconds: number | null
+          id: string
+          path: string
+          referrer: string | null
+          user_id: string
+          visited_at: string
+        }
+        Insert: {
+          duration_seconds?: number | null
+          id?: string
+          path: string
+          referrer?: string | null
+          user_id: string
+          visited_at?: string
+        }
+        Update: {
+          duration_seconds?: number | null
+          id?: string
+          path?: string
+          referrer?: string | null
+          user_id?: string
+          visited_at?: string
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          avatar_url: string | null
+          created_at: string
+          display_name: string | null
+          email: string | null
+          id: string
+          updated_at: string
+        }
+        Insert: {
+          avatar_url?: string | null
+          created_at?: string
+          display_name?: string | null
+          email?: string | null
+          id: string
+          updated_at?: string
+        }
+        Update: {
+          avatar_url?: string | null
+          created_at?: string
+          display_name?: string | null
+          email?: string | null
+          id?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      resource_access: {
+        Row: {
+          accessed_at: string
+          id: string
+          resource_id: string
+          resource_type: string
+          user_id: string
+        }
+        Insert: {
+          accessed_at?: string
+          id?: string
+          resource_id: string
+          resource_type: string
+          user_id: string
+        }
+        Update: {
+          accessed_at?: string
+          id?: string
+          resource_id?: string
+          resource_type?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      search_queries: {
+        Row: {
+          id: string
+          query: string
+          results_count: number | null
+          searched_at: string
+          user_id: string
+        }
+        Insert: {
+          id?: string
+          query: string
+          results_count?: number | null
+          searched_at?: string
+          user_id: string
+        }
+        Update: {
+          id?: string
+          query?: string
+          results_count?: number | null
+          searched_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      tab_access: {
+        Row: {
+          id: string
+          opened_at: string
+          page: string
+          tab_id: string
+          user_id: string
+        }
+        Insert: {
+          id?: string
+          opened_at?: string
+          page: string
+          tab_id: string
+          user_id: string
+        }
+        Update: {
+          id?: string
+          opened_at?: string
+          page?: string
+          tab_id?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      user_activity: {
+        Row: {
+          action_type: string
+          id: string
+          metadata: Json | null
+          occurred_at: string
+          target: string | null
+          user_id: string
+        }
+        Insert: {
+          action_type: string
+          id?: string
+          metadata?: Json | null
+          occurred_at?: string
+          target?: string | null
+          user_id: string
+        }
+        Update: {
+          action_type?: string
+          id?: string
+          metadata?: Json | null
+          occurred_at?: string
+          target?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
+      user_roles: {
+        Row: {
+          created_at: string
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
     }
     Enums: {
-      [_ in never]: never
+      app_role: "admin" | "user"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +413,8 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      app_role: ["admin", "user"],
+    },
   },
 } as const

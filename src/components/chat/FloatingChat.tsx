@@ -22,6 +22,8 @@ import {
 import { Shimmer } from "@/components/ai-elements/shimmer";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/lib/auth";
 
 const STORAGE_KEY = "drm-floating-chat:v1";
 
@@ -41,12 +43,37 @@ export function FloatingChat() {
   const [open, setOpen] = useState(false);
   const [initialMessages] = useState<UIMessage[]>(() => loadInitialMessages());
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
+  const { user } = useAuth();
+  const conversationIdRef = useRef<string>(
+    (typeof crypto !== "undefined" && "randomUUID" in crypto
+      ? crypto.randomUUID()
+      : `c-${Date.now()}-${Math.random().toString(36).slice(2)}`),
+  );
+  const loggedIdsRef = useRef<Set<string>>(new Set());
 
   const { messages, sendMessage, status, setMessages, stop } = useChat({
     id: "floating-chat",
     messages: initialMessages,
     transport: new DefaultChatTransport({ api: "/api/public/chat" }),
   });
+
+  // Log completed messages to the database (auth users only)
+  useEffect(() => {
+    if (!user) return;
+    if (status === "streaming" || status === "submitted") return;
+    for (const m of messages) {
+      if (loggedIdsRef.current.has(m.id)) continue;
+      const text = m.parts.map((p) => (p.type === "text" ? p.text : "")).join("").trim();
+      if (!text) continue;
+      loggedIdsRef.current.add(m.id);
+      void supabase.from("chatbot_messages").insert({
+        user_id: user.id,
+        conversation_id: conversationIdRef.current,
+        role: m.role === "assistant" ? "assistant" : "user",
+        content: text.slice(0, 4000),
+      });
+    }
+  }, [messages, status, user]);
 
   // Persist to localStorage
   useEffect(() => {
@@ -110,7 +137,7 @@ export function FloatingChat() {
           <header className="flex items-center justify-between border-b border-border bg-muted/40 px-4 py-3">
             <div className="flex items-center gap-2">
               <div className="h-2 w-2 rounded-full bg-emerald-500" />
-              <p className="text-sm font-semibold">Ask Dibya's AI</p>
+              <p className="text-sm font-semibold">Learning Assistant</p>
             </div>
             <div className="flex items-center gap-1">
               {messages.length > 0 && (
@@ -130,8 +157,8 @@ export function FloatingChat() {
             <ConversationContent className="px-3">
               {messages.length === 0 ? (
                 <ConversationEmptyState
-                  title="How can I help?"
-                  description="Ask about research, projects, case studies, or how to get in touch."
+                  title="Hi! I'm your Learning Assistant"
+                  description="Ask me about AI, Cloud, SaaS, research articles, projects, or case studies — I'll point you to the right section."
                 />
               ) : (
                 messages.map((m) => {

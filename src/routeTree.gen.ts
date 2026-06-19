@@ -11,15 +11,21 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as TrustRouteImport } from './routes/trust'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
+import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as ResearchRouteImport } from './routes/research'
 import { Route as ProjectsRouteImport } from './routes/projects'
+import { Route as ForgotPasswordRouteImport } from './routes/forgot-password'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as CaseStudiesRouteImport } from './routes/case-studies'
 import { Route as BlogRouteImport } from './routes/blog'
+import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AboutRouteImport } from './routes/about'
+import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as WhitePaperAgenticAiEnterpriseAutomationRouteImport } from './routes/white-paper.agentic-ai-enterprise-automation'
 import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
+import { Route as AuthenticatedReportsRouteImport } from './routes/_authenticated/reports'
+import { Route as AuthenticatedLearnRouteImport } from './routes/_authenticated/learn'
 import { Route as ApiPublicTtsRouteImport } from './routes/api/public/tts'
 import { Route as ApiPublicNewsletterRouteImport } from './routes/api/public/newsletter'
 import { Route as ApiPublicContactRouteImport } from './routes/api/public/contact'
@@ -35,6 +41,11 @@ const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
   path: '/sitemap.xml',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ResetPasswordRoute = ResetPasswordRouteImport.update({
+  id: '/reset-password',
+  path: '/reset-password',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ResearchRoute = ResearchRouteImport.update({
   id: '/research',
   path: '/research',
@@ -43,6 +54,11 @@ const ResearchRoute = ResearchRouteImport.update({
 const ProjectsRoute = ProjectsRouteImport.update({
   id: '/projects',
   path: '/projects',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ForgotPasswordRoute = ForgotPasswordRouteImport.update({
+  id: '/forgot-password',
+  path: '/forgot-password',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ContactRoute = ContactRouteImport.update({
@@ -60,9 +76,18 @@ const BlogRoute = BlogRouteImport.update({
   path: '/blog',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthRoute = AuthRouteImport.update({
+  id: '/auth',
+  path: '/auth',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AboutRoute = AboutRouteImport.update({
   id: '/about',
   path: '/about',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
+  id: '/_authenticated',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IndexRoute = IndexRouteImport.update({
@@ -80,6 +105,16 @@ const BlogSlugRoute = BlogSlugRouteImport.update({
   id: '/$slug',
   path: '/$slug',
   getParentRoute: () => BlogRoute,
+} as any)
+const AuthenticatedReportsRoute = AuthenticatedReportsRouteImport.update({
+  id: '/reports',
+  path: '/reports',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedLearnRoute = AuthenticatedLearnRouteImport.update({
+  id: '/learn',
+  path: '/learn',
+  getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
 const ApiPublicTtsRoute = ApiPublicTtsRouteImport.update({
   id: '/api/public/tts',
@@ -105,13 +140,18 @@ const ApiPublicChatRoute = ApiPublicChatRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/auth': typeof AuthRoute
   '/blog': typeof BlogRouteWithChildren
   '/case-studies': typeof CaseStudiesRoute
   '/contact': typeof ContactRoute
+  '/forgot-password': typeof ForgotPasswordRoute
   '/projects': typeof ProjectsRoute
   '/research': typeof ResearchRoute
+  '/reset-password': typeof ResetPasswordRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/trust': typeof TrustRoute
+  '/learn': typeof AuthenticatedLearnRoute
+  '/reports': typeof AuthenticatedReportsRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/white-paper/agentic-ai-enterprise-automation': typeof WhitePaperAgenticAiEnterpriseAutomationRoute
   '/api/public/chat': typeof ApiPublicChatRoute
@@ -122,13 +162,18 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/auth': typeof AuthRoute
   '/blog': typeof BlogRouteWithChildren
   '/case-studies': typeof CaseStudiesRoute
   '/contact': typeof ContactRoute
+  '/forgot-password': typeof ForgotPasswordRoute
   '/projects': typeof ProjectsRoute
   '/research': typeof ResearchRoute
+  '/reset-password': typeof ResetPasswordRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/trust': typeof TrustRoute
+  '/learn': typeof AuthenticatedLearnRoute
+  '/reports': typeof AuthenticatedReportsRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/white-paper/agentic-ai-enterprise-automation': typeof WhitePaperAgenticAiEnterpriseAutomationRoute
   '/api/public/chat': typeof ApiPublicChatRoute
@@ -139,14 +184,20 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/about': typeof AboutRoute
+  '/auth': typeof AuthRoute
   '/blog': typeof BlogRouteWithChildren
   '/case-studies': typeof CaseStudiesRoute
   '/contact': typeof ContactRoute
+  '/forgot-password': typeof ForgotPasswordRoute
   '/projects': typeof ProjectsRoute
   '/research': typeof ResearchRoute
+  '/reset-password': typeof ResetPasswordRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/trust': typeof TrustRoute
+  '/_authenticated/learn': typeof AuthenticatedLearnRoute
+  '/_authenticated/reports': typeof AuthenticatedReportsRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/white-paper/agentic-ai-enterprise-automation': typeof WhitePaperAgenticAiEnterpriseAutomationRoute
   '/api/public/chat': typeof ApiPublicChatRoute
@@ -159,13 +210,18 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/about'
+    | '/auth'
     | '/blog'
     | '/case-studies'
     | '/contact'
+    | '/forgot-password'
     | '/projects'
     | '/research'
+    | '/reset-password'
     | '/sitemap.xml'
     | '/trust'
+    | '/learn'
+    | '/reports'
     | '/blog/$slug'
     | '/white-paper/agentic-ai-enterprise-automation'
     | '/api/public/chat'
@@ -176,13 +232,18 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/about'
+    | '/auth'
     | '/blog'
     | '/case-studies'
     | '/contact'
+    | '/forgot-password'
     | '/projects'
     | '/research'
+    | '/reset-password'
     | '/sitemap.xml'
     | '/trust'
+    | '/learn'
+    | '/reports'
     | '/blog/$slug'
     | '/white-paper/agentic-ai-enterprise-automation'
     | '/api/public/chat'
@@ -192,14 +253,20 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/_authenticated'
     | '/about'
+    | '/auth'
     | '/blog'
     | '/case-studies'
     | '/contact'
+    | '/forgot-password'
     | '/projects'
     | '/research'
+    | '/reset-password'
     | '/sitemap.xml'
     | '/trust'
+    | '/_authenticated/learn'
+    | '/_authenticated/reports'
     | '/blog/$slug'
     | '/white-paper/agentic-ai-enterprise-automation'
     | '/api/public/chat'
@@ -210,12 +277,16 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
   AboutRoute: typeof AboutRoute
+  AuthRoute: typeof AuthRoute
   BlogRoute: typeof BlogRouteWithChildren
   CaseStudiesRoute: typeof CaseStudiesRoute
   ContactRoute: typeof ContactRoute
+  ForgotPasswordRoute: typeof ForgotPasswordRoute
   ProjectsRoute: typeof ProjectsRoute
   ResearchRoute: typeof ResearchRoute
+  ResetPasswordRoute: typeof ResetPasswordRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   TrustRoute: typeof TrustRoute
   WhitePaperAgenticAiEnterpriseAutomationRoute: typeof WhitePaperAgenticAiEnterpriseAutomationRoute
@@ -241,6 +312,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SitemapDotxmlRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/reset-password': {
+      id: '/reset-password'
+      path: '/reset-password'
+      fullPath: '/reset-password'
+      preLoaderRoute: typeof ResetPasswordRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/research': {
       id: '/research'
       path: '/research'
@@ -253,6 +331,13 @@ declare module '@tanstack/react-router' {
       path: '/projects'
       fullPath: '/projects'
       preLoaderRoute: typeof ProjectsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/forgot-password': {
+      id: '/forgot-password'
+      path: '/forgot-password'
+      fullPath: '/forgot-password'
+      preLoaderRoute: typeof ForgotPasswordRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/contact': {
@@ -276,11 +361,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof BlogRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/auth': {
+      id: '/auth'
+      path: '/auth'
+      fullPath: '/auth'
+      preLoaderRoute: typeof AuthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/about': {
       id: '/about'
       path: '/about'
       fullPath: '/about'
       preLoaderRoute: typeof AboutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated': {
+      id: '/_authenticated'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof AuthenticatedRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/': {
@@ -303,6 +402,20 @@ declare module '@tanstack/react-router' {
       fullPath: '/blog/$slug'
       preLoaderRoute: typeof BlogSlugRouteImport
       parentRoute: typeof BlogRoute
+    }
+    '/_authenticated/reports': {
+      id: '/_authenticated/reports'
+      path: '/reports'
+      fullPath: '/reports'
+      preLoaderRoute: typeof AuthenticatedReportsRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/learn': {
+      id: '/_authenticated/learn'
+      path: '/learn'
+      fullPath: '/learn'
+      preLoaderRoute: typeof AuthenticatedLearnRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
     }
     '/api/public/tts': {
       id: '/api/public/tts'
@@ -335,6 +448,19 @@ declare module '@tanstack/react-router' {
   }
 }
 
+interface AuthenticatedRouteRouteChildren {
+  AuthenticatedLearnRoute: typeof AuthenticatedLearnRoute
+  AuthenticatedReportsRoute: typeof AuthenticatedReportsRoute
+}
+
+const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
+  AuthenticatedLearnRoute: AuthenticatedLearnRoute,
+  AuthenticatedReportsRoute: AuthenticatedReportsRoute,
+}
+
+const AuthenticatedRouteRouteWithChildren =
+  AuthenticatedRouteRoute._addFileChildren(AuthenticatedRouteRouteChildren)
+
 interface BlogRouteChildren {
   BlogSlugRoute: typeof BlogSlugRoute
 }
@@ -347,12 +473,16 @@ const BlogRouteWithChildren = BlogRoute._addFileChildren(BlogRouteChildren)
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
   AboutRoute: AboutRoute,
+  AuthRoute: AuthRoute,
   BlogRoute: BlogRouteWithChildren,
   CaseStudiesRoute: CaseStudiesRoute,
   ContactRoute: ContactRoute,
+  ForgotPasswordRoute: ForgotPasswordRoute,
   ProjectsRoute: ProjectsRoute,
   ResearchRoute: ResearchRoute,
+  ResetPasswordRoute: ResetPasswordRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   TrustRoute: TrustRoute,
   WhitePaperAgenticAiEnterpriseAutomationRoute:
@@ -365,13 +495,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}

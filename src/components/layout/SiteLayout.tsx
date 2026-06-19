@@ -10,6 +10,9 @@ import { PageTransition } from "@/components/cinematic/PageTransition";
 import { ThemeProvider } from "@/components/theme/ThemeProvider";
 import { ThemeToggle } from "@/components/theme/ThemeToggle";
 import { ReadAloudButton } from "@/components/voice/ReadAloudButton";
+import { AuthProvider } from "@/lib/auth";
+import { UserMenu } from "@/components/auth/UserMenu";
+import { useActivityTracker } from "@/lib/tracking";
 
 import drmLogo from "@/assets/drm-logo.png.asset.json";
 
@@ -77,6 +80,7 @@ function NewsletterForm() {
 const NAV = [
   { to: "/", label: "Home" },
   { to: "/about", label: "About" },
+  { to: "/learn", label: "Learn" },
   { to: "/research", label: "Research" },
   { to: "/projects", label: "Projects" },
   { to: "/case-studies", label: "Case Studies" },
@@ -151,13 +155,7 @@ function Header() {
         <div className="flex items-center gap-1 sm:gap-2">
           <ReadAloudButton />
           <ThemeToggle />
-          <Button
-            asChild
-            size="sm"
-            className="hidden bg-brand-gradient text-white shadow-neon hover:opacity-90 sm:inline-flex"
-          >
-            <Link to="/contact">Connect</Link>
-          </Button>
+          <UserMenu />
           <Button
             variant="ghost"
             size="icon"
@@ -280,18 +278,26 @@ function Footer() {
   );
 }
 
+function TrackerMount() {
+  useActivityTracker();
+  return null;
+}
+
 export function SiteLayout() {
   return (
     <ThemeProvider>
-      <div className="relative flex min-h-screen flex-col">
-        <AuroraBackground />
-        <Header />
-        <main className="relative flex-1">
-          <PageTransition />
-        </main>
-        <Footer />
-        <FloatingChat />
-      </div>
+      <AuthProvider>
+        <TrackerMount />
+        <div className="relative flex min-h-screen flex-col">
+          <AuroraBackground />
+          <Header />
+          <main className="relative flex-1">
+            <PageTransition />
+          </main>
+          <Footer />
+          <FloatingChat />
+        </div>
+      </AuthProvider>
     </ThemeProvider>
   );
 }
