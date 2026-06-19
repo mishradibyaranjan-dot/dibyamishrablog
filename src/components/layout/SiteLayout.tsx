@@ -155,13 +155,7 @@ function Header() {
         <div className="flex items-center gap-1 sm:gap-2">
           <ReadAloudButton />
           <ThemeToggle />
-          <Button
-            asChild
-            size="sm"
-            className="hidden bg-brand-gradient text-white shadow-neon hover:opacity-90 sm:inline-flex"
-          >
-            <Link to="/contact">Connect</Link>
-          </Button>
+          <UserMenu />
           <Button
             variant="ghost"
             size="icon"
