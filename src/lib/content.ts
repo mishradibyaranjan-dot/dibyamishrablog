@@ -151,22 +151,6 @@ export const posts: Post[] = [
       "Program delivery is a forecasting problem. AI applied to engineering telemetry — PRs, deploys, incidents, work-item flow — can surface risk early and free leaders to coach instead of chase.",
   },
   {
-    slug: "payments-platform-modernization",
-    title: "Modernizing Enterprise Payment Platforms",
-    summary:
-      "Lessons from architecting Biller Advantage and Bell Canada's payment engine — onboarding, reliability, and the discipline of 99.9% uptime.",
-    category: "BFSI & Payments",
-    readingTime: "8 min",
-    date: "2025-06-18",
-    takeaways: [
-      "Merchant onboarding is a product, not a project.",
-      "Idempotency and retries are the heart of payments reliability.",
-      "Compress feedback loops before scaling volume.",
-    ],
-    content:
-      "Payments platforms live or die by reliability and onboarding velocity. This piece distills patterns from BFSI engagements — multi-portal architectures, payment engine design, and the operating model that holds 99.9% uptime under real traffic.",
-  },
-  {
     slug: "data-platform-bi-at-scale",
     title: "Designing Data Platforms & BI for Enterprise Scale",
     summary:
