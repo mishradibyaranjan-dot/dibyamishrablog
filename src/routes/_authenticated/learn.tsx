@@ -1,6 +1,4 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
-import { ArrowRight, Clock } from "lucide-react";
-import { LESSONS, type TopicKey } from "@/lib/lessons";
+import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import {
