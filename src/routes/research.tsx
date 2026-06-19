@@ -6,6 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { posts, categories } from "@/lib/content";
 import { cn } from "@/lib/utils";
 import { pageOgImages, SITE_ORIGIN } from "@/lib/og-images";
+import { RequireAuth } from "@/components/auth/RequireAuth";
 
 export const Route = createFileRoute("/research")({
   head: () => {
@@ -30,7 +31,11 @@ export const Route = createFileRoute("/research")({
       links: [{ rel: "canonical", href: url }],
     };
   },
-  component: Research,
+  component: () => (
+    <RequireAuth>
+      <Research />
+    </RequireAuth>
+  ),
 });
 
 function Research() {
