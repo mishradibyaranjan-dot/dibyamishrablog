@@ -103,12 +103,7 @@ function Research() {
               </h3>
               <p className="mt-3 text-muted-foreground">{featured.summary}</p>
               <div className="mt-5 text-xs text-muted-foreground">
-                {new Date(featured.date).toLocaleDateString("en", {
-                  month: "long",
-                  day: "numeric",
-                  year: "numeric",
-                })}{" "}
-                · {featured.readingTime}
+                {featured.readingTime}
               </div>
             </div>
           </Link>
@@ -162,14 +157,7 @@ function Research() {
               <p className="relative z-[3] mt-2 line-clamp-3 text-sm text-muted-foreground">
                 {p.summary}
               </p>
-              <div className="relative z-[3] mt-auto flex items-center justify-between pt-4 text-xs text-muted-foreground">
-                <span>
-                  {new Date(p.date).toLocaleDateString("en", {
-                    month: "short",
-                    day: "numeric",
-                    year: "numeric",
-                  })}
-                </span>
+              <div className="relative z-[3] mt-auto flex items-center justify-end pt-4 text-xs text-muted-foreground">
                 <span>{p.readingTime}</span>
               </div>
             </Link>

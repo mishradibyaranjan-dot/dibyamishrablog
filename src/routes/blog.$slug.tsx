@@ -78,7 +78,6 @@ function BlogPost() {
         </h1>
         <div className="mt-5 flex flex-wrap items-center gap-x-4 gap-y-1 text-sm text-muted-foreground">
           <span className="font-medium text-foreground">Dibya Ranjan Mishra</span>
-          <span>· {new Date(post.date).toLocaleDateString("en", { month: "long", day: "numeric", year: "numeric" })}</span>
           <span>· {post.readingTime}</span>
         </div>
       </Section>
