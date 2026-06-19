@@ -257,18 +257,6 @@ export const projects: Project[] = [
     area: "Data & Analytics",
   },
   {
-    slug: "biller-advantage-payments",
-    name: "Biller Advantage Multi-Portal Payments — Capgemini",
-    problem:
-      "Merchant onboarding for a BFSI payments platform took 3 months, blocking growth across 20+ US states.",
-    solution:
-      "Architected a multi-portal payment platform with automated merchant onboarding and a hardened core payment engine.",
-    tech: [".NET Core / C#", "SQL / NoSQL", "REST APIs", "Azure"],
-    impact: "Merchant onboarding compressed from 3 months to 4 hours; Boarding & Servicing delivered at 99.9% uptime.",
-    metrics: ["-98% onboarding time", "99.9% uptime", "20+ US states"],
-    area: "BFSI & Payments",
-  },
-  {
     slug: "deloitte-university-platform",
     name: "Deloitte University Unified Web + Mobile Platform",
     problem:
