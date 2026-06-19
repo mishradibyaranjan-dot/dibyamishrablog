@@ -5,7 +5,7 @@ import rag from "@/assets/og/og-blog-scalable-rag-enterprise.png.asset.json";
 import saas from "@/assets/og/og-blog-cloud-native-saas-patterns.png.asset.json";
 import leadership from "@/assets/og/og-blog-engineering-leadership-global-teams.png.asset.json";
 import delivery from "@/assets/og/og-blog-ai-delivery-predictability.png.asset.json";
-
+import payments from "@/assets/og/og-blog-payments-platform-modernization.png.asset.json";
 import dataBI from "@/assets/og/og-blog-data-platform-bi-at-scale.png.asset.json";
 import projectsOg from "@/assets/og/og-projects.png.asset.json";
 import caseStudiesOg from "@/assets/og/og-case-studies.png.asset.json";
@@ -21,7 +21,7 @@ export const postOgImages: Record<string, string> = {
   "cloud-native-saas-patterns": abs(saas.url),
   "engineering-leadership-global-teams": abs(leadership.url),
   "ai-delivery-predictability": abs(delivery.url),
-  
+  "payments-platform-modernization": abs(payments.url),
   "data-platform-bi-at-scale": abs(dataBI.url),
 };
 

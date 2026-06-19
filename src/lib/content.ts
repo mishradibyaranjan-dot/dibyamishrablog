@@ -151,6 +151,22 @@ export const posts: Post[] = [
       "Program delivery is a forecasting problem. AI applied to engineering telemetry — PRs, deploys, incidents, work-item flow — can surface risk early and free leaders to coach instead of chase.",
   },
   {
+    slug: "payments-platform-modernization",
+    title: "Modernizing Enterprise Payment Platforms",
+    summary:
+      "Lessons from architecting Biller Advantage and Bell Canada's payment engine — onboarding, reliability, and the discipline of 99.9% uptime.",
+    category: "BFSI & Payments",
+    readingTime: "8 min",
+    date: "2025-06-18",
+    takeaways: [
+      "Merchant onboarding is a product, not a project.",
+      "Idempotency and retries are the heart of payments reliability.",
+      "Compress feedback loops before scaling volume.",
+    ],
+    content:
+      "Payments platforms live or die by reliability and onboarding velocity. This piece distills patterns from BFSI engagements — multi-portal architectures, payment engine design, and the operating model that holds 99.9% uptime under real traffic.",
+  },
+  {
     slug: "data-platform-bi-at-scale",
     title: "Designing Data Platforms & BI for Enterprise Scale",
     summary:
@@ -227,6 +243,30 @@ export const projects: Project[] = [
     impact: "Deploy frequency moved from monthly to 40+ per day; infra cost down 38%.",
     metrics: ["40x deploy frequency", "-38% infra cost", "99.99% availability"],
     area: "Cloud & DevSecOps",
+  },
+  {
+    slug: "office365-delivery-program",
+    name: "Microsoft Office 365 & Data Platform Delivery — Centific",
+    problem:
+      "A $1M account needed a scaled delivery engine to ship Office 365 / Office IP, Data Platform, and BI to 10,000+ Microsoft employees.",
+    solution:
+      "Directed a 450-person org (15 Managers, 70 Tech Leads); rebuilt delivery on Azure with BI and governance.",
+    tech: ["Azure", "Power BI", "BI & Analytics", "SAFe 6.0", "Enterprise Architecture"],
+    impact: "Account revenue grew $1M → $20M in 24 months; 200% delivery throughput; ~$2M vendor savings at 99.5% SLA.",
+    metrics: ["$1M → $20M revenue", "+200% throughput", "99.5% SLA"],
+    area: "Data & Analytics",
+  },
+  {
+    slug: "deloitte-university-platform",
+    name: "Deloitte University Unified Web + Mobile Platform",
+    problem:
+      "Five third-party tools and manual workflows ran the event lifecycle for 2,000+ annual guests at Deloitte University, Texas.",
+    solution:
+      "Architected a unified web + mobile platform with AI automation and SaaS payments, retiring all five tools.",
+    tech: ["React", "Mobile", "Node.js", "SQL / NoSQL", "REST APIs"],
+    impact: "100% event lifecycle automated; -15 hrs/week manual entry; booking errors -90%; zero critical outages for 2.5 years.",
+    metrics: ["-90% booking errors", "10+ deploys/week", "0 critical outages (2.5 yrs)"],
+    area: "SaaS Platforms",
   },
   {
     slug: "devsecops-transformation",
@@ -316,6 +356,31 @@ export const caseStudies: CaseStudy[] = [
       "Modernization is an organizational change as much as a technical one.",
       "Pay down platform debt early to unlock product velocity.",
       "Treat cells as a product with versioned contracts.",
+    ],
+  },
+  {
+    slug: "biller-advantage-bfsi",
+    title: "Biller Advantage — BFSI Payments Onboarding at Scale",
+    area: "BFSI & Payments",
+    challenge:
+      "Merchant onboarding took 3 months across 20+ US states, capping growth for a multi-portal payments platform.",
+    architecture:
+      "Multi-portal platform sharing a hardened payment engine; automated merchant onboarding pipeline with rules-driven KYC and routing.",
+    stack: [".NET Core / C#", "SQL / NoSQL", "REST APIs", "Azure", "DevSecOps"],
+    execution:
+      "Domain-driven slices per portal; release trains aligned to regulator windows; SRE-led reliability program targeting 99.9% uptime.",
+    components: [
+      "Merchant onboarding pipeline",
+      "Core payment engine",
+      "Boarding & Servicing platform",
+      "Reconciliation & audit",
+    ],
+    outcome:
+      "Merchant onboarding compressed from 3 months to 4 hours (-98%); 99.9% uptime on Boarding & Servicing across the engagement.",
+    lessons: [
+      "Onboarding velocity is a product KPI — instrument it end-to-end.",
+      "Idempotency and retries belong in the platform, not the apps.",
+      "Regulator-aligned release trains beat ad-hoc deployments in BFSI.",
     ],
   },
 ];
