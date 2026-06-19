@@ -278,18 +278,26 @@ function Footer() {
   );
 }
 
+function TrackerMount() {
+  useActivityTracker();
+  return null;
+}
+
 export function SiteLayout() {
   return (
     <ThemeProvider>
-      <div className="relative flex min-h-screen flex-col">
-        <AuroraBackground />
-        <Header />
-        <main className="relative flex-1">
-          <PageTransition />
-        </main>
-        <Footer />
-        <FloatingChat />
-      </div>
+      <AuthProvider>
+        <TrackerMount />
+        <div className="relative flex min-h-screen flex-col">
+          <AuroraBackground />
+          <Header />
+          <main className="relative flex-1">
+            <PageTransition />
+          </main>
+          <Footer />
+          <FloatingChat />
+        </div>
+      </AuthProvider>
     </ThemeProvider>
   );
 }
