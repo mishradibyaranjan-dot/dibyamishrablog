@@ -26,12 +26,16 @@ type AccessEvent =
   | "reset_clicked"
   | "protected_access_attempt";
 
-/** Fire-and-forget tracking. Writes to user_activity when allowed by RLS; silent otherwise. */
-function trackAccessEvent(event: AccessEvent, path?: string) {
+/** Fire-and-forget tracking. Best-effort; only writes when an auth session exists (RLS). */
+async function trackAccessEvent(event: AccessEvent, path?: string) {
   try {
+    const { data } = await supabase.auth.getSession();
+    const userId = data.session?.user.id;
+    if (!userId) return;
     void supabase.from("user_activity").insert({
-      activity_type: event,
-      activity_data: { path: path ?? (typeof window !== "undefined" ? window.location.pathname : null) },
+      user_id: userId,
+      action_type: event,
+      metadata: { path: path ?? (typeof window !== "undefined" ? window.location.pathname : null) },
     });
   } catch {
     /* ignore */
