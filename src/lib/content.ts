@@ -318,29 +318,4 @@ export const caseStudies: CaseStudy[] = [
       "Treat cells as a product with versioned contracts.",
     ],
   },
-  {
-    slug: "biller-advantage-bfsi",
-    title: "Biller Advantage — BFSI Payments Onboarding at Scale",
-    area: "BFSI & Payments",
-    challenge:
-      "Merchant onboarding took 3 months across 20+ US states, capping growth for a multi-portal payments platform.",
-    architecture:
-      "Multi-portal platform sharing a hardened payment engine; automated merchant onboarding pipeline with rules-driven KYC and routing.",
-    stack: [".NET Core / C#", "SQL / NoSQL", "REST APIs", "Azure", "DevSecOps"],
-    execution:
-      "Domain-driven slices per portal; release trains aligned to regulator windows; SRE-led reliability program targeting 99.9% uptime.",
-    components: [
-      "Merchant onboarding pipeline",
-      "Core payment engine",
-      "Boarding & Servicing platform",
-      "Reconciliation & audit",
-    ],
-    outcome:
-      "Merchant onboarding compressed from 3 months to 4 hours (-98%); 99.9% uptime on Boarding & Servicing across the engagement.",
-    lessons: [
-      "Onboarding velocity is a product KPI — instrument it end-to-end.",
-      "Idempotency and retries belong in the platform, not the apps.",
-      "Regulator-aligned release trains beat ad-hoc deployments in BFSI.",
-    ],
-  },
 ];
