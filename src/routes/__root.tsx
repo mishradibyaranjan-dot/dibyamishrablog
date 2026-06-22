@@ -89,11 +89,10 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "twitter:card", content: "summary_large_image" },
       { property: "og:title", content: "Dibya Ranjan Mishra — AI, Cloud & Engineering Leadership" },
       { name: "twitter:title", content: "Dibya Ranjan Mishra — AI, Cloud & Engineering Leadership" },
-      { name: "description", content: "Dibya's Tech Hub is a professional blog and portfolio website showcasing AI, cloud, architecture, and engineering leadership expertise." },
-      { property: "og:description", content: "Dibya's Tech Hub is a professional blog and portfolio website showcasing AI, cloud, architecture, and engineering leadership expertise." },
-      { name: "twitter:description", content: "Dibya's Tech Hub is a professional blog and portfolio website showcasing AI, cloud, architecture, and engineering leadership expertise." },
-      { property: "og:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/attachments/og-images/62feb90f-3c19-4765-9fa6-9b7f7701a7c6" },
+      { name: "twitter:description", content: "Research, insights, and real-world technology work on GenAI, Agentic AI, Cloud-Native Platforms, SaaS Architecture, and Engineering Leadership." },
+      { property: "og:description", content: "Research, insights, and real-world technology work on GenAI, Agentic AI, Cloud-Native Platforms, SaaS Architecture, and Engineering Leadership." },
       { name: "twitter:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/attachments/og-images/62feb90f-3c19-4765-9fa6-9b7f7701a7c6" },
+
     ],
     links: [
       { rel: "stylesheet", href: appCss },
