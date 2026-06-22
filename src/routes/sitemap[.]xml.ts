@@ -4,13 +4,17 @@ import type {} from "@tanstack/react-start";
 const BASE_URL = "https://dibyamishrablog.lovable.app";
 
 const paths = [
-  "/", "/about", "/research", "/blog", "/projects", "/case-studies", "/contact",
+  "/", "/about", "/research", "/projects", "/case-studies", "/contact",
+  "/blog/how-to-build-an-ai-agent",
   "/blog/agentic-ai-enterprise-automation",
   "/blog/scalable-rag-enterprise",
   "/blog/cloud-native-saas-patterns",
   "/blog/engineering-leadership-global-teams",
   "/blog/ai-delivery-predictability",
+  "/blog/payments-platform-modernization",
+  "/blog/data-platform-bi-at-scale",
 ];
+
 
 export const Route = createFileRoute("/sitemap.xml")({
   server: {
