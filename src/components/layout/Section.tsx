@@ -22,12 +22,15 @@ export function SectionHeader({
   title,
   description,
   align = "left",
+  as = "h2",
 }: {
   eyebrow?: string;
   title: string;
   description?: string;
   align?: "left" | "center";
+  as?: "h1" | "h2";
 }) {
+  const Heading = as;
   return (
     <div className={cn("mb-10 max-w-3xl", align === "center" && "mx-auto text-center")}>
       {eyebrow && (
@@ -36,10 +39,11 @@ export function SectionHeader({
           {eyebrow}
         </div>
       )}
-      <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">{title}</h2>
+      <Heading className="text-3xl font-bold tracking-tight sm:text-4xl">{title}</Heading>
       {description && (
         <p className="mt-3 text-base text-muted-foreground sm:text-lg">{description}</p>
       )}
     </div>
   );
 }
+
