@@ -56,8 +56,10 @@ function NewsletterForm() {
             required
             disabled={status === "sending"}
             placeholder="you@company.com"
+            aria-label="Email address for newsletter"
             className="w-full rounded-md border border-white/15 bg-white/5 px-3 py-2 text-sm text-white placeholder:text-white/40 outline-none focus:border-neon-cyan focus:ring-2 focus:ring-neon-cyan/40 disabled:opacity-60"
           />
+
           <Button
             size="sm"
             type="submit"
