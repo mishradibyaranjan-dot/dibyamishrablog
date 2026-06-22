@@ -46,10 +46,12 @@ function CaseStudies() {
     <>
       <Section className="pb-6 pt-16 lg:pt-24">
         <SectionHeader
+          as="h1"
           eyebrow="Case Studies"
           title="Programs that moved the needle"
           description="Selected case studies with the architecture choices, execution strategy, and business outcomes that defined them."
         />
+
         <div className="flex flex-wrap gap-2">
           {["All", ...categories].map((c) => (
             <button
