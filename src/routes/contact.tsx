@@ -59,10 +59,12 @@ function Contact() {
     <>
       <Section className="pb-6 pt-16 lg:pt-24">
         <SectionHeader
+          as="h1"
           eyebrow="Contact"
           title="Let's talk"
           description="Advisory engagements, architecture reviews, speaking, or a thoughtful exchange on AI and engineering leadership."
         />
+
       </Section>
 
       <Section className="pt-0">

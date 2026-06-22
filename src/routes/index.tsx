@@ -29,16 +29,35 @@ export const Route = createFileRoute("/")({
       {
         name: "description",
         content:
-          "Dibya Ranjan Mishra — Head of Engineering / VP candidate. 20+ years across Shipping, BFSI, Insurance & SaaS. 500+ engineers led, $28M+ budgets, AI-first transformation.",
+          "Head of Engineering / VP candidate. 20+ years in Shipping, BFSI, Insurance & SaaS — 500+ engineers led, AI-first transformation.",
       },
       { property: "og:title", content: "Dibya Ranjan Mishra — Head of Engineering | AI, Cloud & SaaS Leader" },
-      { property: "og:description", content: "20+ years. 500+ engineers led. $1M → $20M revenue in 24 months. 76% incident reduction via AI automation. 42 certifications." },
-      { property: "og:url", content: "/" },
+      { property: "og:description", content: "20+ years. 500+ engineers led. $1M → $20M revenue in 24 months. 76% incident reduction via AI automation." },
+      { property: "og:url", content: "https://dibyamishrablog.lovable.app/" },
+      { property: "og:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/attachments/og-images/62feb90f-3c19-4765-9fa6-9b7f7701a7c6" },
+      { name: "twitter:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/attachments/og-images/62feb90f-3c19-4765-9fa6-9b7f7701a7c6" },
     ],
-    links: [{ rel: "canonical", href: "/" }],
+    links: [{ rel: "canonical", href: "https://dibyamishrablog.lovable.app/" }],
+    scripts: [
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "Person",
+          name: "Dibya Ranjan Mishra",
+          jobTitle: "Head of Engineering",
+          url: "https://dibyamishrablog.lovable.app/",
+          sameAs: [
+            "https://www.linkedin.com/in/dibya-mishra-55b94654",
+            "https://github.com/mishradibyaranjan-dot/",
+          ],
+        }),
+      },
+    ],
   }),
   component: Home,
 });
+
 
 const expertise = [
   { icon: Brain, title: "AI, ML & Agentic AI", desc: "LLM integration, prompt engineering, Model Context Protocol (MCP), and agentic system design at enterprise scale." },
