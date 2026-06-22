@@ -68,6 +68,25 @@ export interface Post {
 
 export const posts: Post[] = [
   {
+    slug: "how-to-build-an-ai-agent",
+    title: "How to Build an AI Agent: A Practical Architecture Guide",
+    summary:
+      "A step-by-step guide to designing planner-executor AI agents — tool use, memory, guardrails, evaluation, and what changes when you move from prototype to production.",
+    category: "AI & Agentic AI",
+    readingTime: "11 min",
+    date: "2026-06-22",
+    featured: true,
+    takeaways: [
+      "Start with a goal contract: inputs, allowed tools, success criteria, and stop conditions.",
+      "The agent loop is plan → act → observe → reflect — make each step inspectable.",
+      "Tool design is the agent's API surface. Idempotent, typed, and small beats clever.",
+      "Guardrails belong at three layers: prompt, policy engine, and human-in-the-loop.",
+      "You can't ship what you can't evaluate — build the eval harness before the agent.",
+    ],
+    content:
+      "Building an AI agent is not prompt engineering with extra steps. It is software engineering with a non-deterministic core. This guide walks through the architecture I use for planner-executor agents in production: a typed goal contract, a tool registry with clear schemas, a planning model that emits structured intents, an executor that calls tools and writes to short-term memory, and a reflection step that decides whether to continue, hand off, or escalate. We cover memory tiers (scratchpad, episodic, long-term retrieval), tool design conventions, and the guardrail stack — system prompt rules, a policy engine that vets every tool call, and human-in-the-loop checkpoints for irreversible actions. The second half is operations: tracing every step so failures are debuggable, evaluation harnesses that score task success and tool-call correctness, cost controls, and the rollout pattern (shadow, assisted, autonomous) that builds trust before turning the agent loose.",
+  },
+  {
     slug: "agentic-ai-enterprise-automation",
     title: "How Agentic AI Is Changing Enterprise Automation",
     summary:
@@ -75,7 +94,6 @@ export const posts: Post[] = [
     category: "AI & Agentic AI",
     readingTime: "8 min",
     date: "2025-09-12",
-    featured: true,
     takeaways: [
       "Agentic systems shift automation from rules to goals.",
       "Memory, tools, and planning loops are the new building blocks.",
@@ -84,6 +102,7 @@ export const posts: Post[] = [
     content:
       "Enterprises are moving beyond chatbots toward goal-driven agents that plan, reason, and act across systems. In this article we explore the architecture patterns — planner-executor, multi-agent orchestration, and tool-augmented retrieval — that make Agentic AI deployable at scale. We discuss the operational backbone: identity, policy, observability, and human-in-the-loop checkpoints. Finally we walk through ROI levers across finance ops, customer service, and engineering productivity.",
   },
+
   {
     slug: "scalable-rag-enterprise",
     title: "Building Scalable RAG Systems for Enterprise Knowledge",
