@@ -46,10 +46,12 @@ function Projects() {
     <>
       <Section className="pb-6 pt-16 lg:pt-24">
         <SectionHeader
+          as="h1"
           eyebrow="Projects"
           title="Selected technical & leadership work"
           description="A portfolio of platforms, programs, and transformations spanning AI, Cloud, SaaS, Data, BFSI, and Engineering Leadership."
         />
+
         <div className="flex flex-wrap gap-2">
           {["All", ...categories].map((c) => (
             <button
