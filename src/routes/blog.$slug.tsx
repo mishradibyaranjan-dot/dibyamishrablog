@@ -35,8 +35,24 @@ export const Route = createFileRoute("/blog/$slug")({
         { name: "twitter:image", content: image },
       ],
       links: [{ rel: "canonical", href: url }],
+      scripts: [
+        {
+          type: "application/ld+json",
+          children: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "Article",
+            headline: post?.title,
+            description: post?.summary,
+            image,
+            author: { "@type": "Person", name: "Dibya Ranjan Mishra" },
+            publisher: { "@type": "Person", name: "Dibya Ranjan Mishra" },
+            mainEntityOfPage: url,
+          }),
+        },
+      ],
     };
   },
+
   notFoundComponent: () => (
     <Section>
       <p className="text-muted-foreground">Article not found.</p>
