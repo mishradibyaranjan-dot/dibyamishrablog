@@ -76,6 +76,7 @@ function CaseStudies() {
             <div className="bg-hero p-8 sm:p-10">
               <Badge className="bg-white/10 text-white hover:bg-white/15">{c.area}</Badge>
               <h2 className="mt-3 font-display text-2xl font-bold text-white sm:text-3xl">{c.title}</h2>
+
               <p className="mt-3 max-w-3xl text-white/70">{c.challenge}</p>
             </div>
             <div className="grid gap-8 p-8 sm:p-10 lg:grid-cols-2">
