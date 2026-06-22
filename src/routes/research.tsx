@@ -59,10 +59,12 @@ function Research() {
     <>
       <Section className="pb-6 pt-16 lg:pt-24">
         <SectionHeader
+          as="h1"
           eyebrow="Research & Blog"
           title="Notes, deep dives, essays & white papers"
           description="A unified library of research, blog writing, and long-form white papers across AI, Cloud, SaaS, and Engineering Leadership — written from the field."
         />
+
 
         {/* WHITE PAPER FEATURE */}
         <Link
