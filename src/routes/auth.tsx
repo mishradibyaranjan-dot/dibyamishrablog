@@ -12,7 +12,7 @@ import { useAuth } from "@/lib/auth";
 
 const authSearchSchema = z.object({
   mode: z.enum(["login", "register"]).optional(),
-  redirect: z.string().optional(),
+  redirect: z.string().regex(/^\/[^/]/).optional(),
 });
 
 export const Route = createFileRoute("/auth")({
