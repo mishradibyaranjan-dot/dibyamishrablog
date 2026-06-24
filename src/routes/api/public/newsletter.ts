@@ -1,21 +1,21 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { z } from "zod";
+import { corsHeadersFor, isAllowedOrigin } from "@/lib/origin.server";
 
 const NewsletterSchema = z.object({
   email: z.string().trim().email().max(255).regex(/^[^\r\n]*$/),
 });
 
-const cors = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Methods": "POST, OPTIONS",
-  "Access-Control-Allow-Headers": "Content-Type",
-};
-
 export const Route = createFileRoute("/api/public/newsletter")({
   server: {
     handlers: {
-      OPTIONS: async () => new Response(null, { status: 204, headers: cors }),
+      OPTIONS: async ({ request }) =>
+        new Response(null, { status: 204, headers: corsHeadersFor(request) }),
       POST: async ({ request }) => {
+        const cors = corsHeadersFor(request);
+        if (!isAllowedOrigin(request)) {
+          return Response.json({ error: "Forbidden" }, { status: 403, headers: cors });
+        }
         let body: unknown;
         try {
           body = await request.json();

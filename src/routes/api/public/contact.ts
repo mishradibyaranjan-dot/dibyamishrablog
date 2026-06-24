@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { z } from "zod";
+import { corsHeadersFor, isAllowedOrigin } from "@/lib/origin.server";
 
 const noCRLF = /^[^\r\n]*$/;
 const ContactSchema = z.object({
@@ -9,17 +10,16 @@ const ContactSchema = z.object({
   message: z.string().trim().min(1).max(5000),
 });
 
-const cors = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Methods": "POST, OPTIONS",
-  "Access-Control-Allow-Headers": "Content-Type",
-};
-
 export const Route = createFileRoute("/api/public/contact")({
   server: {
     handlers: {
-      OPTIONS: async () => new Response(null, { status: 204, headers: cors }),
+      OPTIONS: async ({ request }) =>
+        new Response(null, { status: 204, headers: corsHeadersFor(request) }),
       POST: async ({ request }) => {
+        const cors = corsHeadersFor(request);
+        if (!isAllowedOrigin(request)) {
+          return Response.json({ error: "Forbidden" }, { status: 403, headers: cors });
+        }
         let body: unknown;
         try {
           body = await request.json();
