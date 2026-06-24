@@ -233,7 +233,7 @@ function Reports() {
       <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         <Kpi icon={<Users />} label="Total users" value={counts?.totalUsers ?? "—"} />
         <Kpi icon={<Activity />} label="Active (24h)" value={counts?.active24 ?? "—"} />
-        <Kpi icon={<Activity />} label={`Active (${days}d)`} value={(days <= 7 ? counts?.active7d : counts?.active30d) ?? "—"} />
+        <Kpi icon={<Activity />} label={`Active (${days <= 7 ? 7 : 30}d)`} value={(days <= 7 ? counts?.active7d : counts?.active30d) ?? "—"} />
         <Kpi icon={<Clock />} label="Avg session (s)" value={counts?.avgSession ?? "—"} />
       </div>
 
