@@ -61,23 +61,34 @@ function Reports() {
 
   async function load() {
     const since = new Date(Date.now() - days * 86400000).toISOString();
+    const t24 = new Date(Date.now() - 86400000).toISOString();
+    const t7 = new Date(Date.now() - 7 * 86400000).toISOString();
+    const t30 = new Date(Date.now() - 30 * 86400000).toISOString();
 
-    const [usersR, sess24R, sess7R, sess30R, chatsR, sessR, visitsR, tabsR, qR] = await Promise.all([
+    const [usersR, act24R, act7R, act30R, chatsR, sessR, visitsR, tabsR, qR] = await Promise.all([
       supabase.from("profiles").select("id", { count: "exact", head: true }),
-      supabase.from("login_sessions").select("user_id", { count: "exact", head: true }).gte("started_at", new Date(Date.now() - 86400000).toISOString()),
-      supabase.from("login_sessions").select("user_id", { count: "exact", head: true }).gte("started_at", new Date(Date.now() - 7 * 86400000).toISOString()),
-      supabase.from("login_sessions").select("user_id", { count: "exact", head: true }).gte("started_at", new Date(Date.now() - 30 * 86400000).toISOString()),
+      supabase.from("login_sessions").select("user_id").gte("started_at", t24).limit(5000),
+      supabase.from("login_sessions").select("user_id").gte("started_at", t7).limit(5000),
+      supabase.from("login_sessions").select("user_id").gte("started_at", t30).limit(5000),
       supabase.from("chatbot_messages").select("id", { count: "exact", head: true }).eq("role", "user"),
-      supabase.from("login_sessions").select("duration_seconds").gte("started_at", since).not("duration_seconds", "is", null),
+      supabase.from("login_sessions").select("started_at, ended_at, duration_seconds").gte("started_at", since).limit(5000),
       supabase.from("page_visits").select("path, visited_at").gte("visited_at", since).limit(5000),
       supabase.from("tab_access").select("page, tab_id, opened_at").gte("opened_at", since).limit(5000),
       supabase.from("chatbot_messages").select("content").eq("role", "user").gte("created_at", since).limit(2000),
     ]);
 
-    const avg =
-      sessR.data && sessR.data.length
-        ? Math.round(sessR.data.reduce((a, r) => a + (r.duration_seconds ?? 0), 0) / sessR.data.length)
-        : 0;
+    const distinct = (rows: { user_id: string }[] | null) =>
+      rows ? new Set(rows.map((r) => r.user_id)).size : 0;
+
+    // Compute avg session: prefer duration_seconds; else ended_at - started_at; else now - started_at (still active, capped 1h)
+    const now = Date.now();
+    const durations = (sessR.data ?? []).map((r) => {
+      if (r.duration_seconds != null) return r.duration_seconds;
+      const start = new Date(r.started_at as string).getTime();
+      const end = r.ended_at ? new Date(r.ended_at as string).getTime() : now;
+      return Math.max(1, Math.min(3600, Math.round((end - start) / 1000)));
+    });
+    const avg = durations.length ? Math.round(durations.reduce((a, b) => a + b, 0) / durations.length) : 0;
 
     setCounts({
       totalUsers: usersR.count ?? 0,
