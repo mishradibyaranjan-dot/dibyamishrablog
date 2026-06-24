@@ -92,9 +92,9 @@ function Reports() {
 
     setCounts({
       totalUsers: usersR.count ?? 0,
-      active24: sess24R.count ?? 0,
-      active7d: sess7R.count ?? 0,
-      active30d: sess30R.count ?? 0,
+      active24: distinct(act24R.data as any),
+      active7d: distinct(act7R.data as any),
+      active30d: distinct(act30R.data as any),
       totalChats: chatsR.count ?? 0,
       avgSession: avg,
     });
