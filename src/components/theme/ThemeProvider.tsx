@@ -11,7 +11,7 @@ export const THEMES = [
 export type ThemeId = (typeof THEMES)[number]["id"];
 
 const STORAGE_KEY = "drm-theme:v1";
-const DEFAULT: ThemeId = "cinematic";
+const DEFAULT: ThemeId = "light";
 
 type Ctx = { theme: ThemeId; setTheme: (t: ThemeId) => void };
 const ThemeContext = createContext<Ctx>({ theme: DEFAULT, setTheme: () => {} });
