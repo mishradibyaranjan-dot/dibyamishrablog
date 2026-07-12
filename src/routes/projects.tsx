@@ -29,6 +29,24 @@ export const Route = createFileRoute("/projects")({
         { name: "twitter:image", content: pageOgImages.projects },
       ],
       links: [{ rel: "canonical", href: url }],
+      scripts: [{
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "CollectionPage",
+          name: "Projects — Dibya Ranjan Mishra",
+          url,
+          description: desc,
+          mainEntity: {
+            "@type": "ItemList",
+            itemListElement: projects.map((p, i) => ({
+              "@type": "ListItem",
+              position: i + 1,
+              name: p.name,
+            })),
+          },
+        }),
+      }],
     };
   },
   component: () => (
