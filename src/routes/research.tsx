@@ -82,6 +82,7 @@ function Research() {
         />
 
 
+        <h2 className="sr-only">Featured white paper</h2>
         {/* WHITE PAPER FEATURE */}
         <Link
           to="/white-paper/agentic-ai-enterprise-automation"
