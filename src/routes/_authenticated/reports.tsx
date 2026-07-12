@@ -292,7 +292,144 @@ function Reports() {
           </ul>
         </Panel>
       </div>
+
+      <div className="mt-6">
+        <DataExportPanel />
+      </div>
     </Section>
+  );
+}
+
+const EXPORT_TABLES = [
+  "profiles",
+  "user_roles",
+  "login_sessions",
+  "user_activity",
+  "page_visits",
+  "tab_access",
+  "search_queries",
+  "chatbot_messages",
+  "resource_access",
+  "failed_login_attempts",
+] as const;
+
+function toCsv(rows: Record<string, unknown>[]): string {
+  if (!rows.length) return "";
+  const cols = Array.from(
+    rows.reduce((s, r) => {
+      Object.keys(r).forEach((k) => s.add(k));
+      return s;
+    }, new Set<string>()),
+  );
+  const esc = (v: unknown) => {
+    if (v === null || v === undefined) return "";
+    const s = typeof v === "object" ? JSON.stringify(v) : String(v);
+    return `"${s.replace(/"/g, '""')}"`;
+  };
+  return [cols.join(","), ...rows.map((r) => cols.map((c) => esc(r[c])).join(","))].join("\n");
+}
+
+function downloadBlob(content: string, filename: string, type = "text/csv") {
+  const blob = new Blob([content], { type });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = filename;
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+async function fetchAll(table: string) {
+  const pageSize = 1000;
+  let from = 0;
+  const all: Record<string, unknown>[] = [];
+  // eslint-disable-next-line no-constant-condition
+  while (true) {
+    const { data, error } = await supabase
+      .from(table as never)
+      .select("*")
+      .range(from, from + pageSize - 1);
+    if (error) throw error;
+    if (!data || data.length === 0) break;
+    all.push(...(data as Record<string, unknown>[]));
+    if (data.length < pageSize) break;
+    from += pageSize;
+  }
+  return all;
+}
+
+function DataExportPanel() {
+  const [busy, setBusy] = useState<string | null>(null);
+  const [err, setErr] = useState<string | null>(null);
+
+  const exportOne = async (table: string) => {
+    setErr(null);
+    setBusy(table);
+    try {
+      const rows = await fetchAll(table);
+      const csv = toCsv(rows);
+      const stamp = new Date().toISOString().slice(0, 10);
+      downloadBlob(csv || "(empty)\n", `${table}-${stamp}.csv`);
+    } catch (e) {
+      setErr(`${table}: ${(e as Error).message ?? String(e)}`);
+    } finally {
+      setBusy(null);
+    }
+  };
+
+  const exportAll = async () => {
+    setErr(null);
+    setBusy("__all__");
+    try {
+      const stamp = new Date().toISOString().slice(0, 10);
+      const bundle: Record<string, unknown> = { exported_at: new Date().toISOString(), tables: {} };
+      for (const t of EXPORT_TABLES) {
+        try {
+          (bundle.tables as Record<string, unknown>)[t] = await fetchAll(t);
+        } catch (e) {
+          (bundle.tables as Record<string, unknown>)[t] = { error: (e as Error).message ?? String(e) };
+        }
+      }
+      downloadBlob(JSON.stringify(bundle, null, 2), `database-export-${stamp}.json`, "application/json");
+    } finally {
+      setBusy(null);
+    }
+  };
+
+  return (
+    <Panel title="One-click database export" icon={<Download className="h-4 w-4" />}>
+      <p className="mb-3 text-xs text-white/60">
+        Exports run under your admin session (RLS-scoped). No credentials or service keys needed. For a full raw
+        backup, use Cloud → Advanced settings → Export data.
+      </p>
+      <div className="mb-3 flex flex-wrap gap-2">
+        <Button
+          onClick={exportAll}
+          disabled={busy !== null}
+          size="sm"
+          className="bg-brand-gradient text-white shadow-neon hover:opacity-90"
+        >
+          <Download className="mr-2 h-4 w-4" />
+          {busy === "__all__" ? "Exporting all…" : "Export ALL tables (JSON)"}
+        </Button>
+      </div>
+      <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-4">
+        {EXPORT_TABLES.map((t) => (
+          <Button
+            key={t}
+            onClick={() => exportOne(t)}
+            disabled={busy !== null}
+            variant="outline"
+            size="sm"
+            className="justify-start border-white/15 bg-white/5 text-white hover:bg-white/10"
+          >
+            <Download className="mr-2 h-3.5 w-3.5" />
+            {busy === t ? "…" : t}
+          </Button>
+        ))}
+      </div>
+      {err && <p className="mt-3 text-xs text-red-400">{err}</p>}
+    </Panel>
   );
 }
 
