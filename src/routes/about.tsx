@@ -108,7 +108,7 @@ function About() {
           <div>
             <Badge variant="secondary" className="mb-4">About me</Badge>
             <h1 className="font-display text-4xl font-bold tracking-tight sm:text-5xl">
-              Dibya Ranjan Mishra
+              Dibya Ranjan Mishra — Engineering Leader
             </h1>
             <p className="mt-3 text-lg font-medium text-gradient">
               Technology & Engineering Leader - AI - Cloud - SaaS Platform
