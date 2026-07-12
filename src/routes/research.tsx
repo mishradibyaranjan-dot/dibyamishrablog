@@ -133,6 +133,7 @@ function Research() {
               </div>
             </div>
           </Link>
+          </>
         )}
 
         {/* SEARCH + FILTERS */}
