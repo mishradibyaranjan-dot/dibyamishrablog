@@ -170,6 +170,7 @@ function Research() {
       </Section>
 
       <Section className="pt-4">
+        <h2 className="sr-only">All articles</h2>
         <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
           {filtered.map((p) => (
             <Link
