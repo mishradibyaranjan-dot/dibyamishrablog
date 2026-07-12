@@ -92,7 +92,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { property: "og:title", content: "Dibya Ranjan Mishra" },
       { name: "twitter:title", content: "Dibya Ranjan Mishra" },
       { name: "twitter:description", content: "Research and real-world work on GenAI, Agentic AI, Cloud, SaaS, and Engineering Leadership." },
-      { property: "og:description", content: "Research, insights, and real-world technology work on GenAI, Agentic AI, Cloud-Native Platforms, SaaS Architecture, and Engineering Leadership." },
+      { property: "og:description", content: "Research and real-world work on GenAI, Agentic AI, Cloud, SaaS, and Engineering Leadership." },
     ],
 
     links: [
