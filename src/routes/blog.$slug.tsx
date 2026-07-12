@@ -44,6 +44,8 @@ export const Route = createFileRoute("/blog/$slug")({
             headline: post?.title,
             description: post?.summary,
             image,
+            datePublished: post?.date,
+            dateModified: post?.date,
             author: { "@type": "Person", name: "Dibya Ranjan Mishra" },
             publisher: { "@type": "Person", name: "Dibya Ranjan Mishra" },
             mainEntityOfPage: url,
