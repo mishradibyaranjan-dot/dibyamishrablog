@@ -29,6 +29,22 @@ export const Route = createFileRoute("/research")({
         { name: "twitter:image", content: pageOgImages.research },
       ],
       links: [{ rel: "canonical", href: url }],
+      scripts: [{
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "Blog",
+          name: "Research & Blog — Dibya Ranjan Mishra",
+          url,
+          description: desc,
+          blogPost: posts.map((p) => ({
+            "@type": "BlogPosting",
+            headline: p.title,
+            datePublished: p.date,
+            url: `${SITE_ORIGIN}/blog/${p.slug}`,
+          })),
+        }),
+      }],
     };
   },
   component: () => (
@@ -66,6 +82,7 @@ function Research() {
         />
 
 
+        <h2 className="sr-only">Featured white paper</h2>
         {/* WHITE PAPER FEATURE */}
         <Link
           to="/white-paper/agentic-ai-enterprise-automation"
@@ -93,6 +110,8 @@ function Research() {
 
         {/* FEATURED POST */}
         {featured && (
+          <>
+          <h2 className="sr-only">Featured article</h2>
           <Link
             to="/blog/$slug"
             params={{ slug: featured.slug }}
@@ -114,13 +133,17 @@ function Research() {
               </div>
             </div>
           </Link>
+          </>
         )}
 
         {/* SEARCH + FILTERS */}
         <div className="grid grid-cols-[minmax(0,1fr)_auto] gap-3 sm:flex sm:items-center sm:justify-between">
           <div className="relative min-w-0">
             <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+            <label htmlFor="research-search" className="sr-only">Search articles</label>
             <input
+              id="research-search"
+              aria-label="Search articles"
               value={q}
               onChange={(e) => setQ(e.target.value)}
               placeholder="Search articles..."
@@ -147,6 +170,7 @@ function Research() {
       </Section>
 
       <Section className="pt-4">
+        <h2 className="sr-only">All articles</h2>
         <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
           {filtered.map((p) => (
             <Link

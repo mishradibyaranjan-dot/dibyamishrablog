@@ -79,20 +79,20 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "viewport", content: "width=device-width, initial-scale=1" },
       { name: "google-site-verification", content: "8EO0An2G722tBY4Ux1AdMj7joxlF1vZkZcCy9qCwXs4" },
 
-      { title: "Dibya Ranjan Mishra — AI, Cloud & Engineering Leadership" },
+      { title: "Dibya Ranjan Mishra" },
       {
         name: "description",
         content:
-          "Research, insights, and real-world technology work on GenAI, Agentic AI, Cloud-Native Platforms, SaaS Architecture, and Engineering Leadership.",
+          "Research and real-world work on GenAI, Agentic AI, Cloud-Native Platforms, SaaS, and Engineering Leadership.",
       },
       { name: "author", content: "Dibya Ranjan Mishra" },
       { property: "og:site_name", content: "Dibya Ranjan Mishra" },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
-      { property: "og:title", content: "Dibya Ranjan Mishra — AI, Cloud & Engineering Leadership" },
-      { name: "twitter:title", content: "Dibya Ranjan Mishra — AI, Cloud & Engineering Leadership" },
-      { name: "twitter:description", content: "Research, insights, and real-world technology work on GenAI, Agentic AI, Cloud-Native Platforms, SaaS Architecture, and Engineering Leadership." },
-      { property: "og:description", content: "Research, insights, and real-world technology work on GenAI, Agentic AI, Cloud-Native Platforms, SaaS Architecture, and Engineering Leadership." },
+      { property: "og:title", content: "Dibya Ranjan Mishra" },
+      { name: "twitter:title", content: "Dibya Ranjan Mishra" },
+      { name: "twitter:description", content: "Research and real-world work on GenAI, Agentic AI, Cloud, SaaS, and Engineering Leadership." },
+      { property: "og:description", content: "Research and real-world work on GenAI, Agentic AI, Cloud, SaaS, and Engineering Leadership." },
     ],
 
     links: [

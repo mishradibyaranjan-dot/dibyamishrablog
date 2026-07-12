@@ -14,8 +14,8 @@ export const Route = createFileRoute("/blog/$slug")({
   },
   head: ({ loaderData, params }) => {
     const post = loaderData?.post;
-    const title = post ? `${post.title} — Dibya Ranjan Mishra` : "Article";
-    const desc = post?.summary ?? "Article";
+    const title = post?.title ?? "Article";
+    const desc = (post?.summary ?? "Article").slice(0, 158);
     const url = `${SITE_ORIGIN}/blog/${params.slug}`;
     const image = postOgImages[params.slug] ?? pageOgImages.blog;
     return {
@@ -44,6 +44,8 @@ export const Route = createFileRoute("/blog/$slug")({
             headline: post?.title,
             description: post?.summary,
             image,
+            datePublished: post?.date,
+            dateModified: post?.date,
             author: { "@type": "Person", name: "Dibya Ranjan Mishra" },
             publisher: { "@type": "Person", name: "Dibya Ranjan Mishra" },
             mainEntityOfPage: url,
