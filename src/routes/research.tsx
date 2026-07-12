@@ -136,7 +136,10 @@ function Research() {
         <div className="grid grid-cols-[minmax(0,1fr)_auto] gap-3 sm:flex sm:items-center sm:justify-between">
           <div className="relative min-w-0">
             <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+            <label htmlFor="research-search" className="sr-only">Search articles</label>
             <input
+              id="research-search"
+              aria-label="Search articles"
               value={q}
               onChange={(e) => setQ(e.target.value)}
               placeholder="Search articles..."
