@@ -8,16 +8,16 @@ import photoAsset from "@/assets/dibya-mishra.png.asset.json";
 export const Route = createFileRoute("/about")({
   head: () => ({
     meta: [
-      { title: "About Dibya Ranjan Mishra | Head of Engineering · VP · AI & Cloud Leader" },
-      { name: "description", content: "Dibya Ranjan Mishra — VP Engineering & Head of Engineering with 20+ years leading 500+ engineers and $28M+ budgets across Shipping, BFSI, Insurance and SaaS. AI, Cloud and Agile leader with 42 certifications." },
-      { property: "og:title", content: "About Dibya Ranjan Mishra | Head of Engineering · VP · AI & Cloud Leader" },
-      { property: "og:description", content: "VP Engineering & Head of Engineering with 20+ years, 500+ engineers, $28M+ budgets, and AI/Cloud transformation across global enterprises." },
+      { title: "About Dibya Ranjan Mishra — Engineering Leader" },
+      { name: "description", content: "VP Engineering with 20+ years leading 500+ engineers and $28M+ budgets across Shipping, BFSI, Insurance and SaaS." },
+      { property: "og:title", content: "About Dibya Ranjan Mishra — Engineering Leader" },
+      { property: "og:description", content: "VP Engineering with 20+ years, 500+ engineers, $28M+ budgets, and AI/Cloud transformation across global enterprises." },
       { property: "og:url", content: "https://dibyamishrablog.lovable.app/about" },
       { property: "og:type", content: "profile" },
       { property: "og:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/pI8mCXobICTShgzD4uthW89NKmv1/social-images/social-1781504443585-picofme_(4).webp" },
       { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:title", content: "About Dibya Ranjan Mishra | Head of Engineering · VP · AI & Cloud Leader" },
-      { name: "twitter:description", content: "VP Engineering & Head of Engineering with 20+ years, 500+ engineers, $28M+ budgets, and AI/Cloud transformation across global enterprises." },
+      { name: "twitter:title", content: "About Dibya Ranjan Mishra — Engineering Leader" },
+      { name: "twitter:description", content: "VP Engineering with 20+ years, 500+ engineers, and AI/Cloud transformation across global enterprises." },
       { name: "twitter:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/pI8mCXobICTShgzD4uthW89NKmv1/social-images/social-1781504443585-picofme_(4).webp" },
 
     ],
