@@ -29,6 +29,22 @@ export const Route = createFileRoute("/research")({
         { name: "twitter:image", content: pageOgImages.research },
       ],
       links: [{ rel: "canonical", href: url }],
+      scripts: [{
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "Blog",
+          name: "Research & Blog — Dibya Ranjan Mishra",
+          url,
+          description: desc,
+          blogPost: posts.map((p) => ({
+            "@type": "BlogPosting",
+            headline: p.title,
+            datePublished: p.date,
+            url: `${SITE_ORIGIN}/blog/${p.slug}`,
+          })),
+        }),
+      }],
     };
   },
   component: () => (
