@@ -5,6 +5,7 @@ const BASE_URL = "https://dibyamishrablog.lovable.app";
 
 const paths = [
   "/", "/about", "/research", "/projects", "/case-studies", "/contact",
+  "/auth", "/forgot-password", "/reset-password", "/trust",
   "/blog/how-to-build-an-ai-agent",
   "/blog/agentic-ai-enterprise-automation",
   "/blog/scalable-rag-enterprise",
