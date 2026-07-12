@@ -98,7 +98,7 @@ function Projects() {
                   <Badge variant="secondary">{p.area}</Badge>
                   <div className="text-xs font-medium text-muted-foreground">Case study</div>
                 </div>
-                <h3 className="mt-3 text-xl font-bold">{p.name}</h3>
+                <h2 className="mt-3 text-xl font-bold">{p.name}</h2>
                 <div className="mt-4 space-y-3 text-sm">
                   <div>
                     <div className="text-xs font-semibold uppercase tracking-wider text-gradient">Problem</div>
