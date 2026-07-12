@@ -110,6 +110,8 @@ function Research() {
 
         {/* FEATURED POST */}
         {featured && (
+          <>
+          <h2 className="sr-only">Featured article</h2>
           <Link
             to="/blog/$slug"
             params={{ slug: featured.slug }}
