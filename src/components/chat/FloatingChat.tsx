@@ -87,12 +87,26 @@ export function FloatingChat() {
     }
   }, [messages]);
 
-  // Focus textarea when opening
+  // Focus textarea when opening + seed a friendly greeting on first open
   useEffect(() => {
     if (open) {
+      if (messages.length === 0) {
+        setMessages([
+          {
+            id: `greet-${Date.now()}`,
+            role: "assistant",
+            parts: [
+              {
+                type: "text",
+                text: "👋 Hi there! I'm your Learning Assistant — happy to help you explore AI, Cloud, SaaS, research, projects, and case studies. What would you like to learn today?",
+              },
+            ],
+          } as UIMessage,
+        ]);
+      }
       requestAnimationFrame(() => textareaRef.current?.focus());
     }
-  }, [open, messages.length, status]);
+  }, [open, messages.length, status, setMessages]);
 
   const isBusy = status === "submitted" || status === "streaming";
 
