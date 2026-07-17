@@ -224,7 +224,7 @@ function LightTile({
 }) {
   return (
     <div
-      className={`${span} group flex flex-col rounded-[2rem] border p-8 transition-all duration-500 md:p-10 ${className}`}
+      className={`${span} group flex flex-col rounded-[2rem] border p-5 transition-all duration-500 sm:p-6 md:p-8 ${className}`}
       style={{
         backgroundColor: SURFACE,
         borderColor: LINE,
@@ -246,7 +246,7 @@ function NewsletterTile({ latest }: { latest: LatestIssue | null }) {
         <TileEyebrow>Monthly Newsletter</TileEyebrow>
         <h2
           style={{ ...HEADING, color: INK, letterSpacing: "-0.02em" }}
-          className="text-4xl font-bold tracking-tight md:text-5xl"
+          className="text-3xl font-bold tracking-tight sm:text-4xl md:text-5xl"
         >
           {latest?.title ?? "Human-in-the-Loop"}
         </h2>
@@ -341,7 +341,7 @@ function LearnTile() {
 function RepositoryTile() {
   return (
     <div
-      className="group flex flex-col rounded-[2rem] border border-t-[3px] p-8 shadow-lg transition-transform duration-500 hover:-translate-y-1 md:col-span-4 md:p-10"
+      className="group flex flex-col rounded-[2rem] border border-t-[3px] p-5 shadow-lg transition-transform duration-500 hover:-translate-y-1 sm:p-6 md:p-8 md:col-span-4"
       style={{
         backgroundColor: SURFACE,
         borderColor: LINE,
@@ -357,17 +357,17 @@ function RepositoryTile() {
       </div>
       <h3
         style={{ ...HEADING, color: INK, letterSpacing: "-0.02em" }}
-        className="mt-4 text-3xl font-bold"
+        className="mt-4 text-2xl font-bold sm:text-3xl"
       >
         The Repository
       </h3>
-      <p className="mt-3 text-base" style={{ color: MUTED }}>
+      <p className="mt-3 text-sm sm:text-base" style={{ color: MUTED }}>
         Exclusive PDFs, architecture diagrams, and whitepapers on GenAI, RAG,
         cloud & multi-tenant SaaS.
       </p>
 
       <div
-        className="mt-auto pt-8 text-xs"
+        className="mt-auto pt-6 text-xs sm:pt-8"
         style={{ color: MUTED }}
       >
         <div className="mb-4 flex flex-wrap items-center gap-2">
@@ -381,7 +381,7 @@ function RepositoryTile() {
         </div>
         <Link
           to="/repository"
-          className="flex w-full items-center justify-center gap-2 rounded-xl py-4 text-sm font-bold transition-all hover:brightness-110"
+          className="flex w-full items-center justify-center gap-2 rounded-xl py-3.5 text-sm font-bold transition-all hover:brightness-110 sm:py-4"
           style={{ backgroundColor: ACCENT, color: "#ffffff" }}
         >
           <FileText className="h-4 w-4" />
@@ -396,15 +396,15 @@ function CaseStudyTile() {
   return (
     <LightTile span="md:col-span-8" className="!p-0 overflow-hidden">
       <div className="grid h-full grid-cols-1 md:grid-cols-2">
-        <div className="flex flex-col justify-center p-8 md:p-12">
+        <div className="flex flex-col justify-center p-5 sm:p-8 md:p-12">
           <TileEyebrow>Featured Case Study</TileEyebrow>
           <h3
             style={{ ...HEADING, color: INK, letterSpacing: "-0.02em" }}
-            className="mt-4 text-3xl font-bold"
+            className="mt-4 text-2xl font-bold sm:text-3xl"
           >
             Retail Supply Chain Transformation
           </h3>
-          <p className="mt-3 max-w-md text-base sm:text-lg" style={{ color: MUTED }}>
+          <p className="mt-3 max-w-md text-sm sm:text-base md:text-lg" style={{ color: MUTED }}>
             Implementing multi-tenant SaaS for real-time inventory optimization
             using GenAI and agentic workflows.
           </p>
@@ -418,7 +418,7 @@ function CaseStudyTile() {
           </Link>
         </div>
         <div
-          className="relative flex min-h-[280px] items-center justify-center overflow-hidden border-l p-8"
+          className="relative flex min-h-[200px] items-center justify-center overflow-hidden border-l p-5 sm:min-h-[280px] sm:p-8"
           style={{ backgroundColor: CANVAS, borderColor: LINE }}
         >
           <div

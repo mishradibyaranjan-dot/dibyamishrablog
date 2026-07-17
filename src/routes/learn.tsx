@@ -42,7 +42,7 @@ import { Reveal } from "@/components/cinematic/Reveal";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth";
 
-export const Route = createFileRoute("/_authenticated/learn")({
+export const Route = createFileRoute("/learn")({
   head: () => ({
     meta: [
       { title: "Learn — AI, Cloud & SaaS Fundamentals" },
@@ -76,7 +76,7 @@ function Learn() {
       />
 
       <Tabs value={tab} onValueChange={(v) => setTab(v as TabKey)} className="mt-6">
-        <TabsList className="grid h-auto w-full grid-cols-1 gap-2 rounded-none bg-transparent p-0 sm:grid-cols-2 lg:grid-cols-4">
+        <TabsList className="grid h-auto w-full grid-cols-1 gap-1.5 rounded-none bg-transparent p-0 sm:grid-cols-2 sm:gap-2 lg:grid-cols-4">
           <TabPill value="ai" icon={<Brain className="h-4 w-4" />} label="Intro to AI" />
           <TabPill value="cloud" icon={<Cloud className="h-4 w-4" />} label="Intro to Cloud" />
           <TabPill value="saas" icon={<Layers className="h-4 w-4" />} label="Intro to SaaS" />
@@ -120,7 +120,7 @@ function TabPill({ value, icon, label }: { value: string; icon: React.ReactNode;
   return (
     <TabsTrigger
       value={value}
-      className="group relative w-full justify-start gap-2 rounded-2xl border border-white/10 bg-white/5 px-5 py-3 text-sm font-medium text-white/70 backdrop-blur-xl transition-all data-[state=active]:border-transparent data-[state=active]:bg-brand-gradient data-[state=active]:text-white data-[state=active]:shadow-neon hover:text-white"
+      className="group relative w-full justify-start gap-2 rounded-2xl border border-white/10 bg-white/5 px-4 py-2.5 text-sm font-medium text-white/70 backdrop-blur-xl transition-all data-[state=active]:border-transparent data-[state=active]:bg-brand-gradient data-[state=active]:text-white data-[state=active]:shadow-neon hover:text-white sm:px-5 sm:py-3"
     >
       <span className="grid h-7 w-7 place-items-center rounded-lg bg-white/10 text-white">{icon}</span>
       {label}
@@ -1569,7 +1569,7 @@ function RAGPipelineDiagram() {
 
 function QuickSummary({ items }: { items: string[] }) {
   return (
-    <div className="relative overflow-hidden rounded-3xl border border-neon-cyan/30 bg-gradient-to-br from-neon-cyan/10 via-white/[0.03] to-fuchsia-500/10 p-6 shadow-glow backdrop-blur-xl">
+    <div className="relative overflow-hidden rounded-3xl border border-neon-cyan/30 bg-gradient-to-br from-neon-cyan/10 via-white/[0.03] to-fuchsia-500/10 p-4 shadow-glow backdrop-blur-xl sm:p-6">
       <div className="mb-4 flex items-center gap-2">
         <span className="grid h-8 w-8 place-items-center rounded-lg bg-brand-gradient text-white">
           <Zap className="h-4 w-4" />
@@ -1581,7 +1581,7 @@ function QuickSummary({ items }: { items: string[] }) {
       </div>
       <ul className="grid gap-2 sm:grid-cols-2">
         {items.map((it) => (
-          <li key={it} className="flex items-start gap-2 rounded-xl border border-white/10 bg-white/5 p-3 text-sm text-white/85">
+          <li key={it} className="flex items-start gap-2 rounded-xl border border-white/10 bg-white/5 p-2.5 text-sm text-white/85 sm:p-3">
             <CheckCircle2 className="mt-0.5 h-4 w-4 flex-shrink-0 text-neon-cyan" />
             <span>{it}</span>
           </li>
@@ -1601,15 +1601,15 @@ function HeroCard({ icon, title, tag, body }: { icon: React.ReactNode; title: st
     <motion.div
       initial={{ opacity: 0, y: 12 }}
       animate={{ opacity: 1, y: 0 }}
-      className="card-flashy rounded-3xl glass-strong p-8 shadow-glow sm:p-10"
+      className="card-flashy rounded-3xl glass-strong p-5 shadow-glow sm:p-8 md:p-10"
     >
-      <div className="relative z-[3] flex flex-col gap-6 sm:flex-row sm:items-start">
-        <div className="grid h-14 w-14 shrink-0 place-items-center rounded-2xl bg-white/10 text-white backdrop-blur">
+      <div className="relative z-[3] flex flex-col gap-4 sm:gap-6 sm:flex-row sm:items-start">
+        <div className="grid h-12 w-12 shrink-0 place-items-center rounded-2xl bg-white/10 text-white backdrop-blur sm:h-14 sm:w-14">
           {icon}
         </div>
         <div className="min-w-0 flex-1">
           <Badge className="w-fit bg-white/10 text-white hover:bg-white/15">{tag}</Badge>
-          <h3 className="mt-3 font-display text-2xl font-bold text-white sm:text-3xl">{title}</h3>
+          <h3 className="mt-3 font-display text-xl font-bold text-white sm:text-2xl md:text-3xl">{title}</h3>
           <p className="mt-3 text-sm text-white/75 sm:text-base">{body}</p>
         </div>
       </div>
@@ -1642,21 +1642,21 @@ function SubSection({
 
 function Grid({ cols = 4, children }: { cols?: 2 | 3 | 4; children: React.ReactNode }) {
   const colClass = cols === 2 ? "sm:grid-cols-2" : cols === 3 ? "sm:grid-cols-2 lg:grid-cols-3" : "sm:grid-cols-2 lg:grid-cols-4";
-  return <div className={`grid gap-4 ${colClass}`}>{children}</div>;
+  return <div className={`grid gap-3 sm:gap-4 ${colClass}`}>{children}</div>;
 }
 
 function ConceptCard({ icon, title, desc }: { icon?: React.ReactNode; title: string; desc: string }) {
   return (
     <motion.div
       whileHover={{ y: -3 }}
-      className="card-flashy group flex h-full flex-col rounded-2xl border border-white/10 bg-white/5 p-5 backdrop-blur-xl transition-shadow hover:shadow-glow"
+      className="card-flashy group flex h-full flex-col rounded-2xl border border-white/10 bg-white/5 p-4 backdrop-blur-xl transition-shadow hover:shadow-glow sm:p-5"
     >
       {icon && (
-        <div className="relative z-[3] mb-3 grid h-10 w-10 place-items-center rounded-xl bg-white/10 text-white">
+        <div className="relative z-[3] mb-3 grid h-9 w-9 place-items-center rounded-xl bg-white/10 text-white sm:h-10 sm:w-10">
           {icon}
         </div>
       )}
-      <h4 className="relative z-[3] text-base font-semibold text-white group-hover:text-gradient">{title}</h4>
+      <h4 className="relative z-[3] text-sm font-semibold text-white group-hover:text-gradient sm:text-base">{title}</h4>
       <p className="relative z-[3] mt-2 text-sm text-white/65">{desc}</p>
     </motion.div>
   );
@@ -1664,13 +1664,13 @@ function ConceptCard({ icon, title, desc }: { icon?: React.ReactNode; title: str
 
 function FeatureCard({ icon, title, body }: { icon: React.ReactNode; title: string; body: string }) {
   return (
-    <div className="rounded-2xl border border-white/10 bg-white/5 p-6 backdrop-blur-xl">
-      <div className="flex items-start gap-4">
-        <div className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-brand-gradient text-white shadow-neon">
+    <div className="rounded-2xl border border-white/10 bg-white/5 p-4 backdrop-blur-xl sm:p-6">
+      <div className="flex items-start gap-3 sm:gap-4">
+        <div className="grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-brand-gradient text-white shadow-neon sm:h-10 sm:w-10">
           {icon}
         </div>
         <div>
-          <h4 className="text-base font-semibold text-white">{title}</h4>
+          <h4 className="text-sm font-semibold text-white sm:text-base">{title}</h4>
           <p className="mt-2 text-sm text-white/70">{body}</p>
         </div>
       </div>
@@ -1681,7 +1681,7 @@ function FeatureCard({ icon, title, body }: { icon: React.ReactNode; title: stri
 function KeyTakeaways({ items }: { items: string[] }) {
   return (
     <Reveal>
-      <div className="rounded-3xl border border-white/10 bg-gradient-to-br from-white/[0.04] to-white/[0.02] p-7 backdrop-blur-xl">
+      <div className="rounded-3xl border border-white/10 bg-gradient-to-br from-white/[0.04] to-white/[0.02] p-4 backdrop-blur-xl sm:p-7">
         <div className="flex items-center gap-2">
           <Sparkles className="h-4 w-4 text-neon-cyan" />
           <p className="text-xs font-semibold uppercase tracking-widest text-neon-cyan">Key Takeaways</p>
@@ -1703,13 +1703,13 @@ function Timeline({ items }: { items: { year: string; title: string; desc: strin
   return (
     <div className="relative">
       <div className="absolute left-[7px] top-1 bottom-1 w-px bg-gradient-to-b from-cyan-400/60 via-fuchsia-500/40 to-transparent sm:left-[11px]" />
-      <ol className="space-y-5">
+      <ol className="space-y-4 sm:space-y-5">
         {items.map((it) => (
           <li key={it.year + it.title} className="relative pl-7 sm:pl-10">
             <span className="absolute left-0 top-1.5 grid h-[15px] w-[15px] place-items-center rounded-full bg-brand-gradient shadow-neon sm:h-[23px] sm:w-[23px]">
               <History className="h-2.5 w-2.5 text-white sm:h-3 sm:w-3" />
             </span>
-            <div className="rounded-xl border border-white/10 bg-white/5 p-4 backdrop-blur-xl">
+            <div className="rounded-xl border border-white/10 bg-white/5 p-3 backdrop-blur-xl sm:p-4">
               <div className="flex flex-wrap items-baseline gap-x-3">
                 <span className="font-mono text-xs font-semibold text-neon-cyan">{it.year}</span>
                 <h5 className="text-sm font-semibold text-white">{it.title}</h5>
@@ -1725,11 +1725,11 @@ function Timeline({ items }: { items: { year: string; title: string; desc: strin
 
 function NumberedSteps({ items }: { items: { title: string; desc: string }[] }) {
   return (
-    <ol className="grid gap-4 sm:grid-cols-2">
+    <ol className="grid gap-3 sm:gap-4 sm:grid-cols-2">
       {items.map((it, idx) => (
         <li
           key={it.title}
-          className="rounded-2xl border border-white/10 bg-white/5 p-5 backdrop-blur-xl transition-shadow hover:shadow-glow"
+          className="rounded-2xl border border-white/10 bg-white/5 p-4 backdrop-blur-xl transition-shadow hover:shadow-glow sm:p-5"
         >
           <div className="flex items-start gap-3">
             <span className="grid h-8 w-8 shrink-0 place-items-center rounded-lg bg-brand-gradient text-sm font-bold text-white shadow-neon">

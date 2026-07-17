@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { Mail, ArrowRight } from "lucide-react";
+import { Mail, ArrowRight, FileText } from "lucide-react";
 import { Section, SectionHeader } from "@/components/layout/Section";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
@@ -73,10 +73,12 @@ function NewsletterArchive() {
             key={it.id}
             to="/newsletter/$slug"
             params={{ slug: it.slug }}
-            className="group flex flex-col rounded-2xl border border-white/10 bg-white/5 p-6 backdrop-blur-xl transition hover:border-neon-cyan/50 hover:bg-white/10"
+            className="group flex flex-col rounded-2xl border border-white/10 bg-white/5 p-5 backdrop-blur-xl transition hover:border-neon-cyan/50 hover:bg-white/10 sm:p-6"
           >
-            <div className="mb-3 text-3xl">{it.hero_emoji || "📰"}</div>
-            <h3 className="font-display text-lg font-bold text-white group-hover:text-neon-cyan">
+            <div className="mb-3 grid h-10 w-10 place-items-center rounded-xl bg-blue-100 text-blue-600">
+              <FileText className="h-5 w-5" />
+            </div>
+            <h3 className="font-display text-base font-bold text-white group-hover:text-neon-cyan sm:text-lg">
               {it.title}
             </h3>
             <p className="mt-2 line-clamp-3 text-sm text-white/70">{it.summary}</p>
@@ -103,11 +105,11 @@ function SubscribeCard() {
   const [msg, setMsg] = useState<string | null>(null);
 
   return (
-    <div className="mx-auto mt-6 max-w-2xl rounded-3xl border border-white/10 bg-gradient-to-br from-white/10 to-white/5 p-8 backdrop-blur-xl">
+    <div className="mx-auto mt-6 max-w-2xl rounded-3xl border border-white/10 bg-gradient-to-br from-white/10 to-white/5 p-5 backdrop-blur-xl sm:p-8">
       <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-neon-cyan/40 bg-neon-cyan/10 px-3 py-1 text-xs font-semibold text-neon-cyan">
         <Mail className="h-3.5 w-3.5" /> Free · Monthly · Unsubscribe anytime
       </div>
-      <h2 className="font-display text-2xl font-bold text-white">Subscribe</h2>
+      <h2 className="font-display text-xl font-bold text-white sm:text-2xl">Subscribe</h2>
       <p className="mt-2 text-sm text-white/70">
         One email per month. Deep dives, teardown of real systems, no promo fluff.
       </p>
