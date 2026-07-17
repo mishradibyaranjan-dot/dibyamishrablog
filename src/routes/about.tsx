@@ -125,9 +125,13 @@ const languages = ["English", "Hindi", "Bengali", "Punjabi"];
 function About() {
   const [open, setOpen] = React.useState(false);
   const [query, setQuery] = React.useState("");
-  const filteredCerts = certifications.filter((c) =>
-    c.toLowerCase().includes(query.toLowerCase()),
-  );
+  const [category, setCategory] = React.useState<Category>("All");
+  const filteredCerts = certifications.filter((c) => {
+    const matchesQuery = c.name.toLowerCase().includes(query.toLowerCase()) ||
+      (c.year?.includes(query) ?? false);
+    const matchesCategory = category === "All" || c.category === category;
+    return matchesQuery && matchesCategory;
+  });
   return (
     <>
       <Section className="pb-8 pt-16 lg:pt-24">
