@@ -295,6 +295,54 @@ export type Database = {
         }
         Relationships: []
       }
+      newsletter_schedules: {
+        Row: {
+          active: boolean
+          cadence: string
+          created_at: string
+          created_by: string | null
+          day_of_month: number | null
+          day_of_week: number | null
+          hour_utc: number
+          id: string
+          last_run_at: string | null
+          name: string
+          next_run_at: string | null
+          topic_hint: string | null
+          updated_at: string
+        }
+        Insert: {
+          active?: boolean
+          cadence: string
+          created_at?: string
+          created_by?: string | null
+          day_of_month?: number | null
+          day_of_week?: number | null
+          hour_utc?: number
+          id?: string
+          last_run_at?: string | null
+          name: string
+          next_run_at?: string | null
+          topic_hint?: string | null
+          updated_at?: string
+        }
+        Update: {
+          active?: boolean
+          cadence?: string
+          created_at?: string
+          created_by?: string | null
+          day_of_month?: number | null
+          day_of_week?: number | null
+          hour_utc?: number
+          id?: string
+          last_run_at?: string | null
+          name?: string
+          next_run_at?: string | null
+          topic_hint?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       newsletter_subscribers: {
         Row: {
           email: string
