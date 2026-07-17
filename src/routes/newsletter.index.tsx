@@ -54,6 +54,7 @@ function NewsletterArchive() {
   return (
     <Section>
       <SectionHeader
+        as="h1"
         eyebrow="Newsletter"
         title="Monthly notes on AI, cloud & scale"
         description="A short, technical read on what I'm building, breaking, and learning — delivered on the 1st of each month."
