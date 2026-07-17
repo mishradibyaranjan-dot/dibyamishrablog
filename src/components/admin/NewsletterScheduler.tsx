@@ -386,8 +386,15 @@ export function NewsletterScheduler() {
                                         <Button
                                           size="sm"
                                           variant="outline"
-                                          onClick={() => retryRun(r.id, run.id, run.failed_recipients.length)}
-                                          disabled={retryingRunId === run.id}
+                                          onClick={() =>
+                                            retryRun(
+                                              r.id,
+                                              run.id,
+                                              run.failed_recipients.length,
+                                              run.failed_recipients,
+                                            )
+                                          }
+                                          disabled={retryingRunId === run.id || pendingRetry?.runId === run.id}
                                           className="h-6 border-amber-400/30 bg-amber-500/10 px-2 py-0 text-[10px] text-amber-200 hover:bg-amber-500/20"
                                         >
                                           {retryingRunId === run.id ? (
