@@ -411,3 +411,108 @@ export const publishNewsletterIssue = createServerFn({ method: "POST" })
 
     return result;
   });
+
+// ============ AUTO: generate + approve + email ALL registered users ============
+// One-click: AI-generates a new issue, auto-approves it, and emails every
+// registered user (profiles) plus every active newsletter_subscriber.
+export const autoSendNewsletterToRegisteredUsers = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d: { topicHint?: string } | undefined) =>
+    z.object({ topicHint: z.string().max(500).optional() }).parse(d ?? {}),
+  )
+  .handler(async ({ context, data }) => {
+    await assertAdmin(context);
+    const apiKey = process.env.LOVABLE_API_KEY;
+    if (!apiKey) throw new Error("LOVABLE_API_KEY missing");
+
+    const now = new Date();
+    const monthYear = now.toLocaleDateString("en-US", { month: "long", year: "numeric" });
+    const system = `You are Dibya R. Mishra, VP & Head of Engineering. Write a monthly newsletter for a technical, senior audience. Voice: crisp, first-person, zero fluff. Cover Agentic AI, GenAI in Retail Supply Chains, Multi-Tenant SaaS, RAG systems, or Cloud Architecture. Return STRICT JSON: title (<=90 chars), summary (<=180 chars), body_markdown (500-900 words, ## H2 + short paragraphs; may use "- " bullets), linkedin_post (900-1200 chars, plain text, 3-5 hashtags).`;
+    const user = `Write the ${monthYear} issue.${data.topicHint ? ` Focus: ${data.topicHint}.` : ""} Return JSON only.`;
+
+    const aiRes = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
+      method: "POST",
+      headers: { "Content-Type": "application/json", Authorization: `Bearer ${apiKey}` },
+      body: JSON.stringify({
+        model: "google/gemini-2.5-pro",
+        response_format: { type: "json_object" },
+        messages: [
+          { role: "system", content: system },
+          { role: "user", content: user },
+        ],
+      }),
+    });
+    if (!aiRes.ok) throw new Error(`AI generation failed (${aiRes.status})`);
+    const parsed = JSON.parse((await aiRes.json())?.choices?.[0]?.message?.content ?? "{}");
+    const title = String(parsed.title ?? `${monthYear} Notes`).slice(0, 120);
+    const summary = String(parsed.summary ?? "").slice(0, 240);
+    const body_markdown = String(parsed.body_markdown ?? "");
+    const linkedin_post = String(parsed.linkedin_post ?? "");
+    const slug = slugify(title);
+
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+
+    const nowIso = new Date().toISOString();
+    const { data: issue, error: insErr } = await supabaseAdmin
+      .from("newsletter_issues")
+      .insert({
+        slug,
+        title,
+        summary,
+        body_markdown,
+        linkedin_post,
+        status: "published",
+        approved_at: nowIso,
+        approved_by: context.userId,
+        published_at: nowIso,
+        emails_sent_at: nowIso,
+        created_by: context.userId,
+      })
+      .select("id, slug")
+      .single();
+    if (insErr || !issue) throw new Error(insErr?.message ?? "Insert failed");
+
+    const [{ data: profs }, { data: subs }] = await Promise.all([
+      supabaseAdmin.from("profiles").select("email"),
+      supabaseAdmin.from("newsletter_subscribers").select("email").eq("status", "active"),
+    ]);
+    const emails = new Set<string>();
+    for (const r of profs ?? []) if (r?.email) emails.add(String(r.email).toLowerCase());
+    for (const r of subs ?? []) if (r?.email) emails.add(String(r.email).toLowerCase());
+
+    let queued = 0;
+    let errors = 0;
+    for (const email of emails) {
+      try {
+        const { error: enqErr } = await supabaseAdmin.rpc("enqueue_email", {
+          queue_name: "transactional_emails",
+          payload: {
+            template_name: "newsletter-issue",
+            recipient_email: email,
+            template_data: {
+              title,
+              summary,
+              bodyMarkdown: body_markdown,
+              slug: issue.slug,
+            },
+            idempotency_key: `newsletter-${issue.id}-${email}`,
+          },
+        });
+        if (enqErr) throw enqErr;
+        queued++;
+      } catch (e) {
+        console.error("enqueue failed", email, e);
+        errors++;
+      }
+    }
+
+    return {
+      ok: true,
+      issueId: issue.id,
+      slug: issue.slug,
+      title,
+      recipients: emails.size,
+      emailsQueued: queued,
+      emailErrors: errors,
+    };
+  });

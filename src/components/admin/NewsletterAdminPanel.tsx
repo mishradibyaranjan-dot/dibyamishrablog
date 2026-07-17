@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Mail, Sparkles, Send, Copy, Loader2, ShieldCheck, Clock } from "lucide-react";
+import { Mail, Sparkles, Send, Copy, Loader2, ShieldCheck, Clock, Rocket } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   generateNewsletterDraft,
@@ -8,6 +8,7 @@ import {
   publishNewsletterIssue,
   submitForApproval,
   approveNewsletterIssue,
+  autoSendNewsletterToRegisteredUsers,
 } from "@/lib/newsletter.functions";
 import { NewsletterVersionCompare } from "./NewsletterVersionCompare";
 
@@ -35,6 +36,7 @@ export function NewsletterAdminPanel() {
   const [saving, setSaving] = useState(false);
   const [publishing, setPublishing] = useState(false);
   const [approving, setApproving] = useState(false);
+  const [autoSending, setAutoSending] = useState(false);
   const [err, setErr] = useState<string | null>(null);
   const [msg, setMsg] = useState<string | null>(null);
 
@@ -200,6 +202,32 @@ export function NewsletterAdminPanel() {
     }
   };
 
+  const doAutoSend = async () => {
+    if (!confirm("Auto-generate a new newsletter and email it to ALL registered users + subscribers now?")) return;
+    setErr(null);
+    setMsg(null);
+    setAutoSending(true);
+    try {
+      const r = (await autoSendNewsletterToRegisteredUsers({
+        data: { topicHint: topicHint || undefined },
+      })) as {
+        title: string;
+        slug: string;
+        recipients: number;
+        emailsQueued: number;
+        emailErrors: number;
+      };
+      setMsg(
+        `Auto-sent "${r.title}" — queued ${r.emailsQueued}/${r.recipients} emails (errors: ${r.emailErrors}). Slug: /${r.slug}`,
+      );
+      refresh();
+    } catch (e) {
+      setErr(e instanceof Error ? e.message : String(e));
+    } finally {
+      setAutoSending(false);
+    }
+  };
+
   const isApproved = !!approvedAt && (status === "approved" || status === "published");
 
   return (
@@ -213,6 +241,28 @@ export function NewsletterAdminPanel() {
         <span className="mx-1 rounded bg-yellow-500/20 px-1.5 py-0.5 font-semibold text-yellow-300">pending_approval</span>
         until you click <span className="font-semibold text-emerald-300">Approve</span>. Only then can this panel email subscribers or post to LinkedIn.
       </p>
+
+      <div className="mb-4 flex flex-wrap items-center justify-between gap-3 rounded-xl border border-neon-cyan/30 bg-gradient-to-r from-neon-cyan/10 to-fuchsia-500/10 p-3">
+        <div className="min-w-0">
+          <div className="text-sm font-semibold text-white">⚡ One-click auto-send</div>
+          <div className="text-[11px] text-white/60">
+            Generates a fresh newsletter with AI and emails it to every registered user + active subscriber. Skips LinkedIn.
+          </div>
+        </div>
+        <Button
+          size="sm"
+          onClick={doAutoSend}
+          disabled={autoSending}
+          className="bg-brand-gradient text-white shadow-neon"
+        >
+          {autoSending ? (
+            <Loader2 className="mr-1 h-3.5 w-3.5 animate-spin" />
+          ) : (
+            <Rocket className="mr-1 h-3.5 w-3.5" />
+          )}
+          Auto-generate & send to all users
+        </Button>
+      </div>
 
       <div className="grid gap-4 lg:grid-cols-2">
         <div>
