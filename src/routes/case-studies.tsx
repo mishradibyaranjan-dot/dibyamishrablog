@@ -56,10 +56,13 @@ function CaseStudies() {
 
         <img
           src={heroCaseStudies}
-          alt="Illustration of upward-trending growth curve with stacked blocks representing business outcomes"
+          alt="Editorial illustration of an upward-trending performance curve and stacked architecture blocks representing enterprise case study outcomes"
           width={1600}
           height={900}
-          className="mb-8 w-full rounded-3xl border border-border/60"
+          loading="eager"
+          fetchPriority="high"
+          decoding="async"
+          className="mb-8 aspect-[16/9] w-full rounded-3xl border border-border/60 object-cover"
         />
 
 

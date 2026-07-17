@@ -206,7 +206,7 @@ function Footer() {
       <div className="mx-auto grid max-w-7xl gap-10 px-4 py-16 sm:px-6 md:grid-cols-4">
         <div className="md:col-span-2">
           <div className="flex items-center gap-2 font-display text-lg font-bold text-white">
-            <img src={drmLogo.url} alt="DRM logo" className="h-9 w-9 rounded-lg object-contain shadow-neon" />
+            <img src={drmLogo.url} alt="Dibya Ranjan Mishra site logo" width={36} height={36} decoding="async" className="h-9 w-9 rounded-lg object-contain shadow-neon" />
             Dibya Ranjan Mishra
           </div>
           <p className="mt-3 max-w-md text-sm text-white/65">

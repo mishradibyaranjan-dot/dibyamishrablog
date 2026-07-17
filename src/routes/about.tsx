@@ -137,9 +137,13 @@ function About() {
             <div className="card-flashy mx-auto max-w-xs overflow-hidden rounded-3xl glass-strong shadow-lg">
               <img
                 src={photoAsset.url}
-                alt="Dibya Ranjan Mishra — Technology & Engineering Leader"
-                className="aspect-square w-full object-cover"
+                alt="Portrait of Dibya Ranjan Mishra, Head of Engineering and AI, Cloud & SaaS leader"
+                width={640}
+                height={640}
                 loading="eager"
+                fetchPriority="high"
+                decoding="async"
+                className="aspect-square w-full object-cover"
               />
               <div className="border-t border-border p-5">
                 <div className="font-display text-lg font-semibold">Dibya Ranjan Mishra</div>

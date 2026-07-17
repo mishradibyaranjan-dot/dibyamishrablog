@@ -74,10 +74,13 @@ function Projects() {
 
         <img
           src={heroProjects}
-          alt="Isometric illustration of cloud, AI and dashboard components representing engineering projects"
+          alt="Isometric illustration of cloud infrastructure, AI models, microservices, and analytics dashboards representing a portfolio of AI, Cloud, SaaS, Data and DevSecOps projects"
           width={1600}
           height={900}
-          className="mb-8 w-full rounded-3xl border border-border/60"
+          loading="eager"
+          fetchPriority="high"
+          decoding="async"
+          className="mb-8 aspect-[16/9] w-full rounded-3xl border border-border/60 object-cover"
         />
 
 
