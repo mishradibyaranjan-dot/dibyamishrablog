@@ -187,6 +187,8 @@ export type Database = {
       }
       newsletter_issues: {
         Row: {
+          approved_at: string | null
+          approved_by: string | null
           body_markdown: string
           created_at: string
           created_by: string | null
@@ -203,6 +205,8 @@ export type Database = {
           updated_at: string
         }
         Insert: {
+          approved_at?: string | null
+          approved_by?: string | null
           body_markdown?: string
           created_at?: string
           created_by?: string | null
@@ -219,6 +223,8 @@ export type Database = {
           updated_at?: string
         }
         Update: {
+          approved_at?: string | null
+          approved_by?: string | null
           body_markdown?: string
           created_at?: string
           created_by?: string | null

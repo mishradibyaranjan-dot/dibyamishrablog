@@ -137,14 +137,49 @@ export const listAllIssues = createServerFn({ method: "GET" })
     await assertAdmin(context);
     const { data, error } = await context.supabase
       .from("newsletter_issues")
-      .select("id, slug, title, summary, status, published_at, linkedin_posted_at, emails_sent_at, created_at")
+      .select(
+        "id, slug, title, summary, body_markdown, linkedin_post, hero_emoji, status, approved_at, approved_by, published_at, linkedin_posted_at, emails_sent_at, created_at",
+      )
       .order("created_at", { ascending: false })
       .limit(50);
     if (error) throw new Error(error.message);
     return data ?? [];
   });
 
-// ============ PUBLISH: mark, email subscribers, post to LinkedIn ============
+// ============ SUBMIT FOR APPROVAL ============
+export const submitForApproval = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d: unknown) => z.object({ id: z.string().uuid() }).parse(d))
+  .handler(async ({ context, data }) => {
+    await assertAdmin(context);
+    const { error } = await context.supabase
+      .from("newsletter_issues")
+      .update({ status: "pending_approval", approved_at: null, approved_by: null })
+      .eq("id", data.id);
+    if (error) throw new Error(error.message);
+    return { ok: true };
+  });
+
+// ============ APPROVE (owner sign-off) ============
+export const approveNewsletterIssue = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d: unknown) => z.object({ id: z.string().uuid() }).parse(d))
+  .handler(async ({ context, data }) => {
+    await assertAdmin(context);
+    const { error } = await context.supabase
+      .from("newsletter_issues")
+      .update({
+        status: "approved",
+        approved_at: new Date().toISOString(),
+        approved_by: context.userId,
+      })
+      .eq("id", data.id)
+      .in("status", ["draft", "pending_approval", "approved"]);
+    if (error) throw new Error(error.message);
+    return { ok: true };
+  });
+
+// ============ PUBLISH: requires approval. Emails subscribers + posts to LinkedIn. ============
 export const publishNewsletterIssue = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((d: unknown) =>
@@ -165,6 +200,11 @@ export const publishNewsletterIssue = createServerFn({ method: "POST" })
       .single();
     if (fetchErr || !issue) throw new Error("Issue not found");
 
+    // Human-in-the-loop gate: nothing goes out until the owner has approved.
+    if (!issue.approved_at || (issue.status !== "approved" && issue.status !== "published")) {
+      throw new Error("Approval required before publishing. Approve the issue first.");
+    }
+
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
 
     // 1. Mark published
@@ -175,6 +215,7 @@ export const publishNewsletterIssue = createServerFn({ method: "POST" })
         .eq("id", data.id);
       if (error) throw new Error(error.message);
     }
+
 
     const result: {
       emailsQueued: number;

@@ -1,8 +1,10 @@
 import { createFileRoute } from "@tanstack/react-router";
 
 /**
- * Called monthly by pg_cron. Generates + publishes the next newsletter issue.
- * Auth via Supabase anon apikey header (pg_cron pattern).
+ * Called monthly by pg_cron. Generates the next newsletter DRAFT and stores it
+ * as `pending_approval`. No emails are sent and no LinkedIn post is made —
+ * the owner must review and approve the draft in the admin panel before it
+ * goes out to subscribers or LinkedIn (human-in-the-loop gate).
  */
 export const Route = createFileRoute("/api/public/cron/monthly-newsletter")({
   server: {
@@ -66,103 +68,18 @@ export const Route = createFileRoute("/api/public/cron/monthly-newsletter")({
               summary,
               body_markdown,
               linkedin_post,
-              status: "published",
-              published_at: new Date().toISOString(),
+              status: "pending_approval",
             })
-            .select("*")
+            .select("id, slug, status")
             .single();
           if (insErr) throw insErr;
-
-          // Enqueue emails to all subscribers
-          const { data: subs } = await supabaseAdmin
-            .from("newsletter_subscribers")
-            .select("email")
-            .eq("status", "active");
-          let queued = 0;
-          for (const s of subs ?? []) {
-            const { error: eErr } = await supabaseAdmin.rpc("enqueue_email", {
-              queue_name: "transactional_emails",
-              payload: {
-                template_name: "newsletter-issue",
-                recipient_email: s.email,
-                template_data: {
-                  title: issue.title,
-                  summary: issue.summary,
-                  bodyMarkdown: issue.body_markdown,
-                  slug: issue.slug,
-                },
-                idempotency_key: `newsletter-${issue.id}-${s.email}`,
-              },
-            });
-            if (!eErr) queued++;
-          }
-
-          await supabaseAdmin
-            .from("newsletter_issues")
-            .update({ emails_sent_at: new Date().toISOString() })
-            .eq("id", issue.id);
-
-          // LinkedIn (best-effort)
-          let linkedinPosted = false;
-          try {
-            const liKey = process.env.LINKEDIN_API_KEY;
-            if (liKey && linkedin_post) {
-              const meRes = await fetch(
-                "https://connector-gateway.lovable.dev/linkedin/v2/userinfo",
-                { headers: { Authorization: `Bearer ${lovKey}`, "X-Connection-Api-Key": liKey } },
-              );
-              if (meRes.ok) {
-                const me = await meRes.json();
-                const sub = me?.sub;
-                if (sub) {
-                  const shareUrl = `https://www.dibyamishra.co.in/newsletter/${issue.slug}`;
-                  const postRes = await fetch(
-                    "https://connector-gateway.lovable.dev/linkedin/v2/ugcPosts",
-                    {
-                      method: "POST",
-                      headers: {
-                        Authorization: `Bearer ${lovKey}`,
-                        "X-Connection-Api-Key": liKey,
-                        "Content-Type": "application/json",
-                        "X-Restli-Protocol-Version": "2.0.0",
-                      },
-                      body: JSON.stringify({
-                        author: `urn:li:person:${sub}`,
-                        lifecycleState: "PUBLISHED",
-                        specificContent: {
-                          "com.linkedin.ugc.ShareContent": {
-                            shareCommentary: { text: `${linkedin_post}\n\nRead: ${shareUrl}` },
-                            shareMediaCategory: "NONE",
-                          },
-                        },
-                        visibility: {
-                          "com.linkedin.ugc.MemberNetworkVisibility": "PUBLIC",
-                        },
-                      }),
-                    },
-                  );
-                  if (postRes.ok) {
-                    linkedinPosted = true;
-                    await supabaseAdmin
-                      .from("newsletter_issues")
-                      .update({ linkedin_posted_at: new Date().toISOString() })
-                      .eq("id", issue.id);
-                  } else {
-                    console.error("LinkedIn post failed", postRes.status, await postRes.text());
-                  }
-                }
-              }
-            }
-          } catch (e) {
-            console.error("LinkedIn error", e);
-          }
 
           return Response.json({
             ok: true,
             issueId: issue.id,
             slug: issue.slug,
-            emailsQueued: queued,
-            linkedinPosted,
+            status: issue.status,
+            note: "Draft saved as pending_approval. Owner must approve before emails or LinkedIn post.",
           });
         } catch (err) {
           console.error("monthly-newsletter cron failed", err);
