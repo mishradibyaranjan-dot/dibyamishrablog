@@ -674,8 +674,8 @@ table th, table td { border-color: var(--color-border); }
 .bg-white\/10 { background-color: var(--color-background) !important; }
 
 /* Hardcoded arbitrary-value backgrounds used in pages */
-.bg-\[#fafbfc\] { background-color: var(--color-background) !important; }
-.bg-\[#e8ecf1\] { background-color: var(--color-muted) !important; }
+.bg-\[\#fafbfc\] { background-color: var(--color-background) !important; }
+.bg-\[\#e8ecf1\] { background-color: var(--color-muted) !important; }
 
 /* Slate borders */
 .border-slate-100,
