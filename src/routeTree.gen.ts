@@ -118,9 +118,9 @@ const WhitePaperAgenticAiEnterpriseAutomationRoute =
     getParentRoute: () => rootRouteImport,
   } as any)
 const NewsletterSlugRoute = NewsletterSlugRouteImport.update({
-  id: '/$slug',
-  path: '/$slug',
-  getParentRoute: () => NewsletterRoute,
+  id: '/newsletter/$slug',
+  path: '/newsletter/$slug',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const EmailUnsubscribeRoute = EmailUnsubscribeRouteImport.update({
   id: '/email/unsubscribe',
@@ -426,6 +426,7 @@ export interface RootRouteChildren {
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   TrustRoute: typeof TrustRoute
   EmailUnsubscribeRoute: typeof EmailUnsubscribeRoute
+  NewsletterSlugRoute: typeof NewsletterSlugRoute
   WhitePaperAgenticAiEnterpriseAutomationRoute: typeof WhitePaperAgenticAiEnterpriseAutomationRoute
   NewsletterIndexRoute: typeof NewsletterIndexRoute
   ApiPublicChatRoute: typeof ApiPublicChatRoute
@@ -550,10 +551,10 @@ declare module '@tanstack/react-router' {
     }
     '/newsletter/$slug': {
       id: '/newsletter/$slug'
-      path: '/$slug'
+      path: '/newsletter/$slug'
       fullPath: '/newsletter/$slug'
       preLoaderRoute: typeof NewsletterSlugRouteImport
-      parentRoute: typeof NewsletterRoute
+      parentRoute: typeof rootRouteImport
     }
     '/email/unsubscribe': {
       id: '/email/unsubscribe'
@@ -710,6 +711,7 @@ const rootRouteChildren: RootRouteChildren = {
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   TrustRoute: TrustRoute,
   EmailUnsubscribeRoute: EmailUnsubscribeRoute,
+  NewsletterSlugRoute: NewsletterSlugRoute,
   WhitePaperAgenticAiEnterpriseAutomationRoute:
     WhitePaperAgenticAiEnterpriseAutomationRoute,
   NewsletterIndexRoute: NewsletterIndexRoute,
@@ -728,13 +730,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
