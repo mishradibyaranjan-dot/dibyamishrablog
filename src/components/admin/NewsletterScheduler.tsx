@@ -1,5 +1,5 @@
 import { Fragment, useEffect, useState } from "react";
-import { Loader2, Calendar, Play, Trash2, Plus, History, ChevronDown, ChevronUp } from "lucide-react";
+import { Loader2, Calendar, Play, Trash2, Plus, History, ChevronDown, ChevronUp, RefreshCw } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   listNewsletterSchedules,
@@ -7,6 +7,7 @@ import {
   deleteNewsletterSchedule,
   runScheduleNow,
   listScheduleHistory,
+  retryFailedRunRecipients,
 } from "@/lib/newsletter-schedules.functions";
 
 type Row = {
