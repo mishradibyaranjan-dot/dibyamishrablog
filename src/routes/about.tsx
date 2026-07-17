@@ -263,11 +263,17 @@ function About() {
                 </div>
                 <ul className="space-y-2">
                   {certifications.map((c, i) => (
-                    <li key={c} className="flex items-start gap-2 text-sm">
+                    <li key={c.name} className="flex items-start gap-2 text-sm">
                       <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-brand-gradient" />
-                      <span className={i === certifications.length - 1 ? "font-bold" : ""}>{c}</span>
+                      <span className={i === certifications.length - 1 ? "font-bold" : ""}>
+                        {c.name}{c.year ? `, ${c.year}` : ""}
+                      </span>
                     </li>
                   ))}
+                  <li className="flex items-start gap-2 text-sm">
+                    <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-brand-gradient" />
+                    <span className="font-bold">{summaryCert}</span>
+                  </li>
                 </ul>
                 <div className="mt-4 text-xs font-medium text-brand-1">Click to search all certifications</div>
                 <div className="mt-6 border-t border-border pt-4">
