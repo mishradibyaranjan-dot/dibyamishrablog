@@ -167,6 +167,27 @@ export function NewsletterScheduler() {
     if (open && !historyData[id]) loadHistory(id);
   };
 
+  const retryRun = async (scheduleId: string, runId: string, failedCount: number) => {
+    if (failedCount === 0) return;
+    if (!confirm(`Retry ${failedCount} failed recipient(s) for this run?`)) return;
+    setRetryingRunId(runId);
+    setErr(null);
+    setMsg(null);
+    try {
+      const r = (await retryFailedRunRecipients({ data: { runId } })) as {
+        retried: number;
+        queued: number;
+        errors: number;
+      };
+      setMsg(`Retried ${r.retried} — ${r.queued} re-queued, ${r.errors} still failing.`);
+      await loadHistory(scheduleId);
+    } catch (e) {
+      setErr(e instanceof Error ? e.message : String(e));
+    } finally {
+      setRetryingRunId(null);
+    }
+  };
+
   return (
     <div className="mt-4 rounded-2xl border border-white/10 bg-white/5 p-5 backdrop-blur-xl">
       <div className="mb-3 flex items-center gap-2 text-sm font-semibold text-white">
