@@ -24,6 +24,7 @@ import { Route as AboutRouteImport } from './routes/about'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as WhitePaperAgenticAiEnterpriseAutomationRouteImport } from './routes/white-paper.agentic-ai-enterprise-automation'
+import { Route as NewsletterSlugRouteImport } from './routes/newsletter.$slug'
 import { Route as EmailUnsubscribeRouteImport } from './routes/email/unsubscribe'
 import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
 import { Route as AuthenticatedReportsRouteImport } from './routes/_authenticated/reports'
@@ -114,6 +115,11 @@ const WhitePaperAgenticAiEnterpriseAutomationRoute =
     path: '/white-paper/agentic-ai-enterprise-automation',
     getParentRoute: () => rootRouteImport,
   } as any)
+const NewsletterSlugRoute = NewsletterSlugRouteImport.update({
+  id: '/$slug',
+  path: '/$slug',
+  getParentRoute: () => NewsletterRoute,
+} as any)
 const EmailUnsubscribeRoute = EmailUnsubscribeRouteImport.update({
   id: '/email/unsubscribe',
   path: '/email/unsubscribe',
@@ -196,7 +202,7 @@ export interface FileRoutesByFullPath {
   '/case-studies': typeof CaseStudiesRoute
   '/contact': typeof ContactRoute
   '/forgot-password': typeof ForgotPasswordRoute
-  '/newsletter': typeof NewsletterRoute
+  '/newsletter': typeof NewsletterRouteWithChildren
   '/projects': typeof ProjectsRoute
   '/research': typeof ResearchRoute
   '/reset-password': typeof ResetPasswordRoute
@@ -206,6 +212,7 @@ export interface FileRoutesByFullPath {
   '/reports': typeof AuthenticatedReportsRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/email/unsubscribe': typeof EmailUnsubscribeRoute
+  '/newsletter/$slug': typeof NewsletterSlugRoute
   '/white-paper/agentic-ai-enterprise-automation': typeof WhitePaperAgenticAiEnterpriseAutomationRoute
   '/api/public/chat': typeof ApiPublicChatRoute
   '/api/public/contact': typeof ApiPublicContactRoute
@@ -226,7 +233,7 @@ export interface FileRoutesByTo {
   '/case-studies': typeof CaseStudiesRoute
   '/contact': typeof ContactRoute
   '/forgot-password': typeof ForgotPasswordRoute
-  '/newsletter': typeof NewsletterRoute
+  '/newsletter': typeof NewsletterRouteWithChildren
   '/projects': typeof ProjectsRoute
   '/research': typeof ResearchRoute
   '/reset-password': typeof ResetPasswordRoute
@@ -236,6 +243,7 @@ export interface FileRoutesByTo {
   '/reports': typeof AuthenticatedReportsRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/email/unsubscribe': typeof EmailUnsubscribeRoute
+  '/newsletter/$slug': typeof NewsletterSlugRoute
   '/white-paper/agentic-ai-enterprise-automation': typeof WhitePaperAgenticAiEnterpriseAutomationRoute
   '/api/public/chat': typeof ApiPublicChatRoute
   '/api/public/contact': typeof ApiPublicContactRoute
@@ -258,7 +266,7 @@ export interface FileRoutesById {
   '/case-studies': typeof CaseStudiesRoute
   '/contact': typeof ContactRoute
   '/forgot-password': typeof ForgotPasswordRoute
-  '/newsletter': typeof NewsletterRoute
+  '/newsletter': typeof NewsletterRouteWithChildren
   '/projects': typeof ProjectsRoute
   '/research': typeof ResearchRoute
   '/reset-password': typeof ResetPasswordRoute
@@ -268,6 +276,7 @@ export interface FileRoutesById {
   '/_authenticated/reports': typeof AuthenticatedReportsRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/email/unsubscribe': typeof EmailUnsubscribeRoute
+  '/newsletter/$slug': typeof NewsletterSlugRoute
   '/white-paper/agentic-ai-enterprise-automation': typeof WhitePaperAgenticAiEnterpriseAutomationRoute
   '/api/public/chat': typeof ApiPublicChatRoute
   '/api/public/contact': typeof ApiPublicContactRoute
@@ -300,6 +309,7 @@ export interface FileRouteTypes {
     | '/reports'
     | '/blog/$slug'
     | '/email/unsubscribe'
+    | '/newsletter/$slug'
     | '/white-paper/agentic-ai-enterprise-automation'
     | '/api/public/chat'
     | '/api/public/contact'
@@ -330,6 +340,7 @@ export interface FileRouteTypes {
     | '/reports'
     | '/blog/$slug'
     | '/email/unsubscribe'
+    | '/newsletter/$slug'
     | '/white-paper/agentic-ai-enterprise-automation'
     | '/api/public/chat'
     | '/api/public/contact'
@@ -361,6 +372,7 @@ export interface FileRouteTypes {
     | '/_authenticated/reports'
     | '/blog/$slug'
     | '/email/unsubscribe'
+    | '/newsletter/$slug'
     | '/white-paper/agentic-ai-enterprise-automation'
     | '/api/public/chat'
     | '/api/public/contact'
@@ -383,7 +395,7 @@ export interface RootRouteChildren {
   CaseStudiesRoute: typeof CaseStudiesRoute
   ContactRoute: typeof ContactRoute
   ForgotPasswordRoute: typeof ForgotPasswordRoute
-  NewsletterRoute: typeof NewsletterRoute
+  NewsletterRoute: typeof NewsletterRouteWithChildren
   ProjectsRoute: typeof ProjectsRoute
   ResearchRoute: typeof ResearchRoute
   ResetPasswordRoute: typeof ResetPasswordRoute
@@ -510,6 +522,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof WhitePaperAgenticAiEnterpriseAutomationRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/newsletter/$slug': {
+      id: '/newsletter/$slug'
+      path: '/$slug'
+      fullPath: '/newsletter/$slug'
+      preLoaderRoute: typeof NewsletterSlugRouteImport
+      parentRoute: typeof NewsletterRoute
+    }
     '/email/unsubscribe': {
       id: '/email/unsubscribe'
       path: '/email/unsubscribe'
@@ -634,6 +653,18 @@ const BlogRouteChildren: BlogRouteChildren = {
 
 const BlogRouteWithChildren = BlogRoute._addFileChildren(BlogRouteChildren)
 
+interface NewsletterRouteChildren {
+  NewsletterSlugRoute: typeof NewsletterSlugRoute
+}
+
+const NewsletterRouteChildren: NewsletterRouteChildren = {
+  NewsletterSlugRoute: NewsletterSlugRoute,
+}
+
+const NewsletterRouteWithChildren = NewsletterRoute._addFileChildren(
+  NewsletterRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
@@ -643,7 +674,7 @@ const rootRouteChildren: RootRouteChildren = {
   CaseStudiesRoute: CaseStudiesRoute,
   ContactRoute: ContactRoute,
   ForgotPasswordRoute: ForgotPasswordRoute,
-  NewsletterRoute: NewsletterRoute,
+  NewsletterRoute: NewsletterRouteWithChildren,
   ProjectsRoute: ProjectsRoute,
   ResearchRoute: ResearchRoute,
   ResetPasswordRoute: ResetPasswordRoute,

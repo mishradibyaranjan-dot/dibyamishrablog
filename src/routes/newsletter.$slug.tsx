@@ -58,11 +58,12 @@ export const Route = createFileRoute("/newsletter/$slug")({
 });
 
 function IssuePage() {
-  const issue = Route.useLoaderData();
-  const paragraphs = issue.body_markdown
+  const issue = Route.useLoaderData() as Issue;
+  const paragraphs: string[] = issue.body_markdown
     .replace(/\r\n/g, "\n")
     .split(/\n{2,}/)
-    .map((p) => p.trim())
+    .map((p: string) => p.trim())
+    .filter(Boolean);
     .filter(Boolean);
 
   return (
