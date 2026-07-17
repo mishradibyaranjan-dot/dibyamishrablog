@@ -295,7 +295,7 @@ export function SiteLayout() {
         <div className="relative flex min-h-screen flex-col">
           <AuroraBackground />
           <Header />
-          <GuestAccessStrip />
+          
           <main className="relative flex-1">
             <PageTransition />
           </main>
