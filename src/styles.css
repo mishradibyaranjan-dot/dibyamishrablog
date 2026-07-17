@@ -469,13 +469,17 @@
    now forced to a white background regardless of the selected theme, so
    remap those utilities globally to legible dark text on light surfaces. */
 html, body {
-  background-color: #ffffff !important;
-  color: #0a0a0a !important;
+  background-color: #F8FAFC !important;
+  color: #1F2937 !important;
   color-scheme: light !important;
 }
 h1, h2, h3, h4, h5, h6, p, span, li, a, label, strong, em, blockquote, figcaption {
   color: inherit;
 }
+h1, h2, h3, h4, h5, h6 { color: #0F172A; }
+a { color: #1E3A8A; }
+a:hover { color: #0F766E; }
+
 .text-white,
 .hover\:text-white:hover,
 .text-white\/40,
@@ -488,31 +492,78 @@ h1, h2, h3, h4, h5, h6, p, span, li, a, label, strong, em, blockquote, figcaptio
 .text-white\/80,
 .text-white\/85,
 .text-white\/90 {
-  color: #0a0a0a !important;
+  color: #1F2937 !important;
 }
-.text-white\/40 { color: #6b7280 !important; }
-.text-white\/50 { color: #6b7280 !important; }
-.text-white\/55 { color: #4b5563 !important; }
-.text-white\/60 { color: #4b5563 !important; }
-.text-white\/65 { color: #374151 !important; }
-.text-white\/70 { color: #374151 !important; }
+.text-white\/40 { color: #94A3B8 !important; }
+.text-white\/50 { color: #64748B !important; }
+.text-white\/55 { color: #64748B !important; }
+.text-white\/60 { color: #4B5563 !important; }
+.text-white\/65 { color: #4B5563 !important; }
+.text-white\/70 { color: #4B5563 !important; }
 .text-white\/75 { color: #374151 !important; }
-.text-white\/80 { color: #1f2937 !important; }
-.placeholder\:text-white\/40::placeholder { color: #9ca3af !important; }
-.bg-white\/5   { background-color: #f8fafc !important; }
-.bg-white\/10  { background-color: #f1f5f9 !important; }
-.hover\:bg-white\/10:hover { background-color: #f1f5f9 !important; }
+.text-white\/80 { color: #1F2937 !important; }
+.placeholder\:text-white\/40::placeholder { color: #94A3B8 !important; }
+.bg-white\/5   { background-color: #FFFFFF !important; }
+.bg-white\/10  { background-color: #F8FAFC !important; }
+.hover\:bg-white\/10:hover { background-color: #F1F5F9 !important; }
 .border-white\/10,
 .border-white\/15,
-.border-white\/20 { border-color: #e5e7eb !important; }
+.border-white\/20 { border-color: #E2E8F0 !important; }
 .bg-background\/60,
-.bg-background\/85 { background-color: rgba(255,255,255,0.92) !important; }
-/* Neutralize dark aurora vignette so the page reads white */
-[aria-hidden] .bg-aurora { opacity: 0.18; }
-/* Keep gradient / neon text legible: fall back to dark ink if the
-   gradient can't be seen against white. */
-.text-neon { color: #0f172a !important; text-shadow: none !important; }
-/* Buttons using brand-gradient still get white text (they have a dark bg) */
-.bg-brand-gradient { color: #ffffff !important; }
-.bg-brand-gradient * { color: #ffffff !important; }
+.bg-background\/85 { background-color: #FFFFFF !important; }
+[aria-hidden] .bg-aurora { opacity: 0.12; }
+.text-neon { color: #1E3A8A !important; text-shadow: none !important; }
+
+/* Force new brand gradient (deep blue → teal) for consistency */
+.bg-brand-gradient {
+  background: linear-gradient(135deg, #1E3A8A 0%, #1E4FBF 55%, #0F766E 100%) !important;
+  color: #FFFFFF !important;
+}
+.bg-brand-gradient * { color: #FFFFFF !important; }
+
+/* Card surfaces get subtle shadow + border */
+.card-flashy {
+  background: #FFFFFF !important;
+  border: 1px solid #E2E8F0 !important;
+  box-shadow: 0 1px 2px rgba(15,23,42,0.04), 0 8px 24px -12px rgba(15,23,42,0.10) !important;
+}
+.card-flashy::before, .card-flashy::after { display: none !important; }
+.card-flashy:hover {
+  border-color: #CBD5E1 !important;
+  box-shadow: 0 4px 12px rgba(15,23,42,0.06), 0 16px 40px -12px rgba(30,58,138,0.18) !important;
+  transform: translateY(-2px);
+}
+
+/* Focus ring: visible amber/blue for accessibility */
+*:focus-visible {
+  outline: 2px solid #1E3A8A !important;
+  outline-offset: 2px !important;
+}
+
+/* Form inputs — clear borders + focus */
+input, textarea, select {
+  background-color: #FFFFFF !important;
+  border-color: #E2E8F0 !important;
+  color: #1F2937 !important;
+}
+input::placeholder, textarea::placeholder { color: #94A3B8 !important; }
+input:focus, textarea:focus, select:focus {
+  border-color: #1E3A8A !important;
+  box-shadow: 0 0 0 3px rgba(30,58,138,0.12) !important;
+}
+
+/* Tables — alternating soft rows */
+table tbody tr:nth-child(even) { background-color: #F8FAFC; }
+table thead { background-color: #F1F5F9; color: #0F172A; }
+table th, table td { border-color: #E2E8F0; }
+
+/* Text-gradient / shimmer: fallback to solid deep blue for legibility */
+.text-gradient, .shimmer-headline {
+  background: linear-gradient(120deg, #1E3A8A, #0F766E) !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  color: transparent !important;
+  -webkit-text-fill-color: transparent !important;
+  text-shadow: none !important;
+}
 
