@@ -11,6 +11,10 @@ import {
   Sparkles,
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
+import cardNewsletter from "@/assets/card-newsletter.jpg";
+import cardLearn from "@/assets/card-learn.jpg";
+import cardRepository from "@/assets/card-repository.jpg";
+import cardCaseStudy from "@/assets/card-case-study.jpg";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -240,46 +244,56 @@ function NewsletterTile({ latest }: { latest: LatestIssue | null }) {
   return (
     <LightTile
       span="md:col-span-8"
-      className="justify-between gap-10 hover:-translate-y-0.5"
+      className="justify-between gap-10 hover:-translate-y-0.5 overflow-hidden !p-0"
     >
-      <div className="flex flex-col gap-4">
-        <TileEyebrow>Monthly Newsletter</TileEyebrow>
-        <h2
-          style={{ ...HEADING, color: INK, letterSpacing: "-0.02em" }}
-          className="text-3xl font-bold tracking-tight sm:text-4xl md:text-5xl"
-        >
-          {latest?.title ?? "Human-in-the-Loop"}
-        </h2>
-        <p className="max-w-xl text-base leading-relaxed sm:text-lg" style={{ color: MUTED }}>
-          {latest?.summary ??
-            "Deep dives into AI approval workflows and automated LinkedIn distribution — signed off by me before anything ships."}
-        </p>
-      </div>
+      <div className="grid grid-cols-1 md:grid-cols-5">
+        <div className="md:col-span-3 flex flex-col gap-6 p-6 sm:p-8 md:p-10">
+          <div className="flex flex-col gap-4">
+            <TileEyebrow>Monthly Newsletter</TileEyebrow>
+            <h2
+              style={{ ...HEADING, color: INK, letterSpacing: "-0.02em" }}
+              className="text-3xl font-bold tracking-tight sm:text-4xl md:text-5xl"
+            >
+              {latest?.title ?? "Human-in-the-Loop"}
+            </h2>
+            <p className="max-w-xl text-base leading-relaxed sm:text-lg" style={{ color: MUTED }}>
+              {latest?.summary ??
+                "Deep dives into AI approval workflows and automated LinkedIn distribution — signed off by me before anything ships."}
+            </p>
+          </div>
 
-      <div className="flex flex-col gap-4 sm:flex-row">
-        <Link
-          to={latest ? "/newsletter/$slug" : "/newsletter"}
-          params={latest ? { slug: latest.slug } : undefined}
-          className="inline-flex flex-1 items-center justify-between rounded-xl border px-6 py-4 text-sm font-medium transition-colors"
-          style={{
-            backgroundColor: CANVAS,
-            borderColor: LINE,
-            color: INK,
-          }}
-        >
-          <span className="truncate">
-            {latest ? "Read the latest issue" : "Browse the archive"}
-          </span>
-          <ArrowUpRight className="ml-4 h-4 w-4 shrink-0 transition-transform group-hover:translate-x-0.5" />
-        </Link>
-        <Link
-          to="/newsletter"
-          className="inline-flex items-center justify-center gap-2 rounded-xl px-8 py-4 text-sm font-semibold transition-colors hover:brightness-110"
-          style={{ backgroundColor: ACCENT, color: "#ffffff" }}
-        >
-          <Mail className="h-4 w-4" />
-          Subscribe
-        </Link>
+          <div className="flex flex-col gap-4 sm:flex-row">
+            <Link
+              to={latest ? "/newsletter/$slug" : "/newsletter"}
+              params={latest ? { slug: latest.slug } : undefined}
+              className="inline-flex flex-1 items-center justify-between rounded-xl border px-6 py-4 text-sm font-medium transition-colors"
+              style={{ backgroundColor: CANVAS, borderColor: LINE, color: INK }}
+            >
+              <span className="truncate">
+                {latest ? "Read the latest issue" : "Browse the archive"}
+              </span>
+              <ArrowUpRight className="ml-4 h-4 w-4 shrink-0 transition-transform group-hover:translate-x-0.5" />
+            </Link>
+            <Link
+              to="/newsletter"
+              className="inline-flex items-center justify-center gap-2 rounded-xl px-8 py-4 text-sm font-semibold transition-colors hover:brightness-110"
+              style={{ backgroundColor: ACCENT, color: "#ffffff" }}
+            >
+              <Mail className="h-4 w-4" />
+              Subscribe
+            </Link>
+          </div>
+        </div>
+        <div className="md:col-span-2 relative min-h-[200px] border-t md:border-t-0 md:border-l" style={{ backgroundColor: CANVAS, borderColor: LINE }}>
+          <img
+            src={cardNewsletter}
+            alt="A human hand and a robot hand collaborating on a newsletter document"
+            loading="lazy"
+            width={1280}
+            height={960}
+            className="h-full w-full object-cover"
+          />
+        </div>
       </div>
     </LightTile>
   );
@@ -295,10 +309,17 @@ function LearnTile() {
     <LightTile span="md:col-span-4" className="hover:-translate-y-0.5">
       <div className="mb-auto">
         <div
-          className="mb-6 grid h-12 w-12 place-items-center rounded-2xl"
-          style={{ backgroundColor: ACCENT }}
+          className="mb-4 overflow-hidden rounded-2xl border"
+          style={{ borderColor: LINE, backgroundColor: CANVAS }}
         >
-          <BookOpen className="h-5 w-5" style={{ color: "#ffffff" }} />
+          <img
+            src={cardLearn}
+            alt="A human learner and a robot studying together with books"
+            loading="lazy"
+            width={1280}
+            height={960}
+            className="h-32 w-full object-cover"
+          />
         </div>
         <h3
           style={{ ...HEADING, color: INK, letterSpacing: "-0.02em" }}
@@ -349,6 +370,19 @@ function RepositoryTile() {
         color: INK,
       }}
     >
+      <div
+        className="mb-4 overflow-hidden rounded-2xl border"
+        style={{ borderColor: LINE, backgroundColor: CANVAS }}
+      >
+        <img
+          src={cardRepository}
+          alt="A human and a robot organizing a vault of PDF documents"
+          loading="lazy"
+          width={1280}
+          height={960}
+          className="h-32 w-full object-cover"
+        />
+      </div>
       <div
         className="text-[11px] font-semibold uppercase tracking-[0.18em]"
         style={{ color: ACCENT }}
@@ -418,29 +452,17 @@ function CaseStudyTile() {
           </Link>
         </div>
         <div
-          className="relative flex min-h-[200px] items-center justify-center overflow-hidden border-l p-5 sm:min-h-[280px] sm:p-8"
+          className="relative min-h-[200px] overflow-hidden border-t md:border-t-0 md:border-l"
           style={{ backgroundColor: CANVAS, borderColor: LINE }}
         >
-          <div
-            className="flex aspect-square w-full items-center justify-center rounded-full border-2 border-dashed"
-            style={{ borderColor: LINE, animation: "spin 30s linear infinite" }}
-          >
-            <div
-              className="flex aspect-square w-3/4 items-center justify-center rounded-full border"
-              style={{ borderColor: "rgba(59,130,246,0.25)" }}
-            >
-              <div
-                className="aspect-square w-1/2 rounded-full"
-                style={{ backgroundColor: "rgba(59,130,246,0.10)" }}
-              />
-            </div>
-          </div>
-          <div
-            className="pointer-events-none absolute inset-0 flex items-center justify-center text-xs font-bold uppercase tracking-[0.25em]"
-            style={{ ...MONO, color: INK, opacity: 0.35 }}
-          >
-            SYSTEM_LOG
-          </div>
+          <img
+            src={cardCaseStudy}
+            alt="A human warehouse worker and a robot collaborating in a retail supply chain"
+            loading="lazy"
+            width={1280}
+            height={960}
+            className="h-full w-full object-cover"
+          />
         </div>
       </div>
     </LightTile>
