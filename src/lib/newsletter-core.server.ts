@@ -40,12 +40,46 @@ export async function generateNewsletterJSON(topicHint?: string) {
   };
 }
 
+export type NewsletterTriggerSource = "schedule" | "manual_run" | "one_click" | "cron";
+
 export async function autoSendNewsletter(opts: {
   topicHint?: string;
   createdBy?: string | null;
+  scheduleId?: string | null;
+  triggerSource?: NewsletterTriggerSource;
 }) {
   const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-  const draft = await generateNewsletterJSON(opts.topicHint);
+  const triggerSource: NewsletterTriggerSource = opts.triggerSource ?? "one_click";
+
+  // Start a run row up-front so failures during generation are still visible.
+  const { data: runStart } = await supabaseAdmin
+    .from("newsletter_send_runs")
+    .insert({
+      schedule_id: opts.scheduleId ?? null,
+      trigger_source: triggerSource,
+      triggered_by: opts.createdBy ?? null,
+      status: "running",
+    })
+    .select("id")
+    .single();
+  const runId: string | null = runStart?.id ?? null;
+
+  const finishRun = async (patch: Record<string, unknown>) => {
+    if (!runId) return;
+    await supabaseAdmin
+      .from("newsletter_send_runs")
+      .update({ ...patch, finished_at: new Date().toISOString() })
+      .eq("id", runId);
+  };
+
+  let draft: Awaited<ReturnType<typeof generateNewsletterJSON>>;
+  try {
+    draft = await generateNewsletterJSON(opts.topicHint);
+  } catch (e) {
+    await finishRun({ status: "failed", error_message: e instanceof Error ? e.message : String(e) });
+    throw e;
+  }
+
   const nowIso = new Date().toISOString();
 
   const { data: issue, error: insErr } = await supabaseAdmin
@@ -65,7 +99,17 @@ export async function autoSendNewsletter(opts: {
     })
     .select("id, slug")
     .single();
-  if (insErr || !issue) throw new Error(insErr?.message ?? "Insert failed");
+  if (insErr || !issue) {
+    await finishRun({ status: "failed", error_message: insErr?.message ?? "Insert failed", title: draft.title });
+    throw new Error(insErr?.message ?? "Insert failed");
+  }
+
+  if (runId) {
+    await supabaseAdmin
+      .from("newsletter_send_runs")
+      .update({ issue_id: issue.id, title: draft.title })
+      .eq("id", runId);
+  }
 
   const [{ data: profs }, { data: subs }] = await Promise.all([
     supabaseAdmin.from("profiles").select("email"),
@@ -77,6 +121,7 @@ export async function autoSendNewsletter(opts: {
 
   let queued = 0;
   let errors = 0;
+  const recipientRows: Array<{ run_id: string; email: string; status: "queued" | "failed"; error_message: string | null }> = [];
   for (const email of emails) {
     try {
       const { error } = await supabaseAdmin.rpc("enqueue_email", {
@@ -95,13 +140,37 @@ export async function autoSendNewsletter(opts: {
       });
       if (error) throw error;
       queued++;
+      if (runId) recipientRows.push({ run_id: runId, email, status: "queued", error_message: null });
     } catch (e) {
       console.error("enqueue failed", email, e);
       errors++;
+      if (runId)
+        recipientRows.push({
+          run_id: runId,
+          email,
+          status: "failed",
+          error_message: e instanceof Error ? e.message : String(e),
+        });
     }
   }
 
+  if (runId && recipientRows.length > 0) {
+    // Chunk inserts to stay within row-size limits.
+    for (let i = 0; i < recipientRows.length; i += 500) {
+      await supabaseAdmin.from("newsletter_send_recipients").insert(recipientRows.slice(i, i + 500));
+    }
+  }
+
+  await finishRun({
+    status: "completed",
+    recipients_total: emails.size,
+    queued_count: queued,
+    failed_count: errors,
+    title: draft.title,
+  });
+
   return {
+    runId,
     issueId: issue.id,
     slug: issue.slug,
     title: draft.title,
