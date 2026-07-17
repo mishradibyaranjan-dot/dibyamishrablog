@@ -14,7 +14,6 @@ import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as ResearchRouteImport } from './routes/research'
 import { Route as ProjectsRouteImport } from './routes/projects'
-import { Route as NewsletterRouteImport } from './routes/newsletter'
 import { Route as ForgotPasswordRouteImport } from './routes/forgot-password'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as CaseStudiesRouteImport } from './routes/case-studies'
@@ -23,6 +22,7 @@ import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as NewsletterIndexRouteImport } from './routes/newsletter.index'
 import { Route as WhitePaperAgenticAiEnterpriseAutomationRouteImport } from './routes/white-paper.agentic-ai-enterprise-automation'
 import { Route as NewsletterSlugRouteImport } from './routes/newsletter.$slug'
 import { Route as EmailUnsubscribeRouteImport } from './routes/email/unsubscribe'
@@ -67,11 +67,6 @@ const ProjectsRoute = ProjectsRouteImport.update({
   path: '/projects',
   getParentRoute: () => rootRouteImport,
 } as any)
-const NewsletterRoute = NewsletterRouteImport.update({
-  id: '/newsletter',
-  path: '/newsletter',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const ForgotPasswordRoute = ForgotPasswordRouteImport.update({
   id: '/forgot-password',
   path: '/forgot-password',
@@ -109,6 +104,11 @@ const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const NewsletterIndexRoute = NewsletterIndexRouteImport.update({
+  id: '/newsletter/',
+  path: '/newsletter/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const WhitePaperAgenticAiEnterpriseAutomationRoute =
@@ -215,7 +215,6 @@ export interface FileRoutesByFullPath {
   '/case-studies': typeof CaseStudiesRoute
   '/contact': typeof ContactRoute
   '/forgot-password': typeof ForgotPasswordRoute
-  '/newsletter': typeof NewsletterRouteWithChildren
   '/projects': typeof ProjectsRoute
   '/research': typeof ResearchRoute
   '/reset-password': typeof ResetPasswordRoute
@@ -228,6 +227,7 @@ export interface FileRoutesByFullPath {
   '/email/unsubscribe': typeof EmailUnsubscribeRoute
   '/newsletter/$slug': typeof NewsletterSlugRoute
   '/white-paper/agentic-ai-enterprise-automation': typeof WhitePaperAgenticAiEnterpriseAutomationRoute
+  '/newsletter/': typeof NewsletterIndexRoute
   '/api/public/chat': typeof ApiPublicChatRoute
   '/api/public/contact': typeof ApiPublicContactRoute
   '/api/public/newsletter': typeof ApiPublicNewsletterRoute
@@ -248,7 +248,6 @@ export interface FileRoutesByTo {
   '/case-studies': typeof CaseStudiesRoute
   '/contact': typeof ContactRoute
   '/forgot-password': typeof ForgotPasswordRoute
-  '/newsletter': typeof NewsletterRouteWithChildren
   '/projects': typeof ProjectsRoute
   '/research': typeof ResearchRoute
   '/reset-password': typeof ResetPasswordRoute
@@ -261,6 +260,7 @@ export interface FileRoutesByTo {
   '/email/unsubscribe': typeof EmailUnsubscribeRoute
   '/newsletter/$slug': typeof NewsletterSlugRoute
   '/white-paper/agentic-ai-enterprise-automation': typeof WhitePaperAgenticAiEnterpriseAutomationRoute
+  '/newsletter': typeof NewsletterIndexRoute
   '/api/public/chat': typeof ApiPublicChatRoute
   '/api/public/contact': typeof ApiPublicContactRoute
   '/api/public/newsletter': typeof ApiPublicNewsletterRoute
@@ -283,7 +283,6 @@ export interface FileRoutesById {
   '/case-studies': typeof CaseStudiesRoute
   '/contact': typeof ContactRoute
   '/forgot-password': typeof ForgotPasswordRoute
-  '/newsletter': typeof NewsletterRouteWithChildren
   '/projects': typeof ProjectsRoute
   '/research': typeof ResearchRoute
   '/reset-password': typeof ResetPasswordRoute
@@ -296,6 +295,7 @@ export interface FileRoutesById {
   '/email/unsubscribe': typeof EmailUnsubscribeRoute
   '/newsletter/$slug': typeof NewsletterSlugRoute
   '/white-paper/agentic-ai-enterprise-automation': typeof WhitePaperAgenticAiEnterpriseAutomationRoute
+  '/newsletter/': typeof NewsletterIndexRoute
   '/api/public/chat': typeof ApiPublicChatRoute
   '/api/public/contact': typeof ApiPublicContactRoute
   '/api/public/newsletter': typeof ApiPublicNewsletterRoute
@@ -318,7 +318,6 @@ export interface FileRouteTypes {
     | '/case-studies'
     | '/contact'
     | '/forgot-password'
-    | '/newsletter'
     | '/projects'
     | '/research'
     | '/reset-password'
@@ -331,6 +330,7 @@ export interface FileRouteTypes {
     | '/email/unsubscribe'
     | '/newsletter/$slug'
     | '/white-paper/agentic-ai-enterprise-automation'
+    | '/newsletter/'
     | '/api/public/chat'
     | '/api/public/contact'
     | '/api/public/newsletter'
@@ -351,7 +351,6 @@ export interface FileRouteTypes {
     | '/case-studies'
     | '/contact'
     | '/forgot-password'
-    | '/newsletter'
     | '/projects'
     | '/research'
     | '/reset-password'
@@ -364,6 +363,7 @@ export interface FileRouteTypes {
     | '/email/unsubscribe'
     | '/newsletter/$slug'
     | '/white-paper/agentic-ai-enterprise-automation'
+    | '/newsletter'
     | '/api/public/chat'
     | '/api/public/contact'
     | '/api/public/newsletter'
@@ -385,7 +385,6 @@ export interface FileRouteTypes {
     | '/case-studies'
     | '/contact'
     | '/forgot-password'
-    | '/newsletter'
     | '/projects'
     | '/research'
     | '/reset-password'
@@ -398,6 +397,7 @@ export interface FileRouteTypes {
     | '/email/unsubscribe'
     | '/newsletter/$slug'
     | '/white-paper/agentic-ai-enterprise-automation'
+    | '/newsletter/'
     | '/api/public/chat'
     | '/api/public/contact'
     | '/api/public/newsletter'
@@ -420,7 +420,6 @@ export interface RootRouteChildren {
   CaseStudiesRoute: typeof CaseStudiesRoute
   ContactRoute: typeof ContactRoute
   ForgotPasswordRoute: typeof ForgotPasswordRoute
-  NewsletterRoute: typeof NewsletterRouteWithChildren
   ProjectsRoute: typeof ProjectsRoute
   ResearchRoute: typeof ResearchRoute
   ResetPasswordRoute: typeof ResetPasswordRoute
@@ -428,6 +427,7 @@ export interface RootRouteChildren {
   TrustRoute: typeof TrustRoute
   EmailUnsubscribeRoute: typeof EmailUnsubscribeRoute
   WhitePaperAgenticAiEnterpriseAutomationRoute: typeof WhitePaperAgenticAiEnterpriseAutomationRoute
+  NewsletterIndexRoute: typeof NewsletterIndexRoute
   ApiPublicChatRoute: typeof ApiPublicChatRoute
   ApiPublicContactRoute: typeof ApiPublicContactRoute
   ApiPublicNewsletterRoute: typeof ApiPublicNewsletterRoute
@@ -476,13 +476,6 @@ declare module '@tanstack/react-router' {
       path: '/projects'
       fullPath: '/projects'
       preLoaderRoute: typeof ProjectsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/newsletter': {
-      id: '/newsletter'
-      path: '/newsletter'
-      fullPath: '/newsletter'
-      preLoaderRoute: typeof NewsletterRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/forgot-password': {
@@ -539,6 +532,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/newsletter/': {
+      id: '/newsletter/'
+      path: '/newsletter'
+      fullPath: '/newsletter/'
+      preLoaderRoute: typeof NewsletterIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/white-paper/agentic-ai-enterprise-automation': {
@@ -695,18 +695,6 @@ const BlogRouteChildren: BlogRouteChildren = {
 
 const BlogRouteWithChildren = BlogRoute._addFileChildren(BlogRouteChildren)
 
-interface NewsletterRouteChildren {
-  NewsletterSlugRoute: typeof NewsletterSlugRoute
-}
-
-const NewsletterRouteChildren: NewsletterRouteChildren = {
-  NewsletterSlugRoute: NewsletterSlugRoute,
-}
-
-const NewsletterRouteWithChildren = NewsletterRoute._addFileChildren(
-  NewsletterRouteChildren,
-)
-
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
@@ -716,7 +704,6 @@ const rootRouteChildren: RootRouteChildren = {
   CaseStudiesRoute: CaseStudiesRoute,
   ContactRoute: ContactRoute,
   ForgotPasswordRoute: ForgotPasswordRoute,
-  NewsletterRoute: NewsletterRouteWithChildren,
   ProjectsRoute: ProjectsRoute,
   ResearchRoute: ResearchRoute,
   ResetPasswordRoute: ResetPasswordRoute,
@@ -725,6 +712,7 @@ const rootRouteChildren: RootRouteChildren = {
   EmailUnsubscribeRoute: EmailUnsubscribeRoute,
   WhitePaperAgenticAiEnterpriseAutomationRoute:
     WhitePaperAgenticAiEnterpriseAutomationRoute,
+  NewsletterIndexRoute: NewsletterIndexRoute,
   ApiPublicChatRoute: ApiPublicChatRoute,
   ApiPublicContactRoute: ApiPublicContactRoute,
   ApiPublicNewsletterRoute: ApiPublicNewsletterRoute,
@@ -740,3 +728,13 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
