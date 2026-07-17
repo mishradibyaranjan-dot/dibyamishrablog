@@ -8,6 +8,8 @@ import { cn } from "@/lib/utils";
 import { CheckCircle2 } from "lucide-react";
 import { pageOgImages, SITE_ORIGIN } from "@/lib/og-images";
 import { RequireAuth } from "@/components/auth/RequireAuth";
+import heroCaseStudies from "@/assets/hero-casestudies.jpg";
+
 
 export const Route = createFileRoute("/case-studies")({
   head: () => {

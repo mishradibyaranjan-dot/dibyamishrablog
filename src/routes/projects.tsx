@@ -8,6 +8,8 @@ import { projects, caseStudies, categories } from "@/lib/content";
 import { cn } from "@/lib/utils";
 import { pageOgImages, SITE_ORIGIN } from "@/lib/og-images";
 import { RequireAuth } from "@/components/auth/RequireAuth";
+import heroProjects from "@/assets/hero-projects.jpg";
+
 
 export const Route = createFileRoute("/projects")({
   head: () => {
