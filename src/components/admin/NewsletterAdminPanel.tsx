@@ -9,6 +9,7 @@ import {
   submitForApproval,
   approveNewsletterIssue,
 } from "@/lib/newsletter.functions";
+import { NewsletterVersionCompare } from "./NewsletterVersionCompare";
 
 type IssueRow = {
   id: string;
@@ -351,6 +352,7 @@ export function NewsletterAdminPanel() {
           </div>
         </div>
       </div>
+      {id && <NewsletterVersionCompare issueId={id} />}
     </div>
   );
 }
