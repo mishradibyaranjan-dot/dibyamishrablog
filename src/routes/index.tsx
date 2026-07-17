@@ -69,13 +69,13 @@ export const Route = createFileRoute("/")({
   component: Home,
 });
 
-// ---------- Design tokens (locked from chosen direction) ----------
-const INK = "#0f172a";
-const MUTED = "#475569";
-const ACCENT = "#3b82f6";
-const CANVAS = "#fafbfc";
-const SURFACE = "#ffffff";
-const LINE = "#e8ecf1";
+// ---------- Design tokens (theme-aware, respects dark/light toggle) ----------
+const INK = "var(--color-foreground)";
+const MUTED = "var(--color-muted-foreground)";
+const ACCENT = "var(--color-brand-1)";
+const CANVAS = "var(--color-background)";
+const SURFACE = "var(--color-card)";
+const LINE = "var(--color-border)";
 
 const HEADING: React.CSSProperties = { fontFamily: "'Space Grotesk', sans-serif" };
 const BODY: React.CSSProperties = { fontFamily: "'DM Sans', sans-serif" };
