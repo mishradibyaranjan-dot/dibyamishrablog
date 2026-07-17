@@ -49,7 +49,7 @@ export const template = {
   subject: (data: Record<string, any>) =>
     `[Portfolio Contact] ${data.subject || 'New message'}`,
   displayName: 'Contact Form Notification',
-  to: 'mishra.dibyaranajan@gmail.com',
+  to: 'mishra.dibyaranjan@gmail.com',
   previewData: {
     name: 'Jane Doe',
     email: 'jane@example.com',

@@ -13,7 +13,7 @@ const ContactSchema = z.object({
 const SITE_NAME = "dibyamishrablog";
 const SENDER_DOMAIN = "notify.dibyamishra.co.in";
 const FROM_DOMAIN = "notify.dibyamishra.co.in";
-const OWNER_EMAIL = "mishra.dibyaranajan@gmail.com";
+const OWNER_EMAIL = "mishra.dibyaranjan@gmail.com";
 
 export const Route = createFileRoute("/api/public/contact")({
   server: {
