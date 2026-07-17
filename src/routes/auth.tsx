@@ -43,10 +43,10 @@ function AuthPage() {
       <motion.div
         initial={{ opacity: 0, y: 16 }}
         animate={{ opacity: 1, y: 0 }}
-        className="mx-auto w-full max-w-md rounded-3xl border border-white/10 bg-white/5 p-7 shadow-glow backdrop-blur-xl sm:p-9"
+        className="mx-auto w-full max-w-md rounded-3xl border border-slate-200 bg-white p-7 shadow-xl sm:p-9"
       >
-        <h1 className="font-display text-2xl font-bold text-white sm:text-3xl">Welcome</h1>
-        <p className="mt-2 text-sm text-white/65">
+        <h1 className="font-display text-2xl font-bold text-slate-900 sm:text-3xl">Welcome</h1>
+        <p className="mt-2 text-sm text-slate-600">
           Sign in or create an account to unlock the Learn library, research, projects, and case studies.
         </p>
 
@@ -63,21 +63,22 @@ function AuthPage() {
           </TabsContent>
         </Tabs>
 
-        <div className="my-5 flex items-center gap-3 text-xs uppercase tracking-widest text-white/40">
-          <span className="h-px flex-1 bg-white/10" />
+        <div className="my-5 flex items-center gap-3 text-xs uppercase tracking-widest text-slate-400">
+          <span className="h-px flex-1 bg-slate-200" />
           or
-          <span className="h-px flex-1 bg-white/10" />
+          <span className="h-px flex-1 bg-slate-200" />
         </div>
 
         <SocialButtons />
 
-        <p className="mt-6 text-center text-xs text-white/55">
-          <Link to="/forgot-password" className="hover:text-white">Forgot your password?</Link>
+        <p className="mt-6 text-center text-xs text-slate-500">
+          <Link to="/forgot-password" className="hover:text-slate-900">Forgot your password?</Link>
         </p>
       </motion.div>
     </Section>
   );
 }
+
 
 const emailSchema = z.string().trim().email("Enter a valid email").max(255);
 const passwordSchema = z.string().min(8, "Min 8 characters").max(128);
@@ -185,7 +186,7 @@ function Field({
 }) {
   return (
     <div className="relative">
-      <span className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-white/50">{icon}</span>
+      <span className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-slate-400">{icon}</span>
       <input
         type={type}
         value={value}
@@ -193,7 +194,7 @@ function Field({
         placeholder={placeholder}
         autoComplete={autoComplete}
         required
-        className="w-full rounded-md border border-white/15 bg-white/5 py-2.5 pl-9 pr-3 text-sm text-white placeholder:text-white/40 outline-none focus:border-neon-cyan focus:ring-2 focus:ring-neon-cyan/40"
+        className="w-full rounded-md border border-slate-300 bg-white py-2.5 pl-9 pr-3 text-sm text-slate-900 placeholder:text-slate-400 outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/30"
       />
     </div>
   );
@@ -208,12 +209,13 @@ function SocialButtons() {
   };
   return (
     <div className="grid gap-2 sm:grid-cols-2">
-      <Button variant="outline" type="button" disabled={busy !== null} onClick={() => click("google")} className="border-white/15 bg-white/5 text-white hover:bg-white/10">
+      <Button variant="outline" type="button" disabled={busy !== null} onClick={() => click("google")} className="border-slate-300 bg-white text-slate-900 hover:bg-slate-50">
         {busy === "google" ? <Loader2 className="h-4 w-4 animate-spin" /> : "Continue with Google"}
       </Button>
-      <Button variant="outline" type="button" disabled={busy !== null} onClick={() => click("apple")} className="border-white/15 bg-white/5 text-white hover:bg-white/10">
+      <Button variant="outline" type="button" disabled={busy !== null} onClick={() => click("apple")} className="border-slate-300 bg-white text-slate-900 hover:bg-slate-50">
         {busy === "apple" ? <Loader2 className="h-4 w-4 animate-spin" /> : "Continue with Apple"}
       </Button>
     </div>
   );
 }
+
