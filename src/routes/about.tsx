@@ -95,7 +95,7 @@ const certifications = [
   "AWS Cloud Practitioner (CLF-C02), 2025",
   "CSM — Certified Scrum Master, Scrum Alliance, 2017",
   "MCP / MCAD / MCPDEA — Microsoft, 2008",
-  "42 total certifications across AI, Cloud, Leadership & Delivery",
+  "60+ certifications across AI, Cloud, Leadership & Delivery",
 ];
 
 
@@ -230,10 +230,10 @@ function About() {
               <Award className="h-4 w-4" /> Certifications
             </div>
             <ul className="space-y-2">
-              {certifications.map((c) => (
+              {certifications.map((c, i) => (
                 <li key={c} className="flex items-start gap-2 text-sm">
                   <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-brand-gradient" />
-                  <span>{c}</span>
+                  <span className={i === certifications.length - 1 ? "font-bold" : ""}>{c}</span>
                 </li>
               ))}
             </ul>
