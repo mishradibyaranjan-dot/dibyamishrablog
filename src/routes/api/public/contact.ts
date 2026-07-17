@@ -72,6 +72,29 @@ export const Route = createFileRoute("/api/public/contact")({
           const supabase = createClient(supabaseUrl, supabaseServiceKey);
           const messageId = crypto.randomUUID();
 
+          // Ensure an unsubscribe token exists for the recipient (required by email API)
+          const normalizedEmail = OWNER_EMAIL.toLowerCase();
+          let unsubscribeToken: string | null = null;
+          const { data: existingToken } = await supabase
+            .from("email_unsubscribe_tokens")
+            .select("token")
+            .eq("email", normalizedEmail)
+            .maybeSingle();
+          if (existingToken?.token) {
+            unsubscribeToken = existingToken.token;
+          } else {
+            const newToken = crypto.randomUUID().replace(/-/g, "") + crypto.randomUUID().replace(/-/g, "");
+            await supabase
+              .from("email_unsubscribe_tokens")
+              .upsert({ token: newToken, email: normalizedEmail }, { onConflict: "email", ignoreDuplicates: true });
+            const { data: stored } = await supabase
+              .from("email_unsubscribe_tokens")
+              .select("token")
+              .eq("email", normalizedEmail)
+              .maybeSingle();
+            unsubscribeToken = stored?.token ?? newToken;
+          }
+
           await supabase.from("email_send_log").insert({
             message_id: messageId,
             template_name: "contact-notification",
@@ -93,6 +116,7 @@ export const Route = createFileRoute("/api/public/contact")({
               purpose: "transactional",
               label: "contact-notification",
               idempotency_key: `contact-notification-${messageId}`,
+              unsubscribe_token: unsubscribeToken,
               queued_at: new Date().toISOString(),
             },
           });
