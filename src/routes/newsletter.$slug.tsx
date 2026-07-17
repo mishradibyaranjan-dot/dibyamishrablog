@@ -64,7 +64,6 @@ function IssuePage() {
     .split(/\n{2,}/)
     .map((p: string) => p.trim())
     .filter(Boolean);
-    .filter(Boolean);
 
   return (
     <Section>
