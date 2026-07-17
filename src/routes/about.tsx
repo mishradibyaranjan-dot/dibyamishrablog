@@ -2,8 +2,18 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { Section, SectionHeader } from "@/components/layout/Section";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Award, Briefcase, GraduationCap, Globe } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { Award, Briefcase, GraduationCap, Globe, Search } from "lucide-react";
 import photoAsset from "@/assets/dibya-mishra.png.asset.json";
+import * as React from "react";
 
 export const Route = createFileRoute("/about")({
   head: () => ({
@@ -102,6 +112,11 @@ const certifications = [
 const languages = ["English", "Hindi", "Bengali", "Punjabi"];
 
 function About() {
+  const [open, setOpen] = React.useState(false);
+  const [query, setQuery] = React.useState("");
+  const filteredCerts = certifications.filter((c) =>
+    c.toLowerCase().includes(query.toLowerCase()),
+  );
   return (
     <>
       <Section className="pb-8 pt-16 lg:pt-24">
@@ -225,29 +240,68 @@ function About() {
               ))}
             </ul>
           </div>
-          <div className="card-flashy rounded-2xl glass-strong p-6">
-            <div className="mb-4 flex items-center gap-2 text-sm font-semibold uppercase tracking-wider text-gradient">
-              <Award className="h-4 w-4" /> Certifications
-            </div>
-            <ul className="space-y-2">
-              {certifications.map((c, i) => (
-                <li key={c} className="flex items-start gap-2 text-sm">
-                  <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-brand-gradient" />
-                  <span className={i === certifications.length - 1 ? "font-bold" : ""}>{c}</span>
-                </li>
-              ))}
-            </ul>
-            <div className="mt-6 border-t border-border pt-4">
-              <div className="mb-2 flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-                <Globe className="h-4 w-4" /> Languages
+          <Dialog open={open} onOpenChange={setOpen}>
+            <DialogTrigger asChild>
+              <div className="card-flashy cursor-pointer rounded-2xl glass-strong p-6 transition-colors hover:bg-accent/50">
+                <div className="mb-4 flex items-center gap-2 text-sm font-semibold uppercase tracking-wider text-gradient">
+                  <Award className="h-4 w-4" /> Certifications
+                </div>
+                <ul className="space-y-2">
+                  {certifications.map((c, i) => (
+                    <li key={c} className="flex items-start gap-2 text-sm">
+                      <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-brand-gradient" />
+                      <span className={i === certifications.length - 1 ? "font-bold" : ""}>{c}</span>
+                    </li>
+                  ))}
+                </ul>
+                <div className="mt-4 text-xs font-medium text-brand-1">Click to search all certifications</div>
+                <div className="mt-6 border-t border-border pt-4">
+                  <div className="mb-2 flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                    <Globe className="h-4 w-4" /> Languages
+                  </div>
+                  <div className="flex flex-wrap gap-1.5">
+                    {languages.map((l) => (
+                      <span key={l} className="rounded-full bg-accent px-2.5 py-1 text-xs font-medium">{l}</span>
+                    ))}
+                  </div>
+                </div>
               </div>
-              <div className="flex flex-wrap gap-1.5">
-                {languages.map((l) => (
-                  <span key={l} className="rounded-full bg-accent px-2.5 py-1 text-xs font-medium">{l}</span>
-                ))}
+            </DialogTrigger>
+            <DialogContent className="max-h-[80vh] max-w-2xl overflow-hidden p-0">
+              <DialogHeader className="p-6 pb-0">
+                <DialogTitle className="flex items-center gap-2">
+                  <Award className="h-5 w-5" /> Certifications
+                </DialogTitle>
+                <DialogDescription>
+                  Search across {certifications.length} credentials
+                </DialogDescription>
+              </DialogHeader>
+              <div className="p-6 pt-4">
+                <div className="relative">
+                  <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                  <Input
+                    placeholder="Search certifications..."
+                    value={query}
+                    onChange={(e) => setQuery(e.target.value)}
+                    className="pl-9"
+                  />
+                </div>
               </div>
-            </div>
-          </div>
+              <div className="overflow-y-auto px-6 pb-6">
+                <ul className="space-y-2">
+                  {filteredCerts.map((c, i) => (
+                    <li key={c} className="flex items-start gap-2 text-sm">
+                      <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-brand-gradient" />
+                      <span className={i === filteredCerts.length - 1 ? "font-bold" : ""}>{c}</span>
+                    </li>
+                  ))}
+                  {filteredCerts.length === 0 && (
+                    <li className="text-sm text-muted-foreground">No certifications match your search.</li>
+                  )}
+                </ul>
+              </div>
+            </DialogContent>
+          </Dialog>
         </div>
       </Section>
 
