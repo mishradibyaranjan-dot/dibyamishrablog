@@ -260,16 +260,12 @@ function NewsletterTile({ latest }: { latest: LatestIssue | null }) {
         <Link
           to={latest ? "/newsletter/$slug" : "/newsletter"}
           params={latest ? { slug: latest.slug } : undefined}
-          className="inline-flex flex-1 items-center justify-between rounded-xl border px-6 py-4 text-sm font-medium transition-colors hover:border-[color:var(--tile-accent)]"
-          style={
-            {
-              backgroundColor: CANVAS,
-              borderColor: LINE,
-              color: INK,
-              // @ts-expect-error - CSS var passthrough
-              "--tile-accent": ACCENT,
-            } as React.CSSProperties
-          }
+          className="inline-flex flex-1 items-center justify-between rounded-xl border px-6 py-4 text-sm font-medium transition-colors"
+          style={{
+            backgroundColor: CANVAS,
+            borderColor: LINE,
+            color: INK,
+          }}
         >
           <span className="truncate">
             {latest ? "Read the latest issue" : "Browse the archive"}
