@@ -8,7 +8,7 @@ import { FloatingChat } from "@/components/chat/FloatingChat";
 import { AuroraBackground } from "@/components/cinematic/AuroraBackground";
 import { PageTransition } from "@/components/cinematic/PageTransition";
 import { ThemeProvider } from "@/components/theme/ThemeProvider";
-import { ThemeToggle } from "@/components/theme/ThemeToggle";
+
 import { ReadAloudButton } from "@/components/voice/ReadAloudButton";
 import { AuthProvider, useAuth } from "@/lib/auth";
 import { UserMenu } from "@/components/auth/UserMenu";
