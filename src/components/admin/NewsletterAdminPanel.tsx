@@ -36,6 +36,7 @@ export function NewsletterAdminPanel() {
   const [saving, setSaving] = useState(false);
   const [publishing, setPublishing] = useState(false);
   const [approving, setApproving] = useState(false);
+  const [autoSending, setAutoSending] = useState(false);
   const [err, setErr] = useState<string | null>(null);
   const [msg, setMsg] = useState<string | null>(null);
 
