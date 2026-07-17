@@ -14,6 +14,7 @@ import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as ResearchRouteImport } from './routes/research'
 import { Route as ProjectsRouteImport } from './routes/projects'
+import { Route as LearnRouteImport } from './routes/learn'
 import { Route as ForgotPasswordRouteImport } from './routes/forgot-password'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as CaseStudiesRouteImport } from './routes/case-studies'
@@ -29,7 +30,6 @@ import { Route as EmailUnsubscribeRouteImport } from './routes/email/unsubscribe
 import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
 import { Route as AuthenticatedRepositoryRouteImport } from './routes/_authenticated/repository'
 import { Route as AuthenticatedReportsRouteImport } from './routes/_authenticated/reports'
-import { Route as AuthenticatedLearnRouteImport } from './routes/_authenticated/learn'
 import { Route as LovableEmailSuppressionRouteImport } from './routes/lovable/email/suppression'
 import { Route as ApiPublicTtsRouteImport } from './routes/api/public/tts'
 import { Route as ApiPublicNewsletterRouteImport } from './routes/api/public/newsletter'
@@ -65,6 +65,11 @@ const ResearchRoute = ResearchRouteImport.update({
 const ProjectsRoute = ProjectsRouteImport.update({
   id: '/projects',
   path: '/projects',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LearnRoute = LearnRouteImport.update({
+  id: '/learn',
+  path: '/learn',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ForgotPasswordRoute = ForgotPasswordRouteImport.update({
@@ -142,11 +147,6 @@ const AuthenticatedReportsRoute = AuthenticatedReportsRouteImport.update({
   path: '/reports',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
-const AuthenticatedLearnRoute = AuthenticatedLearnRouteImport.update({
-  id: '/learn',
-  path: '/learn',
-  getParentRoute: () => AuthenticatedRouteRoute,
-} as any)
 const LovableEmailSuppressionRoute = LovableEmailSuppressionRouteImport.update({
   id: '/lovable/email/suppression',
   path: '/lovable/email/suppression',
@@ -215,12 +215,12 @@ export interface FileRoutesByFullPath {
   '/case-studies': typeof CaseStudiesRoute
   '/contact': typeof ContactRoute
   '/forgot-password': typeof ForgotPasswordRoute
+  '/learn': typeof LearnRoute
   '/projects': typeof ProjectsRoute
   '/research': typeof ResearchRoute
   '/reset-password': typeof ResetPasswordRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/trust': typeof TrustRoute
-  '/learn': typeof AuthenticatedLearnRoute
   '/reports': typeof AuthenticatedReportsRoute
   '/repository': typeof AuthenticatedRepositoryRoute
   '/blog/$slug': typeof BlogSlugRoute
@@ -248,12 +248,12 @@ export interface FileRoutesByTo {
   '/case-studies': typeof CaseStudiesRoute
   '/contact': typeof ContactRoute
   '/forgot-password': typeof ForgotPasswordRoute
+  '/learn': typeof LearnRoute
   '/projects': typeof ProjectsRoute
   '/research': typeof ResearchRoute
   '/reset-password': typeof ResetPasswordRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/trust': typeof TrustRoute
-  '/learn': typeof AuthenticatedLearnRoute
   '/reports': typeof AuthenticatedReportsRoute
   '/repository': typeof AuthenticatedRepositoryRoute
   '/blog/$slug': typeof BlogSlugRoute
@@ -283,12 +283,12 @@ export interface FileRoutesById {
   '/case-studies': typeof CaseStudiesRoute
   '/contact': typeof ContactRoute
   '/forgot-password': typeof ForgotPasswordRoute
+  '/learn': typeof LearnRoute
   '/projects': typeof ProjectsRoute
   '/research': typeof ResearchRoute
   '/reset-password': typeof ResetPasswordRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/trust': typeof TrustRoute
-  '/_authenticated/learn': typeof AuthenticatedLearnRoute
   '/_authenticated/reports': typeof AuthenticatedReportsRoute
   '/_authenticated/repository': typeof AuthenticatedRepositoryRoute
   '/blog/$slug': typeof BlogSlugRoute
@@ -318,12 +318,12 @@ export interface FileRouteTypes {
     | '/case-studies'
     | '/contact'
     | '/forgot-password'
+    | '/learn'
     | '/projects'
     | '/research'
     | '/reset-password'
     | '/sitemap.xml'
     | '/trust'
-    | '/learn'
     | '/reports'
     | '/repository'
     | '/blog/$slug'
@@ -351,12 +351,12 @@ export interface FileRouteTypes {
     | '/case-studies'
     | '/contact'
     | '/forgot-password'
+    | '/learn'
     | '/projects'
     | '/research'
     | '/reset-password'
     | '/sitemap.xml'
     | '/trust'
-    | '/learn'
     | '/reports'
     | '/repository'
     | '/blog/$slug'
@@ -385,12 +385,12 @@ export interface FileRouteTypes {
     | '/case-studies'
     | '/contact'
     | '/forgot-password'
+    | '/learn'
     | '/projects'
     | '/research'
     | '/reset-password'
     | '/sitemap.xml'
     | '/trust'
-    | '/_authenticated/learn'
     | '/_authenticated/reports'
     | '/_authenticated/repository'
     | '/blog/$slug'
@@ -420,6 +420,7 @@ export interface RootRouteChildren {
   CaseStudiesRoute: typeof CaseStudiesRoute
   ContactRoute: typeof ContactRoute
   ForgotPasswordRoute: typeof ForgotPasswordRoute
+  LearnRoute: typeof LearnRoute
   ProjectsRoute: typeof ProjectsRoute
   ResearchRoute: typeof ResearchRoute
   ResetPasswordRoute: typeof ResetPasswordRoute
@@ -477,6 +478,13 @@ declare module '@tanstack/react-router' {
       path: '/projects'
       fullPath: '/projects'
       preLoaderRoute: typeof ProjectsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/learn': {
+      id: '/learn'
+      path: '/learn'
+      fullPath: '/learn'
+      preLoaderRoute: typeof LearnRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/forgot-password': {
@@ -584,13 +592,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedReportsRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
-    '/_authenticated/learn': {
-      id: '/_authenticated/learn'
-      path: '/learn'
-      fullPath: '/learn'
-      preLoaderRoute: typeof AuthenticatedLearnRouteImport
-      parentRoute: typeof AuthenticatedRouteRoute
-    }
     '/lovable/email/suppression': {
       id: '/lovable/email/suppression'
       path: '/lovable/email/suppression'
@@ -672,13 +673,11 @@ declare module '@tanstack/react-router' {
 }
 
 interface AuthenticatedRouteRouteChildren {
-  AuthenticatedLearnRoute: typeof AuthenticatedLearnRoute
   AuthenticatedReportsRoute: typeof AuthenticatedReportsRoute
   AuthenticatedRepositoryRoute: typeof AuthenticatedRepositoryRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
-  AuthenticatedLearnRoute: AuthenticatedLearnRoute,
   AuthenticatedReportsRoute: AuthenticatedReportsRoute,
   AuthenticatedRepositoryRoute: AuthenticatedRepositoryRoute,
 }
@@ -705,6 +704,7 @@ const rootRouteChildren: RootRouteChildren = {
   CaseStudiesRoute: CaseStudiesRoute,
   ContactRoute: ContactRoute,
   ForgotPasswordRoute: ForgotPasswordRoute,
+  LearnRoute: LearnRoute,
   ProjectsRoute: ProjectsRoute,
   ResearchRoute: ResearchRoute,
   ResetPasswordRoute: ResetPasswordRoute,

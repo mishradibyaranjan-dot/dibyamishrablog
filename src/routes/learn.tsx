@@ -42,7 +42,7 @@ import { Reveal } from "@/components/cinematic/Reveal";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth";
 
-export const Route = createFileRoute("/_authenticated/learn")({
+export const Route = createFileRoute("/learn")({
   head: () => ({
     meta: [
       { title: "Learn — AI, Cloud & SaaS Fundamentals" },
