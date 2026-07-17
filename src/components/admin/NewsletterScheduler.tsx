@@ -58,6 +58,12 @@ export function NewsletterScheduler() {
   const [historyData, setHistoryData] = useState<Record<string, HistoryRow[]>>({});
   const [historyLoading, setHistoryLoading] = useState<Record<string, boolean>>({});
   const [retryingRunId, setRetryingRunId] = useState<string | null>(null);
+  const [pendingRetry, setPendingRetry] = useState<{
+    scheduleId: string;
+    runId: string;
+    failedCount: number;
+    recipients: Array<{ email: string; error_message: string | null }>;
+  } | null>(null);
 
   // form
   const [name, setName] = useState("Weekly digest");
