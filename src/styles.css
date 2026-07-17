@@ -677,6 +677,11 @@ table th, table td { border-color: var(--color-border); }
 .bg-\[\#fafbfc\] { background-color: var(--color-background) !important; }
 .bg-\[\#e8ecf1\] { background-color: var(--color-muted) !important; }
 
+/* Plain white surfaces */
+.bg-white,
+.hover\:bg-white:hover,
+.hover\:bg-white\/10:hover { background-color: var(--color-card) !important; }
+
 /* Slate borders */
 .border-slate-100,
 .border-slate-200 { border-color: var(--color-border) !important; }
