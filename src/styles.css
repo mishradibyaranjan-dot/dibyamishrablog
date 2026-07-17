@@ -677,15 +677,15 @@ table th, table td { border-color: #E8ECF1; }
 .floating-chat-panel .text-blue-600 {
   color: #000000 !important;
 }
-.floating-chat-panel .group-[.is-user] .bg-secondary,
-.floating-chat-panel .group-[.is-user] > div,
-.floating-chat-panel .group-[.is-user] [class*="bg-secondary"] {
+.floating-chat-panel .is-user .bg-secondary,
+.floating-chat-panel .is-user > div,
+.floating-chat-panel .is-user [class*="bg-secondary"] {
   background-color: #EFF6FF !important;
   color: #000000 !important;
   border: 1px solid #BFDBFE !important;
 }
-.floating-chat-panel .group-[.is-assistant] > div,
-.floating-chat-panel .group-[.is-assistant] [class*="text-foreground"] {
+.floating-chat-panel .is-assistant > div,
+.floating-chat-panel .is-assistant [class*="text-foreground"] {
   color: #000000 !important;
 }
 .floating-chat-panel input,
