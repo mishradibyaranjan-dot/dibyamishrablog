@@ -288,11 +288,14 @@ function NewsletterTile({ latest }: { latest: LatestIssue | null }) {
           <img
             src={cardNewsletter}
             alt="A human hand and a robot hand collaborating on a newsletter document"
-            loading="lazy"
+            loading="eager"
+            fetchPriority="high"
+            decoding="async"
             width={1280}
             height={960}
             className="h-full w-full object-cover"
           />
+
         </div>
       </div>
     </LightTile>
