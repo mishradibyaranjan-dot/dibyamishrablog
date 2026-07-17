@@ -27,6 +27,7 @@ import { Route as WhitePaperAgenticAiEnterpriseAutomationRouteImport } from './r
 import { Route as NewsletterSlugRouteImport } from './routes/newsletter.$slug'
 import { Route as EmailUnsubscribeRouteImport } from './routes/email/unsubscribe'
 import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
+import { Route as AuthenticatedRepositoryRouteImport } from './routes/_authenticated/repository'
 import { Route as AuthenticatedReportsRouteImport } from './routes/_authenticated/reports'
 import { Route as AuthenticatedLearnRouteImport } from './routes/_authenticated/learn'
 import { Route as LovableEmailSuppressionRouteImport } from './routes/lovable/email/suppression'
@@ -131,6 +132,11 @@ const BlogSlugRoute = BlogSlugRouteImport.update({
   path: '/$slug',
   getParentRoute: () => BlogRoute,
 } as any)
+const AuthenticatedRepositoryRoute = AuthenticatedRepositoryRouteImport.update({
+  id: '/repository',
+  path: '/repository',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedReportsRoute = AuthenticatedReportsRouteImport.update({
   id: '/reports',
   path: '/reports',
@@ -217,6 +223,7 @@ export interface FileRoutesByFullPath {
   '/trust': typeof TrustRoute
   '/learn': typeof AuthenticatedLearnRoute
   '/reports': typeof AuthenticatedReportsRoute
+  '/repository': typeof AuthenticatedRepositoryRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/email/unsubscribe': typeof EmailUnsubscribeRoute
   '/newsletter/$slug': typeof NewsletterSlugRoute
@@ -249,6 +256,7 @@ export interface FileRoutesByTo {
   '/trust': typeof TrustRoute
   '/learn': typeof AuthenticatedLearnRoute
   '/reports': typeof AuthenticatedReportsRoute
+  '/repository': typeof AuthenticatedRepositoryRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/email/unsubscribe': typeof EmailUnsubscribeRoute
   '/newsletter/$slug': typeof NewsletterSlugRoute
@@ -283,6 +291,7 @@ export interface FileRoutesById {
   '/trust': typeof TrustRoute
   '/_authenticated/learn': typeof AuthenticatedLearnRoute
   '/_authenticated/reports': typeof AuthenticatedReportsRoute
+  '/_authenticated/repository': typeof AuthenticatedRepositoryRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/email/unsubscribe': typeof EmailUnsubscribeRoute
   '/newsletter/$slug': typeof NewsletterSlugRoute
@@ -317,6 +326,7 @@ export interface FileRouteTypes {
     | '/trust'
     | '/learn'
     | '/reports'
+    | '/repository'
     | '/blog/$slug'
     | '/email/unsubscribe'
     | '/newsletter/$slug'
@@ -349,6 +359,7 @@ export interface FileRouteTypes {
     | '/trust'
     | '/learn'
     | '/reports'
+    | '/repository'
     | '/blog/$slug'
     | '/email/unsubscribe'
     | '/newsletter/$slug'
@@ -382,6 +393,7 @@ export interface FileRouteTypes {
     | '/trust'
     | '/_authenticated/learn'
     | '/_authenticated/reports'
+    | '/_authenticated/repository'
     | '/blog/$slug'
     | '/email/unsubscribe'
     | '/newsletter/$slug'
@@ -557,6 +569,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof BlogSlugRouteImport
       parentRoute: typeof BlogRoute
     }
+    '/_authenticated/repository': {
+      id: '/_authenticated/repository'
+      path: '/repository'
+      fullPath: '/repository'
+      preLoaderRoute: typeof AuthenticatedRepositoryRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/reports': {
       id: '/_authenticated/reports'
       path: '/reports'
@@ -654,11 +673,13 @@ declare module '@tanstack/react-router' {
 interface AuthenticatedRouteRouteChildren {
   AuthenticatedLearnRoute: typeof AuthenticatedLearnRoute
   AuthenticatedReportsRoute: typeof AuthenticatedReportsRoute
+  AuthenticatedRepositoryRoute: typeof AuthenticatedRepositoryRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedLearnRoute: AuthenticatedLearnRoute,
   AuthenticatedReportsRoute: AuthenticatedReportsRoute,
+  AuthenticatedRepositoryRoute: AuthenticatedRepositoryRoute,
 }
 
 const AuthenticatedRouteRouteWithChildren =
