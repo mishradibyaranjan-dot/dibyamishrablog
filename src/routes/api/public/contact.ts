@@ -41,7 +41,7 @@ export const Route = createFileRoute("/api/public/contact")({
         const data = parsed.data;
 
         try {
-          const [{ default: React }, { render }, { createClient }, { template }] = await Promise.all([
+          const [React, { render }, { createClient }, { template }] = await Promise.all([
             import("react"),
             import("@react-email/render"),
             import("@supabase/supabase-js"),
