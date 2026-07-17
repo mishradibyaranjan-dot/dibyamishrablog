@@ -185,7 +185,7 @@ function Reports() {
   if (loading) {
     return (
       <Section className="pt-24">
-        <div className="mx-auto h-10 w-10 animate-pulse rounded-full bg-white/10" />
+        <div className="mx-auto h-10 w-10 animate-pulse rounded-full bg-slate-200" />
       </Section>
     );
   }
@@ -193,10 +193,10 @@ function Reports() {
   if (!isAdmin) {
     return (
       <Section className="pt-20">
-        <div className="mx-auto max-w-md rounded-3xl border border-white/10 bg-white/5 p-10 text-center shadow-glow backdrop-blur-xl">
-          <ShieldAlert className="mx-auto h-10 w-10 text-amber-400" />
-          <h2 className="mt-4 font-display text-2xl font-bold text-white">Admins only</h2>
-          <p className="mt-2 text-sm text-white/65">You don't have access to this page.</p>
+        <div className="mx-auto max-w-md rounded-3xl border border-slate-200 bg-white p-10 text-center shadow-sm">
+          <ShieldAlert className="mx-auto h-10 w-10 text-amber-500" />
+          <h2 className="mt-4 font-display text-2xl font-bold text-slate-900">Admins only</h2>
+          <p className="mt-2 text-sm text-slate-600">You don't have access to this page.</p>
         </div>
       </Section>
     );
@@ -218,15 +218,15 @@ function Reports() {
               onClick={() => setDays(d)}
               className={`rounded-full border px-3 py-1.5 text-xs font-medium transition-colors ${
                 days === d
-                  ? "border-transparent bg-brand-gradient text-white"
-                  : "border-white/15 bg-white/5 text-white/75 hover:bg-white/10"
+                  ? "border-blue-600 bg-blue-600 text-white"
+                  : "border-slate-200 bg-white text-slate-700 hover:bg-slate-50"
               }`}
             >
               Last {d}d
             </button>
           ))}
         </div>
-        <Button onClick={exportCsv} variant="outline" size="sm" className="border-white/15 bg-white/5 text-white hover:bg-white/10">
+        <Button onClick={exportCsv} variant="outline" size="sm" className="border-slate-200 bg-white text-slate-900 hover:bg-slate-50">
           <Download className="mr-2 h-4 w-4" /> Export CSV
         </Button>
       </div>
@@ -242,12 +242,12 @@ function Reports() {
         <Panel title="Daily page visits" icon={<BarChart3 className="h-4 w-4" />}>
           <div className="h-64">
             <ResponsiveContainer width="100%" height="100%">
-              <LineChart data={series}>
-                <CartesianGrid stroke="rgba(255,255,255,0.06)" />
-                <XAxis dataKey="day" stroke="rgba(255,255,255,0.5)" fontSize={11} />
-                <YAxis stroke="rgba(255,255,255,0.5)" fontSize={11} allowDecimals={false} />
-                <Tooltip contentStyle={{ background: "#0b0f17", border: "1px solid rgba(255,255,255,0.1)" }} />
-                <Line type="monotone" dataKey="visits" stroke="#22d3ee" strokeWidth={2} dot={false} />
+              <LineChart data={series} margin={{ top: 8, right: 16, left: 0, bottom: 0 }}>
+                <CartesianGrid stroke="#e2e8f0" strokeDasharray="3 3" />
+                <XAxis dataKey="day" stroke="#475569" fontSize={11} />
+                <YAxis stroke="#475569" fontSize={11} allowDecimals={false} />
+                <Tooltip contentStyle={{ background: "#ffffff", border: "1px solid #e2e8f0", color: "#0f172a" }} />
+                <Line type="monotone" dataKey="visits" stroke="#2563eb" strokeWidth={2} dot={{ r: 3, fill: "#2563eb" }} />
               </LineChart>
             </ResponsiveContainer>
           </div>
@@ -256,12 +256,12 @@ function Reports() {
         <Panel title="Most visited pages" icon={<BarChart3 className="h-4 w-4" />}>
           <div className="h-64">
             <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={topPages} layout="vertical">
-                <CartesianGrid stroke="rgba(255,255,255,0.06)" />
-                <XAxis type="number" stroke="rgba(255,255,255,0.5)" fontSize={11} allowDecimals={false} />
-                <YAxis type="category" dataKey="path" stroke="rgba(255,255,255,0.5)" fontSize={10} width={120} />
-                <Tooltip contentStyle={{ background: "#0b0f17", border: "1px solid rgba(255,255,255,0.1)" }} />
-                <Bar dataKey="count" fill="#a855f7" radius={[0, 6, 6, 0]} />
+              <BarChart data={topPages} layout="vertical" margin={{ top: 8, right: 16, left: 0, bottom: 0 }}>
+                <CartesianGrid stroke="#e2e8f0" strokeDasharray="3 3" />
+                <XAxis type="number" stroke="#475569" fontSize={11} allowDecimals={false} />
+                <YAxis type="category" dataKey="path" stroke="#475569" fontSize={10} width={140} />
+                <Tooltip contentStyle={{ background: "#ffffff", border: "1px solid #e2e8f0", color: "#0f172a" }} />
+                <Bar dataKey="count" fill="#7c3aed" radius={[0, 6, 6, 0]} />
               </BarChart>
             </ResponsiveContainer>
           </div>
@@ -270,24 +270,24 @@ function Reports() {
         <Panel title="Most accessed Learn tabs" icon={<BarChart3 className="h-4 w-4" />}>
           <div className="h-64">
             <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={topTabs} layout="vertical">
-                <CartesianGrid stroke="rgba(255,255,255,0.06)" />
-                <XAxis type="number" stroke="rgba(255,255,255,0.5)" fontSize={11} allowDecimals={false} />
-                <YAxis type="category" dataKey="name" stroke="rgba(255,255,255,0.5)" fontSize={10} width={160} />
-                <Tooltip contentStyle={{ background: "#0b0f17", border: "1px solid rgba(255,255,255,0.1)" }} />
-                <Bar dataKey="count" fill="#22d3ee" radius={[0, 6, 6, 0]} />
+              <BarChart data={topTabs} layout="vertical" margin={{ top: 8, right: 16, left: 0, bottom: 0 }}>
+                <CartesianGrid stroke="#e2e8f0" strokeDasharray="3 3" />
+                <XAxis type="number" stroke="#475569" fontSize={11} allowDecimals={false} />
+                <YAxis type="category" dataKey="name" stroke="#475569" fontSize={10} width={180} />
+                <Tooltip contentStyle={{ background: "#ffffff", border: "1px solid #e2e8f0", color: "#0f172a" }} />
+                <Bar dataKey="count" fill="#0891b2" radius={[0, 6, 6, 0]} />
               </BarChart>
             </ResponsiveContainer>
           </div>
         </Panel>
 
         <Panel title="Top chatbot questions" icon={<MessageSquare className="h-4 w-4" />}>
-          <ul className="max-h-64 space-y-2 overflow-y-auto pr-2 text-sm text-white/80">
-            {topQuestions.length === 0 && <li className="text-white/50">No data yet.</li>}
+          <ul className="max-h-64 space-y-2 overflow-y-auto pr-2 text-sm text-slate-700">
+            {topQuestions.length === 0 && <li className="text-slate-500">No data yet.</li>}
             {topQuestions.map((q) => (
-              <li key={q.q} className="flex justify-between gap-2 border-b border-white/5 pb-1.5">
+              <li key={q.q} className="flex justify-between gap-2 border-b border-slate-100 pb-1.5">
                 <span className="truncate">{q.q}</span>
-                <span className="shrink-0 text-white/50">×{q.count}</span>
+                <span className="shrink-0 text-slate-500">×{q.count}</span>
               </li>
             ))}
           </ul>
@@ -403,16 +403,15 @@ function DataExportPanel() {
 
   return (
     <Panel title="One-click database export" icon={<Download className="h-4 w-4" />}>
-      <p className="mb-3 text-xs text-white/60">
-        Exports run under your admin session (RLS-scoped). No credentials or service keys needed. For a full raw
-        backup, use Cloud → Advanced settings → Export data.
+      <p className="mb-3 text-xs text-slate-600">
+        Exports run under your admin session (RLS-scoped). No credentials or service keys needed.
       </p>
       <div className="mb-3 flex flex-wrap gap-2">
         <Button
           onClick={exportAll}
           disabled={busy !== null}
           size="sm"
-          className="bg-brand-gradient text-white shadow-neon hover:opacity-90"
+          className="bg-blue-600 text-white hover:bg-blue-700"
         >
           <Download className="mr-2 h-4 w-4" />
           {busy === "__all__" ? "Exporting all…" : "Export ALL tables (JSON)"}
@@ -426,35 +425,35 @@ function DataExportPanel() {
             disabled={busy !== null}
             variant="outline"
             size="sm"
-            className="justify-start border-white/15 bg-white/5 text-white hover:bg-white/10"
+            className="justify-start border-slate-200 bg-white text-slate-900 hover:bg-slate-50"
           >
             <Download className="mr-2 h-3.5 w-3.5" />
             {busy === t ? "…" : t}
           </Button>
         ))}
       </div>
-      {err && <p className="mt-3 text-xs text-red-400">{err}</p>}
+      {err && <p className="mt-3 text-xs text-red-600">{err}</p>}
     </Panel>
   );
 }
 
 function Kpi({ icon, label, value }: { icon: React.ReactNode; label: string; value: React.ReactNode }) {
   return (
-    <div className="rounded-2xl border border-white/10 bg-white/5 p-5 backdrop-blur-xl">
-      <div className="flex items-center justify-between text-white/60">
+    <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+      <div className="flex items-center justify-between text-slate-600">
         <span className="text-xs uppercase tracking-widest">{label}</span>
-        <span className="grid h-8 w-8 place-items-center rounded-lg bg-white/10 text-white">{icon}</span>
+        <span className="grid h-8 w-8 place-items-center rounded-lg bg-blue-50 text-blue-600">{icon}</span>
       </div>
-      <p className="mt-3 font-display text-3xl font-bold text-white">{value}</p>
+      <p className="mt-3 font-display text-3xl font-bold text-slate-900">{value}</p>
     </div>
   );
 }
 
 function Panel({ title, icon, children }: { title: string; icon: React.ReactNode; children: React.ReactNode }) {
   return (
-    <div className="rounded-2xl border border-white/10 bg-white/5 p-5 backdrop-blur-xl">
-      <div className="mb-3 flex items-center gap-2 text-sm font-semibold text-white">
-        <span className="text-neon-cyan">{icon}</span>
+    <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+      <div className="mb-3 flex items-center gap-2 text-sm font-semibold text-slate-900">
+        <span className="text-blue-600">{icon}</span>
         {title}
       </div>
       {children}
