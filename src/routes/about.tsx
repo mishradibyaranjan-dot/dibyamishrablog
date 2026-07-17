@@ -294,7 +294,7 @@ function About() {
                   <Award className="h-5 w-5" /> Certifications
                 </DialogTitle>
                 <DialogDescription>
-                  Search across {certifications.length} credentials
+                  Search across {certifications.length} featured credentials
                 </DialogDescription>
               </DialogHeader>
               <div className="space-y-4 p-6 pt-4">
