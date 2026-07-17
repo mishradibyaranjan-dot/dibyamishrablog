@@ -11,6 +11,7 @@ import {
   autoSendNewsletterToRegisteredUsers,
 } from "@/lib/newsletter.functions";
 import { NewsletterVersionCompare } from "./NewsletterVersionCompare";
+import { NewsletterScheduler } from "./NewsletterScheduler";
 
 type IssueRow = {
   id: string;
@@ -403,6 +404,7 @@ export function NewsletterAdminPanel() {
         </div>
       </div>
       {id && <NewsletterVersionCompare issueId={id} />}
+      <NewsletterScheduler />
     </div>
   );
 }
