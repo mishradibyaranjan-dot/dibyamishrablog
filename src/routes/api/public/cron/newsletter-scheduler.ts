@@ -44,7 +44,7 @@ export const Route = createFileRoute("/api/public/cron/newsletter-scheduler")({
                 createdBy: s.created_by ?? null,
               });
               const next = computeNextRun(
-                s.cadence,
+                s.cadence as "daily" | "weekly" | "monthly",
                 s.hour_utc,
                 s.day_of_week,
                 s.day_of_month,

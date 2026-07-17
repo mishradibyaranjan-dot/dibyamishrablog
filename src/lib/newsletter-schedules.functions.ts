@@ -107,7 +107,7 @@ export const runScheduleNow = createServerFn({ method: "POST" })
       createdBy: context.userId,
     });
     const next = computeNextRun(
-      sched.cadence,
+      sched.cadence as "daily" | "weekly" | "monthly",
       sched.hour_utc,
       sched.day_of_week,
       sched.day_of_month,
