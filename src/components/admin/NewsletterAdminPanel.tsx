@@ -242,6 +242,28 @@ export function NewsletterAdminPanel() {
         until you click <span className="font-semibold text-emerald-300">Approve</span>. Only then can this panel email subscribers or post to LinkedIn.
       </p>
 
+      <div className="mb-4 flex flex-wrap items-center justify-between gap-3 rounded-xl border border-neon-cyan/30 bg-gradient-to-r from-neon-cyan/10 to-fuchsia-500/10 p-3">
+        <div className="min-w-0">
+          <div className="text-sm font-semibold text-white">⚡ One-click auto-send</div>
+          <div className="text-[11px] text-white/60">
+            Generates a fresh newsletter with AI and emails it to every registered user + active subscriber. Skips LinkedIn.
+          </div>
+        </div>
+        <Button
+          size="sm"
+          onClick={doAutoSend}
+          disabled={autoSending}
+          className="bg-brand-gradient text-white shadow-neon"
+        >
+          {autoSending ? (
+            <Loader2 className="mr-1 h-3.5 w-3.5 animate-spin" />
+          ) : (
+            <Rocket className="mr-1 h-3.5 w-3.5" />
+          )}
+          Auto-generate & send to all users
+        </Button>
+      </div>
+
       <div className="grid gap-4 lg:grid-cols-2">
         <div>
           <div className="mb-2 flex flex-wrap items-center gap-2">
