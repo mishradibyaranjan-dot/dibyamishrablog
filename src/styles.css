@@ -538,19 +538,35 @@ a:hover { color: #2563EB; }
 }
 .bg-brand-gradient * { color: #FFFFFF !important; }
 
-/* Card surfaces — clean white with subtle blue lift on hover */
+/* Card surfaces — crisp white with blue accent */
 .card-flashy {
   background: #FFFFFF !important;
   border: 1px solid #E8ECF1 !important;
+  border-top: 2px solid #3B82F6 !important;
   border-radius: 14px !important;
   box-shadow: 0 1px 2px rgba(15,23,42,0.04), 0 8px 24px -12px rgba(15,23,42,0.08) !important;
   transition: transform .18s ease, border-color .18s ease, box-shadow .18s ease !important;
 }
 .card-flashy::before, .card-flashy::after { display: none !important; }
 .card-flashy:hover {
-  border-color: rgba(59, 130, 246, 0.35) !important;
-  box-shadow: 0 6px 16px rgba(15,23,42,0.06), 0 20px 48px -16px rgba(59,130,246,0.22) !important;
+  border-color: #3B82F6 !important;
+  border-top-color: #2563EB !important;
+  box-shadow: 0 6px 16px rgba(15,23,42,0.06), 0 20px 48px -16px rgba(59,130,246,0.28) !important;
   transform: translateY(-3px);
+}
+.card-flashy .bg-accent,
+.card-flashy .rounded-full.bg-accent,
+.card-flashy .hover\:bg-accent:hover,
+.card-flashy [class*="bg-accent"] {
+  background-color: rgba(59, 130, 246, 0.10) !important;
+  color: #2563EB !important;
+  border: 1px solid rgba(59, 130, 246, 0.18) !important;
+}
+.card-flashy .text-gradient {
+  background: linear-gradient(120deg, #2563EB 0%, #3B82F6 100%) !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  color: transparent !important;
 }
 
 /* Focus ring — blue, always visible */
@@ -585,6 +601,11 @@ table th, table td { border-color: #E8ECF1; }
   -webkit-text-fill-color: transparent !important;
   text-shadow: none !important;
 }
+.text-gradient svg, .shimmer-headline svg {
+  color: #3B82F6 !important;
+  -webkit-text-fill-color: #3B82F6 !important;
+  fill: currentColor !important;
+}
 
 /* Section eyebrows / small labels */
 .eyebrow, [data-eyebrow] {
@@ -608,9 +629,26 @@ table th, table td { border-color: #E8ECF1; }
 .glass-strong {
   background: #FFFFFF !important;
   border: 1px solid #E8ECF1 !important;
+  border-top: 2px solid #3B82F6 !important;
   backdrop-filter: none !important;
   box-shadow: 0 1px 2px rgba(15,23,42,0.04), 0 8px 24px -12px rgba(15,23,42,0.08) !important;
   color: #1E293B !important;
+}
+.glass-strong:hover {
+  border-color: #3B82F6 !important;
+  box-shadow: 0 6px 16px rgba(15,23,42,0.06), 0 20px 48px -16px rgba(59,130,246,0.24) !important;
+}
+
+/* Accent pills / badges — blue instead of amber */
+.bg-accent,
+.bg-accent\/50,
+.bg-accent\/30,
+.hover\:bg-accent:hover,
+.hover\:bg-accent\/50:hover,
+.group:hover .group-hover\:bg-accent,
+.group:hover .group-hover\:bg-accent\/50 {
+  background-color: rgba(59, 130, 246, 0.12) !important;
+  color: #2563EB !important;
 }
 
 /* Neutralise stray dark utility backgrounds */

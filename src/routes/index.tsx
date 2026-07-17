@@ -171,8 +171,8 @@ function Hero() {
       <div className="mt-2 flex flex-wrap items-center gap-3">
         <Link
           to="/newsletter"
-          className="inline-flex items-center gap-2 rounded-xl px-6 py-3.5 text-sm font-semibold transition-colors"
-          style={{ backgroundColor: INK, color: "#ffffff" }}
+          className="inline-flex items-center gap-2 rounded-xl px-6 py-3.5 text-sm font-semibold transition-colors hover:brightness-110"
+          style={{ backgroundColor: ACCENT, color: "#ffffff" }}
         >
           Read the newsletter
           <ArrowRight className="h-4 w-4" />
@@ -274,8 +274,8 @@ function NewsletterTile({ latest }: { latest: LatestIssue | null }) {
         </Link>
         <Link
           to="/newsletter"
-          className="inline-flex items-center justify-center gap-2 rounded-xl px-8 py-4 text-sm font-semibold transition-colors"
-          style={{ backgroundColor: INK, color: "#ffffff" }}
+          className="inline-flex items-center justify-center gap-2 rounded-xl px-8 py-4 text-sm font-semibold transition-colors hover:brightness-110"
+          style={{ backgroundColor: ACCENT, color: "#ffffff" }}
         >
           <Mail className="h-4 w-4" />
           Subscribe
@@ -341,8 +341,13 @@ function LearnTile() {
 function RepositoryTile() {
   return (
     <div
-      className="group flex flex-col rounded-[2rem] p-8 shadow-2xl transition-transform duration-500 hover:-translate-y-1 md:col-span-4 md:p-10"
-      style={{ backgroundColor: INK, color: "#ffffff" }}
+      className="group flex flex-col rounded-[2rem] border border-t-[3px] p-8 shadow-lg transition-transform duration-500 hover:-translate-y-1 md:col-span-4 md:p-10"
+      style={{
+        backgroundColor: SURFACE,
+        borderColor: LINE,
+        borderTopColor: ACCENT,
+        color: INK,
+      }}
     >
       <div
         className="text-[11px] font-semibold uppercase tracking-[0.18em]"
@@ -351,24 +356,24 @@ function RepositoryTile() {
         Resource Vault
       </div>
       <h3
-        style={{ ...HEADING, color: "#ffffff", letterSpacing: "-0.02em" }}
+        style={{ ...HEADING, color: INK, letterSpacing: "-0.02em" }}
         className="mt-4 text-3xl font-bold"
       >
         The Repository
       </h3>
-      <p className="mt-3 text-base" style={{ color: "#cbd5e1" }}>
+      <p className="mt-3 text-base" style={{ color: MUTED }}>
         Exclusive PDFs, architecture diagrams, and whitepapers on GenAI, RAG,
         cloud & multi-tenant SaaS.
       </p>
 
       <div
         className="mt-auto pt-8 text-xs"
-        style={{ color: "#94a3b8" }}
+        style={{ color: MUTED }}
       >
         <div className="mb-4 flex flex-wrap items-center gap-2">
           <span
-            className="inline-flex items-center gap-1 rounded px-2 py-0.5"
-            style={{ backgroundColor: "rgba(255,255,255,0.08)", color: "#ffffff" }}
+            className="inline-flex items-center gap-1 rounded border px-2 py-0.5"
+            style={{ backgroundColor: "rgba(59,130,246,0.08)", borderColor: "rgba(59,130,246,0.18)", color: ACCENT }}
           >
             <ShieldCheck className="h-3 w-3" /> Auth gated
           </span>
