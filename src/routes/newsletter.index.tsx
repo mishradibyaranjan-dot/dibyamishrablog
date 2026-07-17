@@ -5,6 +5,7 @@ import { Section, SectionHeader } from "@/components/layout/Section";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 import { SITE_ORIGIN } from "@/lib/og-images";
+import collabNewsletter from "@/assets/collab-newsletter.jpg";
 
 type IssueRow = {
   id: string;
@@ -60,7 +61,24 @@ function NewsletterArchive() {
         description="A short, technical read on what I'm building, breaking, and learning — delivered on the 1st of each month."
       />
 
+      <figure className="mt-6 overflow-hidden rounded-3xl border border-blue-100 bg-gradient-to-br from-blue-50 via-white to-amber-50 shadow-[0_10px_30px_-16px_rgba(59,130,246,0.3)]">
+        <img
+          src={collabNewsletter}
+          alt="Human reader and friendly robot mailman delivering a monthly newsletter envelope"
+          width={1600}
+          height={700}
+          loading="eager"
+          decoding="async"
+          className="aspect-[16/7] w-full object-cover"
+        />
+        <figcaption className="flex items-center gap-2 border-t border-blue-100 bg-white/70 px-5 py-3 text-sm text-slate-700">
+          <span className="inline-block h-2 w-2 rounded-full bg-blue-500" />
+          One human-and-AI curated read, delivered on the 1st of every month.
+        </figcaption>
+      </figure>
+
       <SubscribeCard />
+
 
       <div className="mt-12 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
         {loading && <p className="text-white/60">Loading…</p>}

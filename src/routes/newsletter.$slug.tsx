@@ -4,6 +4,7 @@ import { Section } from "@/components/layout/Section";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 import { SITE_ORIGIN } from "@/lib/og-images";
+import collabNewsletter from "@/assets/collab-newsletter.jpg";
 
 type Issue = {
   id: string;
@@ -136,6 +137,17 @@ function IssuePage() {
         >
           <ArrowLeft className="h-4 w-4" /> All issues
         </Link>
+        <figure className="mb-6 overflow-hidden rounded-2xl border border-blue-100 bg-gradient-to-br from-blue-50 via-white to-amber-50">
+          <img
+            src={collabNewsletter}
+            alt="Human reader and friendly robot mailman delivering the monthly newsletter"
+            width={1600}
+            height={700}
+            loading="eager"
+            decoding="async"
+            className="aspect-[16/6] w-full object-cover"
+          />
+        </figure>
         <div className="text-4xl">{issue.hero_emoji || "📰"}</div>
         <h1 className="mt-3 font-display text-3xl font-bold text-white sm:text-4xl">
           {issue.title}
