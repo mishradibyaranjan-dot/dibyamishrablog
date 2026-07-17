@@ -29,17 +29,14 @@ export const Route = createFileRoute("/api/public/newsletter")({
         const email = parsed.data.email;
 
         try {
-          const { sendGmail, escapeHtml } = await import("@/lib/gmail-send.server");
-          const safe = escapeHtml(email);
-          await sendGmail({
-            subject: `[Newsletter] New subscriber: ${email}`,
-            text: `New newsletter subscriber: ${email}`,
-            html: `<div style="font-family:-apple-system,Segoe UI,Roboto,sans-serif;line-height:1.5;color:#0f172a;">
-              <h2 style="margin:0 0 12px;">New newsletter subscriber</h2>
-              <p style="margin:0;"><strong>Email:</strong> ${safe}</p>
-            </div>`,
-            replyTo: email,
-          });
+          const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+          const { error } = await supabaseAdmin
+            .from("newsletter_subscribers")
+            .upsert(
+              { email, status: "active", source: "site", unsubscribed_at: null },
+              { onConflict: "email" },
+            );
+          if (error) throw error;
           return Response.json({ ok: true }, { headers: cors });
         } catch (err) {
           console.error("newsletter subscribe failed", err);
