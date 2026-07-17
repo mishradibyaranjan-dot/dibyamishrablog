@@ -213,23 +213,23 @@ export async function autoSendNewsletter(opts: {
   const recipientRows: Array<{ run_id: string; email: string; status: "queued" | "failed"; error_message: string | null }> = [];
   for (const email of emails) {
     try {
-      const { error } = await supabaseAdmin.rpc("enqueue_email", {
-        queue_name: "transactional_emails",
-        payload: {
-          template_name: "newsletter-issue",
-          recipient_email: email,
-          template_data: {
-            title: draft.title,
-            summary: draft.summary,
-            bodyMarkdown: draft.body_markdown,
-            slug: issue.slug,
-          },
-          idempotency_key: `newsletter-${issue.id}-${email}`,
+      const r = await enqueueRenderedTemplate({
+        templateName: "newsletter-issue",
+        recipientEmail: email,
+        templateData: {
+          title: draft.title,
+          summary: draft.summary,
+          bodyMarkdown: draft.body_markdown,
+          slug: issue.slug,
         },
+        idempotencyKey: `newsletter-${issue.id}-${email}`,
       });
-      if (error) throw error;
-      queued++;
-      if (runId) recipientRows.push({ run_id: runId, email, status: "queued", error_message: null });
+      if (r.queued) {
+        queued++;
+        if (runId) recipientRows.push({ run_id: runId, email, status: "queued", error_message: null });
+      } else {
+        if (runId) recipientRows.push({ run_id: runId, email, status: "failed", error_message: r.reason ?? "not queued" });
+      }
     } catch (e) {
       console.error("enqueue failed", email, e);
       errors++;
