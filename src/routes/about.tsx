@@ -112,7 +112,7 @@ function About() {
               Dibya Ranjan Mishra — Engineering Leader
             </h1>
             <p className="mt-3 text-lg font-medium text-gradient">
-              Technology & Engineering Leader - AI - Cloud - SaaS Platform
+              Vice President & Country Head — Crystal Tech Ventures
             </p>
             <p className="mt-5 text-lg text-muted-foreground">
               Technology executive with 20+ years leading 500+ engineers, $28M+ budgets, and
@@ -148,7 +148,7 @@ function About() {
               />
               <div className="border-t border-border p-5">
                 <div className="font-display text-lg font-semibold">Dibya Ranjan Mishra</div>
-                <div className="text-sm text-muted-foreground">Vice President & Head of Engineering · AI & Cloud Leader</div>
+                <div className="text-sm text-muted-foreground">Vice President & Country Head — Crystal Tech Ventures</div>
               </div>
             </div>
           </div>
