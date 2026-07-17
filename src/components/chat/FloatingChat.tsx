@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
-import { MessageCircle, X, Trash2 } from "lucide-react";
+import { X, Trash2, Bot } from "lucide-react";
+import { motion } from "framer-motion";
 import { useChat } from "@ai-sdk/react";
 import { DefaultChatTransport, type UIMessage } from "ai";
 import {
