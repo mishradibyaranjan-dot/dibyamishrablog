@@ -371,6 +371,19 @@ function RepositoryTile() {
       }}
     >
       <div
+        className="mb-4 overflow-hidden rounded-2xl border"
+        style={{ borderColor: LINE, backgroundColor: CANVAS }}
+      >
+        <img
+          src={cardRepository}
+          alt="A human and a robot organizing a vault of PDF documents"
+          loading="lazy"
+          width={1280}
+          height={960}
+          className="h-32 w-full object-cover"
+        />
+      </div>
+      <div
         className="text-[11px] font-semibold uppercase tracking-[0.18em]"
         style={{ color: ACCENT }}
       >
