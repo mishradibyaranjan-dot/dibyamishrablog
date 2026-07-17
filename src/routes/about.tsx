@@ -112,6 +112,11 @@ const certifications = [
 const languages = ["English", "Hindi", "Bengali", "Punjabi"];
 
 function About() {
+  const [open, setOpen] = React.useState(false);
+  const [query, setQuery] = React.useState("");
+  const filteredCerts = certifications.filter((c) =>
+    c.toLowerCase().includes(query.toLowerCase()),
+  );
   return (
     <>
       <Section className="pb-8 pt-16 lg:pt-24">
