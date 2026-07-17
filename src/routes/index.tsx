@@ -1,29 +1,16 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { useEffect, useState } from "react";
 import {
   ArrowRight,
-  Brain,
-  Cloud,
-  Database,
-  Layers,
-  Rocket,
-  Users,
-  Sparkles,
-  Zap,
-  Shield,
-  Quote,
-  ShieldCheck,
+  ArrowUpRight,
+  BookOpen,
+  Cpu,
+  FileText,
   Mail,
-  Share2,
+  ShieldCheck,
+  Sparkles,
 } from "lucide-react";
-import { motion, useScroll, useTransform } from "framer-motion";
-import { useRef } from "react";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { Reveal } from "@/components/cinematic/Reveal";
-
-
-import { Marquee } from "@/components/cinematic/Marquee";
-import { posts, projects, caseStudies } from "@/lib/content";
+import { supabase } from "@/integrations/supabase/client";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -32,13 +19,29 @@ export const Route = createFileRoute("/")({
       {
         name: "description",
         content:
-          "Vice President & Head of Engineering / VP candidate. 20+ years in Shipping, BFSI, Insurance & SaaS — 500+ engineers led, AI-first transformation.",
+          "Vice President & Country Head at Crystal Tech Ventures. Shipping Agentic AI, multi-tenant SaaS and cloud-native retail supply chain systems.",
       },
-      { property: "og:title", content: "Dibya Ranjan Mishra — Vice President & Head of Engineering | AI, Cloud & SaaS Leader" },
-      { property: "og:description", content: "20+ years. 500+ engineers led. $1M → $20M revenue in 24 months. 76% incident reduction via AI automation." },
+      {
+        property: "og:title",
+        content:
+          "Dibya Ranjan Mishra — Vice President & Country Head | AI, Cloud & SaaS Leader",
+      },
+      {
+        property: "og:description",
+        content:
+          "20+ years. Shipping Agentic AI in retail supply chains, RAG systems and multi-tenant SaaS at enterprise scale.",
+      },
       { property: "og:url", content: "https://dibyamishrablog.lovable.app/" },
-      { property: "og:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/attachments/og-images/62feb90f-3c19-4765-9fa6-9b7f7701a7c6" },
-      { name: "twitter:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/attachments/og-images/62feb90f-3c19-4765-9fa6-9b7f7701a7c6" },
+      {
+        property: "og:image",
+        content:
+          "https://storage.googleapis.com/gpt-engineer-file-uploads/attachments/og-images/62feb90f-3c19-4765-9fa6-9b7f7701a7c6",
+      },
+      {
+        name: "twitter:image",
+        content:
+          "https://storage.googleapis.com/gpt-engineer-file-uploads/attachments/og-images/62feb90f-3c19-4765-9fa6-9b7f7701a7c6",
+      },
     ],
     links: [{ rel: "canonical", href: "https://dibyamishrablog.lovable.app/" }],
     scripts: [
@@ -48,7 +51,8 @@ export const Route = createFileRoute("/")({
           "@context": "https://schema.org",
           "@type": "Person",
           name: "Dibya Ranjan Mishra",
-          jobTitle: "Vice President & Head of Engineering",
+          jobTitle: "Vice President & Country Head",
+          worksFor: { "@type": "Organization", name: "Crystal Tech Ventures" },
           url: "https://dibyamishrablog.lovable.app/",
           sameAs: [
             "https://www.linkedin.com/in/dibya-mishra-55b94654",
@@ -61,583 +65,427 @@ export const Route = createFileRoute("/")({
   component: Home,
 });
 
+// ---------- Design tokens (locked from chosen direction) ----------
+const INK = "#0f172a";
+const MUTED = "#94a3b8";
+const ACCENT = "#3b82f6";
+const CANVAS = "#fafbfc";
+const SURFACE = "#ffffff";
+const LINE = "#e8ecf1";
 
-const expertise = [
-  { icon: Brain, title: "AI, ML & Agentic AI", desc: "LLM integration, prompt engineering, Model Context Protocol (MCP), and agentic system design at enterprise scale." },
-  { icon: Sparkles, title: "GenAI Platforms", desc: "ChatGPT, Gemini, Claude, Amazon Bedrock, SageMaker, MLOps pipelines, and AI-driven automation." },
-  { icon: Cloud, title: "Cloud-Native Architecture", desc: "AWS, Azure, GCP — DevSecOps, CI/CD, microservices, Kubernetes, and infrastructure as code." },
-  { icon: Layers, title: "Enterprise SaaS Delivery", desc: "Greenfield SaaS builds, SAFe 6.0 PI planning, API strategy, and multi-tenant platform engineering." },
-  { icon: Database, title: "Data & BI Platforms", desc: "Snowflake, Redshift, Kafka, dbt, Power BI — semantic layers and analytics serving 10,000+ users." },
-  { icon: Users, title: "VP-Level Engineering Leadership", desc: "500+ engineers across 5 time zones, $28M+ budgets, OKR cascading, and global org transformation." },
-];
+const HEADING: React.CSSProperties = { fontFamily: "'Space Grotesk', sans-serif" };
+const BODY: React.CSSProperties = { fontFamily: "'DM Sans', sans-serif" };
+const MONO: React.CSSProperties = { fontFamily: "'JetBrains Mono', monospace" };
 
+type LatestIssue = {
+  slug: string;
+  title: string;
+  summary: string;
+  hero_emoji: string | null;
+  published_at: string | null;
+};
 
-const testimonials = [
-  { quote: "Scaled our portfolio from $1M to $20M in 24 months through disciplined presales, POC-led bidding, and four new business lines.", author: "Microsoft Partner Account Sponsor — Centific" },
-  { quote: "Zero critical production outages across 10+ weekly deployments over 2.5 years. Rigorous DevSecOps is just how Dibya operates.", author: "Engineering Partner — Deloitte University" },
-  { quote: "Cut recurring incidents 76% and manual training effort 60% by deploying intelligent bots and MLOps pipelines across the platform.", author: "VP, Global Operations — Inchcape Shipping" },
-  { quote: "Compressed merchant onboarding from 3 months to 4 hours — a 98% reduction — with the Biller Advantage multi-portal platform.", author: "Payments Practice Lead — Capgemini BFSI" },
-];
-
-const integrations = [
-  "AWS", "Azure", "GCP", "Kubernetes", "Docker", "GitHub Actions",
-  "Amazon Bedrock", "SageMaker", "Snowflake", "Redshift", "Kafka", "Power BI",
-  "Claude", "ChatGPT", "Gemini", "MCP", ".NET Core", "React", "Angular", "TypeScript", "Node.js", "Python",
-];
-
-
-function Home() {
-  const featured = posts.filter((p) => p.featured);
-  const showcase = projects.slice(0, 8);
-  const studies = caseStudies;
-  const latest = posts.slice(0, 6);
-
-  const heroRef = useRef<HTMLDivElement | null>(null);
-  const { scrollYProgress } = useScroll({ target: heroRef, offset: ["start start", "end start"] });
-  const heroY = useTransform(scrollYProgress, [0, 1], ["0%", "30%"]);
-  const heroOpacity = useTransform(scrollYProgress, [0, 0.9], [1, 0]);
-
-  return (
-    <>
-      {/* ===================== HERO ===================== */}
-      <section
-        ref={heroRef}
-        className="relative isolate flex min-h-0 items-center overflow-hidden"
-      >
-        {/* Local hero spotlight on top of global aurora */}
-        <div className="pointer-events-none absolute inset-0 bg-hero opacity-90" />
-        <div className="pointer-events-none absolute inset-0 grid-pattern opacity-40" />
-
-        {/* Floating neon orbs */}
-        <motion.div
-          aria-hidden
-          className="pointer-events-none absolute -left-20 top-24 h-72 w-72 rounded-full bg-neon-purple/30 blur-3xl animate-float"
-        />
-        <motion.div
-          aria-hidden
-          className="pointer-events-none absolute right-10 top-1/3 h-80 w-80 rounded-full bg-neon-cyan/25 blur-3xl animate-float"
-          style={{ animationDelay: "-2s" }}
-        />
-
-        <motion.div
-          style={{ y: heroY, opacity: heroOpacity }}
-          className="relative mx-auto w-full max-w-[1400px] px-4 py-6 sm:px-6 lg:py-6"
-        >
-          <div className="mx-auto max-w-4xl text-center">
-            <Reveal direction="down" duration={0.5}>
-              <div className="mx-auto mb-4 inline-flex items-center gap-2 rounded-full glass px-4 py-1.5 text-xs font-medium text-white/85">
-                <span className="relative flex h-2 w-2">
-                  <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-neon-cyan opacity-75" />
-                  <span className="relative inline-flex h-2 w-2 rounded-full bg-neon-cyan" />
-                </span>
-                Vice President & Head of Engineering · Senior Director · VP of Engineering
-              </div>
-            </Reveal>
-
-            <Reveal delay={0.1} duration={0.9}>
-              <h1 className="font-display text-5xl font-bold leading-[1.02] tracking-tight text-white sm:text-6xl lg:text-8xl">
-                Engineering leader behind{" "}
-                <span className="shimmer-headline">AI-first transformation</span>
-              </h1>
-            </Reveal>
-
-            <Reveal delay={0.25}>
-              <p className="mx-auto mt-4 max-w-2xl text-base text-white/70 sm:text-lg">
-                20+ years across Shipping, BFSI, Insurance and Enterprise SaaS — building cloud-native
-                platforms, embedding GenAI and Agentic AI at scale, and scaling revenue from $1M to $20M in 24 months.
-              </p>
-            </Reveal>
-
-            <Reveal delay={0.4}>
-              <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
-                <Button
-                  asChild
-                  size="lg"
-                  className="bg-brand-gradient text-white shadow-neon hover:opacity-95 animate-pulse-glow"
-                >
-                  <Link to="/research">
-                    Explore Research <ArrowRight className="ml-1 h-4 w-4" />
-                  </Link>
-                </Button>
-                <Button
-                  asChild
-                  size="lg"
-                  variant="outline"
-                  className="border-white/20 bg-white/5 text-white backdrop-blur hover:bg-white/10"
-                >
-                  <Link to="/projects">View Projects</Link>
-                </Button>
-                <Button asChild size="lg" variant="ghost" className="text-white hover:bg-white/10">
-                  <Link to="/contact">Let's connect</Link>
-                </Button>
-              </div>
-            </Reveal>
-
-          </div>
-        </motion.div>
-
-      </section>
-
-      {/* ===================== INTEGRATIONS MARQUEE ===================== */}
-      <section className="border-y border-border/40 bg-background/40 py-6 backdrop-blur">
-        <div className="mx-auto max-w-[1400px] px-4 sm:px-6">
-          <p className="mb-5 text-center text-xs uppercase tracking-[0.3em] text-white/40">
-            Stack & ecosystem
-          </p>
-          <Marquee>
-            {integrations.map((tech) => (
-              <div
-                key={tech}
-                className="flex h-12 items-center rounded-full glass px-6 text-sm font-medium text-white/80 transition-colors hover:text-neon"
-              >
-                {tech}
-              </div>
-            ))}
-          </Marquee>
-        </div>
-      </section>
-
-      {/* ===================== EXPERTISE BENTO ===================== */}
-      <section className="relative mx-auto max-w-[1400px] px-4 py-6 sm:px-6 lg:py-6">
-        <Reveal>
-          <div className="mx-auto max-w-2xl text-center">
-            <p className="text-xs uppercase tracking-[0.3em] text-neon-cyan/80">Key Expertise</p>
-            <h2 className="mt-3 font-display text-4xl font-bold text-white sm:text-5xl">
-              Where <span className="text-gradient">AI, platforms, and leadership</span> intersect
-            </h2>
-            <p className="mt-4 text-white/65">
-              Disciplines I work across — applied to real enterprise outcomes, not slideware.
-            </p>
-          </div>
-        </Reveal>
-
-        <div className="mt-6 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-          {expertise.map((e, i) => (
-            <Reveal key={e.title} delay={i * 0.08}>
-              <motion.div
-                whileHover={{ y: -6 }}
-                transition={{ type: "spring", stiffness: 280, damping: 20 }}
-                className="card-flashy h-full rounded-2xl glass-strong p-6"
-              >
-                <div className="relative z-[3] mb-4 grid h-12 w-12 place-items-center rounded-xl bg-brand-gradient text-white shadow-neon">
-                  <e.icon className="h-5 w-5" />
-                </div>
-                <h3 className="relative z-[3] text-lg font-semibold text-white">{e.title}</h3>
-                <p className="relative z-[3] mt-2 text-sm text-white/65">{e.desc}</p>
-              </motion.div>
-            </Reveal>
-          ))}
-        </div>
-      </section>
-
-      {/* ===================== HUMAN SIGN-OFF FEATURE HIGHLIGHT ===================== */}
-      <section className="relative py-10">
-        <div className="mx-auto max-w-[1400px] px-4 sm:px-6">
-          <Reveal>
-            <div className="relative overflow-hidden rounded-3xl border border-emerald-400/30 bg-gradient-to-br from-emerald-500/10 via-white/5 to-neon-cyan/10 p-8 backdrop-blur-xl sm:p-12">
-              <div className="pointer-events-none absolute -right-16 -top-16 h-64 w-64 rounded-full bg-emerald-400/20 blur-3xl" />
-              <div className="pointer-events-none absolute -bottom-20 -left-20 h-72 w-72 rounded-full bg-neon-cyan/20 blur-3xl" />
-
-              <div className="relative grid gap-8 lg:grid-cols-[1.2fr_1fr] lg:items-center">
-                <div>
-                  <div className="inline-flex items-center gap-2 rounded-full border border-emerald-400/40 bg-emerald-400/10 px-3 py-1 text-xs font-semibold uppercase tracking-widest text-emerald-300">
-                    <ShieldCheck className="h-3.5 w-3.5" /> Human-in-the-loop · New
-                  </div>
-                  <h2 className="mt-4 font-display text-3xl font-bold text-white sm:text-4xl">
-                    Every newsletter is <span className="text-emerald-300">signed off by me</span> before it goes public.
-                  </h2>
-                  <p className="mt-4 max-w-2xl text-base text-white/70">
-                    AI drafts the monthly <em>Intelligent Enterprise Brief</em>. Nothing reaches
-                    subscribers or LinkedIn until I personally review and approve it — the same
-                    governed, human-approved pattern I recommend for enterprise agents.
-                  </p>
-
-                  <div className="mt-6 grid gap-3 sm:grid-cols-3">
-                    <StepPill n={1} icon={<Sparkles className="h-4 w-4" />} label="AI drafts" sub="Gemini 2.5 Pro" />
-                    <StepPill n={2} icon={<ShieldCheck className="h-4 w-4" />} label="I sign off" sub="Approval gate" tone="emerald" />
-                    <StepPill n={3} icon={<Share2 className="h-4 w-4" />} label="Publish" sub="Email + LinkedIn" />
-                  </div>
-
-                  <div className="mt-6 flex flex-wrap gap-3">
-                    <Button asChild className="bg-brand-gradient text-white shadow-neon">
-                      <Link to="/newsletter">
-                        Read the newsletter <ArrowRight className="ml-1 h-4 w-4" />
-                      </Link>
-                    </Button>
-                    <Button asChild variant="ghost" className="text-white/80 hover:text-white">
-                      <Link to="/newsletter">Subscribe</Link>
-                    </Button>
-                  </div>
-                </div>
-
-                <div className="relative">
-                  <div className="rounded-2xl border border-white/10 bg-black/30 p-5 shadow-2xl">
-                    <div className="mb-3 flex items-center gap-2 text-xs text-white/60">
-                      <Mail className="h-3.5 w-3.5" /> newsletter_issues · latest draft
-                    </div>
-                    <div className="rounded-lg border border-white/10 bg-white/5 p-4">
-                      <div className="text-sm font-semibold text-white">
-                        🧠 The Intelligent Enterprise Brief — July 2026
-                      </div>
-                      <div className="mt-1 text-xs text-white/60">
-                        GenAI, cloud & industry transformation
-                      </div>
-                      <div className="mt-3 flex flex-wrap gap-2 text-[10px]">
-                        <span className="rounded-full bg-yellow-500/20 px-2 py-0.5 font-semibold text-yellow-300">
-                          pending_approval
-                        </span>
-                        <span className="inline-flex items-center gap-1 rounded-full border border-emerald-400/40 bg-emerald-400/10 px-2 py-0.5 font-semibold text-emerald-300">
-                          <ShieldCheck className="h-3 w-3" /> Awaiting your sign-off
-                        </span>
-                      </div>
-                      <div className="mt-4 grid grid-cols-2 gap-2 text-[11px]">
-                        <div className="rounded border border-white/10 bg-white/5 px-2 py-1.5 text-center text-white/40 line-through">
-                          Email subscribers
-                        </div>
-                        <div className="rounded border border-white/10 bg-white/5 px-2 py-1.5 text-center text-white/40 line-through">
-                          Post to LinkedIn
-                        </div>
-                      </div>
-                      <div className="mt-2 text-[10px] text-white/50">
-                        Both actions unlock the moment approval is signed off.
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </Reveal>
-        </div>
-      </section>
-
-      {/* ===================== FEATURED RESEARCH RAIL (Netflix-style) ===================== */}
-
-      <section className="relative py-6">
-        <div className="mx-auto max-w-[1400px] px-4 sm:px-6">
-          <Reveal>
-            <div className="mb-5 flex items-end justify-between gap-4">
-              <div>
-                <p className="text-xs uppercase tracking-[0.3em] text-neon-purple/80">
-                  Featured Research
-                </p>
-                <h2 className="mt-3 font-display text-3xl font-bold text-white sm:text-4xl">
-                  Selected deep dives
-                </h2>
-              </div>
-              <Button asChild variant="ghost" className="shrink-0 text-white/80 hover:text-white">
-                <Link to="/research">
-                  All research <ArrowRight className="ml-1 h-4 w-4" />
-                </Link>
-              </Button>
-            </div>
-          </Reveal>
-
-          <Marquee>
-            {featured.map((p) => (
-              <Link
-                key={p.slug}
-                to="/blog/$slug"
-                params={{ slug: p.slug }}
-                className="group card-flashy relative h-72 w-[440px] shrink-0 overflow-hidden rounded-2xl glass-strong p-7"
-              >
-                <div className="relative z-[3] flex h-full flex-col">
-                  <Badge variant="secondary" className="w-fit bg-white/10 text-white/85">
-                    {p.category}
-                  </Badge>
-                  <h3 className="mt-4 text-xl font-semibold text-white group-hover:text-neon transition-colors">
-                    {p.title}
-                  </h3>
-                  <p className="mt-3 line-clamp-3 text-sm text-white/65">{p.summary}</p>
-                  <div className="mt-auto flex items-center justify-between text-xs text-white/50">
-                    <span className="inline-flex items-center gap-1 text-neon-cyan">
-                      Read <ArrowRight className="h-3.5 w-3.5" />
-                    </span>
-                  </div>
-                </div>
-              </Link>
-            ))}
-          </Marquee>
-        </div>
-      </section>
-
-      {/* ===================== PROJECT SHOWCASE RAIL ===================== */}
-      <section className="relative py-6">
-        <div className="mx-auto max-w-[1400px] px-4 sm:px-6">
-          <Reveal>
-            <div className="mb-5 flex items-end justify-between gap-4">
-              <div>
-                <p className="text-xs uppercase tracking-[0.3em] text-neon-cyan/80">
-                  Selected Projects
-                </p>
-                <h2 className="mt-3 font-display text-3xl font-bold text-white sm:text-4xl">
-                  From AI platforms to global modernization
-                </h2>
-              </div>
-              <Button asChild variant="ghost" className="shrink-0 text-white/80 hover:text-white">
-                <Link to="/projects">
-                  All projects <ArrowRight className="ml-1 h-4 w-4" />
-                </Link>
-              </Button>
-            </div>
-          </Reveal>
-
-          <Marquee>
-            {showcase.map((p) => (
-              <div
-                key={p.slug}
-                className="card-flashy relative h-[22rem] w-[420px] shrink-0 overflow-hidden rounded-2xl glass-strong p-7"
-              >
-                <div className="relative z-[3] flex h-full flex-col">
-                  <Badge variant="secondary" className="w-fit bg-white/10 text-white/85">
-                    {p.area}
-                  </Badge>
-                  <h3 className="mt-4 text-lg font-semibold text-white">{p.name}</h3>
-                  <p className="mt-2 line-clamp-3 text-sm text-white/65">{p.solution}</p>
-
-                  <div className="mt-4 flex flex-wrap gap-1.5">
-                    {p.metrics.map((m) => (
-                      <span
-                        key={m}
-                        className="rounded-full border border-white/15 bg-white/5 px-2.5 py-1 text-[11px] font-medium text-neon-cyan"
-                      >
-                        {m}
-                      </span>
-                    ))}
-                  </div>
-
-                  <div className="mt-auto">
-                    <Button
-                      asChild
-                      size="sm"
-                      variant="outline"
-                      className="border-white/20 bg-white/5 text-white hover:bg-white/10"
-                    >
-                      <Link to="/projects">View details <ArrowRight className="ml-1 h-3.5 w-3.5" /></Link>
-                    </Button>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </Marquee>
-        </div>
-      </section>
-
-      {/* ===================== CASE STUDIES TIMELINE ===================== */}
-      <section className="relative py-6">
-        <div className="mx-auto max-w-[1400px] px-4 sm:px-6">
-          <Reveal>
-            <div className="mx-auto max-w-2xl text-center">
-              <p className="text-xs uppercase tracking-[0.3em] text-neon-purple/80">
-                Customer Success Stories
-              </p>
-              <h2 className="mt-3 font-display text-4xl font-bold text-white sm:text-5xl">
-                Case studies at <span className="text-gradient">enterprise scale</span>
-              </h2>
-            </div>
-          </Reveal>
-
-          <div className="relative mt-8">
-            {/* Vertical neon line */}
-            <div className="pointer-events-none absolute left-1/2 top-0 hidden h-full w-px -translate-x-1/2 bg-gradient-to-b from-neon-blue/0 via-neon-purple/60 to-neon-cyan/0 md:block" />
-
-            <div className="space-y-6">
-              {studies.map((s, i) => (
-                <Reveal key={s.slug} direction={i % 2 === 0 ? "right" : "left"}>
-                  <div className={`grid items-center gap-6 md:grid-cols-2 ${i % 2 === 0 ? "" : "md:[&>*:first-child]:order-2"}`}>
-                    <div className="card-flashy rounded-2xl glass-strong p-7">
-                      <Badge variant="secondary" className="bg-white/10 text-white/85">
-                        {s.area}
-                      </Badge>
-                      <h3 className="mt-3 text-xl font-semibold text-white">{s.title}</h3>
-                      <p className="mt-3 text-sm text-white/70">{s.challenge}</p>
-                      <p className="mt-3 text-sm text-white/65">
-                        <span className="font-semibold text-neon-cyan">Outcome — </span>
-                        {s.outcome}
-                      </p>
-                      <div className="mt-4 flex flex-wrap gap-1.5">
-                        {s.stack.slice(0, 5).map((t) => (
-                          <span
-                            key={t}
-                            className="rounded-full border border-white/15 bg-white/5 px-2.5 py-1 text-[11px] text-white/75"
-                          >
-                            {t}
-                          </span>
-                        ))}
-                      </div>
-                    </div>
-                    <div className="hidden md:flex md:justify-center">
-                      <div className="relative h-44 w-44 rounded-full bg-brand-gradient opacity-90 shadow-neon animate-pulse-glow">
-                        <div className="absolute inset-3 rounded-full bg-background/80 backdrop-blur" />
-                        <div className="absolute inset-0 grid place-items-center">
-                          <Zap className="h-10 w-10 text-neon-cyan" />
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </Reveal>
-              ))}
-            </div>
-          </div>
-
-          <div className="mt-6 text-center">
-            <Button asChild size="lg" className="bg-brand-gradient text-white shadow-neon hover:opacity-90">
-              <Link to="/case-studies">All case studies <ArrowRight className="ml-1 h-4 w-4" /></Link>
-            </Button>
-          </div>
-        </div>
-      </section>
-
-      {/* ===================== TESTIMONIALS MARQUEE ===================== */}
-      <section className="relative py-6">
-        <div className="mx-auto max-w-[1400px] px-4 sm:px-6">
-          <Reveal>
-            <div className="mx-auto max-w-2xl text-center">
-              <p className="text-xs uppercase tracking-[0.3em] text-neon-cyan/80">Testimonials</p>
-              <h2 className="mt-3 font-display text-4xl font-bold text-white sm:text-5xl">
-                Trusted by leaders across <span className="text-gradient">global enterprises</span>
-              </h2>
-            </div>
-          </Reveal>
-
-          <div className="mt-6">
-            <Marquee>
-              {testimonials.map((t) => (
-                <div
-                  key={t.author}
-                  className="w-[28rem] shrink-0 rounded-2xl glass-strong p-7"
-                >
-                  <Quote className="h-6 w-6 text-neon-purple" />
-                  <p className="mt-3 text-sm leading-relaxed text-white/80">"{t.quote}"</p>
-                  <p className="mt-4 text-xs uppercase tracking-wider text-white/50">
-                    — {t.author}
-                  </p>
-                </div>
-              ))}
-            </Marquee>
-          </div>
-        </div>
-      </section>
-
-      {/* ===================== LATEST POSTS GRID ===================== */}
-      <section className="relative py-6">
-        <div className="mx-auto max-w-[1400px] px-4 sm:px-6">
-          <Reveal>
-            <div className="mb-5 flex items-end justify-between gap-4">
-              <div>
-                <p className="text-xs uppercase tracking-[0.3em] text-neon-blue/80">Latest Posts</p>
-                <h2 className="mt-3 font-display text-3xl font-bold text-white sm:text-4xl">
-                  From the research & blog
-                </h2>
-              </div>
-              <Button asChild variant="ghost" className="shrink-0 text-white/80 hover:text-white">
-                <Link to="/research">
-                  All articles <ArrowRight className="ml-1 h-4 w-4" />
-                </Link>
-              </Button>
-            </div>
-          </Reveal>
-
-          <Marquee>
-            {latest.map((p) => (
-              <Link
-                key={p.slug}
-                to="/blog/$slug"
-                params={{ slug: p.slug }}
-                className="group card-flashy flex h-72 w-[400px] shrink-0 flex-col rounded-2xl glass p-6"
-              >
-                <div className="relative z-[3] flex items-center justify-between text-xs text-white/55">
-                  <span className="rounded-full border border-white/15 px-2 py-0.5 text-neon-cyan">
-                    {p.category}
-                  </span>
-                  <span>{p.readingTime}</span>
-                </div>
-                <h3 className="relative z-[3] mt-4 text-lg font-semibold text-white group-hover:text-neon transition-colors">
-                  {p.title}
-                </h3>
-                <p className="relative z-[3] mt-2 line-clamp-3 text-sm text-white/65">
-                  {p.summary}
-                </p>
-                <div className="relative z-[3] mt-auto flex items-center justify-end pt-4 text-xs text-white/50">
-                  <ArrowRight className="h-4 w-4 text-neon-cyan transition-transform group-hover:translate-x-1" />
-                </div>
-              </Link>
-            ))}
-          </Marquee>
-        </div>
-      </section>
-
-      {/* ===================== CTA ===================== */}
-      <section className="relative px-4 py-6 sm:px-6">
-        <div className="mx-auto max-w-6xl">
-          <Reveal>
-            <div className="card-flashy relative overflow-hidden rounded-[2rem] glass-strong p-10 text-center shadow-neon sm:p-16">
-              <div className="pointer-events-none absolute -top-32 left-1/2 h-72 w-72 -translate-x-1/2 rounded-full bg-aurora animate-aurora" />
-              <div className="relative z-[3]">
-                <div className="mx-auto grid h-14 w-14 place-items-center rounded-2xl bg-brand-gradient text-white shadow-neon">
-                  <Rocket className="h-6 w-6" />
-                </div>
-                <h3 className="mt-5 font-display text-3xl font-bold text-white sm:text-5xl">
-                  Let's build the next <span className="text-gradient">breakthrough</span>.
-                </h3>
-                <p className="mx-auto mt-4 max-w-xl text-white/70">
-                  Advisory, architecture reviews, or a conversation about AI and engineering
-                  leadership.
-                </p>
-                <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
-                  <Button
-                    asChild
-                    size="lg"
-                    className="bg-brand-gradient text-white shadow-neon hover:opacity-95"
-                  >
-                    <Link to="/contact">
-                      Start a conversation <ArrowRight className="ml-1 h-4 w-4" />
-                    </Link>
-                  </Button>
-                  <Button
-                    asChild
-                    size="lg"
-                    variant="outline"
-                    className="border-white/20 bg-white/5 text-white hover:bg-white/10"
-                  >
-                    <Link to="/about">
-                      <Shield className="mr-1 h-4 w-4" /> About me
-                    </Link>
-                  </Button>
-                </div>
-              </div>
-            </div>
-          </Reveal>
-        </div>
-      </section>
-    </>
-  );
+function useLatestIssue() {
+  const [issue, setIssue] = useState<LatestIssue | null>(null);
+  useEffect(() => {
+    let alive = true;
+    supabase
+      .from("newsletter_issues")
+      .select("slug, title, summary, hero_emoji, published_at")
+      .eq("status", "published")
+      .order("published_at", { ascending: false })
+      .limit(1)
+      .maybeSingle()
+      .then(({ data }) => {
+        if (alive) setIssue((data as LatestIssue | null) ?? null);
+      });
+    return () => {
+      alive = false;
+    };
+  }, []);
+  return issue;
 }
 
-function StepPill({
-  n,
-  icon,
-  label,
-  sub,
-  tone,
-}: {
-  n: number;
-  icon: React.ReactNode;
-  label: string;
-  sub: string;
-  tone?: "emerald";
-}) {
-  const ring = tone === "emerald" ? "border-emerald-400/40 bg-emerald-400/10" : "border-white/10 bg-white/5";
-  const num = tone === "emerald" ? "bg-emerald-400 text-black" : "bg-white/10 text-white";
+function Home() {
+  const latest = useLatestIssue();
+
   return (
-    <div className={`flex items-center gap-3 rounded-xl border ${ring} px-3 py-2.5 backdrop-blur-xl`}>
-      <div className={`grid h-7 w-7 shrink-0 place-items-center rounded-full text-xs font-bold ${num}`}>{n}</div>
-      <div className="min-w-0">
-        <div className="flex items-center gap-1.5 text-sm font-semibold text-white">
-          {icon} {label}
-        </div>
-        <div className="truncate text-[11px] text-white/60">{sub}</div>
+    <div
+      style={{ ...BODY, backgroundColor: CANVAS, color: INK }}
+      className="w-full"
+    >
+      <div className="mx-auto flex w-full max-w-7xl flex-col gap-14 px-6 py-16 sm:py-20 lg:py-24">
+        <Hero />
+        <BentoGrid latest={latest} />
+        <ProofStrip />
       </div>
     </div>
   );
 }
+
+// ---------- HERO ----------
+function Hero() {
+  return (
+    <section className="flex max-w-5xl flex-col gap-6 animate-fade-in">
+      <div
+        className="inline-flex w-fit items-center gap-3 rounded-full border px-3 py-1"
+        style={{
+          backgroundColor: "rgba(59,130,246,0.06)",
+          borderColor: "rgba(59,130,246,0.15)",
+        }}
+      >
+        <span
+          className="h-2 w-2 animate-pulse rounded-full"
+          style={{ backgroundColor: ACCENT }}
+        />
+        <span
+          className="text-[11px] font-semibold uppercase tracking-[0.18em]"
+          style={{ color: ACCENT }}
+        >
+          VP &amp; Country Head · Crystal Tech Ventures
+        </span>
+      </div>
+
+      <h1
+        style={{
+          ...HEADING,
+          fontSize: "clamp(44px, 8vw, 88px)",
+          lineHeight: 0.92,
+          letterSpacing: "-0.04em",
+          fontWeight: 700,
+          color: INK,
+        }}
+      >
+        Shipping <span style={{ color: ACCENT }}>Agentic AI</span> and
+        <br className="hidden sm:block" /> Multi-Tenant Cloud Systems.
+      </h1>
+
+      <p
+        className="max-w-3xl text-lg leading-relaxed sm:text-2xl"
+        style={{ color: MUTED }}
+      >
+        Leading engineering teams to deploy RAG-driven GenAI in retail supply
+        chains and architect the future of enterprise SaaS.
+      </p>
+
+      <div className="mt-2 flex flex-wrap items-center gap-3">
+        <Link
+          to="/newsletter"
+          className="inline-flex items-center gap-2 rounded-xl px-6 py-3.5 text-sm font-semibold transition-colors"
+          style={{ backgroundColor: INK, color: "#ffffff" }}
+        >
+          Read the newsletter
+          <ArrowRight className="h-4 w-4" />
+        </Link>
+        <Link
+          to="/learn"
+          className="inline-flex items-center gap-2 rounded-xl border px-6 py-3.5 text-sm font-semibold transition-colors hover:bg-white"
+          style={{ borderColor: LINE, color: INK, backgroundColor: SURFACE }}
+        >
+          Explore Learn
+          <ArrowUpRight className="h-4 w-4" />
+        </Link>
+      </div>
+    </section>
+  );
+}
+
+// ---------- BENTO ----------
+function BentoGrid({ latest }: { latest: LatestIssue | null }) {
+  return (
+    <div className="grid grid-cols-1 gap-6 md:grid-cols-12">
+      <NewsletterTile latest={latest} />
+      <LearnTile />
+      <RepositoryTile />
+      <CaseStudyTile />
+    </div>
+  );
+}
+
+function TileEyebrow({ children }: { children: React.ReactNode }) {
+  return (
+    <div
+      className="text-[11px] font-semibold uppercase tracking-[0.18em]"
+      style={{ color: ACCENT }}
+    >
+      {children}
+    </div>
+  );
+}
+
+function LightTile({
+  children,
+  className = "",
+  span = "md:col-span-4",
+}: {
+  children: React.ReactNode;
+  className?: string;
+  span?: string;
+}) {
+  return (
+    <div
+      className={`${span} group flex flex-col rounded-[2rem] border p-8 transition-all duration-500 md:p-10 ${className}`}
+      style={{
+        backgroundColor: SURFACE,
+        borderColor: LINE,
+        boxShadow: "0 1px 2px rgba(15,23,42,0.03), 0 8px 24px -16px rgba(15,23,42,0.08)",
+      }}
+    >
+      {children}
+    </div>
+  );
+}
+
+function NewsletterTile({ latest }: { latest: LatestIssue | null }) {
+  return (
+    <LightTile
+      span="md:col-span-8"
+      className="justify-between gap-10 hover:-translate-y-0.5"
+    >
+      <div className="flex flex-col gap-4">
+        <TileEyebrow>Monthly Newsletter</TileEyebrow>
+        <h2
+          style={{ ...HEADING, color: INK, letterSpacing: "-0.02em" }}
+          className="text-4xl font-bold tracking-tight md:text-5xl"
+        >
+          {latest?.title ?? "Human-in-the-Loop"}
+        </h2>
+        <p className="max-w-xl text-base leading-relaxed sm:text-lg" style={{ color: MUTED }}>
+          {latest?.summary ??
+            "Deep dives into AI approval workflows and automated LinkedIn distribution — signed off by me before anything ships."}
+        </p>
+      </div>
+
+      <div className="flex flex-col gap-4 sm:flex-row">
+        <Link
+          to={latest ? "/newsletter/$slug" : "/newsletter"}
+          params={latest ? { slug: latest.slug } : undefined}
+          className="inline-flex flex-1 items-center justify-between rounded-xl border px-6 py-4 text-sm font-medium transition-colors hover:border-[color:var(--tile-accent)]"
+          style={
+            {
+              backgroundColor: CANVAS,
+              borderColor: LINE,
+              color: INK,
+              // @ts-expect-error - CSS var passthrough
+              "--tile-accent": ACCENT,
+            } as React.CSSProperties
+          }
+        >
+          <span className="truncate">
+            {latest ? "Read the latest issue" : "Browse the archive"}
+          </span>
+          <ArrowUpRight className="ml-4 h-4 w-4 shrink-0 transition-transform group-hover:translate-x-0.5" />
+        </Link>
+        <Link
+          to="/newsletter"
+          className="inline-flex items-center justify-center gap-2 rounded-xl px-8 py-4 text-sm font-semibold transition-colors"
+          style={{ backgroundColor: INK, color: "#ffffff" }}
+        >
+          <Mail className="h-4 w-4" />
+          Subscribe
+        </Link>
+      </div>
+    </LightTile>
+  );
+}
+
+function LearnTile() {
+  const modules: { label: string; num: string }[] = [
+    { label: "Agentic RAG", num: "01" },
+    { label: "Multi-tenant SaaS", num: "02" },
+    { label: "Cloud Architecture", num: "03" },
+  ];
+  return (
+    <LightTile span="md:col-span-4" className="hover:-translate-y-0.5">
+      <div className="mb-auto">
+        <div
+          className="mb-6 grid h-12 w-12 place-items-center rounded-2xl"
+          style={{ backgroundColor: ACCENT }}
+        >
+          <BookOpen className="h-5 w-5" style={{ color: "#ffffff" }} />
+        </div>
+        <h3
+          style={{ ...HEADING, color: INK, letterSpacing: "-0.02em" }}
+          className="text-2xl font-bold"
+        >
+          Learn Module
+        </h3>
+        <p className="mt-3 text-base" style={{ color: MUTED }}>
+          Deep dives into Cloud &amp; SaaS infrastructure for the modern era.
+        </p>
+      </div>
+      <div className="mt-8 flex flex-col">
+        {modules.map((m, i) => (
+          <div
+            key={m.label}
+            className="flex items-center justify-between py-3"
+            style={{
+              borderBottom: i < modules.length - 1 ? `1px solid ${LINE}` : "none",
+            }}
+          >
+            <span className="text-sm font-medium" style={{ color: INK }}>
+              {m.label}
+            </span>
+            <span style={{ ...MONO, color: ACCENT, fontSize: 12 }}>{m.num}</span>
+          </div>
+        ))}
+      </div>
+      <Link
+        to="/learn"
+        className="mt-6 inline-flex items-center gap-1 text-sm font-semibold transition-colors"
+        style={{ color: INK }}
+      >
+        Open Learn
+        <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
+      </Link>
+    </LightTile>
+  );
+}
+
+function RepositoryTile() {
+  return (
+    <div
+      className="group flex flex-col rounded-[2rem] p-8 shadow-2xl transition-transform duration-500 hover:-translate-y-1 md:col-span-4 md:p-10"
+      style={{ backgroundColor: INK, color: "#ffffff" }}
+    >
+      <div
+        className="text-[11px] font-semibold uppercase tracking-[0.18em]"
+        style={{ color: ACCENT }}
+      >
+        Resource Vault
+      </div>
+      <h3
+        style={{ ...HEADING, color: "#ffffff", letterSpacing: "-0.02em" }}
+        className="mt-4 text-3xl font-bold"
+      >
+        The Repository
+      </h3>
+      <p className="mt-3 text-base" style={{ color: "#cbd5e1" }}>
+        Exclusive PDFs, architecture diagrams, and whitepapers on GenAI, RAG,
+        cloud & multi-tenant SaaS.
+      </p>
+
+      <div
+        className="mt-auto pt-8 text-xs"
+        style={{ color: "#94a3b8" }}
+      >
+        <div className="mb-4 flex flex-wrap items-center gap-2">
+          <span
+            className="inline-flex items-center gap-1 rounded px-2 py-0.5"
+            style={{ backgroundColor: "rgba(255,255,255,0.08)", color: "#ffffff" }}
+          >
+            <ShieldCheck className="h-3 w-3" /> Auth gated
+          </span>
+          <span>9 downloads available</span>
+        </div>
+        <Link
+          to="/repository"
+          className="flex w-full items-center justify-center gap-2 rounded-xl py-4 text-sm font-bold transition-all hover:brightness-110"
+          style={{ backgroundColor: ACCENT, color: "#ffffff" }}
+        >
+          <FileText className="h-4 w-4" />
+          Enter Vault
+        </Link>
+      </div>
+    </div>
+  );
+}
+
+function CaseStudyTile() {
+  return (
+    <LightTile span="md:col-span-8" className="!p-0 overflow-hidden">
+      <div className="grid h-full grid-cols-1 md:grid-cols-2">
+        <div className="flex flex-col justify-center p-8 md:p-12">
+          <TileEyebrow>Featured Case Study</TileEyebrow>
+          <h3
+            style={{ ...HEADING, color: INK, letterSpacing: "-0.02em" }}
+            className="mt-4 text-3xl font-bold"
+          >
+            Retail Supply Chain Transformation
+          </h3>
+          <p className="mt-3 max-w-md text-base sm:text-lg" style={{ color: MUTED }}>
+            Implementing multi-tenant SaaS for real-time inventory optimization
+            using GenAI and agentic workflows.
+          </p>
+          <Link
+            to="/case-studies"
+            className="mt-6 inline-flex items-center gap-2 text-sm font-bold transition-colors"
+            style={{ color: INK }}
+          >
+            Read the technical doc
+            <ArrowRight className="h-4 w-4" />
+          </Link>
+        </div>
+        <div
+          className="relative flex min-h-[280px] items-center justify-center overflow-hidden border-l p-8"
+          style={{ backgroundColor: CANVAS, borderColor: LINE }}
+        >
+          <div
+            className="flex aspect-square w-full items-center justify-center rounded-full border-2 border-dashed"
+            style={{ borderColor: LINE, animation: "spin 30s linear infinite" }}
+          >
+            <div
+              className="flex aspect-square w-3/4 items-center justify-center rounded-full border"
+              style={{ borderColor: "rgba(59,130,246,0.25)" }}
+            >
+              <div
+                className="aspect-square w-1/2 rounded-full"
+                style={{ backgroundColor: "rgba(59,130,246,0.10)" }}
+              />
+            </div>
+          </div>
+          <div
+            className="pointer-events-none absolute inset-0 flex items-center justify-center text-xs font-bold uppercase tracking-[0.25em]"
+            style={{ ...MONO, color: INK, opacity: 0.35 }}
+          >
+            SYSTEM_LOG
+          </div>
+        </div>
+      </div>
+    </LightTile>
+  );
+}
+
+// ---------- PROOF / FOOTER STRIP ----------
+function ProofStrip() {
+  const stack = [
+    { icon: Cpu, label: "Agentic AI · RAG · MCP" },
+    { icon: Sparkles, label: "GenAI in Retail Supply Chain" },
+    { icon: ShieldCheck, label: "Multi-tenant SaaS & Cloud" },
+  ];
+  return (
+    <section
+      className="mt-6 flex flex-col gap-8 border-t pt-12 md:flex-row md:items-center md:justify-between"
+      style={{ borderColor: LINE }}
+    >
+      <div
+        className="text-2xl font-bold"
+        style={{ ...HEADING, color: INK, letterSpacing: "-0.02em" }}
+      >
+        Dibya R. Mishra
+      </div>
+      <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-3">
+        {stack.map((s) => (
+          <div
+            key={s.label}
+            className="inline-flex items-center gap-2 text-sm font-medium"
+            style={{ color: MUTED }}
+          >
+            <s.icon className="h-4 w-4" style={{ color: ACCENT }} />
+            {s.label}
+          </div>
+        ))}
+      </div>
+      <Link
+        to="/contact"
+        className="inline-flex items-center gap-2 rounded-full border px-6 py-3 text-sm font-bold transition-all hover:bg-white hover:shadow-md"
+        style={{ borderColor: LINE, color: INK, backgroundColor: CANVAS }}
+      >
+        <Mail className="h-4 w-4" />
+        Contact
+      </Link>
+    </section>
+  );
+}
+
 
