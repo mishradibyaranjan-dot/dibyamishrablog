@@ -347,7 +347,7 @@ export function NewsletterScheduler() {
                                 </td>
                               </tr>
                             )}
-                          </>
+                          </Fragment>
                         ))}
                       </tbody>
                     </table>
