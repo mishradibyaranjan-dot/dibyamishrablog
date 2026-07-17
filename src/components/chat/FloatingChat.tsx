@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
-import { MessageCircle, X, Trash2 } from "lucide-react";
+import { X, Trash2, Bot } from "lucide-react";
+import { motion } from "framer-motion";
 import { useChat } from "@ai-sdk/react";
 import { DefaultChatTransport, type UIMessage } from "ai";
 import {
@@ -117,11 +118,24 @@ export function FloatingChat() {
         onClick={() => setOpen((o) => !o)}
         aria-label={open ? "Close chat" : "Open chat"}
         className={cn(
-          "fixed bottom-5 right-5 z-[60] flex h-14 w-14 items-center justify-center rounded-full",
-          "bg-brand-gradient text-white shadow-glow transition-transform hover:scale-105 active:scale-95",
+          "group fixed bottom-5 right-5 z-[60] flex h-14 w-14 items-center justify-center rounded-full",
+          "border border-blue-200 bg-white text-blue-600 shadow-[0_12px_30px_-10px_rgba(59,130,246,0.55)] transition-all",
+          "hover:scale-105 hover:border-blue-300 hover:text-blue-700 active:scale-95",
         )}
       >
-        {open ? <X className="h-6 w-6" /> : <MessageCircle className="h-6 w-6" />}
+        {open ? (
+          <X className="h-6 w-6" />
+        ) : (
+          <motion.span
+            aria-hidden
+            animate={{ y: [0, -4, 0], rotate: [-4, 4, -4] }}
+            transition={{ duration: 2.4, repeat: Infinity, ease: "easeInOut" }}
+            className="relative inline-flex"
+          >
+            <Bot className="h-6 w-6" />
+            <span className="absolute -bottom-1 left-1/2 h-1 w-4 -translate-x-1/2 rounded-full bg-blue-400/50 blur-sm" />
+          </motion.span>
+        )}
       </button>
 
       {/* Panel */}
@@ -131,13 +145,23 @@ export function FloatingChat() {
           aria-label="AI assistant"
           className={cn(
             "fixed bottom-24 right-5 z-[60] flex w-[min(380px,calc(100vw-2.5rem))] flex-col overflow-hidden",
-            "h-[min(560px,calc(100vh-8rem))] rounded-2xl border border-border bg-background shadow-2xl",
+            "h-[min(560px,calc(100vh-8rem))] rounded-2xl border border-blue-200 bg-white shadow-2xl",
           )}
         >
-          <header className="flex items-center justify-between border-b border-border bg-muted/40 px-4 py-3">
+          <header className="flex items-center justify-between border-b border-blue-100 bg-gradient-to-r from-blue-50 via-white to-cyan-50 px-4 py-3">
             <div className="flex items-center gap-2">
-              <div className="h-2 w-2 rounded-full bg-emerald-500" />
-              <p className="text-sm font-semibold">Learning Assistant</p>
+              <motion.span
+                aria-hidden
+                animate={{ y: [0, -3, 0] }}
+                transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+                className="grid h-7 w-7 place-items-center rounded-lg bg-blue-600 text-white shadow-[0_6px_16px_-4px_rgba(59,130,246,0.6)]"
+              >
+                <Bot className="h-4 w-4" />
+              </motion.span>
+              <div className="flex flex-col leading-tight">
+                <p className="text-sm font-semibold text-slate-900">Learning Assistant</p>
+                <span className="text-[10px] font-medium uppercase tracking-wider text-blue-600">Online</span>
+              </div>
             </div>
             <div className="flex items-center gap-1">
               {messages.length > 0 && (
@@ -146,12 +170,14 @@ export function FloatingChat() {
                   size="icon"
                   aria-label="Clear conversation"
                   onClick={handleClear}
+                  className="text-slate-500 hover:bg-blue-50 hover:text-slate-900"
                 >
                   <Trash2 className="h-4 w-4" />
                 </Button>
               )}
             </div>
           </header>
+
 
           <Conversation className="flex-1">
             <ConversationContent className="px-3">

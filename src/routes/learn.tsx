@@ -41,6 +41,40 @@ import { Badge } from "@/components/ui/badge";
 import { Reveal } from "@/components/cinematic/Reveal";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth";
+import heroAI from "@/assets/learn/human-robot-ai.jpg";
+import heroCloud from "@/assets/learn/human-robot-cloud.jpg";
+import heroSaaS from "@/assets/learn/human-robot-saas.jpg";
+import heroITIL from "@/assets/learn/human-robot-itil.jpg";
+import heroLLM from "@/assets/learn/human-robot-llm.jpg";
+import heroRetail from "@/assets/learn/human-robot-retail.jpg";
+import heroMultiTenant from "@/assets/learn/human-robot-multitenant.jpg";
+import heroRAG from "@/assets/learn/human-robot-rag.jpg";
+
+function TabHeroImage({ src, alt, caption }: { src: string; alt: string; caption: string }) {
+  return (
+    <Reveal>
+      <motion.figure
+        initial={{ opacity: 0, y: 12 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="relative overflow-hidden rounded-3xl border border-blue-200/70 bg-white shadow-[0_20px_60px_-30px_rgba(59,130,246,0.35)]"
+      >
+        <div className="absolute inset-0 bg-gradient-to-tr from-blue-50 via-white to-cyan-50" aria-hidden />
+        <img
+          src={src}
+          alt={alt}
+          width={1600}
+          height={900}
+          loading="lazy"
+          className="relative z-[1] h-56 w-full object-cover sm:h-72 md:h-96"
+        />
+        <figcaption className="relative z-[1] flex items-center gap-2 border-t border-blue-100 bg-white/90 px-4 py-3 text-xs font-medium text-slate-600 backdrop-blur sm:text-sm">
+          <span className="inline-flex h-1.5 w-1.5 rounded-full bg-blue-500" />
+          {caption}
+        </figcaption>
+      </motion.figure>
+    </Reveal>
+  );
+}
 
 export const Route = createFileRoute("/learn")({
   head: () => {
@@ -138,6 +172,7 @@ function TabPill({ value, icon, label }: { value: string; icon: React.ReactNode;
 function IntroAI() {
   return (
     <div className="space-y-12">
+      <TabHeroImage src={heroAI} alt="Human and AI robot exploring intelligent systems together" caption="Humans + AI — building intelligent systems, together." />
       <Reveal>
         <QuickSummary
           items={[
@@ -316,6 +351,7 @@ print(classification_report(y_test, clf.predict(X_test)))`}
 function IntroCloud() {
   return (
     <div className="space-y-12">
+      <TabHeroImage src={heroCloud} alt="Engineer shaking hands with a robot in front of cloud servers" caption="From bare metal to the cloud — elastic, on-demand, global." />
       <Reveal>
         <QuickSummary
           items={[
@@ -476,6 +512,7 @@ aws ec2 describe-instances \\
 function IntroSaaS() {
   return (
     <div className="space-y-12">
+      <TabHeroImage src={heroSaaS} alt="Product manager and robot reviewing SaaS dashboards" caption="Software as a service — subscriptions, dashboards, delight." />
       <Reveal>
         <QuickSummary
           items={[
@@ -674,6 +711,7 @@ CREATE INDEX idx_tickets_tenant ON app_tickets (tenant_id, created_at DESC);`}
 function IntroITIL() {
   return (
     <div className="space-y-12">
+      <TabHeroImage src={heroITIL} alt="IT service manager and robot at a Kanban board" caption="ITIL + Kanban — visualise work, flow value, delight users." />
       <Reveal>
         <QuickSummary
           items={[
@@ -818,6 +856,7 @@ function IntroITIL() {
 function IntroLLM() {
   return (
     <div className="space-y-12">
+      <TabHeroImage src={heroLLM} alt="Developer and robot working with a large language model" caption="LLM engineering — prompt, retrieve, evaluate, ship." />
       <Reveal>
         <QuickSummary
           items={[
@@ -1065,6 +1104,7 @@ function LLMArchitectureDiagram() {
 function IntroGenAIRetail() {
   return (
     <div className="space-y-12">
+      <TabHeroImage src={heroRetail} alt="Shopper and robot assistant in a retail store with AI overlays" caption="GenAI in retail — personalise every aisle, every cart." />
       <Reveal>
         <QuickSummary
           items={[
@@ -1179,6 +1219,7 @@ function IntroGenAIRetail() {
 function IntroMultiTenant() {
   return (
     <div className="space-y-12">
+      <TabHeroImage src={heroMultiTenant} alt="Architect and robot in front of a multi-tenant building diagram" caption="Multi-tenant SaaS — one platform, many isolated tenants." />
       <Reveal>
         <QuickSummary
           items={[
@@ -1335,6 +1376,7 @@ spec:
 function IntroRAG() {
   return (
     <div className="space-y-12">
+      <TabHeroImage src={heroRAG} alt="Researcher and robot retrieving documents from a knowledge library" caption="RAG — retrieve, ground, cite. Trustworthy AI answers." />
       <Reveal>
         <QuickSummary
           items={[
