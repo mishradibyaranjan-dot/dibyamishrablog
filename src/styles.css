@@ -673,6 +673,24 @@ table th, table td { border-color: var(--color-border); }
 .bg-white\/5  { background-color: var(--color-card) !important; }
 .bg-white\/10 { background-color: var(--color-background) !important; }
 
+/* Hardcoded arbitrary-value backgrounds used in pages */
+.bg-\[#fafbfc\] { background-color: var(--color-background) !important; }
+.bg-\[#e8ecf1\] { background-color: var(--color-muted) !important; }
+
+/* Slate borders */
+.border-slate-100,
+.border-slate-200 { border-color: var(--color-border) !important; }
+
+/* Blue accent colours */
+.bg-blue-50,
+.bg-blue-50\/40,
+.bg-blue-100 { background-color: color-mix(in oklch, var(--color-brand-1) 12%, transparent) !important; }
+.border-blue-100,
+.border-blue-200 { border-color: color-mix(in oklch, var(--color-brand-1) 25%, transparent) !important; }
+.text-blue-500,
+.text-blue-600,
+.text-blue-700 { color: var(--color-brand-1) !important; }
+
 /* Neutralise stray dark utility backgrounds using theme values */
 .bg-black,
 [class*="bg-slate-9"],
