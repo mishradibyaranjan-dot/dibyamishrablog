@@ -58,23 +58,24 @@ function NewsletterForm() {
             disabled={status === "sending"}
             placeholder="you@company.com"
             aria-label="Email address for newsletter"
-            className="w-full rounded-md border border-white/15 bg-white/5 px-3 py-2 text-sm text-white placeholder:text-white/40 outline-none focus:border-neon-cyan focus:ring-2 focus:ring-neon-cyan/40 disabled:opacity-60"
+            className="w-full rounded-md border border-slate-200 bg-white px-3 py-2 text-sm text-slate-900 placeholder:text-slate-400 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/30 disabled:opacity-60"
           />
 
           <Button
             size="sm"
             type="submit"
             disabled={status === "sending"}
-            className="bg-brand-gradient text-white shadow-neon"
+            className="bg-blue-600 text-white hover:bg-blue-700"
           >
             {status === "sending" ? "…" : "Join"}
           </Button>
         </div>
         {status === "ok" && (
-          <p className="text-xs text-emerald-400">Thanks — you're subscribed!</p>
+          <p className="text-xs text-emerald-600">Thanks — you're subscribed!</p>
         )}
         {status === "error" && (
-          <p className="text-xs text-red-400">{error ?? "Something went wrong."}</p>
+          <p className="text-xs text-red-600">{error ?? "Something went wrong."}</p>
+
         )}
       </div>
     </form>
