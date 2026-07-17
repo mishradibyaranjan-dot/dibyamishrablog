@@ -147,6 +147,24 @@ export function NewsletterScheduler() {
     }
   };
 
+  const loadHistory = async (id: string) => {
+    setHistoryLoading((m) => ({ ...m, [id]: true }));
+    try {
+      const data = (await listScheduleHistory({ data: { scheduleId: id, limit: 10 } })) as HistoryRow[];
+      setHistoryData((m) => ({ ...m, [id]: data }));
+    } catch (e) {
+      setErr(e instanceof Error ? e.message : String(e));
+    } finally {
+      setHistoryLoading((m) => ({ ...m, [id]: false }));
+    }
+  };
+
+  const toggleHistory = (id: string) => {
+    const open = !historyOpen[id];
+    setHistoryOpen((m) => ({ ...m, [id]: open }));
+    if (open && !historyData[id]) loadHistory(id);
+  };
+
   return (
     <div className="mt-4 rounded-2xl border border-white/10 bg-white/5 p-5 backdrop-blur-xl">
       <div className="mb-3 flex items-center gap-2 text-sm font-semibold text-white">
