@@ -42,6 +42,8 @@ export const Route = createFileRoute("/api/public/cron/newsletter-scheduler")({
               const r = await autoSendNewsletter({
                 topicHint: s.topic_hint ?? undefined,
                 createdBy: s.created_by ?? null,
+                scheduleId: s.id,
+                triggerSource: "cron",
               });
               const next = computeNextRun(
                 s.cadence as "daily" | "weekly" | "monthly",

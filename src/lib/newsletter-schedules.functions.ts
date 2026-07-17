@@ -105,6 +105,8 @@ export const runScheduleNow = createServerFn({ method: "POST" })
     const result = await autoSendNewsletter({
       topicHint: sched.topic_hint ?? undefined,
       createdBy: context.userId,
+      scheduleId: sched.id,
+      triggerSource: "manual_run",
     });
     const next = computeNextRun(
       sched.cadence as "daily" | "weekly" | "monthly",
@@ -117,4 +119,36 @@ export const runScheduleNow = createServerFn({ method: "POST" })
       .update({ last_run_at: new Date().toISOString(), next_run_at: next })
       .eq("id", data.id);
     return result;
+  });
+
+export const listScheduleHistory = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d: unknown) =>
+    z.object({ scheduleId: z.string().uuid(), limit: z.number().int().min(1).max(50).default(10) }).parse(d),
+  )
+  .handler(async ({ context, data }) => {
+    await assertAdmin(context);
+    const { data: runs, error } = await context.supabase
+      .from("newsletter_send_runs")
+      .select("id, issue_id, trigger_source, title, recipients_total, queued_count, failed_count, status, error_message, started_at, finished_at")
+      .eq("schedule_id", data.scheduleId)
+      .order("started_at", { ascending: false })
+      .limit(data.limit);
+    if (error) throw new Error(error.message);
+    const ids = (runs ?? []).map((r) => r.id);
+    let failures: Array<{ run_id: string; email: string; error_message: string | null }> = [];
+    if (ids.length > 0) {
+      const { data: recs, error: e2 } = await context.supabase
+        .from("newsletter_send_recipients")
+        .select("run_id, email, error_message")
+        .in("run_id", ids)
+        .eq("status", "failed")
+        .limit(500);
+      if (e2) throw new Error(e2.message);
+      failures = recs ?? [];
+    }
+    return (runs ?? []).map((r) => ({
+      ...r,
+      failed_recipients: failures.filter((f) => f.run_id === r.id),
+    }));
   });

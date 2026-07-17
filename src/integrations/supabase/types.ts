@@ -343,6 +343,107 @@ export type Database = {
         }
         Relationships: []
       }
+      newsletter_send_recipients: {
+        Row: {
+          created_at: string
+          email: string
+          error_message: string | null
+          id: string
+          run_id: string
+          status: string
+        }
+        Insert: {
+          created_at?: string
+          email: string
+          error_message?: string | null
+          id?: string
+          run_id: string
+          status: string
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          error_message?: string | null
+          id?: string
+          run_id?: string
+          status?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "newsletter_send_recipients_run_id_fkey"
+            columns: ["run_id"]
+            isOneToOne: false
+            referencedRelation: "newsletter_send_runs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      newsletter_send_runs: {
+        Row: {
+          created_at: string
+          error_message: string | null
+          failed_count: number
+          finished_at: string | null
+          id: string
+          issue_id: string | null
+          queued_count: number
+          recipients_total: number
+          schedule_id: string | null
+          started_at: string
+          status: string
+          title: string | null
+          trigger_source: string
+          triggered_by: string | null
+        }
+        Insert: {
+          created_at?: string
+          error_message?: string | null
+          failed_count?: number
+          finished_at?: string | null
+          id?: string
+          issue_id?: string | null
+          queued_count?: number
+          recipients_total?: number
+          schedule_id?: string | null
+          started_at?: string
+          status?: string
+          title?: string | null
+          trigger_source: string
+          triggered_by?: string | null
+        }
+        Update: {
+          created_at?: string
+          error_message?: string | null
+          failed_count?: number
+          finished_at?: string | null
+          id?: string
+          issue_id?: string | null
+          queued_count?: number
+          recipients_total?: number
+          schedule_id?: string | null
+          started_at?: string
+          status?: string
+          title?: string | null
+          trigger_source?: string
+          triggered_by?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "newsletter_send_runs_issue_id_fkey"
+            columns: ["issue_id"]
+            isOneToOne: false
+            referencedRelation: "newsletter_issues"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "newsletter_send_runs_schedule_id_fkey"
+            columns: ["schedule_id"]
+            isOneToOne: false
+            referencedRelation: "newsletter_schedules"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       newsletter_subscribers: {
         Row: {
           email: string
