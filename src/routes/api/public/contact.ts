@@ -10,6 +10,11 @@ const ContactSchema = z.object({
   message: z.string().trim().min(1).max(5000),
 });
 
+const SITE_NAME = "dibyamishrablog";
+const SENDER_DOMAIN = "notify.dibyamishra.co.in";
+const FROM_DOMAIN = "notify.dibyamishra.co.in";
+const OWNER_EMAIL = "mishra.dibyaranajan@gmail.com";
+
 export const Route = createFileRoute("/api/public/contact")({
   server: {
     handlers: {
@@ -36,24 +41,74 @@ export const Route = createFileRoute("/api/public/contact")({
         const data = parsed.data;
 
         try {
-          const { sendGmail, escapeHtml } = await import("@/lib/gmail-send.server");
-          const html = `
-            <div style="font-family:-apple-system,Segoe UI,Roboto,sans-serif;line-height:1.5;color:#0f172a;">
-              <h2 style="margin:0 0 12px;">New message from your portfolio</h2>
-              <p style="margin:0 0 4px;"><strong>Name:</strong> ${escapeHtml(data.name)}</p>
-              <p style="margin:0 0 4px;"><strong>Email:</strong> ${escapeHtml(data.email)}</p>
-              <p style="margin:0 0 12px;"><strong>Subject:</strong> ${escapeHtml(data.subject)}</p>
-              <hr style="border:none;border-top:1px solid #e2e8f0;margin:16px 0;" />
-              <pre style="white-space:pre-wrap;font-family:inherit;margin:0;">${escapeHtml(data.message)}</pre>
-            </div>`.trim();
-          const text = `From: ${data.name} <${data.email}>\nSubject: ${data.subject}\n\n${data.message}`;
-          const sent = await sendGmail({
-            subject: `[Portfolio Contact] ${data.subject}`,
-            html,
-            text,
-            replyTo: `${data.name} <${data.email}>`,
+          const [React, { render }, { createClient }, { template }] = await Promise.all([
+            import("react"),
+            import("@react-email/render"),
+            import("@supabase/supabase-js"),
+            import("@/lib/email-templates/contact-notification"),
+          ]);
+
+          const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+          const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+          if (!supabaseUrl || !supabaseServiceKey) {
+            console.error("Missing Supabase env for contact email");
+            return Response.json({ error: "Server not configured" }, { status: 500, headers: cors });
+          }
+
+          const templateData = {
+            name: data.name,
+            email: data.email,
+            subject: data.subject,
+            message: data.message,
+          };
+          const element = React.createElement(template.component, templateData);
+          const html = await render(element);
+          const text = await render(element, { plainText: true });
+          const subject =
+            typeof template.subject === "function"
+              ? template.subject(templateData)
+              : template.subject;
+
+          const supabase = createClient(supabaseUrl, supabaseServiceKey);
+          const messageId = crypto.randomUUID();
+
+          await supabase.from("email_send_log").insert({
+            message_id: messageId,
+            template_name: "contact-notification",
+            recipient_email: OWNER_EMAIL,
+            status: "pending",
           });
-          return Response.json({ ok: true, messageId: sent.id }, { headers: cors });
+
+          const { error: enqueueError } = await supabase.rpc("enqueue_email", {
+            queue_name: "transactional_emails",
+            payload: {
+              message_id: messageId,
+              to: OWNER_EMAIL,
+              from: `${SITE_NAME} <noreply@${FROM_DOMAIN}>`,
+              sender_domain: SENDER_DOMAIN,
+              reply_to: `${data.name} <${data.email}>`,
+              subject,
+              html,
+              text,
+              purpose: "transactional",
+              label: "contact-notification",
+              queued_at: new Date().toISOString(),
+            },
+          });
+
+          if (enqueueError) {
+            console.error("Failed to enqueue contact email", enqueueError);
+            await supabase.from("email_send_log").insert({
+              message_id: messageId,
+              template_name: "contact-notification",
+              recipient_email: OWNER_EMAIL,
+              status: "failed",
+              error_message: "Failed to enqueue email",
+            });
+            return Response.json({ error: "Send failed" }, { status: 500, headers: cors });
+          }
+
+          return Response.json({ ok: true, messageId }, { headers: cors });
         } catch (err) {
           console.error("contact send failed", err);
           return Response.json(
