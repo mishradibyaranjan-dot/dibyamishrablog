@@ -94,6 +94,7 @@ export const Route = createFileRoute("/api/public/contact")({
               .maybeSingle();
             unsubscribeToken = stored?.token ?? newToken;
           }
+          console.log("contact: unsubscribeToken", { has: Boolean(unsubscribeToken), len: unsubscribeToken?.length });
 
           await supabase.from("email_send_log").insert({
             message_id: messageId,
