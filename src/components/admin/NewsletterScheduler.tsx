@@ -181,9 +181,20 @@ export function NewsletterScheduler() {
     if (open && !historyData[id]) loadHistory(id);
   };
 
-  const retryRun = async (scheduleId: string, runId: string, failedCount: number) => {
+  const retryRun = (
+    scheduleId: string,
+    runId: string,
+    failedCount: number,
+    recipients: Array<{ email: string; error_message: string | null }>,
+  ) => {
     if (failedCount === 0) return;
-    if (!confirm(`Retry ${failedCount} failed recipient(s) for this run?`)) return;
+    setPendingRetry({ scheduleId, runId, failedCount, recipients });
+  };
+
+  const executeRetry = async () => {
+    if (!pendingRetry) return;
+    const { scheduleId, runId } = pendingRetry;
+    setPendingRetry(null);
     setRetryingRunId(runId);
     setErr(null);
     setMsg(null);
