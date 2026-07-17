@@ -460,3 +460,36 @@
   a { color: #1f2937 !important; text-decoration: none !important; }
   .shadow-glow, .shadow-card-soft, .shadow-neon { box-shadow: none !important; }
 }
+
+/* ============== Light theme legibility overrides ==============
+   The site was originally authored for a dark cinematic theme with many
+   hardcoded text-white / bg-white/x / border-white/x classes. We now force
+   a white background site-wide, so remap those classes to legible dark
+   tones on light theme instead of touching every component. */
+[data-theme="light"] {
+  color-scheme: light;
+}
+[data-theme="light"] body {
+  background-color: #ffffff;
+  color: #0a0a0a;
+}
+[data-theme="light"] .text-white,
+[data-theme="light"] .hover\:text-white:hover {
+  color: #0a0a0a !important;
+}
+[data-theme="light"] .text-white\/40 { color: #6b7280 !important; }
+[data-theme="light"] .text-white\/50 { color: #6b7280 !important; }
+[data-theme="light"] .text-white\/65 { color: #374151 !important; }
+[data-theme="light"] .text-white\/70 { color: #374151 !important; }
+[data-theme="light"] .text-white\/75 { color: #374151 !important; }
+[data-theme="light"] .text-white\/80 { color: #1f2937 !important; }
+[data-theme="light"] .placeholder\:text-white\/40::placeholder { color: #9ca3af !important; }
+[data-theme="light"] .bg-white\/5   { background-color: #f8fafc !important; }
+[data-theme="light"] .bg-white\/10  { background-color: #f1f5f9 !important; }
+[data-theme="light"] .hover\:bg-white\/10:hover { background-color: #f1f5f9 !important; }
+[data-theme="light"] .border-white\/10,
+[data-theme="light"] .border-white\/15 { border-color: #e5e7eb !important; }
+[data-theme="light"] .bg-background\/60,
+[data-theme="light"] .bg-background\/85 { background-color: rgba(255,255,255,0.92) !important; }
+/* Neutralize dark aurora vignette so the page reads white */
+[data-theme="light"] [aria-hidden] .bg-aurora { opacity: 0.18; }
