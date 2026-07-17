@@ -105,6 +105,8 @@ export const runScheduleNow = createServerFn({ method: "POST" })
     const result = await autoSendNewsletter({
       topicHint: sched.topic_hint ?? undefined,
       createdBy: context.userId,
+      scheduleId: sched.id,
+      triggerSource: "manual_run",
     });
     const next = computeNextRun(
       sched.cadence as "daily" | "weekly" | "monthly",
