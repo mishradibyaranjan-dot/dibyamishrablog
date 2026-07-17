@@ -28,6 +28,10 @@ import {
   LineChart,
   Lock,
   AlertTriangle,
+  ClipboardList,
+  KanbanSquare,
+  Wrench,
+  Zap,
 } from "lucide-react";
 import { Section, SectionHeader } from "@/components/layout/Section";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
