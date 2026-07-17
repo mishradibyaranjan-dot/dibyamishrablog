@@ -1,6 +1,7 @@
-import { createFileRoute, Link, notFound } from "@tanstack/react-router";
-import { ArrowLeft } from "lucide-react";
+import { createFileRoute, Link, notFound, useRouter } from "@tanstack/react-router";
+import { AlertTriangle, ArrowLeft, Loader2 } from "lucide-react";
 import { Section } from "@/components/layout/Section";
+import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 import { SITE_ORIGIN } from "@/lib/og-images";
 
@@ -44,18 +45,79 @@ export const Route = createFileRoute("/newsletter/$slug")({
       links: [{ rel: "canonical", href: url }],
     };
   },
-  errorComponent: () => (
-    <Section>
-      <p className="text-white/70">Couldn't load this issue.</p>
-    </Section>
-  ),
-  notFoundComponent: () => (
-    <Section>
-      <p className="text-white/70">Issue not found.</p>
-    </Section>
-  ),
+  pendingMs: 200,
+  pendingComponent: PendingIssue,
+  errorComponent: IssueError,
+  notFoundComponent: IssueNotFound,
   component: IssuePage,
 });
+
+function PendingIssue() {
+  return (
+    <Section>
+      <div
+        role="status"
+        aria-live="polite"
+        className="mx-auto flex max-w-3xl flex-col items-center justify-center gap-3 py-24 text-center"
+      >
+        <Loader2 className="h-8 w-8 animate-spin text-neon-cyan" aria-hidden="true" />
+        <p className="text-sm text-white/70">Loading issue…</p>
+      </div>
+    </Section>
+  );
+}
+
+function IssueError({ error }: { error: Error }) {
+  const router = useRouter();
+  return (
+    <Section>
+      <div
+        role="alert"
+        className="mx-auto flex max-w-2xl flex-col items-center gap-4 rounded-2xl border border-red-500/30 bg-red-500/5 p-8 text-center"
+      >
+        <AlertTriangle className="h-8 w-8 text-red-400" aria-hidden="true" />
+        <h1 className="font-display text-xl font-bold text-white">
+          Couldn't load this issue
+        </h1>
+        <p className="text-sm text-white/70">
+          {error?.message || "Something went wrong while fetching this newsletter."}
+        </p>
+        <div className="flex flex-wrap justify-center gap-2">
+          <Button onClick={() => router.invalidate()} className="bg-brand-gradient text-white">
+            Try again
+          </Button>
+          <Link
+            to="/newsletter"
+            className="inline-flex items-center gap-1 rounded-md border border-white/15 px-4 py-2 text-sm text-white/80 hover:bg-white/10"
+          >
+            <ArrowLeft className="h-4 w-4" /> Back to archive
+          </Link>
+        </div>
+      </div>
+    </Section>
+  );
+}
+
+function IssueNotFound() {
+  const { slug } = Route.useParams();
+  return (
+    <Section>
+      <div className="mx-auto max-w-2xl rounded-2xl border border-white/10 bg-white/5 p-8 text-center">
+        <h1 className="font-display text-2xl font-bold text-white">Issue not found</h1>
+        <p className="mt-2 text-sm text-white/70">
+          No published newsletter matches <span className="font-mono">/{slug}</span>.
+        </p>
+        <Link
+          to="/newsletter"
+          className="mt-6 inline-flex items-center gap-1 text-sm text-neon-cyan hover:underline"
+        >
+          <ArrowLeft className="h-4 w-4" /> Browse all issues
+        </Link>
+      </div>
+    </Section>
+  );
+}
+
 
 function IssuePage() {
   const issue = Route.useLoaderData() as Issue;
