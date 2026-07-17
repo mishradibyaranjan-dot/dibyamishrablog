@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Mail, Sparkles, Send, Copy, Loader2, ShieldCheck, Clock } from "lucide-react";
+import { Mail, Sparkles, Send, Copy, Loader2, ShieldCheck, Clock, Rocket } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   generateNewsletterDraft,
@@ -8,6 +8,7 @@ import {
   publishNewsletterIssue,
   submitForApproval,
   approveNewsletterIssue,
+  autoSendNewsletterToRegisteredUsers,
 } from "@/lib/newsletter.functions";
 import { NewsletterVersionCompare } from "./NewsletterVersionCompare";
 
