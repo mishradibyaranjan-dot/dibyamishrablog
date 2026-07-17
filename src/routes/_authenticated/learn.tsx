@@ -136,6 +136,17 @@ function IntroAI() {
   return (
     <div className="space-y-12">
       <Reveal>
+        <QuickSummary
+          items={[
+            'Artificial Intelligence is systems that perceive, reason, learn, and act — not a single model.',
+            'Modern stack: Transformers + retrieval + tools → agents. Data quality still beats novelty.',
+            'Ship with governance: privacy, bias, security, and traceability are first-class.',
+            'Start with the simplest baseline; add complexity only when the metric demands it.',
+          ]}
+        />
+      </Reveal>
+
+      <Reveal>
         <HeroCard
           icon={<Brain className="h-6 w-6" />}
           title="What is Artificial Intelligence?"
@@ -303,6 +314,17 @@ function IntroCloud() {
   return (
     <div className="space-y-12">
       <Reveal>
+        <QuickSummary
+          items={[
+            'Cloud = elastic, on-demand compute, storage, networking billed by usage.',
+            'Service tiers: IaaS → PaaS → SaaS → Serverless (you manage less at each step).',
+            'Identity + regions + zones are the mental model that maps to AWS, Azure, and GCP.',
+            'FinOps and observability are day-1 concerns, not afterthoughts.',
+          ]}
+        />
+      </Reveal>
+
+      <Reveal>
         <HeroCard
           icon={<Cloud className="h-6 w-6" />}
           title="What is Cloud Computing?"
@@ -451,6 +473,17 @@ aws ec2 describe-instances \\
 function IntroSaaS() {
   return (
     <div className="space-y-12">
+      <Reveal>
+        <QuickSummary
+          items={[
+            'SaaS = software delivered as a service — multi-tenant, subscription, cloud-hosted.',
+            'Tenancy models: Silo (isolated), Pool (shared), Bridge (mixed stamps).',
+            'Row-Level Security + tenant_id everywhere is the bedrock of pooled SaaS.',
+            'Metering, billing, and per-tenant observability are product features, not plumbing.',
+          ]}
+        />
+      </Reveal>
+
       <Reveal>
         <HeroCard
           icon={<Layers className="h-6 w-6" />}
@@ -639,6 +672,17 @@ function IntroITIL() {
   return (
     <div className="space-y-12">
       <Reveal>
+        <QuickSummary
+          items={[
+            'ITIL 4 = value-driven service management: Incident, Problem, Change, Request.',
+            'Kanban visualises flow — WIP limits and pull, not push, cut lead time.',
+            'Combine ITIL practices with Kanban cadence for continuous, low-risk delivery.',
+            'Measure lead time, cycle time, and change failure rate — not tickets closed.',
+          ]}
+        />
+      </Reveal>
+
+      <Reveal>
         <HeroCard
           icon={<KanbanSquare className="h-6 w-6" />}
           title="ITIL 4 + Kanban — Running Incident, Change, Problem & Request as one flow"
@@ -771,6 +815,17 @@ function IntroITIL() {
 function IntroLLM() {
   return (
     <div className="space-y-12">
+      <Reveal>
+        <QuickSummary
+          items={[
+            'LLMs = Transformer models pretrained on huge corpora, then instruction/RLHF-tuned.',
+            'Training scales with data, compute, and parameters — mixed precision + FSDP are table stakes.',
+            'Inference is engineering: batching, quantization, KV cache, and served on Triton/vLLM.',
+            'Evaluate with perplexity, BLEU/ROUGE, and human review — automated metrics alone mislead.',
+          ]}
+        />
+      </Reveal>
+
       <Reveal>
         <HeroCard
           icon={<Cpu className="h-6 w-6" />}
