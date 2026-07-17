@@ -297,7 +297,7 @@ function About() {
                   Search across {certifications.length} credentials
                 </DialogDescription>
               </DialogHeader>
-              <div className="p-6 pt-4">
+              <div className="space-y-4 p-6 pt-4">
                 <div className="relative">
                   <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
                   <Input
@@ -307,15 +307,42 @@ function About() {
                     className="pl-9"
                   />
                 </div>
+                <div className="flex flex-wrap gap-2">
+                  {categories.map((cat) => (
+                    <button
+                      key={cat}
+                      type="button"
+                      onClick={() => setCategory(cat)}
+                      className={`rounded-full px-3 py-1 text-xs font-medium transition-colors ${
+                        category === cat
+                          ? "bg-brand-gradient text-white"
+                          : "bg-accent text-foreground hover:bg-accent/80"
+                      }`}
+                    >
+                      {cat}
+                    </button>
+                  ))}
+                </div>
               </div>
               <div className="overflow-y-auto px-6 pb-6">
                 <ul className="space-y-2">
-                  {filteredCerts.map((c, i) => (
-                    <li key={c} className="flex items-start gap-2 text-sm">
+                  {filteredCerts.map((c) => (
+                    <li key={c.name} className="flex items-start gap-2 text-sm">
                       <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-brand-gradient" />
-                      <span className={i === filteredCerts.length - 1 ? "font-bold" : ""}>{c}</span>
+                      <span>
+                        {c.name}{c.year ? `, ${c.year}` : ""}
+                        <span className="ml-2 rounded-full bg-accent px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">
+                          {c.category}
+                        </span>
+                      </span>
                     </li>
                   ))}
+                  {filteredCerts.length > 0 && (
+                    <li className="flex items-start gap-2 text-sm">
+                      <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-brand-gradient" />
+                      <span className="font-bold">{summaryCert}</span>
+                    </li>
+                  )}
                   {filteredCerts.length === 0 && (
                     <li className="text-sm text-muted-foreground">No certifications match your search.</li>
                   )}
