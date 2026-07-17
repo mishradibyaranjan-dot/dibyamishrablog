@@ -262,10 +262,10 @@ function About() {
                   <Award className="h-4 w-4" /> Certifications
                 </div>
                 <ul className="space-y-2">
-                  {certifications.map((c, i) => (
+                  {certifications.map((c) => (
                     <li key={c.name} className="flex items-start gap-2 text-sm">
                       <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-brand-gradient" />
-                      <span className={i === certifications.length - 1 ? "font-bold" : ""}>
+                      <span>
                         {c.name}{c.year ? `, ${c.year}` : ""}
                       </span>
                     </li>
