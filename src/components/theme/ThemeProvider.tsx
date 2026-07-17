@@ -27,12 +27,12 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     const stored = typeof window !== "undefined" ? window.localStorage.getItem(STORAGE_KEY) : null;
     const initial = isThemeId(stored) ? stored : DEFAULT_THEME;
     setThemeState(initial);
-    applyTheme(initial);
+    applyTheme(initial, false);
   }, []);
 
   const setTheme = useCallback((next: ThemeId) => {
     setThemeState(next);
-    applyTheme(next);
+    applyTheme(next, true);
     try {
       window.localStorage.setItem(STORAGE_KEY, next);
     } catch {
@@ -43,12 +43,23 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
   return <ThemeContext.Provider value={{ theme, setTheme }}>{children}</ThemeContext.Provider>;
 }
 
-function applyTheme(theme: ThemeId) {
+function applyTheme(theme: ThemeId, enableTransition: boolean) {
   if (typeof document === "undefined") return;
   const root = document.documentElement;
+  const prefersReducedMotion =
+    typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  if (enableTransition && !prefersReducedMotion) {
+    root.classList.add("theme-transition");
+  }
+
   root.dataset.theme = theme;
   root.classList.toggle("dark", theme !== "light");
   root.style.colorScheme = theme === "light" ? "light" : "dark";
+
+  if (enableTransition && !prefersReducedMotion) {
+    window.setTimeout(() => root.classList.remove("theme-transition"), 350);
+  }
 }
 
 export function useTheme() {

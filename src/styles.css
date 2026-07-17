@@ -463,138 +463,139 @@
   .shadow-glow, .shadow-card-soft, .shadow-neon { box-shadow: none !important; }
 }
 
-/* ============== Cloud White palette overrides ==============
-   Airy SaaS minimalism. Slate neutrals on off-white canvas with a
-   single crisp blue accent. Applied globally so hardcoded dark-theme
-   utility classes still render legibly on the white surface.
-
-   Palette tokens (documentation)
-   --ink-900:  #0F172A  headings (slate-900)
-   --ink-700:  #1E293B  body text (slate-800)
-   --ink-500:  #475569  secondary (slate-600)
-   --ink-400:  #64748B  muted    (slate-500)
-   --ink-300:  #94A3B8  placeholder (slate-400)
-   --line:     #E8ECF1  borders
-   --surface:  #FFFFFF  card
-   --canvas:   #FAFBFC  page
-   --blue:     #3B82F6  primary accent
-   --blue-2:   #2563EB  hover / gradient stop
-   --sky:      #60A5FA  soft gradient stop
+/* ============== Theme-aware palette overrides ==============
+   Uses the active theme's CSS variables so the same components
+   render legibly in both light and dark modes. Hardcoded dark-mode
+   utility classes are remapped to theme values instead of static
+   Cloud White colors, fixing theme switching while keeping the
+   light theme airy and professional.
 */
 
 html, body {
-  background-color: #FAFBFC !important;
-  color: #1E293B !important;
-  color-scheme: light !important;
+  background-color: var(--color-background);
+  color: var(--color-foreground);
 }
+
+/* Theme transition: smooth background/text color switches.
+   Disabled when the user prefers reduced motion. */
+@media (prefers-reduced-motion: no-preference) {
+  html.theme-transition,
+  html.theme-transition *,
+  html.theme-transition *::before,
+  html.theme-transition *::after {
+    transition: background-color 250ms ease-in-out, color 250ms ease-in-out, border-color 250ms ease-in-out, fill 250ms ease-in-out, stroke 250ms ease-in-out !important;
+  }
+}
+
 h1, h2, h3, h4, h5, h6, p, span, li, a, label, strong, em, blockquote, figcaption {
   color: inherit;
 }
-h1, h2, h3, h4, h5, h6 { color: #0F172A; letter-spacing: -0.02em; }
-a { color: #3B82F6; }
-a:hover { color: #2563EB; }
+h1, h2, h3, h4, h5, h6 { color: var(--color-card-foreground); letter-spacing: -0.02em; }
+a { color: var(--color-primary); }
+a:hover { color: var(--color-brand-2); }
 
 /* Neutralise the legacy dark-mode utility classes */
 .text-white,
 .hover\:text-white:hover,
 .text-white\/85,
-.text-white\/90 { color: #1E293B !important; }
-.text-white\/40 { color: #94A3B8 !important; }
-.text-white\/50 { color: #64748B !important; }
-.text-white\/55 { color: #64748B !important; }
-.text-white\/60 { color: #475569 !important; }
-.text-white\/65 { color: #475569 !important; }
-.text-white\/70 { color: #475569 !important; }
-.text-white\/75 { color: #334155 !important; }
-.text-white\/80 { color: #1E293B !important; }
-.placeholder\:text-white\/40::placeholder { color: #94A3B8 !important; }
-.bg-white\/5   { background-color: #FFFFFF !important; }
-.bg-white\/10  { background-color: #FAFBFC !important; }
-.hover\:bg-white\/10:hover { background-color: #EFF6FF !important; }
+.text-white\/90 { color: var(--color-foreground) !important; }
+.text-white\/40 { color: var(--color-muted-foreground) !important; }
+.text-white\/50 { color: var(--color-muted-foreground) !important; }
+.text-white\/55 { color: var(--color-muted-foreground) !important; }
+.text-white\/60 { color: var(--color-muted-foreground) !important; }
+.text-white\/65 { color: var(--color-muted-foreground) !important; }
+.text-white\/70 { color: var(--color-muted-foreground) !important; }
+.text-white\/75 { color: var(--color-secondary-foreground) !important; }
+.text-white\/80 { color: var(--color-foreground) !important; }
+.placeholder\:text-white\/40::placeholder { color: var(--color-muted-foreground) !important; }
+.bg-white\/5   { background-color: var(--color-card) !important; }
+.bg-white\/10  { background-color: var(--color-background) !important; }
+.hover\:bg-white\/10:hover { background-color: var(--color-secondary) !important; }
 .border-white\/10,
 .border-white\/15,
-.border-white\/20 { border-color: #E8ECF1 !important; }
+.border-white\/20 { border-color: var(--color-border) !important; }
 .bg-background\/60,
-.bg-background\/85 { background-color: #FFFFFF !important; }
+.bg-background\/85 { background-color: var(--color-card) !important; }
 [aria-hidden] .bg-aurora { opacity: 0.10; }
-.text-neon { color: #3B82F6 !important; text-shadow: none !important; }
+.text-neon { color: var(--color-primary) !important; text-shadow: none !important; }
 
 /* Brand accent utilities */
 .text-neon-cyan,
 .hover\:text-neon-cyan:hover,
-.group-hover\:text-neon-cyan { color: #3B82F6 !important; }
-.text-neon-blue { color: #3B82F6 !important; }
-.text-neon-purple { color: #2563EB !important; }
+.group-hover\:text-neon-cyan { color: var(--color-primary) !important; }
+.text-neon-blue { color: var(--color-primary) !important; }
+.text-neon-purple { color: var(--color-brand-2) !important; }
 .border-neon-cyan\/40,
-.border-neon-cyan\/50 { border-color: rgba(59, 130, 246, 0.35) !important; }
-.bg-neon-cyan\/10 { background-color: rgba(59, 130, 246, 0.08) !important; }
-.focus\:border-neon-cyan:focus { border-color: #3B82F6 !important; }
-.focus\:ring-neon-cyan\/40:focus { box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.20) !important; }
+.border-neon-cyan\/50 { border-color: color-mix(in oklch, var(--color-primary) 35%, transparent) !important; }
+.bg-neon-cyan\/10 { background-color: color-mix(in oklch, var(--color-primary) 8%, transparent) !important; }
+.focus\:border-neon-cyan:focus { border-color: var(--color-primary) !important; }
+.focus\:ring-neon-cyan\/40:focus { box-shadow: 0 0 0 3px color-mix(in oklch, var(--color-primary) 20%, transparent) !important; }
 
 /* Force modern brand gradient (blue → sky) */
 .bg-brand-gradient {
-  background: linear-gradient(135deg, #2563EB 0%, #3B82F6 50%, #60A5FA 100%) !important;
-  color: #FFFFFF !important;
+  background: var(--gradient-brand) !important;
+  color: var(--color-primary-foreground) !important;
 }
-.bg-brand-gradient * { color: #FFFFFF !important; }
+.bg-brand-gradient * { color: var(--color-primary-foreground) !important; }
 
-/* Card surfaces — crisp white with blue accent */
+/* Card surfaces — theme-aware with blue accent */
 .card-flashy {
-  background: #FFFFFF !important;
-  border: 1px solid #E8ECF1 !important;
-  border-top: 2px solid #3B82F6 !important;
+  background: var(--color-card) !important;
+  border: 1px solid var(--color-border) !important;
+  border-top: 2px solid var(--color-primary) !important;
   border-radius: 14px !important;
-  box-shadow: 0 1px 2px rgba(15,23,42,0.04), 0 8px 24px -12px rgba(15,23,42,0.08) !important;
-  transition: transform .18s ease, border-color .18s ease, box-shadow .18s ease !important;
+  box-shadow: var(--shadow-card) !important;
+  transition: transform .18s ease, border-color .18s ease, box-shadow .18s ease, background-color .25s ease, color .25s ease !important;
 }
 .card-flashy::before, .card-flashy::after { display: none !important; }
 .card-flashy:hover {
-  border-color: #3B82F6 !important;
-  border-top-color: #2563EB !important;
-  box-shadow: 0 6px 16px rgba(15,23,42,0.06), 0 20px 48px -16px rgba(59,130,246,0.28) !important;
+  border-color: var(--color-primary) !important;
+  border-top-color: var(--color-brand-2) !important;
+  box-shadow: 0 6px 16px color-mix(in oklch, var(--color-foreground) 6%, transparent),
+              0 20px 48px -16px color-mix(in oklch, var(--color-primary) 28%, transparent) !important;
   transform: translateY(-3px);
 }
 .card-flashy .bg-accent,
 .card-flashy .rounded-full.bg-accent,
 .card-flashy .hover\:bg-accent:hover,
 .card-flashy [class*="bg-accent"] {
-  background-color: rgba(59, 130, 246, 0.10) !important;
-  color: #2563EB !important;
-  border: 1px solid rgba(59, 130, 246, 0.18) !important;
+  background-color: color-mix(in oklch, var(--color-primary) 10%, transparent) !important;
+  color: var(--color-brand-2) !important;
+  border: 1px solid color-mix(in oklch, var(--color-primary) 18%, transparent) !important;
 }
 .card-flashy .text-gradient {
-  background: linear-gradient(120deg, #2563EB 0%, #3B82F6 100%) !important;
+  background: var(--gradient-brand) !important;
   -webkit-background-clip: text !important;
   background-clip: text !important;
   color: transparent !important;
 }
 
-/* Focus ring — blue, always visible */
+/* Focus ring — primary, always visible */
 *:focus-visible {
-  outline: 2px solid #3B82F6 !important;
+  outline: 2px solid var(--color-primary) !important;
   outline-offset: 2px !important;
 }
 
 /* Form inputs */
 input, textarea, select {
-  background-color: #FFFFFF !important;
-  border-color: #E8ECF1 !important;
-  color: #1E293B !important;
+  background-color: var(--color-card) !important;
+  border-color: var(--color-border) !important;
+  color: var(--color-foreground) !important;
 }
-input::placeholder, textarea::placeholder { color: #94A3B8 !important; }
+input::placeholder, textarea::placeholder { color: var(--color-muted-foreground) !important; }
 input:focus, textarea:focus, select:focus {
-  border-color: #3B82F6 !important;
-  box-shadow: 0 0 0 3px rgba(59,130,246,0.15) !important;
+  border-color: var(--color-primary) !important;
+  box-shadow: 0 0 0 3px color-mix(in oklch, var(--color-primary) 15%, transparent) !important;
 }
 
 /* Tables */
-table tbody tr:nth-child(even) { background-color: #FAFBFC; }
-table thead { background-color: #EFF6FF; color: #0F172A; }
-table th, table td { border-color: #E8ECF1; }
+table tbody tr:nth-child(even) { background-color: var(--color-background); }
+table thead { background-color: var(--color-secondary); color: var(--color-card-foreground); }
+table th, table td { border-color: var(--color-border); }
 
-/* Text gradient — blue tonal */
+/* Text gradient — brand tonal */
 .text-gradient, .shimmer-headline {
-  background: linear-gradient(120deg, #0F172A 0%, #2563EB 55%, #3B82F6 100%) !important;
+  background: var(--gradient-brand) !important;
   -webkit-background-clip: text !important;
   background-clip: text !important;
   color: transparent !important;
@@ -602,44 +603,42 @@ table th, table td { border-color: #E8ECF1; }
   text-shadow: none !important;
 }
 .text-gradient svg, .shimmer-headline svg {
-  color: #3B82F6 !important;
-  -webkit-text-fill-color: #3B82F6 !important;
+  color: var(--color-primary) !important;
+  -webkit-text-fill-color: var(--color-primary) !important;
   fill: currentColor !important;
 }
 
 /* Section eyebrows / small labels */
 .eyebrow, [data-eyebrow] {
-  color: #3B82F6 !important;
+  color: var(--color-primary) !important;
   letter-spacing: 0.14em;
   text-transform: uppercase;
   font-weight: 700;
 }
 
-/* Force dark hero / glass surfaces to render as light cards so
-   text (which we forced to dark) stays legible across the whole site. */
+/* Hero surfaces — theme-aware */
 .bg-hero {
-  background:
-    radial-gradient(ellipse 90% 60% at 50% 0%, rgba(59,130,246,0.08), transparent 65%),
-    linear-gradient(180deg, #FFFFFF 0%, #FAFBFC 100%) !important;
-  color: #1E293B !important;
+  background: var(--gradient-hero) !important;
+  color: var(--color-foreground) !important;
 }
 .bg-hero .text-gradient,
 .bg-hero .shimmer-headline { color: transparent !important; }
 
 .glass-strong {
-  background: #FFFFFF !important;
-  border: 1px solid #E8ECF1 !important;
-  border-top: 2px solid #3B82F6 !important;
-  backdrop-filter: none !important;
-  box-shadow: 0 1px 2px rgba(15,23,42,0.04), 0 8px 24px -12px rgba(15,23,42,0.08) !important;
-  color: #1E293B !important;
+  background: var(--color-card) !important;
+  border: 1px solid var(--color-border) !important;
+  border-top: 2px solid var(--color-primary) !important;
+  backdrop-filter: blur(24px) saturate(160%) !important;
+  box-shadow: var(--shadow-card) !important;
+  color: var(--color-foreground) !important;
 }
 .glass-strong:hover {
-  border-color: #3B82F6 !important;
-  box-shadow: 0 6px 16px rgba(15,23,42,0.06), 0 20px 48px -16px rgba(59,130,246,0.24) !important;
+  border-color: var(--color-primary) !important;
+  box-shadow: 0 6px 16px color-mix(in oklch, var(--color-foreground) 6%, transparent),
+              0 20px 48px -16px color-mix(in oklch, var(--color-primary) 24%, transparent) !important;
 }
 
-/* Accent pills / badges — blue instead of amber */
+/* Accent pills / badges — brand instead of amber */
 .bg-accent,
 .bg-accent\/50,
 .bg-accent\/30,
@@ -647,22 +646,78 @@ table th, table td { border-color: #E8ECF1; }
 .hover\:bg-accent\/50:hover,
 .group:hover .group-hover\:bg-accent,
 .group:hover .group-hover\:bg-accent\/50 {
-  background-color: rgba(59, 130, 246, 0.12) !important;
-  color: #2563EB !important;
+  background-color: color-mix(in oklch, var(--color-primary) 12%, transparent) !important;
+  color: var(--color-brand-2) !important;
 }
 
-/* Neutralise stray dark utility backgrounds */
+/* Map common hardcoded Tailwind slate colours to theme variables so they
+   respond to light/dark switches without editing every component. */
+.text-slate-900,
+.text-slate-800,
+.text-slate-700 { color: var(--color-card-foreground) !important; }
+.text-slate-600,
+.text-slate-500,
+.text-slate-400,
+.text-slate-300 { color: var(--color-muted-foreground) !important; }
+
+.bg-slate-50 { background-color: var(--color-background) !important; }
+.bg-slate-100,
+.bg-slate-200,
+.hover\:bg-slate-50:hover,
+.hover\:bg-slate-100:hover { background-color: var(--color-muted) !important; }
+
+.hover\:text-slate-900:hover { color: var(--color-card-foreground) !important; }
+
+/* White surfaces and translucency — use card color at the matching opacity so they adapt */
+.bg-white,
+.hover\:bg-white:hover { background-color: var(--color-card) !important; }
+.bg-white\/5  { background-color: color-mix(in oklch, var(--color-card) 5%, transparent) !important; }
+.bg-white\/10 { background-color: color-mix(in oklch, var(--color-card) 10%, transparent) !important; }
+.bg-white\/15 { background-color: color-mix(in oklch, var(--color-card) 15%, transparent) !important; }
+.bg-white\/60 { background-color: color-mix(in oklch, var(--color-card) 60%, transparent) !important; }
+.bg-white\/70 { background-color: color-mix(in oklch, var(--color-card) 70%, transparent) !important; }
+.bg-white\/80 { background-color: color-mix(in oklch, var(--color-card) 80%, transparent) !important; }
+.bg-white\/85 { background-color: color-mix(in oklch, var(--color-card) 85%, transparent) !important; }
+.bg-white\/90 { background-color: color-mix(in oklch, var(--color-card) 90%, transparent) !important; }
+.bg-white\/95 { background-color: color-mix(in oklch, var(--color-card) 95%, transparent) !important; }
+.hover\:bg-white\/10:hover { background-color: color-mix(in oklch, var(--color-card) 10%, transparent) !important; }
+
+/* Hardcoded arbitrary-value backgrounds used in pages */
+.bg-\[\#fafbfc\] { background-color: var(--color-background) !important; }
+.bg-\[\#e8ecf1\] { background-color: var(--color-muted) !important; }
+
+/* Slate borders */
+.border-slate-100,
+.border-slate-200,
+.border-slate-300 { border-color: var(--color-border) !important; }
+
+/* Blue accent colours */
+.bg-blue-50,
+.bg-blue-50\/40,
+.bg-blue-100 { background-color: color-mix(in oklch, var(--color-brand-1) 12%, transparent) !important; }
+.border-blue-100,
+.border-blue-200 { border-color: color-mix(in oklch, var(--color-brand-1) 25%, transparent) !important; }
+.text-blue-500,
+.text-blue-600,
+.text-blue-700 { color: var(--color-brand-1) !important; }
+
+/* Gradient stops used in case-studies hero figure */
+.from-blue-50 { --tw-gradient-from: color-mix(in oklch, var(--color-brand-1) 12%, transparent) !important; }
+.via-white { --tw-gradient-via: var(--color-card) !important; }
+.to-emerald-50 { --tw-gradient-to: color-mix(in oklch, var(--color-brand-2) 12%, transparent) !important; }
+
+/* Neutralise stray dark utility backgrounds using theme values */
 .bg-black,
 [class*="bg-slate-9"],
 [class*="bg-zinc-9"],
 [class*="bg-neutral-9"],
 [class*="bg-gray-9"] {
-  background-color: #FFFFFF !important;
-  color: #1E293B !important;
+  background-color: var(--color-card) !important;
+  color: var(--color-foreground) !important;
 }
 .bg-black\/40,
 .bg-black\/60,
-.bg-black\/80 { background-color: rgba(15, 23, 42, 0.55) !important; }
+.bg-black\/80 { background-color: color-mix(in oklch, var(--color-foreground) 55%, transparent) !important; }
 
 /* ============== Chat panel text overrides ==============
    Force all text inside the floating chat panel to pure black for visibility.
@@ -698,4 +753,5 @@ table th, table td { border-color: #E8ECF1; }
 .floating-chat-panel button svg {
   color: #000000 !important;
 }
+
 

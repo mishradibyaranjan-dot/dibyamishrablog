@@ -69,13 +69,13 @@ export const Route = createFileRoute("/")({
   component: Home,
 });
 
-// ---------- Design tokens (locked from chosen direction) ----------
-const INK = "#0f172a";
-const MUTED = "#475569";
-const ACCENT = "#3b82f6";
-const CANVAS = "#fafbfc";
-const SURFACE = "#ffffff";
-const LINE = "#e8ecf1";
+// ---------- Design tokens (theme-aware, respects dark/light toggle) ----------
+const INK = "var(--color-foreground)";
+const MUTED = "var(--color-muted-foreground)";
+const ACCENT = "var(--color-brand-1)";
+const CANVAS = "var(--color-background)";
+const SURFACE = "var(--color-card)";
+const LINE = "var(--color-border)";
 
 const HEADING: React.CSSProperties = { fontFamily: "'Space Grotesk', sans-serif" };
 const BODY: React.CSSProperties = { fontFamily: "'DM Sans', sans-serif" };
@@ -176,7 +176,7 @@ function Hero() {
         <Link
           to="/newsletter"
           className="inline-flex items-center gap-2 rounded-xl px-6 py-3.5 text-sm font-semibold transition-colors hover:brightness-110"
-          style={{ backgroundColor: ACCENT, color: "#ffffff" }}
+          style={{ backgroundColor: ACCENT, color: "var(--color-primary-foreground)" }}
         >
           Read the newsletter
           <ArrowRight className="h-4 w-4" />
@@ -277,7 +277,7 @@ function NewsletterTile({ latest }: { latest: LatestIssue | null }) {
             <Link
               to="/newsletter"
               className="inline-flex items-center justify-center gap-2 rounded-xl px-8 py-4 text-sm font-semibold transition-colors hover:brightness-110"
-              style={{ backgroundColor: ACCENT, color: "#ffffff" }}
+              style={{ backgroundColor: ACCENT, color: "var(--color-primary-foreground)" }}
             >
               <Mail className="h-4 w-4" />
               Subscribe
@@ -416,7 +416,7 @@ function RepositoryTile() {
         <Link
           to="/repository"
           className="flex w-full items-center justify-center gap-2 rounded-xl py-3.5 text-sm font-bold transition-all hover:brightness-110 sm:py-4"
-          style={{ backgroundColor: ACCENT, color: "#ffffff" }}
+          style={{ backgroundColor: ACCENT, color: "var(--color-primary-foreground)" }}
         >
           <FileText className="h-4 w-4" />
           Enter Vault
