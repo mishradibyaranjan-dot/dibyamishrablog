@@ -54,7 +54,7 @@ export const Route = createFileRoute("/_authenticated/learn")({
   component: Learn,
 });
 
-type TabKey = "ai" | "cloud" | "saas";
+type TabKey = "ai" | "cloud" | "saas" | "itil" | "llm";
 
 function Learn() {
   const { user } = useAuth();
@@ -69,15 +69,17 @@ function Learn() {
     <Section className="pb-4 pt-16 lg:pt-24">
       <SectionHeader
         eyebrow="Learning Library"
-        title="Learn — AI, Cloud & SaaS, from the ground up"
-        description="Three self-contained mini-courses with concepts, history, architecture diagrams, comparison tables, code snippets, and security guidance. Designed for beginners with basic technical literacy who want depth, not just buzzwords."
+        title="Learn — AI, Cloud, SaaS, ITIL & LLM Engineering"
+        description="Five self-contained mini-courses with concepts, history, architecture diagrams, comparison tables, code snippets, and security guidance. Designed for beginners with basic technical literacy who want depth, not just buzzwords."
       />
 
       <Tabs value={tab} onValueChange={(v) => setTab(v as TabKey)} className="mt-6">
-        <TabsList className="grid w-full grid-cols-1 gap-2 bg-transparent p-0 sm:grid-cols-3">
+        <TabsList className="grid w-full grid-cols-1 gap-2 bg-transparent p-0 sm:grid-cols-3 lg:grid-cols-5">
           <TabPill value="ai" icon={<Brain className="h-4 w-4" />} label="Intro to AI" />
           <TabPill value="cloud" icon={<Cloud className="h-4 w-4" />} label="Intro to Cloud" />
           <TabPill value="saas" icon={<Layers className="h-4 w-4" />} label="Intro to SaaS" />
+          <TabPill value="itil" icon={<KanbanSquare className="h-4 w-4" />} label="ITIL & Kanban" />
+          <TabPill value="llm" icon={<Cpu className="h-4 w-4" />} label="LLM Engineering" />
         </TabsList>
 
         <TabsContent value="ai" className="mt-8 space-y-12">
@@ -88,6 +90,12 @@ function Learn() {
         </TabsContent>
         <TabsContent value="saas" className="mt-8 space-y-12">
           <IntroSaaS />
+        </TabsContent>
+        <TabsContent value="itil" className="mt-8 space-y-12">
+          <IntroITIL />
+        </TabsContent>
+        <TabsContent value="llm" className="mt-8 space-y-12">
+          <IntroLLM />
         </TabsContent>
       </Tabs>
     </Section>
