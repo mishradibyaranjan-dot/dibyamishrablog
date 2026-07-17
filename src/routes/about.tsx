@@ -93,20 +93,31 @@ const education = [
   { school: "Utkal University", degree: "Bachelor of Computer Applications (BCA)", year: "2004" },
 ];
 
-const certifications = [
-  "Model Context Protocol (MCP) — Agentic AI, 2026",
-  "Agentic AI System Design — LinkedIn, 2026",
-  "Generative AI on Azure — Microsoft, 2026",
-  "Advanced AI Analytics on AWS — Bedrock, SageMaker, QuickSight, 2026",
-  "Claude 101 — Anthropic, 2026",
-  "Apache Kafka Essential Training, 2026",
-  "SAFe 6.0 — Scaled Agile Framework, 2026",
-  "Lean Six Sigma Foundations — PMIEF, 2026",
-  "AWS Cloud Practitioner (CLF-C02), 2025",
-  "CSM — Certified Scrum Master, Scrum Alliance, 2017",
-  "MCP / MCAD / MCPDEA — Microsoft, 2008",
-  "60+ certifications across AI, Cloud, Leadership & Delivery",
+const categories = ["All", "AI", "Cloud", "Leadership", "Delivery"] as const;
+
+type Category = (typeof categories)[number];
+
+interface Certification {
+  name: string;
+  category: Category;
+  year?: string;
+}
+
+const certifications: Certification[] = [
+  { name: "Model Context Protocol (MCP) — Agentic AI", category: "AI", year: "2026" },
+  { name: "Agentic AI System Design — LinkedIn", category: "AI", year: "2026" },
+  { name: "Generative AI on Azure — Microsoft", category: "AI", year: "2026" },
+  { name: "Advanced AI Analytics on AWS — Bedrock, SageMaker, QuickSight", category: "AI", year: "2026" },
+  { name: "Claude 101 — Anthropic", category: "AI", year: "2026" },
+  { name: "Apache Kafka Essential Training", category: "Cloud", year: "2026" },
+  { name: "SAFe 6.0 — Scaled Agile Framework", category: "Leadership", year: "2026" },
+  { name: "Lean Six Sigma Foundations — PMIEF", category: "Leadership", year: "2026" },
+  { name: "AWS Cloud Practitioner (CLF-C02)", category: "Cloud", year: "2025" },
+  { name: "CSM — Certified Scrum Master, Scrum Alliance", category: "Leadership", year: "2017" },
+  { name: "MCP / MCAD / MCPDEA — Microsoft", category: "Cloud", year: "2008" },
 ];
+
+const summaryCert = "60+ certifications across AI, Cloud, Leadership & Delivery";
 
 
 const languages = ["English", "Hindi", "Bengali", "Punjabi"];
@@ -114,9 +125,13 @@ const languages = ["English", "Hindi", "Bengali", "Punjabi"];
 function About() {
   const [open, setOpen] = React.useState(false);
   const [query, setQuery] = React.useState("");
-  const filteredCerts = certifications.filter((c) =>
-    c.toLowerCase().includes(query.toLowerCase()),
-  );
+  const [category, setCategory] = React.useState<Category>("All");
+  const filteredCerts = certifications.filter((c) => {
+    const matchesQuery = c.name.toLowerCase().includes(query.toLowerCase()) ||
+      (c.year?.includes(query) ?? false);
+    const matchesCategory = category === "All" || c.category === category;
+    return matchesQuery && matchesCategory;
+  });
   return (
     <>
       <Section className="pb-8 pt-16 lg:pt-24">
@@ -247,12 +262,18 @@ function About() {
                   <Award className="h-4 w-4" /> Certifications
                 </div>
                 <ul className="space-y-2">
-                  {certifications.map((c, i) => (
-                    <li key={c} className="flex items-start gap-2 text-sm">
+                  {certifications.map((c) => (
+                    <li key={c.name} className="flex items-start gap-2 text-sm">
                       <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-brand-gradient" />
-                      <span className={i === certifications.length - 1 ? "font-bold" : ""}>{c}</span>
+                      <span>
+                        {c.name}{c.year ? `, ${c.year}` : ""}
+                      </span>
                     </li>
                   ))}
+                  <li className="flex items-start gap-2 text-sm">
+                    <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-brand-gradient" />
+                    <span className="font-bold">{summaryCert}</span>
+                  </li>
                 </ul>
                 <div className="mt-4 text-xs font-medium text-brand-1">Click to search all certifications</div>
                 <div className="mt-6 border-t border-border pt-4">
@@ -273,10 +294,10 @@ function About() {
                   <Award className="h-5 w-5" /> Certifications
                 </DialogTitle>
                 <DialogDescription>
-                  Search across {certifications.length} credentials
+                  Search across {certifications.length} featured credentials
                 </DialogDescription>
               </DialogHeader>
-              <div className="p-6 pt-4">
+              <div className="space-y-4 p-6 pt-4">
                 <div className="relative">
                   <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
                   <Input
@@ -286,15 +307,42 @@ function About() {
                     className="pl-9"
                   />
                 </div>
+                <div className="flex flex-wrap gap-2">
+                  {categories.map((cat) => (
+                    <button
+                      key={cat}
+                      type="button"
+                      onClick={() => setCategory(cat)}
+                      className={`rounded-full px-3 py-1 text-xs font-medium transition-colors ${
+                        category === cat
+                          ? "bg-brand-gradient text-white"
+                          : "bg-accent text-foreground hover:bg-accent/80"
+                      }`}
+                    >
+                      {cat}
+                    </button>
+                  ))}
+                </div>
               </div>
               <div className="overflow-y-auto px-6 pb-6">
                 <ul className="space-y-2">
-                  {filteredCerts.map((c, i) => (
-                    <li key={c} className="flex items-start gap-2 text-sm">
+                  {filteredCerts.map((c) => (
+                    <li key={c.name} className="flex items-start gap-2 text-sm">
                       <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-brand-gradient" />
-                      <span className={i === filteredCerts.length - 1 ? "font-bold" : ""}>{c}</span>
+                      <span>
+                        {c.name}{c.year ? `, ${c.year}` : ""}
+                        <span className="ml-2 rounded-full bg-accent px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">
+                          {c.category}
+                        </span>
+                      </span>
                     </li>
                   ))}
+                  {filteredCerts.length > 0 && (
+                    <li className="flex items-start gap-2 text-sm">
+                      <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-brand-gradient" />
+                      <span className="font-bold">{summaryCert}</span>
+                    </li>
+                  )}
                   {filteredCerts.length === 0 && (
                     <li className="text-sm text-muted-foreground">No certifications match your search.</li>
                   )}
