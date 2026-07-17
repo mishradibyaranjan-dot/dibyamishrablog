@@ -309,10 +309,17 @@ function LearnTile() {
     <LightTile span="md:col-span-4" className="hover:-translate-y-0.5">
       <div className="mb-auto">
         <div
-          className="mb-6 grid h-12 w-12 place-items-center rounded-2xl"
-          style={{ backgroundColor: ACCENT }}
+          className="mb-4 overflow-hidden rounded-2xl border"
+          style={{ borderColor: LINE, backgroundColor: CANVAS }}
         >
-          <BookOpen className="h-5 w-5" style={{ color: "#ffffff" }} />
+          <img
+            src={cardLearn}
+            alt="A human learner and a robot studying together with books"
+            loading="lazy"
+            width={1280}
+            height={960}
+            className="h-32 w-full object-cover"
+          />
         </div>
         <h3
           style={{ ...HEADING, color: INK, letterSpacing: "-0.02em" }}
