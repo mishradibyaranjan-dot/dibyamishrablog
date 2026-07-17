@@ -7,11 +7,14 @@ import { useAuth } from "@/lib/auth";
 import { supabase } from "@/integrations/supabase/client";
 
 import llm from "@/assets/repo/llm.pdf.asset.json" with { type: "json" };
-
 import rag from "@/assets/repo/building_and_deploying_rag.pdf.asset.json" with { type: "json" };
 import retail from "@/assets/repo/generative_ai_in_retail_supply_chains_white_paper.pdf.asset.json" with { type: "json" };
 import itil from "@/assets/repo/itil_kanban_whitepaper.pdf.asset.json" with { type: "json" };
 import execsum from "@/assets/repo/executive_summary.pdf.asset.json" with { type: "json" };
+import aiBeginner from "@/assets/repo/ai_beginner.pdf.asset.json" with { type: "json" };
+import introCloud from "@/assets/repo/intro_cloud.pdf.asset.json" with { type: "json" };
+import saasTutorial from "@/assets/repo/saas_tutorial.pdf.asset.json" with { type: "json" };
+import enterpriseBrief from "@/assets/repo/enterprise_brief.pdf.asset.json" with { type: "json" };
 
 const asset = (a: unknown) => (a as { url: string }).url;
 
@@ -25,6 +28,38 @@ type Doc = {
 };
 
 const DOCS: Doc[] = [
+  {
+    title: "Comprehensive Beginner Guide to AI & AI Agents",
+    description:
+      "A ground-up introduction to Artificial Intelligence and modern AI Agents — concepts, architectures, tooling, and real-world use cases.",
+    category: "AI / Beginner",
+    url: asset(aiBeginner),
+    filename: "AI-and-AI-Agents-Beginner-Guide.pdf",
+  },
+  {
+    title: "Intro to Cloud & Basic Concepts of Cloud",
+    description:
+      "Foundations of cloud computing: service models (IaaS/PaaS/SaaS), deployment models, architecture patterns, and cost basics.",
+    category: "Cloud / Foundations",
+    url: asset(introCloud),
+    filename: "Intro-to-Cloud-Basics.pdf",
+  },
+  {
+    title: "Comprehensive SaaS Tutorial & Architecture Report",
+    description:
+      "End-to-end SaaS blueprint — multi-tenancy, pricing, security, observability, and architecture decisions for production platforms.",
+    category: "SaaS / Architecture",
+    url: asset(saasTutorial),
+    filename: "SaaS-Tutorial-and-Architecture.pdf",
+  },
+  {
+    title: "The Intelligent Enterprise Brief — July 2026",
+    description:
+      "Executive brief on the shift from AI experiments to governed enterprise agents across BFSI, retail, shipping, supply chain, and telecom.",
+    category: "Executive Brief",
+    url: asset(enterpriseBrief),
+    filename: "Intelligent-Enterprise-Brief-July-2026.pdf",
+  },
   {
     title: "Large Language Models — Foundations & Practice",
     description:
