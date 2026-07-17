@@ -185,6 +185,59 @@ export type Database = {
         }
         Relationships: []
       }
+      newsletter_issue_versions: {
+        Row: {
+          body_markdown: string
+          created_at: string
+          created_by: string | null
+          hero_emoji: string
+          id: string
+          issue_id: string
+          linkedin_post: string
+          snapshot_reason: string
+          status_at_snapshot: string
+          summary: string
+          title: string
+          version_no: number
+        }
+        Insert: {
+          body_markdown?: string
+          created_at?: string
+          created_by?: string | null
+          hero_emoji?: string
+          id?: string
+          issue_id: string
+          linkedin_post?: string
+          snapshot_reason?: string
+          status_at_snapshot?: string
+          summary?: string
+          title: string
+          version_no: number
+        }
+        Update: {
+          body_markdown?: string
+          created_at?: string
+          created_by?: string | null
+          hero_emoji?: string
+          id?: string
+          issue_id?: string
+          linkedin_post?: string
+          snapshot_reason?: string
+          status_at_snapshot?: string
+          summary?: string
+          title?: string
+          version_no?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "newsletter_issue_versions_issue_id_fkey"
+            columns: ["issue_id"]
+            isOneToOne: false
+            referencedRelation: "newsletter_issues"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       newsletter_issues: {
         Row: {
           approved_at: string | null
