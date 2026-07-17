@@ -68,6 +68,27 @@ export interface Post {
 
 export const posts: Post[] = [
   {
+    slug: "model-context-protocol-mcp-servers",
+    title: "Model Context Protocol (MCP) Servers: The Enterprise Guide",
+    summary:
+      "What Model Context Protocol (MCP) servers are, why they matter for enterprise AI agents, how to design them, secure them, and roll them out across teams.",
+    category: "AI & Agentic AI",
+    readingTime: "11 min",
+    date: "2026-07-15",
+    featured: true,
+    takeaways: [
+      "MCP is an open protocol that standardizes how LLMs and agents connect to tools, data, and prompts.",
+      "An MCP server exposes typed resources, tools, and prompts — any MCP-aware client can consume them.",
+      "Enterprise value: one integration surface instead of N bespoke tool wrappers per agent framework.",
+      "Security model: scoped credentials, per-tool authorization, audit logs, and human approvals for write actions.",
+      "Rollout pattern: start with read-only resources, add write tools behind policy, then federate multiple MCP servers behind a gateway.",
+    ],
+    content:
+      "Model Context Protocol (MCP) is an open standard that defines how AI assistants and agents connect to external tools, data sources, and prompt libraries. An MCP server is a lightweight process that exposes three primitives — resources (read-only data), tools (typed callable actions), and prompts (reusable templates) — over a well-defined JSON-RPC interface. Any MCP-aware client (Claude Desktop, Cursor, custom agents, or your own orchestration layer) can discover and call them without bespoke glue code. For enterprises this collapses the integration matrix: instead of writing N tool adapters per agent framework, you write one MCP server per system of record (Snowflake, Jira, SAP, your internal knowledge base) and every agent inherits the capability. The design principles that matter in production are the same ones we apply to any typed API surface — clear schemas, idempotency on writes, structured errors, and version negotiation — plus AI-specific concerns: token-efficient resource summaries, deterministic tool naming, and prompt templates that pin the model into a narrow behavior. The security model is where MCP earns its place in a regulated stack: each server runs under scoped credentials, every tool call is authorized against the caller's identity, write actions can be gated behind a human-in-the-loop approval step, and every request/response is logged for audit. The rollout pattern we recommend is incremental: start by exposing read-only resources so agents can ground answers in trusted data, add low-risk tools (search, lookup, draft) behind policy, then unlock write tools (create ticket, post message, execute trade) with explicit approval workflows. As MCP servers proliferate, put them behind an MCP gateway that handles discovery, authentication, quota, and observability — the same shape as an API gateway, adapted for agentic traffic.",
+  },
+
+
+  {
     slug: "what-is-agentic-ai",
     title: "What Is Agentic AI? A Definition, Architecture and Retail Supply Chain Playbook",
     summary:
