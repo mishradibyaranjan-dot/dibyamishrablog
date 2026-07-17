@@ -49,6 +49,7 @@ export function NewsletterScheduler() {
   const [historyOpen, setHistoryOpen] = useState<Record<string, boolean>>({});
   const [historyData, setHistoryData] = useState<Record<string, HistoryRow[]>>({});
   const [historyLoading, setHistoryLoading] = useState<Record<string, boolean>>({});
+  const [retryingRunId, setRetryingRunId] = useState<string | null>(null);
 
   // form
   const [name, setName] = useState("Weekly digest");
