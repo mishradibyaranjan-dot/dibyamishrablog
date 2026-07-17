@@ -202,6 +202,32 @@ export function NewsletterAdminPanel() {
     }
   };
 
+  const doAutoSend = async () => {
+    if (!confirm("Auto-generate a new newsletter and email it to ALL registered users + subscribers now?")) return;
+    setErr(null);
+    setMsg(null);
+    setAutoSending(true);
+    try {
+      const r = (await autoSendNewsletterToRegisteredUsers({
+        data: { topicHint: topicHint || undefined },
+      })) as {
+        title: string;
+        slug: string;
+        recipients: number;
+        emailsQueued: number;
+        emailErrors: number;
+      };
+      setMsg(
+        `Auto-sent "${r.title}" — queued ${r.emailsQueued}/${r.recipients} emails (errors: ${r.emailErrors}). Slug: /${r.slug}`,
+      );
+      refresh();
+    } catch (e) {
+      setErr(e instanceof Error ? e.message : String(e));
+    } finally {
+      setAutoSending(false);
+    }
+  };
+
   const isApproved = !!approvedAt && (status === "approved" || status === "published");
 
   return (
