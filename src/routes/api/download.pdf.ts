@@ -56,11 +56,16 @@ export const Route = createFileRoute("/api/download/pdf")({
           return new Response("Not found", { status: 404 });
         }
 
-        // Best-effort access log (RLS on resource_access should allow authenticated inserts scoped to user_id)
+        // Best-effort access log (uses caller's token so RLS "own resource insert" applies)
         try {
-          await supabase.from("resource_access").insert({
+          const userScoped = createClient(supabaseUrl, process.env.SUPABASE_PUBLISHABLE_KEY ?? "", {
+            global: { headers: { Authorization: `Bearer ${token}` } },
+            auth: { persistSession: false },
+          });
+          await userScoped.from("resource_access").insert({
             user_id: user.id,
-            resource: `pdf:${key}`,
+            resource_type: "repository_pdf",
+            resource_id: doc.filename,
           });
         } catch {
           /* non-fatal */
