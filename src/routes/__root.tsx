@@ -78,6 +78,8 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
       { name: "google-site-verification", content: "8EO0An2G722tBY4Ux1AdMj7joxlF1vZkZcCy9qCwXs4" },
+      { name: "google-site-verification", content: "zSv7Z_xrt_XkQYkl7c2EuLjbzO5inNSKvdq-3-ftVvY" },
+
 
       { title: "Dibya Ranjan Mishra" },
       {

@@ -67,7 +67,7 @@ export const Route = createFileRoute("/")({
 
 // ---------- Design tokens (locked from chosen direction) ----------
 const INK = "#0f172a";
-const MUTED = "#94a3b8";
+const MUTED = "#475569";
 const ACCENT = "#3b82f6";
 const CANVAS = "#fafbfc";
 const SURFACE = "#ffffff";
