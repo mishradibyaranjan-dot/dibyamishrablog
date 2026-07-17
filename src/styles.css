@@ -664,6 +664,38 @@ table th, table td { border-color: #E8ECF1; }
 .bg-black\/60,
 .bg-black\/80 { background-color: rgba(15, 23, 42, 0.55) !important; }
 
-
-
+/* ============== Chat panel text overrides ==============
+   Force all text inside the floating chat panel to pure black for visibility.
+*/
+.floating-chat-panel,
+.floating-chat-panel *,
+.floating-chat-panel ::placeholder {
+  color: #000000 !important;
+}
+.floating-chat-panel .text-muted-foreground,
+.floating-chat-panel .text-slate-500,
+.floating-chat-panel .text-blue-600 {
+  color: #000000 !important;
+}
+.floating-chat-panel .group-[.is-user] .bg-secondary,
+.floating-chat-panel .group-[.is-user] > div,
+.floating-chat-panel .group-[.is-user] [class*="bg-secondary"] {
+  background-color: #EFF6FF !important;
+  color: #000000 !important;
+  border: 1px solid #BFDBFE !important;
+}
+.floating-chat-panel .group-[.is-assistant] > div,
+.floating-chat-panel .group-[.is-assistant] [class*="text-foreground"] {
+  color: #000000 !important;
+}
+.floating-chat-panel input,
+.floating-chat-panel textarea,
+.floating-chat-panel [data-slot="prompt-input-textarea"] {
+  background-color: #FFFFFF !important;
+  color: #000000 !important;
+  border-color: #BFDBFE !important;
+}
+.floating-chat-panel button svg {
+  color: #000000 !important;
+}
 
