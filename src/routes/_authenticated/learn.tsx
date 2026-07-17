@@ -56,7 +56,7 @@ export const Route = createFileRoute("/_authenticated/learn")({
   component: Learn,
 });
 
-type TabKey = "ai" | "cloud" | "saas" | "itil" | "llm";
+type TabKey = "ai" | "cloud" | "saas" | "itil" | "llm" | "genai-retail" | "multitenant" | "rag";
 
 function Learn() {
   const { user } = useAuth();
@@ -71,17 +71,20 @@ function Learn() {
     <Section className="pb-4 pt-16 lg:pt-24">
       <SectionHeader
         eyebrow="Learning Library"
-        title="Learn — AI, Cloud, SaaS, ITIL & LLM Engineering"
-        description="Five self-contained mini-courses with concepts, history, architecture diagrams, comparison tables, code snippets, and security guidance. Designed for beginners with basic technical literacy who want depth, not just buzzwords."
+        title="Learn — AI, Cloud, SaaS, ITIL, LLM, GenAI Retail, Multi-Tenant & RAG"
+        description="Eight self-contained mini-courses with quick-summary guides, concepts, history, architecture diagrams, comparison tables, code snippets, and security guidance. Each module opens with a Quick Summary Guide so you get the key takeaways in under a minute."
       />
 
       <Tabs value={tab} onValueChange={(v) => setTab(v as TabKey)} className="mt-6">
-        <TabsList className="grid w-full grid-cols-1 gap-2 bg-transparent p-0 sm:grid-cols-3 lg:grid-cols-5">
+        <TabsList className="grid w-full grid-cols-1 gap-2 bg-transparent p-0 sm:grid-cols-2 lg:grid-cols-4">
           <TabPill value="ai" icon={<Brain className="h-4 w-4" />} label="Intro to AI" />
           <TabPill value="cloud" icon={<Cloud className="h-4 w-4" />} label="Intro to Cloud" />
           <TabPill value="saas" icon={<Layers className="h-4 w-4" />} label="Intro to SaaS" />
           <TabPill value="itil" icon={<KanbanSquare className="h-4 w-4" />} label="ITIL & Kanban" />
           <TabPill value="llm" icon={<Cpu className="h-4 w-4" />} label="LLM Engineering" />
+          <TabPill value="genai-retail" icon={<ShoppingCart className="h-4 w-4" />} label="GenAI in Retail" />
+          <TabPill value="multitenant" icon={<Building2 className="h-4 w-4" />} label="Multi-Tenant Apps" />
+          <TabPill value="rag" icon={<Search className="h-4 w-4" />} label="RAG Systems" />
         </TabsList>
 
         <TabsContent value="ai" className="mt-8 space-y-12">
@@ -98,6 +101,15 @@ function Learn() {
         </TabsContent>
         <TabsContent value="llm" className="mt-8 space-y-12">
           <IntroLLM />
+        </TabsContent>
+        <TabsContent value="genai-retail" className="mt-8 space-y-12">
+          <IntroGenAIRetail />
+        </TabsContent>
+        <TabsContent value="multitenant" className="mt-8 space-y-12">
+          <IntroMultiTenant />
+        </TabsContent>
+        <TabsContent value="rag" className="mt-8 space-y-12">
+          <IntroRAG />
         </TabsContent>
       </Tabs>
     </Section>
