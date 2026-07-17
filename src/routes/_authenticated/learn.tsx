@@ -31,6 +31,9 @@ import {
   KanbanSquare,
   Wrench,
   Zap,
+  ShoppingCart,
+  Building2,
+  Search,
 } from "lucide-react";
 import { Section, SectionHeader } from "@/components/layout/Section";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
