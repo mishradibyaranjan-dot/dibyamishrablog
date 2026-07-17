@@ -43,10 +43,10 @@ function AuthPage() {
       <motion.div
         initial={{ opacity: 0, y: 16 }}
         animate={{ opacity: 1, y: 0 }}
-        className="mx-auto w-full max-w-md rounded-3xl border border-white/10 bg-white/5 p-7 shadow-glow backdrop-blur-xl sm:p-9"
+        className="mx-auto w-full max-w-md rounded-3xl border border-slate-200 bg-white p-7 shadow-xl sm:p-9"
       >
-        <h1 className="font-display text-2xl font-bold text-white sm:text-3xl">Welcome</h1>
-        <p className="mt-2 text-sm text-white/65">
+        <h1 className="font-display text-2xl font-bold text-slate-900 sm:text-3xl">Welcome</h1>
+        <p className="mt-2 text-sm text-slate-600">
           Sign in or create an account to unlock the Learn library, research, projects, and case studies.
         </p>
 
@@ -63,21 +63,22 @@ function AuthPage() {
           </TabsContent>
         </Tabs>
 
-        <div className="my-5 flex items-center gap-3 text-xs uppercase tracking-widest text-white/40">
-          <span className="h-px flex-1 bg-white/10" />
+        <div className="my-5 flex items-center gap-3 text-xs uppercase tracking-widest text-slate-400">
+          <span className="h-px flex-1 bg-slate-200" />
           or
-          <span className="h-px flex-1 bg-white/10" />
+          <span className="h-px flex-1 bg-slate-200" />
         </div>
 
         <SocialButtons />
 
-        <p className="mt-6 text-center text-xs text-white/55">
-          <Link to="/forgot-password" className="hover:text-white">Forgot your password?</Link>
+        <p className="mt-6 text-center text-xs text-slate-500">
+          <Link to="/forgot-password" className="hover:text-slate-900">Forgot your password?</Link>
         </p>
       </motion.div>
     </Section>
   );
 }
+
 
 const emailSchema = z.string().trim().email("Enter a valid email").max(255);
 const passwordSchema = z.string().min(8, "Min 8 characters").max(128);
