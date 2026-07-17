@@ -69,10 +69,13 @@ function Contact() {
 
         <img
           src={heroContact}
-          alt="Illustration of an open envelope with a paper plane representing getting in touch"
+          alt="Illustration of an open envelope and paper plane inviting messages for advisory, architecture reviews, and engineering leadership conversations"
           width={1600}
           height={900}
-          className="mt-2 w-full rounded-3xl border border-border/60"
+          loading="eager"
+          fetchPriority="high"
+          decoding="async"
+          className="mt-2 aspect-[16/9] w-full rounded-3xl border border-border/60 object-cover"
         />
 
       </Section>

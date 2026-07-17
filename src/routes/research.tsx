@@ -85,10 +85,13 @@ function Research() {
 
         <img
           src={heroResearch}
-          alt="Illustration of floating papers and connected knowledge nodes representing research and writing"
+          alt="Editorial illustration of white papers, essays, and a knowledge graph representing research on Generative AI, Agentic AI, Cloud, SaaS, and Engineering Leadership"
           width={1600}
           height={900}
-          className="mb-10 w-full rounded-3xl border border-border/60"
+          loading="eager"
+          fetchPriority="high"
+          decoding="async"
+          className="mb-10 aspect-[16/9] w-full rounded-3xl border border-border/60 object-cover"
         />
 
 
