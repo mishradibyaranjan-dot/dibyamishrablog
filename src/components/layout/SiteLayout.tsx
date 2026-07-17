@@ -113,8 +113,8 @@ function Header() {
       className={cn(
         "sticky top-0 z-50 w-full transition-all duration-500",
         scrolled
-          ? "border-b border-white/10 bg-background/60 backdrop-blur-xl shadow-[0_8px_30px_-15px_oklch(0_0_0/0.6)]"
-          : "bg-transparent",
+          ? "border-b border-slate-200 bg-white/85 backdrop-blur-xl shadow-[0_8px_30px_-15px_rgba(15,23,42,0.15)]"
+          : "border-b border-transparent bg-white/60 backdrop-blur",
       )}
     >
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-4 px-4 sm:px-6">
@@ -124,9 +124,9 @@ function Header() {
             transition={{ type: "spring", stiffness: 280, damping: 18 }}
             src={drmLogo.url}
             alt="DRM logo"
-            className="h-9 w-9 shrink-0 rounded-lg object-contain shadow-neon"
+            className="h-9 w-9 shrink-0 rounded-lg object-contain"
           />
-          <span className="truncate text-white">Dibya R. Mishra</span>
+          <span className="truncate text-slate-900">Dibya R. Mishra</span>
         </Link>
 
         <nav className="hidden items-center gap-1 lg:flex" data-site-nav>
@@ -141,7 +141,7 @@ function Header() {
                 to={item.to}
                 className={cn(
                   "relative rounded-md px-3 py-2 text-sm font-medium transition-colors",
-                  active ? "text-white" : "text-white/65 hover:text-white",
+                  active ? "text-blue-600" : "text-slate-600 hover:text-slate-900",
                 )}
                 activeOptions={{ exact: item.to === "/" }}
               >
@@ -149,7 +149,7 @@ function Header() {
                 {active && (
                   <motion.span
                     layoutId="nav-underline"
-                    className="absolute inset-x-2 -bottom-0.5 h-0.5 rounded-full bg-brand-gradient shadow-neon"
+                    className="absolute inset-x-2 -bottom-0.5 h-0.5 rounded-full bg-blue-500"
                     transition={{ type: "spring", stiffness: 360, damping: 28 }}
                   />
                 )}
@@ -165,7 +165,7 @@ function Header() {
           <Button
             variant="ghost"
             size="icon"
-            className="text-white hover:bg-white/10 lg:hidden"
+            className="text-slate-700 hover:bg-slate-100 lg:hidden"
             onClick={() => setOpen((o) => !o)}
             aria-label="Menu"
           >
@@ -181,15 +181,15 @@ function Header() {
             animate={{ height: "auto", opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
             transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
-            className="overflow-hidden border-t border-white/10 bg-background/85 backdrop-blur-xl lg:hidden"
+            className="overflow-hidden border-t border-slate-200 bg-white/95 backdrop-blur-xl lg:hidden"
           >
             <nav className="mx-auto flex max-w-7xl flex-col px-4 py-3 sm:px-6">
               {NAV.map((item) => (
                 <Link
                   key={item.to}
                   to={item.to}
-                  className="rounded-md px-3 py-2.5 text-sm font-medium text-white/75 hover:bg-white/10 hover:text-white"
-                  activeProps={{ className: "text-white bg-white/10" }}
+                  className="rounded-md px-3 py-2.5 text-sm font-medium text-slate-700 hover:bg-slate-100 hover:text-blue-600"
+                  activeProps={{ className: "text-blue-600 bg-blue-50" }}
                   activeOptions={{ exact: item.to === "/" }}
                 >
                   {item.label}
@@ -202,6 +202,7 @@ function Header() {
     </header>
   );
 }
+
 
 function Footer() {
   return (
