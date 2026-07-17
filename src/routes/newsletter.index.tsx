@@ -15,7 +15,7 @@ type IssueRow = {
   published_at: string | null;
 };
 
-export const Route = createFileRoute("/newsletter")({
+export const Route = createFileRoute("/newsletter/")({
   head: () => {
     const url = `${SITE_ORIGIN}/newsletter`;
     const desc =
