@@ -1,5 +1,5 @@
 import { Fragment, useEffect, useState } from "react";
-import { Loader2, Calendar, Play, Trash2, Plus, History, ChevronDown, ChevronUp } from "lucide-react";
+import { Loader2, Calendar, Play, Trash2, Plus, History, ChevronDown, ChevronUp, RefreshCw } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   listNewsletterSchedules,
@@ -7,6 +7,7 @@ import {
   deleteNewsletterSchedule,
   runScheduleNow,
   listScheduleHistory,
+  retryFailedRunRecipients,
 } from "@/lib/newsletter-schedules.functions";
 
 type Row = {
@@ -48,6 +49,7 @@ export function NewsletterScheduler() {
   const [historyOpen, setHistoryOpen] = useState<Record<string, boolean>>({});
   const [historyData, setHistoryData] = useState<Record<string, HistoryRow[]>>({});
   const [historyLoading, setHistoryLoading] = useState<Record<string, boolean>>({});
+  const [retryingRunId, setRetryingRunId] = useState<string | null>(null);
 
   // form
   const [name, setName] = useState("Weekly digest");
@@ -163,6 +165,27 @@ export function NewsletterScheduler() {
     const open = !historyOpen[id];
     setHistoryOpen((m) => ({ ...m, [id]: open }));
     if (open && !historyData[id]) loadHistory(id);
+  };
+
+  const retryRun = async (scheduleId: string, runId: string, failedCount: number) => {
+    if (failedCount === 0) return;
+    if (!confirm(`Retry ${failedCount} failed recipient(s) for this run?`)) return;
+    setRetryingRunId(runId);
+    setErr(null);
+    setMsg(null);
+    try {
+      const r = (await retryFailedRunRecipients({ data: { runId } })) as {
+        retried: number;
+        queued: number;
+        errors: number;
+      };
+      setMsg(`Retried ${r.retried} — ${r.queued} re-queued, ${r.errors} still failing.`);
+      await loadHistory(scheduleId);
+    } catch (e) {
+      setErr(e instanceof Error ? e.message : String(e));
+    } finally {
+      setRetryingRunId(null);
+    }
   };
 
   return (
@@ -332,17 +355,36 @@ export function NewsletterScheduler() {
                                     <div className="mb-1 text-red-300">Run error: {run.error_message}</div>
                                   )}
                                   {run.failed_recipients.length > 0 && (
-                                    <details className="text-white/70">
-                                      <summary className="cursor-pointer text-red-300">{run.failed_recipients.length} failed recipient(s)</summary>
-                                      <ul className="mt-1 space-y-0.5 pl-4">
-                                        {run.failed_recipients.map((f, i) => (
-                                          <li key={i} className="text-[10px]">
-                                            <span className="text-white/80">{f.email}</span>
-                                            {f.error_message && <span className="text-red-300"> — {f.error_message}</span>}
-                                          </li>
-                                        ))}
-                                      </ul>
-                                    </details>
+                                    <div className="space-y-1">
+                                      <div className="flex items-center gap-2">
+                                        <span className="text-red-300">{run.failed_recipients.length} failed recipient(s)</span>
+                                        <Button
+                                          size="sm"
+                                          variant="outline"
+                                          onClick={() => retryRun(r.id, run.id, run.failed_recipients.length)}
+                                          disabled={retryingRunId === run.id}
+                                          className="h-6 border-amber-400/30 bg-amber-500/10 px-2 py-0 text-[10px] text-amber-200 hover:bg-amber-500/20"
+                                        >
+                                          {retryingRunId === run.id ? (
+                                            <Loader2 className="mr-1 h-3 w-3 animate-spin" />
+                                          ) : (
+                                            <RefreshCw className="mr-1 h-3 w-3" />
+                                          )}
+                                          Retry failed
+                                        </Button>
+                                      </div>
+                                      <details className="text-white/70">
+                                        <summary className="cursor-pointer text-red-300/80 text-[10px]">Show recipients</summary>
+                                        <ul className="mt-1 space-y-0.5 pl-4">
+                                          {run.failed_recipients.map((f, i) => (
+                                            <li key={i} className="text-[10px]">
+                                              <span className="text-white/80">{f.email}</span>
+                                              {f.error_message && <span className="text-red-300"> — {f.error_message}</span>}
+                                            </li>
+                                          ))}
+                                        </ul>
+                                      </details>
+                                    </div>
                                   )}
                                 </td>
                               </tr>
