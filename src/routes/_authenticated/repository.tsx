@@ -7,7 +7,7 @@ import { useAuth } from "@/lib/auth";
 import { supabase } from "@/integrations/supabase/client";
 
 import llm from "@/assets/repo/llm.pdf.asset.json" with { type: "json" };
-import multitenant from "@/assets/repo/start_building_multitenant_application.pdf.asset.json" with { type: "json" };
+
 import rag from "@/assets/repo/building_and_deploying_rag.pdf.asset.json" with { type: "json" };
 import retail from "@/assets/repo/generative_ai_in_retail_supply_chains_white_paper.pdf.asset.json" with { type: "json" };
 import itil from "@/assets/repo/itil_kanban_whitepaper.pdf.asset.json" with { type: "json" };
@@ -40,14 +40,6 @@ const DOCS: Doc[] = [
     category: "AI / RAG",
     url: asset(rag),
     filename: "Building-and-Deploying-RAG.pdf",
-  },
-  {
-    title: "Start Building a Multi-Tenant Application",
-    description:
-      "Tenancy models, data isolation strategies, per-tenant configuration, billing, and observability patterns for SaaS.",
-    category: "SaaS Architecture",
-    url: asset(multitenant),
-    filename: "Multi-Tenant-Application-Guide.pdf",
   },
   {
     title: "Generative AI in Retail Supply Chains",

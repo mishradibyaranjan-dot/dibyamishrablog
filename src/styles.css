@@ -461,35 +461,56 @@
   .shadow-glow, .shadow-card-soft, .shadow-neon { box-shadow: none !important; }
 }
 
-/* ============== Light theme legibility overrides ==============
+/* ============== Global legibility overrides ==============
    The site was originally authored for a dark cinematic theme with many
-   hardcoded text-white / bg-white/x / border-white/x classes. We now force
-   a white background site-wide, so remap those classes to legible dark
-   tones on light theme instead of touching every component. */
-[data-theme="light"] {
-  color-scheme: light;
+   hardcoded text-white / bg-white/x / border-white/x classes. The site is
+   now forced to a white background regardless of the selected theme, so
+   remap those utilities globally to legible dark text on light surfaces. */
+html, body {
+  background-color: #ffffff !important;
+  color: #0a0a0a !important;
+  color-scheme: light !important;
 }
-[data-theme="light"] body {
-  background-color: #ffffff;
-  color: #0a0a0a;
+h1, h2, h3, h4, h5, h6, p, span, li, a, label, strong, em, blockquote, figcaption {
+  color: inherit;
 }
-[data-theme="light"] .text-white,
-[data-theme="light"] .hover\:text-white:hover {
+.text-white,
+.hover\:text-white:hover,
+.text-white\/40,
+.text-white\/50,
+.text-white\/55,
+.text-white\/60,
+.text-white\/65,
+.text-white\/70,
+.text-white\/75,
+.text-white\/80,
+.text-white\/85,
+.text-white\/90 {
   color: #0a0a0a !important;
 }
-[data-theme="light"] .text-white\/40 { color: #6b7280 !important; }
-[data-theme="light"] .text-white\/50 { color: #6b7280 !important; }
-[data-theme="light"] .text-white\/65 { color: #374151 !important; }
-[data-theme="light"] .text-white\/70 { color: #374151 !important; }
-[data-theme="light"] .text-white\/75 { color: #374151 !important; }
-[data-theme="light"] .text-white\/80 { color: #1f2937 !important; }
-[data-theme="light"] .placeholder\:text-white\/40::placeholder { color: #9ca3af !important; }
-[data-theme="light"] .bg-white\/5   { background-color: #f8fafc !important; }
-[data-theme="light"] .bg-white\/10  { background-color: #f1f5f9 !important; }
-[data-theme="light"] .hover\:bg-white\/10:hover { background-color: #f1f5f9 !important; }
-[data-theme="light"] .border-white\/10,
-[data-theme="light"] .border-white\/15 { border-color: #e5e7eb !important; }
-[data-theme="light"] .bg-background\/60,
-[data-theme="light"] .bg-background\/85 { background-color: rgba(255,255,255,0.92) !important; }
+.text-white\/40 { color: #6b7280 !important; }
+.text-white\/50 { color: #6b7280 !important; }
+.text-white\/55 { color: #4b5563 !important; }
+.text-white\/60 { color: #4b5563 !important; }
+.text-white\/65 { color: #374151 !important; }
+.text-white\/70 { color: #374151 !important; }
+.text-white\/75 { color: #374151 !important; }
+.text-white\/80 { color: #1f2937 !important; }
+.placeholder\:text-white\/40::placeholder { color: #9ca3af !important; }
+.bg-white\/5   { background-color: #f8fafc !important; }
+.bg-white\/10  { background-color: #f1f5f9 !important; }
+.hover\:bg-white\/10:hover { background-color: #f1f5f9 !important; }
+.border-white\/10,
+.border-white\/15,
+.border-white\/20 { border-color: #e5e7eb !important; }
+.bg-background\/60,
+.bg-background\/85 { background-color: rgba(255,255,255,0.92) !important; }
 /* Neutralize dark aurora vignette so the page reads white */
-[data-theme="light"] [aria-hidden] .bg-aurora { opacity: 0.18; }
+[aria-hidden] .bg-aurora { opacity: 0.18; }
+/* Keep gradient / neon text legible: fall back to dark ink if the
+   gradient can't be seen against white. */
+.text-neon { color: #0f172a !important; text-shadow: none !important; }
+/* Buttons using brand-gradient still get white text (they have a dark bg) */
+.bg-brand-gradient { color: #ffffff !important; }
+.bg-brand-gradient * { color: #ffffff !important; }
+
