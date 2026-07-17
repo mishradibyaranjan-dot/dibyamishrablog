@@ -25,12 +25,12 @@ export function AuroraBackground({ className }: { className?: string }) {
       />
       {/* Grid */}
       <div className="absolute inset-0 grid-pattern opacity-30" />
-      {/* Vignette */}
+      {/* Vignette (subtle on light theme) */}
       <div
         className="absolute inset-0"
         style={{
           background:
-            "radial-gradient(ellipse at 50% 0%, transparent 30%, oklch(0.09 0.02 265 / 0.6) 80%)",
+            "radial-gradient(ellipse at 50% 0%, transparent 40%, oklch(1 0 0 / 0.6) 85%)",
         }}
       />
     </div>
