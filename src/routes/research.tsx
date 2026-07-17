@@ -6,7 +6,6 @@ import { Badge } from "@/components/ui/badge";
 import { posts, categories } from "@/lib/content";
 import { cn } from "@/lib/utils";
 import { pageOgImages, SITE_ORIGIN } from "@/lib/og-images";
-import { RequireAuth } from "@/components/auth/RequireAuth";
 import heroResearch from "@/assets/hero-research.jpg";
 
 
@@ -49,11 +48,7 @@ export const Route = createFileRoute("/research")({
       }],
     };
   },
-  component: () => (
-    <RequireAuth>
-      <Research />
-    </RequireAuth>
-  ),
+  component: Research,
 });
 
 function Research() {
