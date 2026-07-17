@@ -1,0 +1,1 @@
+CREATE POLICY "Block anon from reading subscribers" ON public.newsletter_subscribers AS RESTRICTIVE FOR SELECT TO anon USING (false);
