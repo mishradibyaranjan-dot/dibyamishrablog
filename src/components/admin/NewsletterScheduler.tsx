@@ -311,7 +311,7 @@ export function NewsletterScheduler() {
                       </thead>
                       <tbody>
                         {historyData[r.id].map((run) => (
-                          <>
+                          <Fragment key={run.id}>
                             <tr key={run.id} className="border-t border-white/5 align-top">
                               <td className="py-1 pr-3 text-white/70 whitespace-nowrap">{new Date(run.started_at).toLocaleString()}</td>
                               <td className="py-1 pr-3 text-white/60">{run.trigger_source}</td>
