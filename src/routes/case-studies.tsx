@@ -8,6 +8,8 @@ import { cn } from "@/lib/utils";
 import { CheckCircle2 } from "lucide-react";
 import { pageOgImages, SITE_ORIGIN } from "@/lib/og-images";
 import { RequireAuth } from "@/components/auth/RequireAuth";
+import heroCaseStudies from "@/assets/hero-casestudies.jpg";
+
 
 export const Route = createFileRoute("/case-studies")({
   head: () => {
@@ -51,6 +53,15 @@ function CaseStudies() {
           title="Programs that moved the needle"
           description="Selected case studies with the architecture choices, execution strategy, and business outcomes that defined them."
         />
+
+        <img
+          src={heroCaseStudies}
+          alt="Illustration of upward-trending growth curve with stacked blocks representing business outcomes"
+          width={1600}
+          height={900}
+          className="mb-8 w-full rounded-3xl border border-border/60"
+        />
+
 
         <div className="flex flex-wrap gap-2">
           {["All", ...categories].map((c) => (

@@ -7,6 +7,8 @@ import { posts, categories } from "@/lib/content";
 import { cn } from "@/lib/utils";
 import { pageOgImages, SITE_ORIGIN } from "@/lib/og-images";
 import { RequireAuth } from "@/components/auth/RequireAuth";
+import heroResearch from "@/assets/hero-research.jpg";
+
 
 export const Route = createFileRoute("/research")({
   head: () => {
@@ -80,6 +82,15 @@ function Research() {
           title="Notes, deep dives, essays & white papers"
           description="A unified library of research, blog writing, and long-form white papers across AI, Cloud, SaaS, and Engineering Leadership — written from the field."
         />
+
+        <img
+          src={heroResearch}
+          alt="Illustration of floating papers and connected knowledge nodes representing research and writing"
+          width={1600}
+          height={900}
+          className="mb-10 w-full rounded-3xl border border-border/60"
+        />
+
 
 
         <h2 className="sr-only">Featured white paper</h2>

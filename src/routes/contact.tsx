@@ -3,6 +3,8 @@ import { useState } from "react";
 import { Mail, ExternalLink, Send, CheckCircle2, Loader2 } from "lucide-react";
 import { Section, SectionHeader } from "@/components/layout/Section";
 import { Button } from "@/components/ui/button";
+import heroContact from "@/assets/hero-contact.jpg";
+
 
 export const Route = createFileRoute("/contact")({
   head: () => ({
@@ -65,7 +67,16 @@ function Contact() {
           description="Advisory engagements, architecture reviews, speaking, or a thoughtful exchange on AI and engineering leadership."
         />
 
+        <img
+          src={heroContact}
+          alt="Illustration of an open envelope with a paper plane representing getting in touch"
+          width={1600}
+          height={900}
+          className="mt-2 w-full rounded-3xl border border-border/60"
+        />
+
       </Section>
+
 
       <Section className="pt-0">
         <div className="grid gap-8 lg:grid-cols-[1.3fr_1fr]">

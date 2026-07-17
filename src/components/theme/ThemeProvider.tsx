@@ -10,52 +10,29 @@ export const THEMES = [
 
 export type ThemeId = (typeof THEMES)[number]["id"];
 
-const STORAGE_KEY = "drm-theme:v1";
-const DEFAULT: ThemeId = "sunset";
+// Force white/light theme site-wide. Toggle is a no-op.
+const FORCED: ThemeId = "light";
 
 type Ctx = { theme: ThemeId; setTheme: (t: ThemeId) => void };
-const ThemeContext = createContext<Ctx>({ theme: DEFAULT, setTheme: () => {} });
+const ThemeContext = createContext<Ctx>({ theme: FORCED, setTheme: () => {} });
 
 export function ThemeProvider({ children }: { children: ReactNode }) {
-  const [theme, setThemeState] = useState<ThemeId>(DEFAULT);
-
   useEffect(() => {
-    try {
-      const stored = localStorage.getItem(STORAGE_KEY) as ThemeId | null;
-      if (stored && THEMES.some((t) => t.id === stored)) {
-        setThemeState(stored);
-        applyTheme(stored);
-      } else {
-        applyTheme(DEFAULT);
-      }
-    } catch {
-      applyTheme(DEFAULT);
-    }
+    applyTheme(FORCED);
   }, []);
 
-  const setTheme = useCallback((next: ThemeId) => {
-    setThemeState(next);
-    applyTheme(next);
-    try {
-      localStorage.setItem(STORAGE_KEY, next);
-    } catch {
-      // ignore
-    }
+  const setTheme = useCallback((_next: ThemeId) => {
+    applyTheme(FORCED);
   }, []);
 
-  return <ThemeContext.Provider value={{ theme, setTheme }}>{children}</ThemeContext.Provider>;
+  return <ThemeContext.Provider value={{ theme: FORCED, setTheme }}>{children}</ThemeContext.Provider>;
 }
 
-function applyTheme(theme: ThemeId) {
+function applyTheme(_theme: ThemeId) {
   const root = document.documentElement;
-  root.dataset.theme = theme;
-  if (theme === "light") {
-    root.classList.remove("dark");
-    root.style.colorScheme = "light";
-  } else {
-    root.classList.add("dark");
-    root.style.colorScheme = "dark";
-  }
+  root.dataset.theme = "light";
+  root.classList.remove("dark");
+  root.style.colorScheme = "light";
 }
 
 export function useTheme() {

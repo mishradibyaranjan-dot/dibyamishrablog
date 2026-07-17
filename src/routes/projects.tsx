@@ -8,6 +8,8 @@ import { projects, caseStudies, categories } from "@/lib/content";
 import { cn } from "@/lib/utils";
 import { pageOgImages, SITE_ORIGIN } from "@/lib/og-images";
 import { RequireAuth } from "@/components/auth/RequireAuth";
+import heroProjects from "@/assets/hero-projects.jpg";
+
 
 export const Route = createFileRoute("/projects")({
   head: () => {
@@ -69,6 +71,15 @@ function Projects() {
           title="Selected technical & leadership work"
           description="A portfolio of platforms, programs, and transformations spanning AI, Cloud, SaaS, Data, BFSI, and Engineering Leadership."
         />
+
+        <img
+          src={heroProjects}
+          alt="Isometric illustration of cloud, AI and dashboard components representing engineering projects"
+          width={1600}
+          height={900}
+          className="mb-8 w-full rounded-3xl border border-border/60"
+        />
+
 
         <div className="flex flex-wrap gap-2">
           {["All", ...categories].map((c) => (
