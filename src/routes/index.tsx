@@ -29,9 +29,9 @@ export const Route = createFileRoute("/")({
       {
         name: "description",
         content:
-          "Head of Engineering / VP candidate. 20+ years in Shipping, BFSI, Insurance & SaaS — 500+ engineers led, AI-first transformation.",
+          "Vice President & Head of Engineering / VP candidate. 20+ years in Shipping, BFSI, Insurance & SaaS — 500+ engineers led, AI-first transformation.",
       },
-      { property: "og:title", content: "Dibya Ranjan Mishra — Head of Engineering | AI, Cloud & SaaS Leader" },
+      { property: "og:title", content: "Dibya Ranjan Mishra — Vice President & Head of Engineering | AI, Cloud & SaaS Leader" },
       { property: "og:description", content: "20+ years. 500+ engineers led. $1M → $20M revenue in 24 months. 76% incident reduction via AI automation." },
       { property: "og:url", content: "https://dibyamishrablog.lovable.app/" },
       { property: "og:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/attachments/og-images/62feb90f-3c19-4765-9fa6-9b7f7701a7c6" },
@@ -45,7 +45,7 @@ export const Route = createFileRoute("/")({
           "@context": "https://schema.org",
           "@type": "Person",
           name: "Dibya Ranjan Mishra",
-          jobTitle: "Head of Engineering",
+          jobTitle: "Vice President & Head of Engineering",
           url: "https://dibyamishrablog.lovable.app/",
           sameAs: [
             "https://www.linkedin.com/in/dibya-mishra-55b94654",
@@ -127,7 +127,7 @@ function Home() {
                   <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-neon-cyan opacity-75" />
                   <span className="relative inline-flex h-2 w-2 rounded-full bg-neon-cyan" />
                 </span>
-                Head of Engineering · Senior Director · VP of Engineering
+                Vice President & Head of Engineering · Senior Director · VP of Engineering
               </div>
             </Reveal>
 

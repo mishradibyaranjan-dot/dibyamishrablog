@@ -29,7 +29,7 @@ export const Route = createFileRoute("/about")({
         "@type": "Person",
         name: "Dibya Ranjan Mishra",
         jobTitle: "Vice President & Country Head | Head of Engineering | Senior Director",
-        description: "VP Engineering & Head of Engineering with 20+ years leading 500+ engineers, $28M+ budgets, and AI/Cloud platforms across Shipping, BFSI, Insurance and SaaS.",
+        description: "Vice President & Head of Engineering with 20+ years leading 500+ engineers, $28M+ budgets, and AI/Cloud platforms across Shipping, BFSI, Insurance and SaaS.",
 
         url: "https://dibyamishrablog.lovable.app/about",
         image: "https://storage.googleapis.com/gpt-engineer-file-uploads/pI8mCXobICTShgzD4uthW89NKmv1/social-images/social-1781504443585-picofme_(4).webp",
@@ -63,7 +63,7 @@ export const Route = createFileRoute("/about")({
 
 const timeline = [
   { year: "2026 — Present", role: "Vice President & Country Head — Crystal Tech", text: "Leading Gen AI-powered retail and supply chain products, driving platform strategy, engineering delivery, and AI transformation at scale." },
-  { year: "2022 — 2026", role: "Head of Engineering & Global Application Support — Inchcape Shipping Services", text: "Led 40 engineers across 5 time zones on a cloud-native vessel management platform. Cut time-to-market 35%; AI transformation reduced incidents 76% (3,800 → 900) and training effort 60%." },
+  { year: "2022 — 2026", role: "Vice President, Head of Engineering & Global Application Support — Inchcape Shipping Services", text: "Led 40 engineers across 5 time zones on a cloud-native vessel management platform. Cut time-to-market 35%; AI transformation reduced incidents 76% (3,800 → 900) and training effort 60%." },
   { year: "2019 — 2022", role: "Director of Delivery — Centific India", text: "Ran a 450-person delivery org with $8M budget. Delivered Microsoft 365 and Data Platform programs for 10,000+ users. Grew revenue $1M → $20M in 24 months." },
   { year: "2017 — 2019", role: "Delivery Manager — Deloitte Support Services", text: "Built a unified web/mobile platform for Deloitte University, replacing 5 tools and automating event lifecycle for 2,000+ guests. Zero critical outages over 2.5 years." },
   { year: "2011 — 2017", role: "Senior Consultant — BFSI Domain SME — Capgemini", text: "Banking & Payments SME across 6 engagements. Architected Biller Advantage platform — cut merchant onboarding from 3 months to 4 hours (98%)." },
@@ -138,7 +138,7 @@ function About() {
             <div className="card-flashy mx-auto max-w-xs overflow-hidden rounded-3xl glass-strong shadow-lg">
               <img
                 src={photoAsset.url}
-                alt="Portrait of Dibya Ranjan Mishra, Head of Engineering and AI, Cloud & SaaS leader"
+                alt="Portrait of Dibya Ranjan Mishra, Vice President & Head of Engineering and AI, Cloud & SaaS leader"
                 width={640}
                 height={640}
                 loading="eager"
@@ -148,7 +148,7 @@ function About() {
               />
               <div className="border-t border-border p-5">
                 <div className="font-display text-lg font-semibold">Dibya Ranjan Mishra</div>
-                <div className="text-sm text-muted-foreground">Head of Engineering · AI & Cloud Leader</div>
+                <div className="text-sm text-muted-foreground">Vice President & Head of Engineering · AI & Cloud Leader</div>
               </div>
             </div>
           </div>
