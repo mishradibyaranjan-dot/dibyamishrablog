@@ -657,34 +657,39 @@ table th, table td { border-color: var(--color-border); }
 .text-slate-700 { color: var(--color-card-foreground) !important; }
 .text-slate-600,
 .text-slate-500,
-.text-slate-400 { color: var(--color-muted-foreground) !important; }
+.text-slate-400,
+.text-slate-300 { color: var(--color-muted-foreground) !important; }
 
 .bg-slate-50 { background-color: var(--color-background) !important; }
 .bg-slate-100,
-.bg-slate-200 { background-color: var(--color-muted) !important; }
+.bg-slate-200,
+.hover\:bg-slate-50:hover,
+.hover\:bg-slate-100:hover { background-color: var(--color-muted) !important; }
 
-.bg-white\/15 { background-color: color-mix(in oklch, var(--color-card) 15%, transparent) !important; }
-.bg-white\/60 { background-color: color-mix(in oklch, var(--color-card) 60%, transparent) !important; }
-.bg-white\/70 { background-color: color-mix(in oklch, var(--color-card) 70%, transparent) !important; }
-.bg-white\/80 { background-color: color-mix(in oklch, var(--color-card) 80%, transparent) !important; }
-.bg-white\/85 { background-color: color-mix(in oklch, var(--color-card) 85%, transparent) !important; }
-.bg-white\/90 { background-color: color-mix(in oklch, var(--color-card) 90%, transparent) !important; }
-.bg-white\/95 { background-color: color-mix(in oklch, var(--color-card) 95%, transparent) !important; }
-.bg-white\/5  { background-color: var(--color-card) !important; }
-.bg-white\/10 { background-color: var(--color-background) !important; }
+.hover\:text-slate-900:hover { color: var(--color-card-foreground) !important; }
+
+/* White surfaces and translucency — use card color so they adapt */
+.bg-white,
+.hover\:bg-white:hover { background-color: var(--color-card) !important; }
+.bg-white\/5,
+.bg-white\/10,
+.bg-white\/15,
+.bg-white\/60,
+.bg-white\/70,
+.bg-white\/80,
+.bg-white\/85,
+.bg-white\/90,
+.bg-white\/95 { background-color: color-mix(in oklch, var(--color-card) 100%, transparent) !important; }
+.hover\:bg-white\/10:hover { background-color: color-mix(in oklch, var(--color-card) 10%, transparent) !important; }
 
 /* Hardcoded arbitrary-value backgrounds used in pages */
 .bg-\[\#fafbfc\] { background-color: var(--color-background) !important; }
 .bg-\[\#e8ecf1\] { background-color: var(--color-muted) !important; }
 
-/* Plain white surfaces */
-.bg-white,
-.hover\:bg-white:hover,
-.hover\:bg-white\/10:hover { background-color: var(--color-card) !important; }
-
 /* Slate borders */
 .border-slate-100,
-.border-slate-200 { border-color: var(--color-border) !important; }
+.border-slate-200,
+.border-slate-300 { border-color: var(--color-border) !important; }
 
 /* Blue accent colours */
 .bg-blue-50,
@@ -695,6 +700,11 @@ table th, table td { border-color: var(--color-border); }
 .text-blue-500,
 .text-blue-600,
 .text-blue-700 { color: var(--color-brand-1) !important; }
+
+/* Gradient stops used in case-studies hero figure */
+.from-blue-50 { --tw-gradient-from: color-mix(in oklch, var(--color-brand-1) 12%, transparent) !important; }
+.via-white { --tw-gradient-via: var(--color-card) !important; }
+.to-emerald-50 { --tw-gradient-to: color-mix(in oklch, var(--color-brand-2) 12%, transparent) !important; }
 
 /* Neutralise stray dark utility backgrounds using theme values */
 .bg-black,
