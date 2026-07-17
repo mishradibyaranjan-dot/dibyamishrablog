@@ -463,43 +463,42 @@
   .shadow-glow, .shadow-card-soft, .shadow-neon { box-shadow: none !important; }
 }
 
-/* ============== Modern light palette overrides ==============
-   Indigo (primary) · Emerald (secondary) · Amber (accent) on a soft
-   slate-tinted off-white. Applied globally so hardcoded dark-theme
-   utility classes still render legibly on the white surface. */
+/* ============== Cloud White palette overrides ==============
+   Airy SaaS minimalism. Slate neutrals on off-white canvas with a
+   single crisp blue accent. Applied globally so hardcoded dark-theme
+   utility classes still render legibly on the white surface.
 
-/* Palette tokens (documentation)
-   --ink-900:  #0B1220  headings
-   --ink-700:  #1F2937  body text
-   --ink-500:  #475569  secondary text
-   --ink-400:  #64748B  muted
-   --ink-300:  #94A3B8  placeholder
-   --line:     #E2E8F0  borders
+   Palette tokens (documentation)
+   --ink-900:  #0F172A  headings (slate-900)
+   --ink-700:  #1E293B  body text (slate-800)
+   --ink-500:  #475569  secondary (slate-600)
+   --ink-400:  #64748B  muted    (slate-500)
+   --ink-300:  #94A3B8  placeholder (slate-400)
+   --line:     #E8ECF1  borders
    --surface:  #FFFFFF  card
-   --canvas:   #F7F8FB  page
-   --indigo:   #4F46E5  primary
-   --indigo-2: #6366F1  primary hover / gradient stop
-   --emerald:  #10B981  secondary
-   --amber:    #F59E0B  accent
+   --canvas:   #FAFBFC  page
+   --blue:     #3B82F6  primary accent
+   --blue-2:   #2563EB  hover / gradient stop
+   --sky:      #60A5FA  soft gradient stop
 */
 
 html, body {
-  background-color: #F7F8FB !important;
-  color: #1F2937 !important;
+  background-color: #FAFBFC !important;
+  color: #1E293B !important;
   color-scheme: light !important;
 }
 h1, h2, h3, h4, h5, h6, p, span, li, a, label, strong, em, blockquote, figcaption {
   color: inherit;
 }
-h1, h2, h3, h4, h5, h6 { color: #0B1220; letter-spacing: -0.02em; }
-a { color: #4F46E5; }
-a:hover { color: #4338CA; }
+h1, h2, h3, h4, h5, h6 { color: #0F172A; letter-spacing: -0.02em; }
+a { color: #3B82F6; }
+a:hover { color: #2563EB; }
 
 /* Neutralise the legacy dark-mode utility classes */
 .text-white,
 .hover\:text-white:hover,
 .text-white\/85,
-.text-white\/90 { color: #1F2937 !important; }
+.text-white\/90 { color: #1E293B !important; }
 .text-white\/40 { color: #94A3B8 !important; }
 .text-white\/50 { color: #64748B !important; }
 .text-white\/55 { color: #64748B !important; }
@@ -507,79 +506,79 @@ a:hover { color: #4338CA; }
 .text-white\/65 { color: #475569 !important; }
 .text-white\/70 { color: #475569 !important; }
 .text-white\/75 { color: #334155 !important; }
-.text-white\/80 { color: #1F2937 !important; }
+.text-white\/80 { color: #1E293B !important; }
 .placeholder\:text-white\/40::placeholder { color: #94A3B8 !important; }
 .bg-white\/5   { background-color: #FFFFFF !important; }
-.bg-white\/10  { background-color: #F7F8FB !important; }
-.hover\:bg-white\/10:hover { background-color: #EEF2FF !important; }
+.bg-white\/10  { background-color: #FAFBFC !important; }
+.hover\:bg-white\/10:hover { background-color: #EFF6FF !important; }
 .border-white\/10,
 .border-white\/15,
-.border-white\/20 { border-color: #E2E8F0 !important; }
+.border-white\/20 { border-color: #E8ECF1 !important; }
 .bg-background\/60,
 .bg-background\/85 { background-color: #FFFFFF !important; }
 [aria-hidden] .bg-aurora { opacity: 0.10; }
-.text-neon { color: #4F46E5 !important; text-shadow: none !important; }
+.text-neon { color: #3B82F6 !important; text-shadow: none !important; }
 
 /* Brand accent utilities */
 .text-neon-cyan,
 .hover\:text-neon-cyan:hover,
-.group-hover\:text-neon-cyan { color: #4F46E5 !important; }
-.text-neon-blue { color: #4F46E5 !important; }
-.text-neon-purple { color: #10B981 !important; }
+.group-hover\:text-neon-cyan { color: #3B82F6 !important; }
+.text-neon-blue { color: #3B82F6 !important; }
+.text-neon-purple { color: #2563EB !important; }
 .border-neon-cyan\/40,
-.border-neon-cyan\/50 { border-color: rgba(79, 70, 229, 0.35) !important; }
-.bg-neon-cyan\/10 { background-color: rgba(79, 70, 229, 0.08) !important; }
-.focus\:border-neon-cyan:focus { border-color: #4F46E5 !important; }
-.focus\:ring-neon-cyan\/40:focus { box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.20) !important; }
+.border-neon-cyan\/50 { border-color: rgba(59, 130, 246, 0.35) !important; }
+.bg-neon-cyan\/10 { background-color: rgba(59, 130, 246, 0.08) !important; }
+.focus\:border-neon-cyan:focus { border-color: #3B82F6 !important; }
+.focus\:ring-neon-cyan\/40:focus { box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.20) !important; }
 
-/* Force modern brand gradient (indigo → emerald) */
+/* Force modern brand gradient (blue → sky) */
 .bg-brand-gradient {
-  background: linear-gradient(135deg, #4F46E5 0%, #6366F1 50%, #10B981 100%) !important;
+  background: linear-gradient(135deg, #2563EB 0%, #3B82F6 50%, #60A5FA 100%) !important;
   color: #FFFFFF !important;
 }
 .bg-brand-gradient * { color: #FFFFFF !important; }
 
-/* Card surfaces — soft elevated white with subtle indigo lift on hover */
+/* Card surfaces — clean white with subtle blue lift on hover */
 .card-flashy {
   background: #FFFFFF !important;
-  border: 1px solid #E2E8F0 !important;
+  border: 1px solid #E8ECF1 !important;
   border-radius: 14px !important;
   box-shadow: 0 1px 2px rgba(15,23,42,0.04), 0 8px 24px -12px rgba(15,23,42,0.08) !important;
   transition: transform .18s ease, border-color .18s ease, box-shadow .18s ease !important;
 }
 .card-flashy::before, .card-flashy::after { display: none !important; }
 .card-flashy:hover {
-  border-color: rgba(79, 70, 229, 0.35) !important;
-  box-shadow: 0 6px 16px rgba(15,23,42,0.06), 0 20px 48px -16px rgba(79,70,229,0.22) !important;
+  border-color: rgba(59, 130, 246, 0.35) !important;
+  box-shadow: 0 6px 16px rgba(15,23,42,0.06), 0 20px 48px -16px rgba(59,130,246,0.22) !important;
   transform: translateY(-3px);
 }
 
-/* Focus ring — indigo, always visible */
+/* Focus ring — blue, always visible */
 *:focus-visible {
-  outline: 2px solid #4F46E5 !important;
+  outline: 2px solid #3B82F6 !important;
   outline-offset: 2px !important;
 }
 
 /* Form inputs */
 input, textarea, select {
   background-color: #FFFFFF !important;
-  border-color: #E2E8F0 !important;
-  color: #1F2937 !important;
+  border-color: #E8ECF1 !important;
+  color: #1E293B !important;
 }
 input::placeholder, textarea::placeholder { color: #94A3B8 !important; }
 input:focus, textarea:focus, select:focus {
-  border-color: #4F46E5 !important;
-  box-shadow: 0 0 0 3px rgba(79,70,229,0.15) !important;
+  border-color: #3B82F6 !important;
+  box-shadow: 0 0 0 3px rgba(59,130,246,0.15) !important;
 }
 
 /* Tables */
-table tbody tr:nth-child(even) { background-color: #F7F8FB; }
-table thead { background-color: #EEF2FF; color: #0B1220; }
-table th, table td { border-color: #E2E8F0; }
+table tbody tr:nth-child(even) { background-color: #FAFBFC; }
+table thead { background-color: #EFF6FF; color: #0F172A; }
+table th, table td { border-color: #E8ECF1; }
 
-/* Text gradient — indigo → emerald with amber highlight */
+/* Text gradient — blue tonal */
 .text-gradient, .shimmer-headline {
-  background: linear-gradient(120deg, #4F46E5 0%, #6366F1 40%, #10B981 100%) !important;
+  background: linear-gradient(120deg, #0F172A 0%, #2563EB 55%, #3B82F6 100%) !important;
   -webkit-background-clip: text !important;
   background-clip: text !important;
   color: transparent !important;
@@ -587,33 +586,31 @@ table th, table td { border-color: #E2E8F0; }
   text-shadow: none !important;
 }
 
-/* Amber highlight utility for badges / eyebrows */
-.text-amber-accent { color: #B45309 !important; }
-.bg-amber-accent { background-color: #F59E0B !important; color: #0B1220 !important; }
-
 /* Section eyebrows / small labels */
 .eyebrow, [data-eyebrow] {
-  color: #4F46E5 !important;
+  color: #3B82F6 !important;
   letter-spacing: 0.14em;
   text-transform: uppercase;
   font-weight: 700;
 }
 
-/* Force dark hero / glass surfaces to render as light white cards so
+/* Force dark hero / glass surfaces to render as light cards so
    text (which we forced to dark) stays legible across the whole site. */
 .bg-hero {
-  background: linear-gradient(180deg, #FFFFFF 0%, #F7F8FB 100%) !important;
-  color: #1F2937 !important;
+  background:
+    radial-gradient(ellipse 90% 60% at 50% 0%, rgba(59,130,246,0.08), transparent 65%),
+    linear-gradient(180deg, #FFFFFF 0%, #FAFBFC 100%) !important;
+  color: #1E293B !important;
 }
 .bg-hero .text-gradient,
 .bg-hero .shimmer-headline { color: transparent !important; }
 
 .glass-strong {
   background: #FFFFFF !important;
-  border: 1px solid #E2E8F0 !important;
+  border: 1px solid #E8ECF1 !important;
   backdrop-filter: none !important;
   box-shadow: 0 1px 2px rgba(15,23,42,0.04), 0 8px 24px -12px rgba(15,23,42,0.08) !important;
-  color: #1F2937 !important;
+  color: #1E293B !important;
 }
 
 /* Neutralise stray dark utility backgrounds */
@@ -623,11 +620,12 @@ table th, table td { border-color: #E2E8F0; }
 [class*="bg-neutral-9"],
 [class*="bg-gray-9"] {
   background-color: #FFFFFF !important;
-  color: #1F2937 !important;
+  color: #1E293B !important;
 }
 .bg-black\/40,
 .bg-black\/60,
 .bg-black\/80 { background-color: rgba(15, 23, 42, 0.55) !important; }
+
 
 
 
