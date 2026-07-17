@@ -95,7 +95,7 @@ const certifications = [
   "AWS Cloud Practitioner (CLF-C02), 2025",
   "CSM — Certified Scrum Master, Scrum Alliance, 2017",
   "MCP / MCAD / MCPDEA — Microsoft, 2008",
-  "42 total certifications across AI, Cloud, Leadership & Delivery",
+  "60+ certifications across AI, Cloud, Leadership & Delivery",
 ];
 
 
