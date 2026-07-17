@@ -352,6 +352,7 @@ export function NewsletterAdminPanel() {
           </div>
         </div>
       </div>
+      {id && <NewsletterVersionCompare issueId={id} />}
     </div>
   );
 }
