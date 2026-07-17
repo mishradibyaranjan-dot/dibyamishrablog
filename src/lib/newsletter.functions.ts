@@ -79,6 +79,43 @@ Return STRICT JSON with keys: title (string, <=90 chars), summary (string, <=180
     return { title, summary, body_markdown, linkedin_post };
   });
 
+// ============ SNAPSHOT helper ============
+async function snapshotIssue(
+  supabase: { from: (t: string) => any },
+  issueId: string,
+  reason: "save" | "submit" | "approve",
+  createdBy: string,
+) {
+  const { data: issue, error: fErr } = await supabase
+    .from("newsletter_issues")
+    .select("title, summary, body_markdown, linkedin_post, hero_emoji, status")
+    .eq("id", issueId)
+    .single();
+  if (fErr || !issue) return;
+
+  const { data: last } = await supabase
+    .from("newsletter_issue_versions")
+    .select("version_no")
+    .eq("issue_id", issueId)
+    .order("version_no", { ascending: false })
+    .limit(1)
+    .maybeSingle();
+  const nextNo = (last?.version_no ?? 0) + 1;
+
+  await supabase.from("newsletter_issue_versions").insert({
+    issue_id: issueId,
+    version_no: nextNo,
+    title: issue.title ?? "",
+    summary: issue.summary ?? "",
+    body_markdown: issue.body_markdown ?? "",
+    linkedin_post: issue.linkedin_post ?? "",
+    hero_emoji: issue.hero_emoji ?? "📰",
+    status_at_snapshot: issue.status ?? "draft",
+    snapshot_reason: reason,
+    created_by: createdBy,
+  });
+}
+
 // ============ SAVE (create or update) ============
 export const saveNewsletterIssue = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
@@ -97,8 +134,9 @@ export const saveNewsletterIssue = createServerFn({ method: "POST" })
   .handler(async ({ context, data }) => {
     await assertAdmin(context);
     const slug = slugify(data.title);
+    let row: any;
     if (data.id) {
-      const { data: row, error } = await context.supabase
+      const r = await context.supabase
         .from("newsletter_issues")
         .update({
           title: data.title,
@@ -110,23 +148,26 @@ export const saveNewsletterIssue = createServerFn({ method: "POST" })
         .eq("id", data.id)
         .select("*")
         .single();
-      if (error) throw new Error(error.message);
-      return row;
+      if (r.error) throw new Error(r.error.message);
+      row = r.data;
+    } else {
+      const r = await context.supabase
+        .from("newsletter_issues")
+        .insert({
+          slug,
+          title: data.title,
+          summary: data.summary,
+          body_markdown: data.body_markdown,
+          linkedin_post: data.linkedin_post,
+          hero_emoji: data.hero_emoji,
+          created_by: context.userId,
+        })
+        .select("*")
+        .single();
+      if (r.error) throw new Error(r.error.message);
+      row = r.data;
     }
-    const { data: row, error } = await context.supabase
-      .from("newsletter_issues")
-      .insert({
-        slug,
-        title: data.title,
-        summary: data.summary,
-        body_markdown: data.body_markdown,
-        linkedin_post: data.linkedin_post,
-        hero_emoji: data.hero_emoji,
-        created_by: context.userId,
-      })
-      .select("*")
-      .single();
-    if (error) throw new Error(error.message);
+    await snapshotIssue(context.supabase, row.id, "save", context.userId);
     return row;
   });
 
@@ -146,6 +187,50 @@ export const listAllIssues = createServerFn({ method: "GET" })
     return data ?? [];
   });
 
+// ============ VERSIONS ============
+export const listIssueVersions = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d: unknown) => z.object({ issueId: z.string().uuid() }).parse(d))
+  .handler(async ({ context, data }) => {
+    await assertAdmin(context);
+    const { data: rows, error } = await context.supabase
+      .from("newsletter_issue_versions")
+      .select(
+        "id, version_no, title, summary, snapshot_reason, status_at_snapshot, created_by, created_at",
+      )
+      .eq("issue_id", data.issueId)
+      .order("version_no", { ascending: false });
+    if (error) throw new Error(error.message);
+    return rows ?? [];
+  });
+
+export const getIssueVersionsForDiff = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d: unknown) =>
+    z
+      .object({
+        issueId: z.string().uuid(),
+        aId: z.string().uuid(),
+        bId: z.string().uuid(),
+      })
+      .parse(d),
+  )
+  .handler(async ({ context, data }) => {
+    await assertAdmin(context);
+    const { data: rows, error } = await context.supabase
+      .from("newsletter_issue_versions")
+      .select(
+        "id, version_no, title, summary, body_markdown, linkedin_post, hero_emoji, status_at_snapshot, snapshot_reason, created_at",
+      )
+      .eq("issue_id", data.issueId)
+      .in("id", [data.aId, data.bId]);
+    if (error) throw new Error(error.message);
+    const a = (rows ?? []).find((r: any) => r.id === data.aId);
+    const b = (rows ?? []).find((r: any) => r.id === data.bId);
+    if (!a || !b) throw new Error("Versions not found");
+    return { a, b };
+  });
+
 // ============ SUBMIT FOR APPROVAL ============
 export const submitForApproval = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
@@ -157,8 +242,10 @@ export const submitForApproval = createServerFn({ method: "POST" })
       .update({ status: "pending_approval", approved_at: null, approved_by: null })
       .eq("id", data.id);
     if (error) throw new Error(error.message);
+    await snapshotIssue(context.supabase, data.id, "submit", context.userId);
     return { ok: true };
   });
+
 
 // ============ APPROVE (owner sign-off) ============
 export const approveNewsletterIssue = createServerFn({ method: "POST" })
