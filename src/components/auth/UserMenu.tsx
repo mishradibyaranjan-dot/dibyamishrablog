@@ -17,12 +17,9 @@ export function UserMenu() {
 
   if (loading) return null;
 
+  // Login is currently hidden for public browsing; direct /auth still works when needed.
   if (!user) {
-    return (
-      <Button asChild size="sm" variant="outline" className="border-white/15 bg-white/5 text-white hover:bg-white/10">
-        <Link to="/auth"><LogIn className="mr-2 h-4 w-4" /> Sign in</Link>
-      </Button>
-    );
+    return null;
   }
 
   const initial = (user.user_metadata?.full_name || user.email || "?").slice(0, 1).toUpperCase();

@@ -1,4 +1,22 @@
 User-agent: *
 Allow: /
 
+# Auth flows (already noindex, keep out of crawl budget)
+Disallow: /auth
+Disallow: /forgot-password
+Disallow: /reset-password
+Disallow: /email/
+
+# Protected app areas (redirect to auth for unauthenticated users)
+Disallow: /learn
+Disallow: /repository
+Disallow: /reports
+Disallow: /research
+Disallow: /projects
+Disallow: /case-studies
+
+# Internal / API routes
+Disallow: /api/
+Disallow: /lovable/
+
 Sitemap: https://dibyamishrablog.lovable.app/sitemap.xml
