@@ -206,77 +206,62 @@ function Header() {
 
 function Footer() {
   return (
-    <footer data-site-footer className="relative border-t border-white/10 bg-background/60 backdrop-blur">
+    <footer data-site-footer className="relative border-t border-slate-200 bg-white">
       <div className="mx-auto grid max-w-7xl gap-10 px-4 py-16 sm:px-6 md:grid-cols-4">
         <div className="md:col-span-2">
-          <div className="flex items-center gap-2 font-display text-lg font-bold text-white">
-            <img src={drmLogo.url} alt="Dibya Ranjan Mishra site logo" width={36} height={36} decoding="async" className="h-9 w-9 rounded-lg object-contain shadow-neon" />
+          <div className="flex items-center gap-2 font-display text-lg font-bold text-slate-900">
+            <img src={drmLogo.url} alt="Dibya Ranjan Mishra site logo" width={36} height={36} decoding="async" className="h-9 w-9 rounded-lg object-contain" />
             Dibya Ranjan Mishra
           </div>
-          <p className="mt-3 max-w-md text-sm text-white/65">
+          <p className="mt-3 max-w-md text-sm text-slate-600">
             Research, insights, and real-world technology work on GenAI, Agentic AI,
             Cloud-Native Platforms, SaaS Architecture, and Engineering Leadership.
           </p>
           <div className="mt-5 flex items-center gap-2">
-            <Button variant="outline" size="icon" asChild className="border-white/15 bg-white/5 text-white hover:bg-white/10">
-              <a
-                href="https://github.com/mishradibyaranjan-dot/"
-                target="_blank"
-                rel="noreferrer"
-                aria-label="GitHub"
-              >
+            <Button variant="outline" size="icon" asChild className="border-slate-200 bg-white text-slate-700 hover:bg-slate-100">
+              <a href="https://github.com/mishradibyaranjan-dot/" target="_blank" rel="noreferrer" aria-label="GitHub">
                 <ExternalLink className="h-4 w-4" />
               </a>
             </Button>
-            <Button variant="outline" size="icon" asChild className="border-white/15 bg-white/5 text-white hover:bg-white/10">
-              <a
-                href="https://bold.pro/my/dibya-mishra-260203120923"
-                target="_blank"
-                rel="noreferrer"
-                aria-label="Portfolio"
-              >
+            <Button variant="outline" size="icon" asChild className="border-slate-200 bg-white text-slate-700 hover:bg-slate-100">
+              <a href="https://bold.pro/my/dibya-mishra-260203120923" target="_blank" rel="noreferrer" aria-label="Portfolio">
                 <ExternalLink className="h-4 w-4" />
               </a>
             </Button>
-            <Button variant="outline" size="icon" asChild className="border-white/15 bg-white/5 text-white hover:bg-white/10">
-              <a
-                href="https://www.linkedin.com/in/dibya-mishra-55b94654"
-                target="_blank"
-                rel="noreferrer"
-                aria-label="LinkedIn"
-              >
+            <Button variant="outline" size="icon" asChild className="border-slate-200 bg-white text-slate-700 hover:bg-slate-100">
+              <a href="https://www.linkedin.com/in/dibya-mishra-55b94654" target="_blank" rel="noreferrer" aria-label="LinkedIn">
                 <ExternalLink className="h-4 w-4" />
               </a>
             </Button>
           </div>
         </div>
         <div>
-          <h4 className="text-sm font-semibold text-white">Explore</h4>
-          <ul className="mt-3 space-y-2 text-sm text-white/65">
+          <h4 className="text-sm font-semibold text-slate-900">Explore</h4>
+          <ul className="mt-3 space-y-2 text-sm text-slate-600">
             {NAV.slice(1).map((n) => (
               <li key={n.to}>
-                <Link to={n.to} className="transition-colors hover:text-white">
+                <Link to={n.to} className="transition-colors hover:text-blue-600">
                   {n.label}
                 </Link>
               </li>
             ))}
             <li>
-              <Link to="/trust" className="transition-colors hover:text-white">
+              <Link to="/trust" className="transition-colors hover:text-blue-600">
                 Trust & Privacy
               </Link>
             </li>
           </ul>
         </div>
         <div>
-          <h4 className="text-sm font-semibold text-white">Newsletter</h4>
-          <p className="mt-3 text-sm text-white/65">
+          <h4 className="text-sm font-semibold text-slate-900">Newsletter</h4>
+          <p className="mt-3 text-sm text-slate-600">
             Monthly research notes on AI, Cloud, and Engineering Leadership.
           </p>
           <NewsletterForm />
         </div>
       </div>
-      <div className="border-t border-white/10">
-        <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-2 px-4 py-5 text-xs text-white/50 sm:flex-row sm:px-6">
+      <div className="border-t border-slate-200">
+        <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-2 px-4 py-5 text-xs text-slate-500 sm:flex-row sm:px-6">
           <p>© {new Date().getFullYear()} Dibya Ranjan Mishra. All rights reserved.</p>
           <p>Built with research, rigor, and a bias for clarity.</p>
         </div>
@@ -284,6 +269,7 @@ function Footer() {
     </footer>
   );
 }
+
 
 function TrackerMount() {
   useActivityTracker();
