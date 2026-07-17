@@ -93,20 +93,31 @@ const education = [
   { school: "Utkal University", degree: "Bachelor of Computer Applications (BCA)", year: "2004" },
 ];
 
-const certifications = [
-  "Model Context Protocol (MCP) — Agentic AI, 2026",
-  "Agentic AI System Design — LinkedIn, 2026",
-  "Generative AI on Azure — Microsoft, 2026",
-  "Advanced AI Analytics on AWS — Bedrock, SageMaker, QuickSight, 2026",
-  "Claude 101 — Anthropic, 2026",
-  "Apache Kafka Essential Training, 2026",
-  "SAFe 6.0 — Scaled Agile Framework, 2026",
-  "Lean Six Sigma Foundations — PMIEF, 2026",
-  "AWS Cloud Practitioner (CLF-C02), 2025",
-  "CSM — Certified Scrum Master, Scrum Alliance, 2017",
-  "MCP / MCAD / MCPDEA — Microsoft, 2008",
-  "60+ certifications across AI, Cloud, Leadership & Delivery",
+const categories = ["All", "AI", "Cloud", "Leadership", "Delivery"] as const;
+
+type Category = (typeof categories)[number];
+
+interface Certification {
+  name: string;
+  category: Category;
+  year?: string;
+}
+
+const certifications: Certification[] = [
+  { name: "Model Context Protocol (MCP) — Agentic AI", category: "AI", year: "2026" },
+  { name: "Agentic AI System Design — LinkedIn", category: "AI", year: "2026" },
+  { name: "Generative AI on Azure — Microsoft", category: "AI", year: "2026" },
+  { name: "Advanced AI Analytics on AWS — Bedrock, SageMaker, QuickSight", category: "AI", year: "2026" },
+  { name: "Claude 101 — Anthropic", category: "AI", year: "2026" },
+  { name: "Apache Kafka Essential Training", category: "Cloud", year: "2026" },
+  { name: "SAFe 6.0 — Scaled Agile Framework", category: "Leadership", year: "2026" },
+  { name: "Lean Six Sigma Foundations — PMIEF", category: "Leadership", year: "2026" },
+  { name: "AWS Cloud Practitioner (CLF-C02)", category: "Cloud", year: "2025" },
+  { name: "CSM — Certified Scrum Master, Scrum Alliance", category: "Leadership", year: "2017" },
+  { name: "MCP / MCAD / MCPDEA — Microsoft", category: "Cloud", year: "2008" },
 ];
+
+const summaryCert = "60+ certifications across AI, Cloud, Leadership & Delivery";
 
 
 const languages = ["English", "Hindi", "Bengali", "Punjabi"];
