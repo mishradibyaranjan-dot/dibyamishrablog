@@ -76,7 +76,7 @@ function Learn() {
       />
 
       <Tabs value={tab} onValueChange={(v) => setTab(v as TabKey)} className="mt-6">
-        <TabsList className="grid h-auto w-full grid-cols-1 gap-2 rounded-none bg-transparent p-0 sm:grid-cols-2 lg:grid-cols-4">
+        <TabsList className="grid h-auto w-full grid-cols-1 gap-1.5 rounded-none bg-transparent p-0 sm:grid-cols-2 sm:gap-2 lg:grid-cols-4">
           <TabPill value="ai" icon={<Brain className="h-4 w-4" />} label="Intro to AI" />
           <TabPill value="cloud" icon={<Cloud className="h-4 w-4" />} label="Intro to Cloud" />
           <TabPill value="saas" icon={<Layers className="h-4 w-4" />} label="Intro to SaaS" />
@@ -120,7 +120,7 @@ function TabPill({ value, icon, label }: { value: string; icon: React.ReactNode;
   return (
     <TabsTrigger
       value={value}
-      className="group relative w-full justify-start gap-2 rounded-2xl border border-white/10 bg-white/5 px-5 py-3 text-sm font-medium text-white/70 backdrop-blur-xl transition-all data-[state=active]:border-transparent data-[state=active]:bg-brand-gradient data-[state=active]:text-white data-[state=active]:shadow-neon hover:text-white"
+      className="group relative w-full justify-start gap-2 rounded-2xl border border-white/10 bg-white/5 px-4 py-2.5 text-sm font-medium text-white/70 backdrop-blur-xl transition-all data-[state=active]:border-transparent data-[state=active]:bg-brand-gradient data-[state=active]:text-white data-[state=active]:shadow-neon hover:text-white sm:px-5 sm:py-3"
     >
       <span className="grid h-7 w-7 place-items-center rounded-lg bg-white/10 text-white">{icon}</span>
       {label}
