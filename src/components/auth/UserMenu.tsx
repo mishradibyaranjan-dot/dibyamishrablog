@@ -18,8 +18,11 @@ export function UserMenu() {
   if (loading) return null;
 
   if (!user) {
-    // Login temporarily disabled
-    return null;
+    return (
+      <Button asChild size="sm" variant="outline" className="border-white/15 bg-white/5 text-white hover:bg-white/10">
+        <Link to="/auth"><LogIn className="mr-2 h-4 w-4" /> Sign in</Link>
+      </Button>
+    );
   }
 
   const initial = (user.user_metadata?.full_name || user.email || "?").slice(0, 1).toUpperCase();
