@@ -1,6 +1,14 @@
 import { Fragment, useEffect, useState } from "react";
-import { Loader2, Calendar, Play, Trash2, Plus, History, ChevronDown, ChevronUp, RefreshCw } from "lucide-react";
+import { Loader2, Calendar, Play, Trash2, Plus, History, ChevronDown, ChevronUp, RefreshCw, AlertTriangle } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import {
   listNewsletterSchedules,
   upsertNewsletterSchedule,
@@ -50,6 +58,12 @@ export function NewsletterScheduler() {
   const [historyData, setHistoryData] = useState<Record<string, HistoryRow[]>>({});
   const [historyLoading, setHistoryLoading] = useState<Record<string, boolean>>({});
   const [retryingRunId, setRetryingRunId] = useState<string | null>(null);
+  const [pendingRetry, setPendingRetry] = useState<{
+    scheduleId: string;
+    runId: string;
+    failedCount: number;
+    recipients: Array<{ email: string; error_message: string | null }>;
+  } | null>(null);
 
   // form
   const [name, setName] = useState("Weekly digest");
@@ -167,9 +181,20 @@ export function NewsletterScheduler() {
     if (open && !historyData[id]) loadHistory(id);
   };
 
-  const retryRun = async (scheduleId: string, runId: string, failedCount: number) => {
+  const retryRun = (
+    scheduleId: string,
+    runId: string,
+    failedCount: number,
+    recipients: Array<{ email: string; error_message: string | null }>,
+  ) => {
     if (failedCount === 0) return;
-    if (!confirm(`Retry ${failedCount} failed recipient(s) for this run?`)) return;
+    setPendingRetry({ scheduleId, runId, failedCount, recipients });
+  };
+
+  const executeRetry = async () => {
+    if (!pendingRetry) return;
+    const { scheduleId, runId } = pendingRetry;
+    setPendingRetry(null);
     setRetryingRunId(runId);
     setErr(null);
     setMsg(null);
@@ -361,8 +386,15 @@ export function NewsletterScheduler() {
                                         <Button
                                           size="sm"
                                           variant="outline"
-                                          onClick={() => retryRun(r.id, run.id, run.failed_recipients.length)}
-                                          disabled={retryingRunId === run.id}
+                                          onClick={() =>
+                                            retryRun(
+                                              r.id,
+                                              run.id,
+                                              run.failed_recipients.length,
+                                              run.failed_recipients,
+                                            )
+                                          }
+                                          disabled={retryingRunId === run.id || pendingRetry?.runId === run.id}
                                           className="h-6 border-amber-400/30 bg-amber-500/10 px-2 py-0 text-[10px] text-amber-200 hover:bg-amber-500/20"
                                         >
                                           {retryingRunId === run.id ? (
@@ -403,6 +435,66 @@ export function NewsletterScheduler() {
 
       {msg && <p className="mt-3 text-xs text-emerald-400">{msg}</p>}
       {err && <p className="mt-3 text-xs text-red-400">{err}</p>}
+
+      <Dialog open={!!pendingRetry} onOpenChange={(open) => !open && setPendingRetry(null)}>
+        <DialogContent className="border-white/10 bg-slate-900 text-white">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2 text-white">
+              <AlertTriangle className="h-5 w-5 text-amber-400" />
+              Retry failed deliveries?
+            </DialogTitle>
+            <DialogDescription className="text-white/60">
+              Please review the run summary below before confirming.
+            </DialogDescription>
+          </DialogHeader>
+          {pendingRetry && (
+            <div className="space-y-3 py-2 text-sm">
+              <div className="grid grid-cols-[120px_1fr] gap-2 rounded-lg border border-white/10 bg-white/5 p-3">
+                <span className="text-white/60">Run ID</span>
+                <span className="font-mono text-white/90">{pendingRetry.runId}</span>
+                <span className="text-white/60">Failed count</span>
+                <span className="font-semibold text-red-300">{pendingRetry.failedCount}</span>
+                <span className="text-white/60">Estimated recipients</span>
+                <span className="text-emerald-300">{pendingRetry.recipients.length} email(s) will be re-queued</span>
+              </div>
+              <details className="rounded-lg border border-white/10 bg-white/5">
+                <summary className="cursor-pointer p-3 text-xs text-white/70 hover:text-white">
+                  Preview failed recipients
+                </summary>
+                <ul className="max-h-40 overflow-auto p-3 pt-0 text-xs">
+                  {pendingRetry.recipients.map((f, i) => (
+                    <li key={i} className="py-0.5">
+                      <span className="text-white/80">{f.email}</span>
+                      {f.error_message && <span className="text-red-300"> — {f.error_message}</span>}
+                    </li>
+                  ))}
+                </ul>
+              </details>
+            </div>
+          )}
+          <DialogFooter>
+            <Button
+              variant="outline"
+              onClick={() => setPendingRetry(null)}
+              className="border-white/15 bg-white/5 text-white hover:bg-white/10"
+            >
+              Cancel
+            </Button>
+            <Button
+              onClick={executeRetry}
+              disabled={retryingRunId === pendingRetry?.runId}
+              className="bg-amber-500 text-slate-950 hover:bg-amber-400"
+            >
+              {retryingRunId === pendingRetry?.runId ? (
+                <Loader2 className="mr-1 h-4 w-4 animate-spin" />
+              ) : (
+                <RefreshCw className="mr-1 h-4 w-4" />
+              )}
+              Retry now
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
