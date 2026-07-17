@@ -12,7 +12,7 @@ import { ThemeProvider } from "@/components/theme/ThemeProvider";
 import { ReadAloudButton } from "@/components/voice/ReadAloudButton";
 import { AuthProvider, useAuth } from "@/lib/auth";
 import { UserMenu } from "@/components/auth/UserMenu";
-import { AccessBanner } from "@/components/auth/AccessBanner";
+
 import { useActivityTracker } from "@/lib/tracking";
 
 import drmLogo from "@/assets/drm-logo.png.asset.json";
@@ -286,11 +286,6 @@ function TrackerMount() {
   return null;
 }
 
-function GuestAccessStrip() {
-  const { user, loading } = useAuth();
-  if (loading || user) return null;
-  return <AccessBanner variant="inline" />;
-}
 
 export function SiteLayout() {
   return (
