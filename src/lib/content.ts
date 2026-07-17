@@ -68,6 +68,26 @@ export interface Post {
 
 export const posts: Post[] = [
   {
+    slug: "what-is-agentic-ai",
+    title: "What Is Agentic AI? A Definition, Architecture and Retail Supply Chain Playbook",
+    summary:
+      "A clear definition of Agentic AI, how it differs from generative AI, the Observe-Decide-Act loop, tool use, memory, guardrails, and concrete examples from retail supply chain operations.",
+    category: "AI & Agentic AI",
+    readingTime: "12 min",
+    date: "2026-07-01",
+    featured: true,
+    takeaways: [
+      "Agentic AI = goal-directed systems that Observe, Decide, and Act via tools — not just text generation.",
+      "Generative AI produces content; Agentic AI produces outcomes by chaining tool calls under a policy.",
+      "The reference architecture: planner, tool registry, executor, memory tiers, and a reflection loop.",
+      "Retail supply chain wins: autonomous replenishment, exception handling, and store-level markdown agents.",
+      "Governance is the product: guardrails, evaluations, and human-in-the-loop turn agents into shippable software.",
+    ],
+    content:
+      "Agentic AI is a class of AI systems that pursue goals autonomously by planning, calling tools, observing results, and adjusting — rather than only generating text or images. Where generative AI answers 'what should I write?', Agentic AI answers 'what should I do next, and did it work?'. The core architecture is an Observe-Decide-Act loop: a planner model turns a goal into a structured intent, an executor calls typed tools (APIs, SQL, RPA, another model), observations are written to short and long-term memory, and a reflection step decides whether to continue, hand off, or escalate. In retail supply chain — the domain we ship into at Crystal Tech Ventures — agentic patterns are already replacing brittle rules: a replenishment agent watches sell-through, weather, and lead-time signals to place purchase orders within a buyer-approved envelope; an exceptions agent triages EDI failures, drafts vendor emails, and only escalates the ambiguous cases; a markdown agent proposes store-level price changes with a forecast delta and a rollback plan. The definition that matters in production is operational, not academic: an Agentic AI system has a goal contract, a bounded tool surface, a policy engine that vets every action, tracing on every step, and an eval harness that scores task success and tool-call correctness before rollout. Get those five right and 'agentic' stops being a buzzword and starts being shippable software.",
+  },
+
+  {
     slug: "how-to-build-an-ai-agent",
     title: "How to Build an AI Agent: A Practical Architecture Guide",
     summary:
