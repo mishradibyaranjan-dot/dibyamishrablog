@@ -650,6 +650,31 @@ table th, table td { border-color: var(--color-border); }
   color: var(--color-brand-2) !important;
 }
 
+/* Map common hardcoded Tailwind slate colours to theme variables so they
+   respond to light/dark switches without editing every component. */
+.text-slate-900,
+.text-slate-800,
+.text-slate-700 { color: var(--color-card-foreground) !important; }
+.text-slate-600,
+.text-slate-500,
+.text-slate-400 { color: var(--color-muted-foreground) !important; }
+
+.bg-slate-50 { background-color: var(--color-background) !important; }
+.bg-slate-100,
+.bg-slate-200 { background-color: var(--color-muted) !important; }
+
+.bg-white\/15,
+.bg-white\/60,
+.bg-white\/70,
+.bg-white\/80,
+.bg-white\/85,
+.bg-white\/90,
+.bg-white\/95 {
+  background-color: color-mix(in oklch, var(--color-card) var(--tw-bg-opacity, 60%), transparent) !important;
+}
+.bg-white\/5  { background-color: var(--color-card) !important; }
+.bg-white\/10 { background-color: var(--color-background) !important; }
+
 /* Neutralise stray dark utility backgrounds using theme values */
 .bg-black,
 [class*="bg-slate-9"],
