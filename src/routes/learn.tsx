@@ -172,6 +172,7 @@ function TabPill({ value, icon, label }: { value: string; icon: React.ReactNode;
 function IntroAI() {
   return (
     <div className="space-y-12">
+      <TabHeroImage src={heroAI} alt="Human and AI robot exploring intelligent systems together" caption="Humans + AI — building intelligent systems, together." />
       <Reveal>
         <QuickSummary
           items={[
@@ -350,6 +351,7 @@ print(classification_report(y_test, clf.predict(X_test)))`}
 function IntroCloud() {
   return (
     <div className="space-y-12">
+      <TabHeroImage src={heroCloud} alt="Engineer shaking hands with a robot in front of cloud servers" caption="From bare metal to the cloud — elastic, on-demand, global." />
       <Reveal>
         <QuickSummary
           items={[
@@ -510,6 +512,7 @@ aws ec2 describe-instances \\
 function IntroSaaS() {
   return (
     <div className="space-y-12">
+      <TabHeroImage src={heroSaaS} alt="Product manager and robot reviewing SaaS dashboards" caption="Software as a service — subscriptions, dashboards, delight." />
       <Reveal>
         <QuickSummary
           items={[
@@ -708,6 +711,7 @@ CREATE INDEX idx_tickets_tenant ON app_tickets (tenant_id, created_at DESC);`}
 function IntroITIL() {
   return (
     <div className="space-y-12">
+      <TabHeroImage src={heroITIL} alt="IT service manager and robot at a Kanban board" caption="ITIL + Kanban — visualise work, flow value, delight users." />
       <Reveal>
         <QuickSummary
           items={[
@@ -852,6 +856,7 @@ function IntroITIL() {
 function IntroLLM() {
   return (
     <div className="space-y-12">
+      <TabHeroImage src={heroLLM} alt="Developer and robot working with a large language model" caption="LLM engineering — prompt, retrieve, evaluate, ship." />
       <Reveal>
         <QuickSummary
           items={[
@@ -1099,6 +1104,7 @@ function LLMArchitectureDiagram() {
 function IntroGenAIRetail() {
   return (
     <div className="space-y-12">
+      <TabHeroImage src={heroRetail} alt="Shopper and robot assistant in a retail store with AI overlays" caption="GenAI in retail — personalise every aisle, every cart." />
       <Reveal>
         <QuickSummary
           items={[
@@ -1213,6 +1219,7 @@ function IntroGenAIRetail() {
 function IntroMultiTenant() {
   return (
     <div className="space-y-12">
+      <TabHeroImage src={heroMultiTenant} alt="Architect and robot in front of a multi-tenant building diagram" caption="Multi-tenant SaaS — one platform, many isolated tenants." />
       <Reveal>
         <QuickSummary
           items={[
@@ -1369,6 +1376,7 @@ spec:
 function IntroRAG() {
   return (
     <div className="space-y-12">
+      <TabHeroImage src={heroRAG} alt="Researcher and robot retrieving documents from a knowledge library" caption="RAG — retrieve, ground, cite. Trustworthy AI answers." />
       <Reveal>
         <QuickSummary
           items={[
