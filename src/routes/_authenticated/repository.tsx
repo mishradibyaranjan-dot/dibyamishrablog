@@ -30,7 +30,7 @@ const DOCS: Doc[] = [
     description:
       "Comprehensive guide to LLM architectures, training, prompting, evaluation, and production deployment.",
     category: "AI / LLM",
-    url: llm.url,
+    url: asset(llm),
     filename: "LLM-Foundations-and-Practice.pdf",
   },
   {
@@ -38,7 +38,7 @@ const DOCS: Doc[] = [
     description:
       "End-to-end blueprint for Retrieval-Augmented Generation: chunking, embeddings, vector stores, retrievers, evaluation.",
     category: "AI / RAG",
-    url: rag.url,
+    url: asset(rag),
     filename: "Building-and-Deploying-RAG.pdf",
   },
   {
@@ -46,7 +46,7 @@ const DOCS: Doc[] = [
     description:
       "Tenancy models, data isolation strategies, per-tenant configuration, billing, and observability patterns for SaaS.",
     category: "SaaS Architecture",
-    url: multitenant.url,
+    url: asset(multitenant),
     filename: "Multi-Tenant-Application-Guide.pdf",
   },
   {
@@ -54,7 +54,7 @@ const DOCS: Doc[] = [
     description:
       "White paper on applying GenAI across demand forecasting, merchandising, logistics, and store operations.",
     category: "Retail / Supply Chain",
-    url: retail.url,
+    url: asset(retail),
     filename: "GenAI-Retail-Supply-Chains.pdf",
   },
   {
@@ -62,7 +62,7 @@ const DOCS: Doc[] = [
     description:
       "Incident, Change, Problem, and Service Request Management using Kanban — flow, WIP limits, SLAs, and governance.",
     category: "IT Service Management",
-    url: itil.url,
+    url: asset(itil),
     filename: "ITIL-with-Kanban.pdf",
   },
   {
@@ -70,7 +70,7 @@ const DOCS: Doc[] = [
     description:
       "Executive brief on AI agents, cloud platforms, and industry-specific AI adoption across BFSI, retail, and telecom.",
     category: "Executive Brief",
-    url: execsum.url,
+    url: asset(execsum),
     filename: "Executive-Summary.pdf",
   },
 ];
