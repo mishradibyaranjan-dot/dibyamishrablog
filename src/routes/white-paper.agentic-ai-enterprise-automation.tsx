@@ -10,7 +10,7 @@ const CANONICAL =
 export const Route = createFileRoute("/white-paper/agentic-ai-enterprise-automation")({
   head: () => ({
     meta: [
-      { title: "How Agentic AI Is Changing Enterprise Automation | Dibya Ranjan Mishra" },
+      { title: "Agentic AI in Enterprise Automation — White Paper" },
       {
         name: "description",
         content:

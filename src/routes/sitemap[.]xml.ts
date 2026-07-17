@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import type {} from "@tanstack/react-start";
 import { posts } from "@/lib/content";
 
-const BASE_URL = "https://dibyamishrablog.lovable.app";
+const BASE_URL = "https://www.dibyamishra.co.in";
 
 interface SitemapEntry {
   path: string;
@@ -18,6 +18,11 @@ const staticEntries: SitemapEntry[] = [
   { path: "/newsletter", changefreq: "weekly", priority: "0.8" },
   { path: "/contact", changefreq: "monthly", priority: "0.7" },
   { path: "/trust", changefreq: "monthly", priority: "0.7" },
+  { path: "/case-studies", changefreq: "monthly", priority: "0.7" },
+  { path: "/projects", changefreq: "monthly", priority: "0.7" },
+  { path: "/research", changefreq: "monthly", priority: "0.7" },
+  { path: "/learn", changefreq: "weekly", priority: "0.8" },
+  { path: "/repository", changefreq: "monthly", priority: "0.7" },
   { path: "/white-paper/agentic-ai-enterprise-automation", changefreq: "monthly", priority: "0.8" },
 ];
 

@@ -43,16 +43,18 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth";
 
 export const Route = createFileRoute("/learn")({
-  head: () => ({
-    meta: [
-      { title: "Learn — AI, Cloud & SaaS Fundamentals" },
-      {
-        name: "description",
-        content:
-          "An in-depth, beginner-friendly learning library covering Artificial Intelligence, Cloud Computing, and Software-as-a-Service (SaaS) — concepts, history, architecture, diagrams, code, and security.",
-      },
-    ],
-  }),
+  head: () => {
+    const description =
+      "Beginner-friendly learning library on AI, Cloud, and SaaS — concepts, history, architecture diagrams, and code.";
+    return {
+      meta: [
+        { title: "Learn — AI, Cloud & SaaS Fundamentals" },
+        { name: "description", content: description },
+        { property: "og:title", content: "Learn — AI, Cloud & SaaS Fundamentals" },
+        { property: "og:description", content: description },
+      ],
+    };
+  },
   component: Learn,
 });
 
@@ -70,6 +72,7 @@ function Learn() {
   return (
     <Section className="pb-4 pt-16 lg:pt-24">
       <SectionHeader
+        as="h1"
         eyebrow="Learning Library"
         title="Learn — AI, Cloud, SaaS, ITIL, LLM, GenAI Retail, Multi-Tenant & RAG"
         description="Eight self-contained mini-courses with quick-summary guides, concepts, history, architecture diagrams, comparison tables, code snippets, and security guidance. Each module opens with a Quick Summary Guide so you get the key takeaways in under a minute."
