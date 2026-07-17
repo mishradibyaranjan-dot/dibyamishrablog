@@ -63,7 +63,7 @@ function AuthPage() {
           </TabsContent>
         </Tabs>
 
-        <div className="my-5 flex items-center gap-3 text-xs uppercase tracking-widest text-slate-400">
+        <div className="my-5 flex items-center gap-3 text-xs uppercase tracking-widest text-slate-600">
           <span className="h-px flex-1 bg-slate-200" />
           or
           <span className="h-px flex-1 bg-slate-200" />
