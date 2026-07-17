@@ -11,6 +11,10 @@ import {
   Sparkles,
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
+import cardNewsletter from "@/assets/card-newsletter.jpg";
+import cardLearn from "@/assets/card-learn.jpg";
+import cardRepository from "@/assets/card-repository.jpg";
+import cardCaseStudy from "@/assets/card-case-study.jpg";
 
 export const Route = createFileRoute("/")({
   head: () => ({
