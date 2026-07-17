@@ -322,24 +322,21 @@ export const publishNewsletterIssue = createServerFn({ method: "POST" })
 
       // Enqueue one at a time using the internal /lovable/email/transactional/send route
       // via the RPC enqueue_email (which is exactly what /send does under the hood).
+      const { enqueueRenderedTemplate } = await import("@/lib/newsletter-core.server");
       for (const s of list) {
         try {
-          const { error: enqErr } = await supabaseAdmin.rpc("enqueue_email", {
-            queue_name: "transactional_emails",
-            payload: {
-              template_name: "newsletter-issue",
-              recipient_email: s.email,
-              template_data: {
-                title: issue.title,
-                summary: issue.summary,
-                bodyMarkdown: issue.body_markdown,
-                slug: issue.slug,
-              },
-              idempotency_key: `newsletter-${issue.id}-${s.email}`,
+          const r = await enqueueRenderedTemplate({
+            templateName: "newsletter-issue",
+            recipientEmail: s.email,
+            templateData: {
+              title: issue.title,
+              summary: issue.summary,
+              bodyMarkdown: issue.body_markdown,
+              slug: issue.slug,
             },
+            idempotencyKey: `newsletter-${issue.id}-${s.email}`,
           });
-          if (enqErr) throw enqErr;
-          result.emailsQueued++;
+          if (r.queued) result.emailsQueued++;
         } catch (e) {
           console.error("enqueue failed", s.email, e);
           result.emailErrors++;
@@ -482,24 +479,21 @@ export const autoSendNewsletterToRegisteredUsers = createServerFn({ method: "POS
 
     let queued = 0;
     let errors = 0;
+    const { enqueueRenderedTemplate } = await import("@/lib/newsletter-core.server");
     for (const email of emails) {
       try {
-        const { error: enqErr } = await supabaseAdmin.rpc("enqueue_email", {
-          queue_name: "transactional_emails",
-          payload: {
-            template_name: "newsletter-issue",
-            recipient_email: email,
-            template_data: {
-              title,
-              summary,
-              bodyMarkdown: body_markdown,
-              slug: issue.slug,
-            },
-            idempotency_key: `newsletter-${issue.id}-${email}`,
+        const r = await enqueueRenderedTemplate({
+          templateName: "newsletter-issue",
+          recipientEmail: email,
+          templateData: {
+            title,
+            summary,
+            bodyMarkdown: body_markdown,
+            slug: issue.slug,
           },
+          idempotencyKey: `newsletter-${issue.id}-${email}`,
         });
-        if (enqErr) throw enqErr;
-        queued++;
+        if (r.queued) queued++;
       } catch (e) {
         console.error("enqueue failed", email, e);
         errors++;
