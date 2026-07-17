@@ -599,4 +599,35 @@ table th, table td { border-color: #E2E8F0; }
   font-weight: 700;
 }
 
+/* Force dark hero / glass surfaces to render as light white cards so
+   text (which we forced to dark) stays legible across the whole site. */
+.bg-hero {
+  background: linear-gradient(180deg, #FFFFFF 0%, #F7F8FB 100%) !important;
+  color: #1F2937 !important;
+}
+.bg-hero .text-gradient,
+.bg-hero .shimmer-headline { color: transparent !important; }
+
+.glass-strong {
+  background: #FFFFFF !important;
+  border: 1px solid #E2E8F0 !important;
+  backdrop-filter: none !important;
+  box-shadow: 0 1px 2px rgba(15,23,42,0.04), 0 8px 24px -12px rgba(15,23,42,0.08) !important;
+  color: #1F2937 !important;
+}
+
+/* Neutralise stray dark utility backgrounds */
+.bg-black,
+[class*="bg-slate-9"],
+[class*="bg-zinc-9"],
+[class*="bg-neutral-9"],
+[class*="bg-gray-9"] {
+  background-color: #FFFFFF !important;
+  color: #1F2937 !important;
+}
+.bg-black\/40,
+.bg-black\/60,
+.bg-black\/80 { background-color: rgba(15, 23, 42, 0.55) !important; }
+
+
 
