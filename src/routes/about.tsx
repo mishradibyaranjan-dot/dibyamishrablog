@@ -28,7 +28,7 @@ export const Route = createFileRoute("/about")({
         "@context": "https://schema.org",
         "@type": "Person",
         name: "Dibya Ranjan Mishra",
-        jobTitle: "Head of Engineering | Senior Director | Vice President of Engineering",
+        jobTitle: "Vice President & Country Head | Head of Engineering | Senior Director",
         description: "VP Engineering & Head of Engineering with 20+ years leading 500+ engineers, $28M+ budgets, and AI/Cloud platforms across Shipping, BFSI, Insurance and SaaS.",
 
         url: "https://dibyamishrablog.lovable.app/about",
@@ -47,7 +47,7 @@ export const Route = createFileRoute("/about")({
           "Engineering Leadership",
           "Digital Transformation",
         ],
-        worksFor: { "@type": "Organization", name: "Inchcape Shipping Services" },
+        worksFor: { "@type": "Organization", name: "Crystal Tech" },
         alumniOf: [
           { "@type": "Organization", name: "Centific India Pvt Ltd" },
           { "@type": "Organization", name: "Deloitte Support Services" },
@@ -62,6 +62,7 @@ export const Route = createFileRoute("/about")({
 });
 
 const timeline = [
+  { year: "2026 — Present", role: "Vice President & Country Head — Crystal Tech", text: "Leading Gen AI-powered retail and supply chain products, driving platform strategy, engineering delivery, and AI transformation at scale." },
   { year: "2022 — 2026", role: "Head of Engineering & Global Application Support — Inchcape Shipping Services", text: "Led 40 engineers across 5 time zones on a cloud-native vessel management platform. Cut time-to-market 35%; AI transformation reduced incidents 76% (3,800 → 900) and training effort 60%." },
   { year: "2019 — 2022", role: "Director of Delivery — Centific India", text: "Ran a 450-person delivery org with $8M budget. Delivered Microsoft 365 and Data Platform programs for 10,000+ users. Grew revenue $1M → $20M in 24 months." },
   { year: "2017 — 2019", role: "Delivery Manager — Deloitte Support Services", text: "Built a unified web/mobile platform for Deloitte University, replacing 5 tools and automating event lifecycle for 2,000+ guests. Zero critical outages over 2.5 years." },
