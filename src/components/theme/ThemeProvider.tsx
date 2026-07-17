@@ -27,12 +27,12 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     const stored = typeof window !== "undefined" ? window.localStorage.getItem(STORAGE_KEY) : null;
     const initial = isThemeId(stored) ? stored : DEFAULT_THEME;
     setThemeState(initial);
-    applyTheme(initial);
+    applyTheme(initial, false);
   }, []);
 
   const setTheme = useCallback((next: ThemeId) => {
     setThemeState(next);
-    applyTheme(next);
+    applyTheme(next, true);
     try {
       window.localStorage.setItem(STORAGE_KEY, next);
     } catch {
