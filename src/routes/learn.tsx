@@ -72,6 +72,7 @@ function Learn() {
   return (
     <Section className="pb-4 pt-16 lg:pt-24">
       <SectionHeader
+        as="h1"
         eyebrow="Learning Library"
         title="Learn — AI, Cloud, SaaS, ITIL, LLM, GenAI Retail, Multi-Tenant & RAG"
         description="Eight self-contained mini-courses with quick-summary guides, concepts, history, architecture diagrams, comparison tables, code snippets, and security guidance. Each module opens with a Quick Summary Guide so you get the key takeaways in under a minute."
