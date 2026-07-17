@@ -11,6 +11,9 @@ import {
   Zap,
   Shield,
   Quote,
+  ShieldCheck,
+  Mail,
+  Share2,
 } from "lucide-react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { useRef } from "react";
@@ -227,7 +230,88 @@ function Home() {
         </div>
       </section>
 
+      {/* ===================== HUMAN SIGN-OFF FEATURE HIGHLIGHT ===================== */}
+      <section className="relative py-10">
+        <div className="mx-auto max-w-[1400px] px-4 sm:px-6">
+          <Reveal>
+            <div className="relative overflow-hidden rounded-3xl border border-emerald-400/30 bg-gradient-to-br from-emerald-500/10 via-white/5 to-neon-cyan/10 p-8 backdrop-blur-xl sm:p-12">
+              <div className="pointer-events-none absolute -right-16 -top-16 h-64 w-64 rounded-full bg-emerald-400/20 blur-3xl" />
+              <div className="pointer-events-none absolute -bottom-20 -left-20 h-72 w-72 rounded-full bg-neon-cyan/20 blur-3xl" />
+
+              <div className="relative grid gap-8 lg:grid-cols-[1.2fr_1fr] lg:items-center">
+                <div>
+                  <div className="inline-flex items-center gap-2 rounded-full border border-emerald-400/40 bg-emerald-400/10 px-3 py-1 text-xs font-semibold uppercase tracking-widest text-emerald-300">
+                    <ShieldCheck className="h-3.5 w-3.5" /> Human-in-the-loop · New
+                  </div>
+                  <h2 className="mt-4 font-display text-3xl font-bold text-white sm:text-4xl">
+                    Every newsletter is <span className="text-emerald-300">signed off by me</span> before it goes public.
+                  </h2>
+                  <p className="mt-4 max-w-2xl text-base text-white/70">
+                    AI drafts the monthly <em>Intelligent Enterprise Brief</em>. Nothing reaches
+                    subscribers or LinkedIn until I personally review and approve it — the same
+                    governed, human-approved pattern I recommend for enterprise agents.
+                  </p>
+
+                  <div className="mt-6 grid gap-3 sm:grid-cols-3">
+                    <StepPill n={1} icon={<Sparkles className="h-4 w-4" />} label="AI drafts" sub="Gemini 2.5 Pro" />
+                    <StepPill n={2} icon={<ShieldCheck className="h-4 w-4" />} label="I sign off" sub="Approval gate" tone="emerald" />
+                    <StepPill n={3} icon={<Share2 className="h-4 w-4" />} label="Publish" sub="Email + LinkedIn" />
+                  </div>
+
+                  <div className="mt-6 flex flex-wrap gap-3">
+                    <Button asChild className="bg-brand-gradient text-white shadow-neon">
+                      <Link to="/newsletter">
+                        Read the newsletter <ArrowRight className="ml-1 h-4 w-4" />
+                      </Link>
+                    </Button>
+                    <Button asChild variant="ghost" className="text-white/80 hover:text-white">
+                      <Link to="/newsletter">Subscribe</Link>
+                    </Button>
+                  </div>
+                </div>
+
+                <div className="relative">
+                  <div className="rounded-2xl border border-white/10 bg-black/30 p-5 shadow-2xl">
+                    <div className="mb-3 flex items-center gap-2 text-xs text-white/60">
+                      <Mail className="h-3.5 w-3.5" /> newsletter_issues · latest draft
+                    </div>
+                    <div className="rounded-lg border border-white/10 bg-white/5 p-4">
+                      <div className="text-sm font-semibold text-white">
+                        🧠 The Intelligent Enterprise Brief — July 2026
+                      </div>
+                      <div className="mt-1 text-xs text-white/60">
+                        GenAI, cloud & industry transformation
+                      </div>
+                      <div className="mt-3 flex flex-wrap gap-2 text-[10px]">
+                        <span className="rounded-full bg-yellow-500/20 px-2 py-0.5 font-semibold text-yellow-300">
+                          pending_approval
+                        </span>
+                        <span className="inline-flex items-center gap-1 rounded-full border border-emerald-400/40 bg-emerald-400/10 px-2 py-0.5 font-semibold text-emerald-300">
+                          <ShieldCheck className="h-3 w-3" /> Awaiting your sign-off
+                        </span>
+                      </div>
+                      <div className="mt-4 grid grid-cols-2 gap-2 text-[11px]">
+                        <div className="rounded border border-white/10 bg-white/5 px-2 py-1.5 text-center text-white/40 line-through">
+                          Email subscribers
+                        </div>
+                        <div className="rounded border border-white/10 bg-white/5 px-2 py-1.5 text-center text-white/40 line-through">
+                          Post to LinkedIn
+                        </div>
+                      </div>
+                      <div className="mt-2 text-[10px] text-white/50">
+                        Both actions unlock the moment approval is signed off.
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </Reveal>
+        </div>
+      </section>
+
       {/* ===================== FEATURED RESEARCH RAIL (Netflix-style) ===================== */}
+
       <section className="relative py-6">
         <div className="mx-auto max-w-[1400px] px-4 sm:px-6">
           <Reveal>
@@ -528,3 +612,32 @@ function Home() {
     </>
   );
 }
+
+function StepPill({
+  n,
+  icon,
+  label,
+  sub,
+  tone,
+}: {
+  n: number;
+  icon: React.ReactNode;
+  label: string;
+  sub: string;
+  tone?: "emerald";
+}) {
+  const ring = tone === "emerald" ? "border-emerald-400/40 bg-emerald-400/10" : "border-white/10 bg-white/5";
+  const num = tone === "emerald" ? "bg-emerald-400 text-black" : "bg-white/10 text-white";
+  return (
+    <div className={`flex items-center gap-3 rounded-xl border ${ring} px-3 py-2.5 backdrop-blur-xl`}>
+      <div className={`grid h-7 w-7 shrink-0 place-items-center rounded-full text-xs font-bold ${num}`}>{n}</div>
+      <div className="min-w-0">
+        <div className="flex items-center gap-1.5 text-sm font-semibold text-white">
+          {icon} {label}
+        </div>
+        <div className="truncate text-[11px] text-white/60">{sub}</div>
+      </div>
+    </div>
+  );
+}
+
