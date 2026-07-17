@@ -10,9 +10,23 @@ export const Route = createFileRoute("/api/public/cron/monthly-newsletter")({
   server: {
     handlers: {
       POST: async ({ request }) => {
-        const apikey = request.headers.get("apikey");
-        const expected = process.env.SUPABASE_PUBLISHABLE_KEY;
-        if (!expected || apikey !== expected) {
+        // Authenticate with a true server-only secret (never the publishable/anon key).
+        // Supports either Authorization: Bearer <CRON_SECRET> or x-cron-secret header.
+        const cronSecret = process.env.CRON_SECRET;
+        if (!cronSecret) {
+          return new Response("Server misconfigured", { status: 500 });
+        }
+        const authHeader = request.headers.get("authorization") ?? "";
+        const bearer = authHeader.toLowerCase().startsWith("bearer ")
+          ? authHeader.slice(7).trim()
+          : "";
+        const provided = bearer || request.headers.get("x-cron-secret") || "";
+        // Constant-time compare
+        const a = new TextEncoder().encode(provided);
+        const b = new TextEncoder().encode(cronSecret);
+        let ok = a.length === b.length;
+        for (let i = 0; i < b.length; i++) ok = ok && a[i % a.length] === b[i];
+        if (!ok || provided.length === 0) {
           return new Response("Unauthorized", { status: 401 });
         }
 

@@ -35,6 +35,7 @@ import { Route as ApiPublicTtsRouteImport } from './routes/api/public/tts'
 import { Route as ApiPublicNewsletterRouteImport } from './routes/api/public/newsletter'
 import { Route as ApiPublicContactRouteImport } from './routes/api/public/contact'
 import { Route as ApiPublicChatRouteImport } from './routes/api/public/chat'
+import { Route as ApiDownloadPdfRouteImport } from './routes/api/download.pdf'
 import { Route as LovableEmailTransactionalSendRouteImport } from './routes/lovable/email/transactional/send'
 import { Route as LovableEmailTransactionalPreviewRouteImport } from './routes/lovable/email/transactional/preview'
 import { Route as LovableEmailQueueProcessRouteImport } from './routes/lovable/email/queue/process'
@@ -172,6 +173,11 @@ const ApiPublicChatRoute = ApiPublicChatRouteImport.update({
   path: '/api/public/chat',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiDownloadPdfRoute = ApiDownloadPdfRouteImport.update({
+  id: '/api/download/pdf',
+  path: '/api/download/pdf',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const LovableEmailTransactionalSendRoute =
   LovableEmailTransactionalSendRouteImport.update({
     id: '/lovable/email/transactional/send',
@@ -228,6 +234,7 @@ export interface FileRoutesByFullPath {
   '/newsletter/$slug': typeof NewsletterSlugRoute
   '/white-paper/agentic-ai-enterprise-automation': typeof WhitePaperAgenticAiEnterpriseAutomationRoute
   '/newsletter/': typeof NewsletterIndexRoute
+  '/api/download/pdf': typeof ApiDownloadPdfRoute
   '/api/public/chat': typeof ApiPublicChatRoute
   '/api/public/contact': typeof ApiPublicContactRoute
   '/api/public/newsletter': typeof ApiPublicNewsletterRoute
@@ -261,6 +268,7 @@ export interface FileRoutesByTo {
   '/newsletter/$slug': typeof NewsletterSlugRoute
   '/white-paper/agentic-ai-enterprise-automation': typeof WhitePaperAgenticAiEnterpriseAutomationRoute
   '/newsletter': typeof NewsletterIndexRoute
+  '/api/download/pdf': typeof ApiDownloadPdfRoute
   '/api/public/chat': typeof ApiPublicChatRoute
   '/api/public/contact': typeof ApiPublicContactRoute
   '/api/public/newsletter': typeof ApiPublicNewsletterRoute
@@ -296,6 +304,7 @@ export interface FileRoutesById {
   '/newsletter/$slug': typeof NewsletterSlugRoute
   '/white-paper/agentic-ai-enterprise-automation': typeof WhitePaperAgenticAiEnterpriseAutomationRoute
   '/newsletter/': typeof NewsletterIndexRoute
+  '/api/download/pdf': typeof ApiDownloadPdfRoute
   '/api/public/chat': typeof ApiPublicChatRoute
   '/api/public/contact': typeof ApiPublicContactRoute
   '/api/public/newsletter': typeof ApiPublicNewsletterRoute
@@ -331,6 +340,7 @@ export interface FileRouteTypes {
     | '/newsletter/$slug'
     | '/white-paper/agentic-ai-enterprise-automation'
     | '/newsletter/'
+    | '/api/download/pdf'
     | '/api/public/chat'
     | '/api/public/contact'
     | '/api/public/newsletter'
@@ -364,6 +374,7 @@ export interface FileRouteTypes {
     | '/newsletter/$slug'
     | '/white-paper/agentic-ai-enterprise-automation'
     | '/newsletter'
+    | '/api/download/pdf'
     | '/api/public/chat'
     | '/api/public/contact'
     | '/api/public/newsletter'
@@ -398,6 +409,7 @@ export interface FileRouteTypes {
     | '/newsletter/$slug'
     | '/white-paper/agentic-ai-enterprise-automation'
     | '/newsletter/'
+    | '/api/download/pdf'
     | '/api/public/chat'
     | '/api/public/contact'
     | '/api/public/newsletter'
@@ -430,6 +442,7 @@ export interface RootRouteChildren {
   NewsletterSlugRoute: typeof NewsletterSlugRoute
   WhitePaperAgenticAiEnterpriseAutomationRoute: typeof WhitePaperAgenticAiEnterpriseAutomationRoute
   NewsletterIndexRoute: typeof NewsletterIndexRoute
+  ApiDownloadPdfRoute: typeof ApiDownloadPdfRoute
   ApiPublicChatRoute: typeof ApiPublicChatRoute
   ApiPublicContactRoute: typeof ApiPublicContactRoute
   ApiPublicNewsletterRoute: typeof ApiPublicNewsletterRoute
@@ -627,6 +640,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPublicChatRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/download/pdf': {
+      id: '/api/download/pdf'
+      path: '/api/download/pdf'
+      fullPath: '/api/download/pdf'
+      preLoaderRoute: typeof ApiDownloadPdfRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/lovable/email/transactional/send': {
       id: '/lovable/email/transactional/send'
       path: '/lovable/email/transactional/send'
@@ -715,6 +735,7 @@ const rootRouteChildren: RootRouteChildren = {
   WhitePaperAgenticAiEnterpriseAutomationRoute:
     WhitePaperAgenticAiEnterpriseAutomationRoute,
   NewsletterIndexRoute: NewsletterIndexRoute,
+  ApiDownloadPdfRoute: ApiDownloadPdfRoute,
   ApiPublicChatRoute: ApiPublicChatRoute,
   ApiPublicContactRoute: ApiPublicContactRoute,
   ApiPublicNewsletterRoute: ApiPublicNewsletterRoute,

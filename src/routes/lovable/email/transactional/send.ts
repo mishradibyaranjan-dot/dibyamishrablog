@@ -115,6 +115,28 @@ export const Route = createFileRoute("/lovable/email/transactional/send")({
           )
         }
 
+        // Anti-abuse: if the caller is choosing the recipient (template has no
+        // fixed `to`), require an admin role. Prevents any self-registered user
+        // from using this endpoint as a spam/phishing relay on the site's
+        // verified sending domain. Templates with a fixed `to` (e.g. owner
+        // notifications) remain callable by any authenticated user.
+        if (!template.to) {
+          const { data: roleRow, error: roleErr } = await supabase
+            .from('user_roles')
+            .select('role')
+            .eq('user_id', user.id)
+            .eq('role', 'admin')
+            .maybeSingle()
+          if (roleErr) {
+            console.error('Role check failed for email send', { error: roleErr })
+            return Response.json({ error: 'Authorization check failed' }, { status: 500 })
+          }
+          if (!roleRow) {
+            return Response.json({ error: 'Forbidden' }, { status: 403 })
+          }
+        }
+
+
         // 2. Check suppression list (fail-closed: if we can't verify, don't send)
         const { data: suppressed, error: suppressionError } = await supabase
           .from('suppressed_emails')
