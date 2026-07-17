@@ -92,6 +92,7 @@ export const Route = createFileRoute("/api/public/contact")({
               text,
               purpose: "transactional",
               label: "contact-notification",
+              idempotency_key: `contact-notification-${messageId}`,
               queued_at: new Date().toISOString(),
             },
           });
