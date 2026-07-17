@@ -28,6 +28,9 @@ import {
   LineChart,
   Lock,
   AlertTriangle,
+  KanbanSquare,
+  Wrench,
+  Zap,
 } from "lucide-react";
 import { Section, SectionHeader } from "@/components/layout/Section";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
@@ -50,7 +53,7 @@ export const Route = createFileRoute("/_authenticated/learn")({
   component: Learn,
 });
 
-type TabKey = "ai" | "cloud" | "saas";
+type TabKey = "ai" | "cloud" | "saas" | "itil" | "llm";
 
 function Learn() {
   const { user } = useAuth();
@@ -65,15 +68,17 @@ function Learn() {
     <Section className="pb-4 pt-16 lg:pt-24">
       <SectionHeader
         eyebrow="Learning Library"
-        title="Learn — AI, Cloud & SaaS, from the ground up"
-        description="Three self-contained mini-courses with concepts, history, architecture diagrams, comparison tables, code snippets, and security guidance. Designed for beginners with basic technical literacy who want depth, not just buzzwords."
+        title="Learn — AI, Cloud, SaaS, ITIL & LLM Engineering"
+        description="Five self-contained mini-courses with concepts, history, architecture diagrams, comparison tables, code snippets, and security guidance. Designed for beginners with basic technical literacy who want depth, not just buzzwords."
       />
 
       <Tabs value={tab} onValueChange={(v) => setTab(v as TabKey)} className="mt-6">
-        <TabsList className="grid w-full grid-cols-1 gap-2 bg-transparent p-0 sm:grid-cols-3">
+        <TabsList className="grid w-full grid-cols-1 gap-2 bg-transparent p-0 sm:grid-cols-3 lg:grid-cols-5">
           <TabPill value="ai" icon={<Brain className="h-4 w-4" />} label="Intro to AI" />
           <TabPill value="cloud" icon={<Cloud className="h-4 w-4" />} label="Intro to Cloud" />
           <TabPill value="saas" icon={<Layers className="h-4 w-4" />} label="Intro to SaaS" />
+          <TabPill value="itil" icon={<KanbanSquare className="h-4 w-4" />} label="ITIL & Kanban" />
+          <TabPill value="llm" icon={<Cpu className="h-4 w-4" />} label="LLM Engineering" />
         </TabsList>
 
         <TabsContent value="ai" className="mt-8 space-y-12">
@@ -84,6 +89,12 @@ function Learn() {
         </TabsContent>
         <TabsContent value="saas" className="mt-8 space-y-12">
           <IntroSaaS />
+        </TabsContent>
+        <TabsContent value="itil" className="mt-8 space-y-12">
+          <IntroITIL />
+        </TabsContent>
+        <TabsContent value="llm" className="mt-8 space-y-12">
+          <IntroLLM />
         </TabsContent>
       </Tabs>
     </Section>
@@ -604,6 +615,375 @@ CREATE INDEX idx_tickets_tenant ON app_tickets (tenant_id, created_at DESC);`}
     </div>
   );
 }
+
+/* ================================================================
+   ITIL & KANBAN TAB
+   ================================================================ */
+
+function IntroITIL() {
+  return (
+    <div className="space-y-12">
+      <Reveal>
+        <HeroCard
+          icon={<KanbanSquare className="h-6 w-6" />}
+          title="ITIL 4 + Kanban — Running Incident, Change, Problem & Request as one flow"
+          tag="ITSM · Operating Model"
+          body="Modern service management blends ITIL 4's four core practices — Incident, Change, Problem, and Service Request — with Kanban's visual flow, WIP limits, and cycle-time discipline. The result is a lightweight operating model that a greenfield team can stand up quickly, then scale from a 50-user startup to a 20,000-user enterprise without re-architecting."
+        />
+      </Reveal>
+
+      <Reveal>
+        <KeyTakeaways
+          items={[
+            "Service desk is the single entry point — separate incidents from requests at intake.",
+            "Run incidents on a Kanban board with visible blockers and WIP limits per swimlane.",
+            "Promote recurring incidents into Problem Management; permanent fixes flow through Change Enablement.",
+            "Predefined, low-risk asks belong in a Service Catalog, not the incident queue.",
+            "Start lean: taxonomy, ownership, SLAs, and a minimum viable catalog — automate later.",
+          ]}
+        />
+      </Reveal>
+
+      <Reveal>
+        <SubSection eyebrow="Value Stream" title="How the four practices fit together">
+          <Diagram>
+            <ITILFlowDiagram />
+          </Diagram>
+        </SubSection>
+      </Reveal>
+
+      <Reveal>
+        <SubSection eyebrow="Incident Kanban" title="A board that scales from 3 analysts to 300">
+          <Diagram>
+            <KanbanBoardDiagram />
+          </Diagram>
+          <p className="mt-4 text-sm text-white/70">
+            Each column has a WIP limit. When a column is full, upstream work stops until the team pulls a card
+            through. Blocked cards get a red flag and a swarm rule for P1/P2 severity.
+          </p>
+        </SubSection>
+      </Reveal>
+
+      <Reveal>
+        <SubSection eyebrow="Sizing" title="Right-sized posture by organization band">
+          <Table
+            headers={["Band", "Users", "Process posture", "Team shape", "Platform fit"]}
+            rows={[
+              ["Small", "50–200", "One queue, lightweight CAB, compact catalog", "Lead + 2–5 analysts", "Freshservice · ManageEngine · JSM"],
+              ["Medium", "200–2,000", "Formal owners, change manager, problem reviews", "Manager + 5–20 analysts + admin", "JSM Premium · Freshservice Pro · ServiceNow"],
+              ["Large", ">2,000", "Segregation of duties, CI linkage, audit evidence", "Regional desks, CAB, service owners", "ServiceNow · BMC Helix · JSM"],
+            ]}
+          />
+        </SubSection>
+      </Reveal>
+
+      <Reveal>
+        <SubSection eyebrow="Roles" title="A minimum RACI that scales">
+          <Table
+            headers={["Role", "Incident", "Change", "Problem", "Request"]}
+            rows={[
+              ["Executive sponsor", "I", "I", "I", "I"],
+              ["ITSM practice owner", "A", "A", "A", "A"],
+              ["Service desk manager", "A", "C", "C", "A"],
+              ["Service desk analyst", "R", "I", "C", "R"],
+              ["Change manager", "C", "A/R", "C", "I"],
+              ["Problem coordinator", "C", "C", "A/R", "I"],
+              ["Resolver / SME", "R", "R", "R", "R"],
+            ]}
+          />
+        </SubSection>
+      </Reveal>
+
+      <Reveal>
+        <SubSection eyebrow="Change Enablement" title="Three change classes, one workflow">
+          <Grid cols={3}>
+            <ConceptCard icon={<Zap />} title="Standard" desc="Pre-approved, repeatable, low risk. No CAB — just execute and record." />
+            <ConceptCard icon={<Wrench />} title="Normal" desc="Assessed by CAB or peer review. Scheduled, tested, backed out on failure." />
+            <ConceptCard icon={<AlertTriangle />} title="Emergency" desc="Fast-tracked with post-implementation review. Restore first, document immediately after." />
+          </Grid>
+        </SubSection>
+      </Reveal>
+
+      <Reveal>
+        <SubSection eyebrow="KPIs" title="What to measure — by size">
+          <Table
+            headers={["Metric", "Small target", "Medium target", "Large target"]}
+            rows={[
+              ["Mean time to restore (P1)", "< 4 h", "< 2 h", "< 1 h"],
+              ["First-contact resolution", "> 55%", "> 65%", "> 70%"],
+              ["Change success rate", "> 90%", "> 95%", "> 98%"],
+              ["Emergency change ratio", "< 15%", "< 10%", "< 5%"],
+              ["Problem-to-incident ratio", "1:30", "1:20", "1:15"],
+              ["Catalog fulfillment SLA hit", "> 90%", "> 95%", "> 97%"],
+            ]}
+          />
+        </SubSection>
+      </Reveal>
+
+      <Reveal>
+        <SubSection eyebrow="Launch" title="Pre-go-live checklist">
+          <div className="rounded-2xl border border-white/10 bg-white/5 p-6 backdrop-blur-xl">
+            <ul className="grid gap-2.5 sm:grid-cols-2">
+              {[
+                "Ticket taxonomy & priority matrix defined",
+                "Assignment groups mapped to services",
+                "Incident Kanban board with WIP limits",
+                "Swarm rules for P1/P2 documented",
+                "Standard change catalog seeded",
+                "CAB cadence & authority defined",
+                "Problem review meeting scheduled",
+                "Minimum viable service catalog live",
+                "Knowledge base seeded with top-20 articles",
+                "Reporting pack + KPI baseline captured",
+              ].map((it) => (
+                <li key={it} className="flex items-start gap-2.5 text-sm text-white/80">
+                  <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-emerald-400" />
+                  <span>{it}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </SubSection>
+      </Reveal>
+    </div>
+  );
+}
+
+/* ================================================================
+   LLM ENGINEERING TAB
+   ================================================================ */
+
+function IntroLLM() {
+  return (
+    <div className="space-y-12">
+      <Reveal>
+        <HeroCard
+          icon={<Cpu className="h-6 w-6" />}
+          title="Building & Deploying Large Language Models"
+          tag="LLM · From Architecture to Production"
+          body="A practitioner's tour of the modern LLM stack — transformer variants, pretraining vs. fine-tuning, data curation, scaling laws, quantization & distillation, low-latency inference, and cloud deployment on AWS, GCP, and Azure. Optimized for engineers who need depth without a research paper."
+        />
+      </Reveal>
+
+      <Reveal>
+        <KeyTakeaways
+          items={[
+            "Transformers dominate: encoder-only (BERT), decoder-only (GPT/LLaMA), encoder–decoder (T5).",
+            "Chinchilla scaling laws — for a fixed compute budget, more tokens beat more parameters.",
+            "Start from an open base model (LLaMA/Mistral) and fine-tune; training from scratch rarely pays off.",
+            "QLoRA (4-bit + LoRA) fine-tunes 65B models on a single 48 GB GPU.",
+            "Inference wins come from batching, KV-cache reuse, quantization, and smart serving (vLLM, Triton).",
+          ]}
+        />
+      </Reveal>
+
+      <Reveal>
+        <SubSection eyebrow="Architectures" title="Three transformer families you'll actually ship">
+          <Grid cols={3}>
+            <ConceptCard icon={<Database />} title="Encoder-only" desc="BERT, RoBERTa, DeBERTa. Masked LM. 110M–340M params. Best for classification, retrieval, embeddings." />
+            <ConceptCard icon={<Sparkles />} title="Decoder-only" desc="GPT, LLaMA, Mistral, Claude. Causal LM. 100M → 1T+ params. Best for generation & agents." />
+            <ConceptCard icon={<Workflow />} title="Encoder–decoder" desc="T5, BART, mT5. Denoising objective. Best for translation, summarization, structured output." />
+          </Grid>
+        </SubSection>
+      </Reveal>
+
+      <Reveal>
+        <SubSection eyebrow="Training Pipeline" title="Pretraining → Fine-tuning → RLHF">
+          <NumberedSteps
+            items={[
+              { title: "Self-supervised pretraining", desc: "Trillions of tokens from Common Crawl, Wikipedia, books, code. Filter, dedupe, license-check." },
+              { title: "Supervised fine-tuning (SFT)", desc: "Instruction-tuning on task or domain data. Use LoRA/QLoRA for parameter-efficient fine-tunes." },
+              { title: "Preference alignment (RLHF/DPO)", desc: "Shape helpfulness, safety, and style using human preference pairs or direct preference optimization." },
+              { title: "Evaluation harness", desc: "Perplexity, MMLU, task-specific benchmarks, red-team probes. Track regressions per commit." },
+            ]}
+          />
+        </SubSection>
+      </Reveal>
+
+      <Reveal>
+        <SubSection eyebrow="Scaling" title="Compute · Cost · Latency by model size">
+          <Table
+            headers={["Params", "Pretrain cost", "Fine-tune cost", "Latency (single token, A100)", "Typical use"]}
+            rows={[
+              ["100M", "~$1K", "~$10", "< 5 ms", "Embeddings, classifiers"],
+              ["1B", "~$50K", "~$50", "~10 ms", "Small chat, on-device"],
+              ["7B", "~$500K", "~$50–500", "~25 ms", "General chat, RAG backends"],
+              ["70B", "~$5M", "~$5K–50K", "~80 ms", "Assistants, agents, coding"],
+              ["100B+", "~$50M+", "~$50K+", "~300 ms", "Frontier reasoning, SOTA benchmarks"],
+            ]}
+          />
+        </SubSection>
+      </Reveal>
+
+      <Reveal>
+        <SubSection eyebrow="Optimization" title="Shrink & speed up before you serve">
+          <Grid cols={3}>
+            <ConceptCard icon={<Gauge />} title="Quantization" desc="INT8 / INT4 / FP8 with bitsandbytes or GPTQ — 2–4× smaller, minimal accuracy loss." />
+            <ConceptCard icon={<GitBranch />} title="Distillation" desc="Teacher–student: transfer capability from a big model into a smaller, cheaper one." />
+            <ConceptCard icon={<Boxes />} title="LoRA / QLoRA" desc="Train small adapter matrices instead of full weights. Ship many domain adapters over one base." />
+          </Grid>
+        </SubSection>
+      </Reveal>
+
+      <Reveal>
+        <SubSection eyebrow="Serving" title="Reference inference architecture">
+          <Diagram>
+            <LLMArchitectureDiagram />
+          </Diagram>
+        </SubSection>
+      </Reveal>
+
+      <Reveal>
+        <SubSection eyebrow="Code" title="Fine-tune with QLoRA (HuggingFace + PEFT)">
+          <Code
+            language="python"
+            code={`from transformers import AutoModelForCausalLM, AutoTokenizer, TrainingArguments, Trainer
+from peft import LoraConfig, get_peft_model, prepare_model_for_kbit_training
+from datasets import load_dataset
+
+model_id = "mistralai/Mistral-7B-v0.1"
+tok = AutoTokenizer.from_pretrained(model_id)
+model = AutoModelForCausalLM.from_pretrained(
+    model_id, load_in_4bit=True, device_map="auto",
+)
+model = prepare_model_for_kbit_training(model)
+
+lora = LoraConfig(r=16, lora_alpha=32, target_modules=["q_proj","v_proj"],
+                  lora_dropout=0.05, bias="none", task_type="CAUSAL_LM")
+model = get_peft_model(model, lora)
+
+ds = load_dataset("tatsu-lab/alpaca", split="train[:5%]")
+ds = ds.map(lambda x: tok(x["text"], truncation=True, max_length=1024), batched=True)
+
+Trainer(
+    model=model,
+    train_dataset=ds,
+    args=TrainingArguments("out", per_device_train_batch_size=4,
+                           gradient_accumulation_steps=4, num_train_epochs=1,
+                           learning_rate=2e-4, fp16=True, logging_steps=20),
+).train()`}
+          />
+        </SubSection>
+      </Reveal>
+
+      <Reveal>
+        <SubSection eyebrow="Cloud" title="Where to deploy">
+          <Table
+            headers={["Cloud", "Managed hosting", "Compute", "Best for"]}
+            rows={[
+              ["AWS", "SageMaker · Bedrock", "p4d/p5 (A100/H100), g5 (A10G)", "Regulated workloads, deep AWS integration"],
+              ["GCP", "Vertex AI · HUGS", "TPU v5, A100 / L40S", "TPU-friendly training, BigQuery pipelines"],
+              ["Azure", "Azure ML · Azure OpenAI", "ND-series (H100/A100)", "Microsoft-centric enterprises, Copilot stack"],
+              ["Self-hosted K8s", "vLLM · Triton · TGI", "Bare-metal GPUs or spot", "Max control, lowest $/token at scale"],
+            ]}
+          />
+        </SubSection>
+      </Reveal>
+
+      <Reveal>
+        <SubSection eyebrow="Safety & Compliance" title="Non-negotiables before you ship">
+          <Grid cols={2}>
+            <ConceptCard icon={<Lock />} title="Data governance" desc="Provenance logs, license compliance, PII scrubbing, DPIA for regulated data." />
+            <ConceptCard icon={<ShieldCheck />} title="Model safety" desc="Red-team suites, jailbreak evals, output filtering, refusal policies, RAG grounding." />
+            <ConceptCard icon={<Activity />} title="Observability" desc="Token-level tracing, cost per tenant, latency SLOs, drift & hallucination detectors." />
+            <ConceptCard icon={<KeyRound />} title="Access control" desc="Per-tenant API keys, rate limits, prompt/response encryption, audit logs." />
+          </Grid>
+        </SubSection>
+      </Reveal>
+    </div>
+  );
+}
+
+/* ================================================================
+   ITIL / LLM DIAGRAMS
+   ================================================================ */
+
+function ITILFlowDiagram() {
+  return (
+    <div className="space-y-3">
+      <DiagramRow label="User or Monitoring Event" tint="bg-emerald-500/15 border-emerald-400/30 text-emerald-50" />
+      <DiagramArrow />
+      <DiagramRow label="Service Desk · Intake · Classify" tint="bg-amber-500/15 border-amber-400/30 text-amber-50" />
+      <DiagramArrow />
+      <div className="grid gap-2 sm:grid-cols-2">
+        <DiagramRow label="Incident Management (Kanban)" tint="bg-fuchsia-500/15 border-fuchsia-400/30 text-fuchsia-50" />
+        <DiagramRow label="Service Request (Catalog)" tint="bg-cyan-500/15 border-cyan-400/30 text-cyan-50" />
+      </div>
+      <DiagramArrow />
+      <div className="grid gap-2 sm:grid-cols-2">
+        <DiagramRow label="Problem Management (RCA)" tint="bg-indigo-500/15 border-indigo-400/30 text-indigo-50" />
+        <DiagramRow label="Change Enablement (Std · Normal · Emergency)" tint="bg-rose-500/15 border-rose-400/30 text-rose-50" />
+      </div>
+      <DiagramArrow />
+      <DiagramRow label="Validation · Knowledge · Known Error · Runbook" tint="bg-emerald-500/15 border-emerald-400/30 text-emerald-50" />
+    </div>
+  );
+}
+
+function KanbanBoardDiagram() {
+  const cols = [
+    { name: "Backlog", wip: "—", cards: ["INC-812", "INC-813", "INC-814"] },
+    { name: "Triage", wip: "5", cards: ["INC-807", "INC-808"] },
+    { name: "In Progress", wip: "3", cards: ["INC-802", "INC-803", "INC-804"] },
+    { name: "Blocked", wip: "2", cards: ["INC-799 🚩"] },
+    { name: "Done", wip: "—", cards: ["INC-791", "INC-790"] },
+  ];
+  return (
+    <div className="grid gap-3 sm:grid-cols-5">
+      {cols.map((c) => (
+        <div key={c.name} className="rounded-xl border border-white/10 bg-white/5 p-3 backdrop-blur">
+          <div className="mb-2 flex items-center justify-between">
+            <span className="font-display text-xs font-bold text-white">{c.name}</span>
+            <span className="rounded bg-white/10 px-1.5 py-0.5 text-[10px] font-mono text-neon-cyan">WIP {c.wip}</span>
+          </div>
+          <div className="space-y-1.5">
+            {c.cards.map((card) => (
+              <div
+                key={card}
+                className={`rounded-md px-2 py-1.5 text-[11px] font-medium ${
+                  card.includes("🚩")
+                    ? "border border-rose-400/40 bg-rose-500/20 text-rose-100"
+                    : "border border-cyan-400/30 bg-cyan-500/15 text-cyan-50"
+                }`}
+              >
+                {card}
+              </div>
+            ))}
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function LLMArchitectureDiagram() {
+  return (
+    <div className="space-y-3">
+      <DiagramRow label="Users · Clients · Agents" tint="bg-emerald-500/15 border-emerald-400/30 text-emerald-50" />
+      <DiagramArrow />
+      <div className="grid gap-2 sm:grid-cols-3">
+        <DiagramRow label="API Gateway / WAF" tint="bg-amber-500/15 border-amber-400/30 text-amber-50" />
+        <DiagramRow label="Auth · Rate limit · Quotas" tint="bg-amber-500/15 border-amber-400/30 text-amber-50" />
+        <DiagramRow label="Router (model + tenant)" tint="bg-amber-500/15 border-amber-400/30 text-amber-50" />
+      </div>
+      <DiagramArrow />
+      <div className="grid gap-2 sm:grid-cols-3">
+        <DiagramRow label="vLLM / Triton Pods (GPU)" tint="bg-fuchsia-500/15 border-fuchsia-400/30 text-fuchsia-50" />
+        <DiagramRow label="KV-Cache + Redis" tint="bg-fuchsia-500/15 border-fuchsia-400/30 text-fuchsia-50" />
+        <DiagramRow label="RAG · Vector DB" tint="bg-fuchsia-500/15 border-fuchsia-400/30 text-fuchsia-50" />
+      </div>
+      <DiagramArrow />
+      <div className="grid gap-2 sm:grid-cols-2">
+        <DiagramRow label="Model Registry (S3 / GCS)" tint="bg-indigo-500/15 border-indigo-400/30 text-indigo-50" />
+        <DiagramRow label="Fine-tune Jobs · MLflow" tint="bg-indigo-500/15 border-indigo-400/30 text-indigo-50" />
+      </div>
+      <DiagramArrow />
+      <DiagramRow label="Observability · Cost · Safety · Audit" tint="bg-rose-500/15 border-rose-400/30 text-rose-50" />
+    </div>
+  );
+}
+
+
 
 /* ================================================================
    REUSABLE PRESENTATION COMPONENTS
