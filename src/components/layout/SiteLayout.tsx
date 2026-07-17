@@ -8,6 +8,7 @@ import { FloatingChat } from "@/components/chat/FloatingChat";
 import { AuroraBackground } from "@/components/cinematic/AuroraBackground";
 import { PageTransition } from "@/components/cinematic/PageTransition";
 import { ThemeProvider } from "@/components/theme/ThemeProvider";
+import { ThemeToggle } from "@/components/theme/ThemeToggle";
 
 import { ReadAloudButton } from "@/components/voice/ReadAloudButton";
 import { AuthProvider, useAuth } from "@/lib/auth";
@@ -157,7 +158,7 @@ function Header() {
 
         <div className="flex items-center gap-1 sm:gap-2">
           <ReadAloudButton />
-
+          <ThemeToggle />
           <UserMenu />
           <Button
             variant="ghost"

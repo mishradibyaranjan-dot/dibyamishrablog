@@ -10,29 +10,45 @@ export const THEMES = [
 
 export type ThemeId = (typeof THEMES)[number]["id"];
 
-// Force white/light theme site-wide. Toggle is a no-op.
-const FORCED: ThemeId = "light";
+const STORAGE_KEY = "drm-theme";
+const DEFAULT_THEME: ThemeId = "light";
 
 type Ctx = { theme: ThemeId; setTheme: (t: ThemeId) => void };
-const ThemeContext = createContext<Ctx>({ theme: FORCED, setTheme: () => {} });
+const ThemeContext = createContext<Ctx>({ theme: DEFAULT_THEME, setTheme: () => {} });
 
-export function ThemeProvider({ children }: { children: ReactNode }) {
-  useEffect(() => {
-    applyTheme(FORCED);
-  }, []);
-
-  const setTheme = useCallback((_next: ThemeId) => {
-    applyTheme(FORCED);
-  }, []);
-
-  return <ThemeContext.Provider value={{ theme: FORCED, setTheme }}>{children}</ThemeContext.Provider>;
+function isThemeId(v: string | null): v is ThemeId {
+  return !!v && THEMES.some((t) => t.id === v);
 }
 
-function applyTheme(_theme: ThemeId) {
+export function ThemeProvider({ children }: { children: ReactNode }) {
+  const [theme, setThemeState] = useState<ThemeId>(DEFAULT_THEME);
+
+  useEffect(() => {
+    const stored = typeof window !== "undefined" ? window.localStorage.getItem(STORAGE_KEY) : null;
+    const initial = isThemeId(stored) ? stored : DEFAULT_THEME;
+    setThemeState(initial);
+    applyTheme(initial);
+  }, []);
+
+  const setTheme = useCallback((next: ThemeId) => {
+    setThemeState(next);
+    applyTheme(next);
+    try {
+      window.localStorage.setItem(STORAGE_KEY, next);
+    } catch {
+      /* ignore */
+    }
+  }, []);
+
+  return <ThemeContext.Provider value={{ theme, setTheme }}>{children}</ThemeContext.Provider>;
+}
+
+function applyTheme(theme: ThemeId) {
+  if (typeof document === "undefined") return;
   const root = document.documentElement;
-  root.dataset.theme = "light";
-  root.classList.remove("dark");
-  root.style.colorScheme = "light";
+  root.dataset.theme = theme;
+  root.classList.toggle("dark", theme !== "light");
+  root.style.colorScheme = theme === "light" ? "light" : "dark";
 }
 
 export function useTheme() {
