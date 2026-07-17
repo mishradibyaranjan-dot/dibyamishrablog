@@ -295,6 +295,10 @@ function Reports() {
       </div>
 
       <div className="mt-6">
+        <NewsletterAdminPanel />
+      </div>
+
+      <div className="mt-6">
         <DataExportPanel />
       </div>
     </Section>
