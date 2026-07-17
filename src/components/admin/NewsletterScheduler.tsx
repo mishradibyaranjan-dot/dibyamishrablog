@@ -24,12 +24,30 @@ type Row = {
 
 const DOW = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
+type HistoryRow = {
+  id: string;
+  issue_id: string | null;
+  trigger_source: string;
+  title: string | null;
+  recipients_total: number;
+  queued_count: number;
+  failed_count: number;
+  status: string;
+  error_message: string | null;
+  started_at: string;
+  finished_at: string | null;
+  failed_recipients: Array<{ run_id: string; email: string; error_message: string | null }>;
+};
+
 export function NewsletterScheduler() {
   const [rows, setRows] = useState<Row[]>([]);
   const [busy, setBusy] = useState(false);
   const [runningId, setRunningId] = useState<string | null>(null);
   const [err, setErr] = useState<string | null>(null);
   const [msg, setMsg] = useState<string | null>(null);
+  const [historyOpen, setHistoryOpen] = useState<Record<string, boolean>>({});
+  const [historyData, setHistoryData] = useState<Record<string, HistoryRow[]>>({});
+  const [historyLoading, setHistoryLoading] = useState<Record<string, boolean>>({});
 
   // form
   const [name, setName] = useState("Weekly digest");
