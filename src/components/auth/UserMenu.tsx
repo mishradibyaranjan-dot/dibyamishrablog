@@ -18,13 +18,8 @@ export function UserMenu() {
   if (loading) return null;
 
   if (!user) {
-    return (
-      <Button asChild size="sm" className="hidden bg-brand-gradient text-white shadow-neon hover:opacity-90 sm:inline-flex">
-        <Link to="/auth" search={{ mode: "login" }}>
-          <LogIn className="mr-1.5 h-4 w-4" /> Sign in
-        </Link>
-      </Button>
-    );
+    // Login temporarily disabled
+    return null;
   }
 
   const initial = (user.user_metadata?.full_name || user.email || "?").slice(0, 1).toUpperCase();
