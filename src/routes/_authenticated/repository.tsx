@@ -6,12 +6,14 @@ import { Button } from "@/components/ui/button";
 import { useAuth } from "@/lib/auth";
 import { supabase } from "@/integrations/supabase/client";
 
-import llm from "@/assets/repo/llm.pdf.asset.json";
-import multitenant from "@/assets/repo/start_building_multitenant_application.pdf.asset.json";
-import rag from "@/assets/repo/building_and_deploying_rag.pdf.asset.json";
-import retail from "@/assets/repo/generative_ai_in_retail_supply_chains_white_paper.pdf.asset.json";
-import itil from "@/assets/repo/itil_kanban_whitepaper.pdf.asset.json";
-import execsum from "@/assets/repo/executive_summary.pdf.asset.json";
+import llm from "@/assets/repo/llm.pdf.asset.json" with { type: "json" };
+import multitenant from "@/assets/repo/start_building_multitenant_application.pdf.asset.json" with { type: "json" };
+import rag from "@/assets/repo/building_and_deploying_rag.pdf.asset.json" with { type: "json" };
+import retail from "@/assets/repo/generative_ai_in_retail_supply_chains_white_paper.pdf.asset.json" with { type: "json" };
+import itil from "@/assets/repo/itil_kanban_whitepaper.pdf.asset.json" with { type: "json" };
+import execsum from "@/assets/repo/executive_summary.pdf.asset.json" with { type: "json" };
+
+const asset = (a: unknown) => (a as { url: string }).url;
 
 type Doc = {
   title: string;
