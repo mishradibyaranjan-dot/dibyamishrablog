@@ -479,24 +479,21 @@ export const autoSendNewsletterToRegisteredUsers = createServerFn({ method: "POS
 
     let queued = 0;
     let errors = 0;
+    const { enqueueRenderedTemplate } = await import("@/lib/newsletter-core.server");
     for (const email of emails) {
       try {
-        const { error: enqErr } = await supabaseAdmin.rpc("enqueue_email", {
-          queue_name: "transactional_emails",
-          payload: {
-            template_name: "newsletter-issue",
-            recipient_email: email,
-            template_data: {
-              title,
-              summary,
-              bodyMarkdown: body_markdown,
-              slug: issue.slug,
-            },
-            idempotency_key: `newsletter-${issue.id}-${email}`,
+        const r = await enqueueRenderedTemplate({
+          templateName: "newsletter-issue",
+          recipientEmail: email,
+          templateData: {
+            title,
+            summary,
+            bodyMarkdown: body_markdown,
+            slug: issue.slug,
           },
+          idempotencyKey: `newsletter-${issue.id}-${email}`,
         });
-        if (enqErr) throw enqErr;
-        queued++;
+        if (r.queued) queued++;
       } catch (e) {
         console.error("enqueue failed", email, e);
         errors++;
