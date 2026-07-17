@@ -15,6 +15,12 @@ const SENDER_DOMAIN = "notify.dibyamishra.co.in";
 const FROM_DOMAIN = "notify.dibyamishra.co.in";
 const OWNER_EMAIL = "mishra.dibyaranjan@gmail.com";
 
+function generateToken(): string {
+  const bytes = new Uint8Array(32);
+  crypto.getRandomValues(bytes);
+  return Array.from(bytes).map((b) => b.toString(16).padStart(2, "0")).join("");
+}
+
 export const Route = createFileRoute("/api/public/contact")({
   server: {
     handlers: {
@@ -41,36 +47,66 @@ export const Route = createFileRoute("/api/public/contact")({
         const data = parsed.data;
 
         try {
-          const [React, { render }, { createClient }, { template }] = await Promise.all([
-            import("react"),
-            import("@react-email/render"),
-            import("@supabase/supabase-js"),
-            import("@/lib/email-templates/contact-notification"),
-          ]);
+          const [React, { render }, { createClient }, { template }, { sendLovableEmail }] =
+            await Promise.all([
+              import("react"),
+              import("@react-email/render"),
+              import("@supabase/supabase-js"),
+              import("@/lib/email-templates/contact-notification"),
+              import("@lovable.dev/email-js"),
+            ]);
 
           const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
           const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
-          if (!supabaseUrl || !supabaseServiceKey) {
-            console.error("Missing Supabase env for contact email");
+          const apiKey = process.env.LOVABLE_API_KEY;
+          if (!supabaseUrl || !supabaseServiceKey || !apiKey) {
+            console.error("contact: missing env", {
+              hasUrl: Boolean(supabaseUrl),
+              hasKey: Boolean(supabaseServiceKey),
+              hasApiKey: Boolean(apiKey),
+            });
             return Response.json({ error: "Server not configured" }, { status: 500, headers: cors });
           }
 
-          const templateData = {
-            name: data.name,
-            email: data.email,
-            subject: data.subject,
-            message: data.message,
-          };
+          const templateData = { name: data.name, email: data.email, subject: data.subject, message: data.message };
           const element = React.createElement(template.component, templateData);
           const html = await render(element);
           const text = await render(element, { plainText: true });
           const subject =
-            typeof template.subject === "function"
-              ? template.subject(templateData)
-              : template.subject;
+            typeof template.subject === "function" ? template.subject(templateData) : template.subject;
 
           const supabase = createClient(supabaseUrl, supabaseServiceKey);
           const messageId = crypto.randomUUID();
+          const normalizedEmail = OWNER_EMAIL.toLowerCase();
+
+          // Ensure unsubscribe token exists
+          let unsubscribeToken: string | null = null;
+          const { data: existing, error: lookupError } = await supabase
+            .from("email_unsubscribe_tokens")
+            .select("token")
+            .eq("email", normalizedEmail)
+            .maybeSingle();
+          if (lookupError) console.error("contact: token lookup error", lookupError);
+          if (existing?.token) {
+            unsubscribeToken = existing.token;
+          } else {
+            const newToken = generateToken();
+            const { error: insErr } = await supabase
+              .from("email_unsubscribe_tokens")
+              .upsert({ token: newToken, email: normalizedEmail }, { onConflict: "email", ignoreDuplicates: true });
+            if (insErr) console.error("contact: token upsert error", insErr);
+            const { data: stored } = await supabase
+              .from("email_unsubscribe_tokens")
+              .select("token")
+              .eq("email", normalizedEmail)
+              .maybeSingle();
+            unsubscribeToken = stored?.token ?? newToken;
+          }
+
+          if (!unsubscribeToken) {
+            console.error("contact: could not obtain unsubscribe token");
+            return Response.json({ error: "Send failed" }, { status: 500, headers: cors });
+          }
 
           await supabase.from("email_send_log").insert({
             message_id: messageId,
@@ -79,32 +115,39 @@ export const Route = createFileRoute("/api/public/contact")({
             status: "pending",
           });
 
-          const { error: enqueueError } = await supabase.rpc("enqueue_email", {
-            queue_name: "transactional_emails",
-            payload: {
+          // Send synchronously via SDK — bypass queue to avoid staleness/misroutes
+          try {
+            await sendLovableEmail(
+              {
+                to: OWNER_EMAIL,
+                from: `${SITE_NAME} <noreply@${FROM_DOMAIN}>`,
+                sender_domain: SENDER_DOMAIN,
+                subject,
+                html,
+                text,
+                purpose: "transactional",
+                label: "contact-notification",
+                idempotency_key: `contact-notification-${messageId}`,
+                unsubscribe_token: unsubscribeToken,
+                message_id: messageId,
+              },
+              { apiKey, sendUrl: process.env.LOVABLE_SEND_URL },
+            );
+            await supabase.from("email_send_log").insert({
               message_id: messageId,
-              to: OWNER_EMAIL,
-              from: `${SITE_NAME} <noreply@${FROM_DOMAIN}>`,
-              sender_domain: SENDER_DOMAIN,
-              reply_to: `${data.name} <${data.email}>`,
-              subject,
-              html,
-              text,
-              purpose: "transactional",
-              label: "contact-notification",
-              idempotency_key: `contact-notification-${messageId}`,
-              queued_at: new Date().toISOString(),
-            },
-          });
-
-          if (enqueueError) {
-            console.error("Failed to enqueue contact email", enqueueError);
+              template_name: "contact-notification",
+              recipient_email: OWNER_EMAIL,
+              status: "sent",
+            });
+          } catch (sendErr) {
+            const msg = sendErr instanceof Error ? sendErr.message : String(sendErr);
+            console.error("contact: sendLovableEmail failed", msg);
             await supabase.from("email_send_log").insert({
               message_id: messageId,
               template_name: "contact-notification",
               recipient_email: OWNER_EMAIL,
               status: "failed",
-              error_message: "Failed to enqueue email",
+              error_message: msg.slice(0, 1000),
             });
             return Response.json({ error: "Send failed" }, { status: 500, headers: cors });
           }
@@ -112,10 +155,7 @@ export const Route = createFileRoute("/api/public/contact")({
           return Response.json({ ok: true, messageId }, { headers: cors });
         } catch (err) {
           console.error("contact send failed", err);
-          return Response.json(
-            { error: "Send failed" },
-            { status: 500, headers: cors },
-          );
+          return Response.json({ error: "Send failed" }, { status: 500, headers: cors });
         }
       },
     },
