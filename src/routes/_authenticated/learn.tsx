@@ -76,7 +76,7 @@ function Learn() {
       />
 
       <Tabs value={tab} onValueChange={(v) => setTab(v as TabKey)} className="mt-6">
-        <TabsList className="grid w-full grid-cols-1 gap-2 bg-transparent p-0 sm:grid-cols-2 lg:grid-cols-4">
+        <TabsList className="grid h-auto w-full grid-cols-1 gap-2 rounded-none bg-transparent p-0 sm:grid-cols-2 lg:grid-cols-4">
           <TabPill value="ai" icon={<Brain className="h-4 w-4" />} label="Intro to AI" />
           <TabPill value="cloud" icon={<Cloud className="h-4 w-4" />} label="Intro to Cloud" />
           <TabPill value="saas" icon={<Layers className="h-4 w-4" />} label="Intro to SaaS" />
