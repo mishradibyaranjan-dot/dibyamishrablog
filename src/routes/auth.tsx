@@ -186,7 +186,7 @@ function Field({
 }) {
   return (
     <div className="relative">
-      <span className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-white/50">{icon}</span>
+      <span className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-slate-400">{icon}</span>
       <input
         type={type}
         value={value}
@@ -194,7 +194,7 @@ function Field({
         placeholder={placeholder}
         autoComplete={autoComplete}
         required
-        className="w-full rounded-md border border-white/15 bg-white/5 py-2.5 pl-9 pr-3 text-sm text-white placeholder:text-white/40 outline-none focus:border-neon-cyan focus:ring-2 focus:ring-neon-cyan/40"
+        className="w-full rounded-md border border-slate-300 bg-white py-2.5 pl-9 pr-3 text-sm text-slate-900 placeholder:text-slate-400 outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/30"
       />
     </div>
   );
@@ -209,12 +209,13 @@ function SocialButtons() {
   };
   return (
     <div className="grid gap-2 sm:grid-cols-2">
-      <Button variant="outline" type="button" disabled={busy !== null} onClick={() => click("google")} className="border-white/15 bg-white/5 text-white hover:bg-white/10">
+      <Button variant="outline" type="button" disabled={busy !== null} onClick={() => click("google")} className="border-slate-300 bg-white text-slate-900 hover:bg-slate-50">
         {busy === "google" ? <Loader2 className="h-4 w-4 animate-spin" /> : "Continue with Google"}
       </Button>
-      <Button variant="outline" type="button" disabled={busy !== null} onClick={() => click("apple")} className="border-white/15 bg-white/5 text-white hover:bg-white/10">
+      <Button variant="outline" type="button" disabled={busy !== null} onClick={() => click("apple")} className="border-slate-300 bg-white text-slate-900 hover:bg-slate-50">
         {busy === "apple" ? <Loader2 className="h-4 w-4 animate-spin" /> : "Continue with Apple"}
       </Button>
     </div>
   );
 }
+
