@@ -42,14 +42,6 @@ const DOCS: Doc[] = [
     filename: "Building-and-Deploying-RAG.pdf",
   },
   {
-    title: "Start Building a Multi-Tenant Application",
-    description:
-      "Tenancy models, data isolation strategies, per-tenant configuration, billing, and observability patterns for SaaS.",
-    category: "SaaS Architecture",
-    url: asset(multitenant),
-    filename: "Multi-Tenant-Application-Guide.pdf",
-  },
-  {
     title: "Generative AI in Retail Supply Chains",
     description:
       "White paper on applying GenAI across demand forecasting, merchandising, logistics, and store operations.",
