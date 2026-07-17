@@ -452,29 +452,17 @@ function CaseStudyTile() {
           </Link>
         </div>
         <div
-          className="relative flex min-h-[200px] items-center justify-center overflow-hidden border-l p-5 sm:min-h-[280px] sm:p-8"
+          className="relative min-h-[200px] overflow-hidden border-t md:border-t-0 md:border-l"
           style={{ backgroundColor: CANVAS, borderColor: LINE }}
         >
-          <div
-            className="flex aspect-square w-full items-center justify-center rounded-full border-2 border-dashed"
-            style={{ borderColor: LINE, animation: "spin 30s linear infinite" }}
-          >
-            <div
-              className="flex aspect-square w-3/4 items-center justify-center rounded-full border"
-              style={{ borderColor: "rgba(59,130,246,0.25)" }}
-            >
-              <div
-                className="aspect-square w-1/2 rounded-full"
-                style={{ backgroundColor: "rgba(59,130,246,0.10)" }}
-              />
-            </div>
-          </div>
-          <div
-            className="pointer-events-none absolute inset-0 flex items-center justify-center text-xs font-bold uppercase tracking-[0.25em]"
-            style={{ ...MONO, color: INK, opacity: 0.35 }}
-          >
-            SYSTEM_LOG
-          </div>
+          <img
+            src={cardCaseStudy}
+            alt="A human warehouse worker and a robot collaborating in a retail supply chain"
+            loading="lazy"
+            width={1280}
+            height={960}
+            className="h-full w-full object-cover"
+          />
         </div>
       </div>
     </LightTile>
