@@ -31,6 +31,9 @@ import {
   KanbanSquare,
   Wrench,
   Zap,
+  ShoppingCart,
+  Building2,
+  Search,
 } from "lucide-react";
 import { Section, SectionHeader } from "@/components/layout/Section";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
@@ -53,7 +56,7 @@ export const Route = createFileRoute("/_authenticated/learn")({
   component: Learn,
 });
 
-type TabKey = "ai" | "cloud" | "saas" | "itil" | "llm";
+type TabKey = "ai" | "cloud" | "saas" | "itil" | "llm" | "genai-retail" | "multitenant" | "rag";
 
 function Learn() {
   const { user } = useAuth();
@@ -68,17 +71,20 @@ function Learn() {
     <Section className="pb-4 pt-16 lg:pt-24">
       <SectionHeader
         eyebrow="Learning Library"
-        title="Learn — AI, Cloud, SaaS, ITIL & LLM Engineering"
-        description="Five self-contained mini-courses with concepts, history, architecture diagrams, comparison tables, code snippets, and security guidance. Designed for beginners with basic technical literacy who want depth, not just buzzwords."
+        title="Learn — AI, Cloud, SaaS, ITIL, LLM, GenAI Retail, Multi-Tenant & RAG"
+        description="Eight self-contained mini-courses with quick-summary guides, concepts, history, architecture diagrams, comparison tables, code snippets, and security guidance. Each module opens with a Quick Summary Guide so you get the key takeaways in under a minute."
       />
 
       <Tabs value={tab} onValueChange={(v) => setTab(v as TabKey)} className="mt-6">
-        <TabsList className="grid w-full grid-cols-1 gap-2 bg-transparent p-0 sm:grid-cols-3 lg:grid-cols-5">
+        <TabsList className="grid w-full grid-cols-1 gap-2 bg-transparent p-0 sm:grid-cols-2 lg:grid-cols-4">
           <TabPill value="ai" icon={<Brain className="h-4 w-4" />} label="Intro to AI" />
           <TabPill value="cloud" icon={<Cloud className="h-4 w-4" />} label="Intro to Cloud" />
           <TabPill value="saas" icon={<Layers className="h-4 w-4" />} label="Intro to SaaS" />
           <TabPill value="itil" icon={<KanbanSquare className="h-4 w-4" />} label="ITIL & Kanban" />
           <TabPill value="llm" icon={<Cpu className="h-4 w-4" />} label="LLM Engineering" />
+          <TabPill value="genai-retail" icon={<ShoppingCart className="h-4 w-4" />} label="GenAI in Retail" />
+          <TabPill value="multitenant" icon={<Building2 className="h-4 w-4" />} label="Multi-Tenant Apps" />
+          <TabPill value="rag" icon={<Search className="h-4 w-4" />} label="RAG Systems" />
         </TabsList>
 
         <TabsContent value="ai" className="mt-8 space-y-12">
@@ -95,6 +101,15 @@ function Learn() {
         </TabsContent>
         <TabsContent value="llm" className="mt-8 space-y-12">
           <IntroLLM />
+        </TabsContent>
+        <TabsContent value="genai-retail" className="mt-8 space-y-12">
+          <IntroGenAIRetail />
+        </TabsContent>
+        <TabsContent value="multitenant" className="mt-8 space-y-12">
+          <IntroMultiTenant />
+        </TabsContent>
+        <TabsContent value="rag" className="mt-8 space-y-12">
+          <IntroRAG />
         </TabsContent>
       </Tabs>
     </Section>
@@ -120,6 +135,17 @@ function TabPill({ value, icon, label }: { value: string; icon: React.ReactNode;
 function IntroAI() {
   return (
     <div className="space-y-12">
+      <Reveal>
+        <QuickSummary
+          items={[
+            'Artificial Intelligence is systems that perceive, reason, learn, and act — not a single model.',
+            'Modern stack: Transformers + retrieval + tools → agents. Data quality still beats novelty.',
+            'Ship with governance: privacy, bias, security, and traceability are first-class.',
+            'Start with the simplest baseline; add complexity only when the metric demands it.',
+          ]}
+        />
+      </Reveal>
+
       <Reveal>
         <HeroCard
           icon={<Brain className="h-6 w-6" />}
@@ -288,6 +314,17 @@ function IntroCloud() {
   return (
     <div className="space-y-12">
       <Reveal>
+        <QuickSummary
+          items={[
+            'Cloud = elastic, on-demand compute, storage, networking billed by usage.',
+            'Service tiers: IaaS → PaaS → SaaS → Serverless (you manage less at each step).',
+            'Identity + regions + zones are the mental model that maps to AWS, Azure, and GCP.',
+            'FinOps and observability are day-1 concerns, not afterthoughts.',
+          ]}
+        />
+      </Reveal>
+
+      <Reveal>
         <HeroCard
           icon={<Cloud className="h-6 w-6" />}
           title="What is Cloud Computing?"
@@ -436,6 +473,17 @@ aws ec2 describe-instances \\
 function IntroSaaS() {
   return (
     <div className="space-y-12">
+      <Reveal>
+        <QuickSummary
+          items={[
+            'SaaS = software delivered as a service — multi-tenant, subscription, cloud-hosted.',
+            'Tenancy models: Silo (isolated), Pool (shared), Bridge (mixed stamps).',
+            'Row-Level Security + tenant_id everywhere is the bedrock of pooled SaaS.',
+            'Metering, billing, and per-tenant observability are product features, not plumbing.',
+          ]}
+        />
+      </Reveal>
+
       <Reveal>
         <HeroCard
           icon={<Layers className="h-6 w-6" />}
@@ -624,6 +672,17 @@ function IntroITIL() {
   return (
     <div className="space-y-12">
       <Reveal>
+        <QuickSummary
+          items={[
+            'ITIL 4 = value-driven service management: Incident, Problem, Change, Request.',
+            'Kanban visualises flow — WIP limits and pull, not push, cut lead time.',
+            'Combine ITIL practices with Kanban cadence for continuous, low-risk delivery.',
+            'Measure lead time, cycle time, and change failure rate — not tickets closed.',
+          ]}
+        />
+      </Reveal>
+
+      <Reveal>
         <HeroCard
           icon={<KanbanSquare className="h-6 w-6" />}
           title="ITIL 4 + Kanban — Running Incident, Change, Problem & Request as one flow"
@@ -756,6 +815,17 @@ function IntroITIL() {
 function IntroLLM() {
   return (
     <div className="space-y-12">
+      <Reveal>
+        <QuickSummary
+          items={[
+            'LLMs = Transformer models pretrained on huge corpora, then instruction/RLHF-tuned.',
+            'Training scales with data, compute, and parameters — mixed precision + FSDP are table stakes.',
+            'Inference is engineering: batching, quantization, KV cache, and served on Triton/vLLM.',
+            'Evaluate with perplexity, BLEU/ROUGE, and human review — automated metrics alone mislead.',
+          ]}
+        />
+      </Reveal>
+
       <Reveal>
         <HeroCard
           icon={<Cpu className="h-6 w-6" />}
@@ -986,8 +1056,545 @@ function LLMArchitectureDiagram() {
 
 
 /* ================================================================
+   GENAI IN RETAIL SUPPLY CHAINS TAB
+   ================================================================ */
+
+function IntroGenAIRetail() {
+  return (
+    <div className="space-y-12">
+      <Reveal>
+        <QuickSummary
+          items={[
+            "Generative AI could unlock $240–$390B of value across retail supply chains (McKinsey).",
+            "GenAI augments — not replaces — predictive ML: forecasts stay quantitative, GenAI adds reasoning, scenarios, and natural-language plans.",
+            "High-impact stages: demand planning, procurement negotiation, warehouse ops, last-mile dispatch, and returns triage.",
+            "Governance up front: privacy, EU AI Act readiness, human-in-the-loop for autonomous agents, kill-switches for rogue actions.",
+          ]}
+        />
+      </Reveal>
+
+      <Reveal>
+        <HeroCard
+          icon={<ShoppingCart className="h-6 w-6" />}
+          title="Generative AI in Retail Supply Chains"
+          tag="GenAI · Retail · Supply Chain"
+          body="Generative AI creates novel plans, narratives, and decisions from prompts — a step beyond predictive AI's numeric forecasts. In retail supply chains, GenAI copilots and agents ingest sales, inventory, logistics, weather, and social data to draft assortments, negotiate contracts, orchestrate warehouses, dispatch last-mile fleets, and triage returns. Analysts project 1.2–1.9pp margin uplift and 20–50% forecast error reduction when adoption is disciplined and paired with clean data foundations."
+        />
+      </Reveal>
+
+      <Reveal>
+        <SubSection eyebrow="End-to-end map" title="Where GenAI Plugs Into the Supply Chain">
+          <Diagram>
+            <SupplyChainDiagram />
+          </Diagram>
+        </SubSection>
+      </Reveal>
+
+      <Reveal>
+        <SubSection eyebrow="Use cases" title="GenAI Across Retail Stages">
+          <Grid cols={3}>
+            <ConceptCard icon={<LineChart />} title="Demand Planning" desc="Chat-based forecasting, what-if scenarios (supplier X fails), assortment narratives. Cuts forecast error 20–50%." />
+            <ConceptCard icon={<Users />} title="Procurement" desc="Negotiation bots draft & counter RFQs; 65% of vendors preferred the AI negotiator in one Walmart pilot." />
+            <ConceptCard icon={<Boxes />} title="Warehousing" desc="Copilots suggest layout, slotting, and pick paths; auto-generate SOPs and safety briefings." />
+            <ConceptCard icon={<Workflow />} title="Inventory" desc="Agentic replenishment; explanation-first reorder proposals grounded in policy documents." />
+            <ConceptCard icon={<Rocket />} title="Last-Mile" desc="Virtual dispatchers assist 10,000-vehicle fleets: route changes, roadside help, real-time exceptions." />
+            <ConceptCard icon={<History />} title="Returns" desc="Read return reasons + damage photos → auto-classify, route, and draft customer replies." />
+          </Grid>
+        </SubSection>
+      </Reveal>
+
+      <Reveal>
+        <SubSection eyebrow="Impact snapshot" title="KPIs & Documented Improvements">
+          <Table
+            headers={["Stage", "Key KPIs", "Documented Improvement"]}
+            rows={[
+              ["Demand Planning", "MAPE, bias, stockout rate", "Forecast error −20–50%; stockouts −65% (McKinsey)"],
+              ["Procurement", "PPV, RFQ cycle time", "RFQ cycle −30%, spend −15% (Walmart pilot)"],
+              ["Warehouse", "Picks/hr, labor cost", "Throughput +10–20%; documentation lead time −60%"],
+              ["Last-Mile", "On-time %, cost per stop", "$30–35M annual savings on $2M invest (national parcel carrier)"],
+              ["Returns", "Cycle time, refund accuracy", "Triage time −40–60% with vision + LLM classifier"],
+            ]}
+          />
+        </SubSection>
+      </Reveal>
+
+      <Reveal>
+        <SubSection eyebrow="Adoption journey" title="From 12-month Pilot to 3-Year Scale">
+          <NumberedSteps
+            items={[
+              { title: "Foundations (0–3 mo)", desc: "Data platform, MLOps, guardrails, choose 2–3 pilot use cases with clear ROI." },
+              { title: "Pilots (3–12 mo)", desc: "Ship 5–10 use cases behind kill-switches; measure MAPE, PPV, throughput, savings." },
+              { title: "Scale (12–24 mo)", desc: "Roll out proven agents cross-region; embed AI champions in each function." },
+              { title: "Autonomous ops (24–36 mo)", desc: "Semi-autonomous replenishment and dispatch; GenAI narratives across planning + execution." },
+            ]}
+          />
+        </SubSection>
+      </Reveal>
+
+      <Reveal>
+        <SubSection eyebrow="Vendor landscape" title="Platform Comparison">
+          <Table
+            headers={["Vendor / Platform", "Capabilities", "Deployment", "Pricing"]}
+            rows={[
+              ["Microsoft Dynamics 365 + Copilot", "Embedded Copilot for D365 SCM — planning, insights (Azure OpenAI)", "Cloud (Azure)", "SaaS per user"],
+              ["Oracle Fusion Cloud SCM", "AI agents for planning, procurement, warehouse, maintenance", "Cloud (OCI)", "SaaS module-based"],
+              ["Kinaxis RapidResponse", "Concurrent planning + AI forecasts; adding GenAI chat", "Cloud", "SaaS per user"],
+              ["IBM watsonx Orchestrate", "Agentic AI for order processing and exception workflows", "Hybrid", "Usage + subscription"],
+              ["MarkIt", "AI-native agent for global trade compliance + docs", "Cloud", "Per document / process"],
+            ]}
+          />
+        </SubSection>
+      </Reveal>
+
+      <Reveal>
+        <SubSection eyebrow="Guardrails" title="Governance & Risk">
+          <Grid cols={4}>
+            <ConceptCard icon={<Lock />} title="Data Privacy" desc="Contract clauses on training data; PII minimisation and vendor-side isolation." />
+            <ConceptCard icon={<ShieldCheck />} title="EU AI Act (2027)" desc="Classify supply-chain agents by risk; keep decision + training logs." />
+            <ConceptCard icon={<AlertTriangle />} title="Human-in-the-loop" desc="Auto-actions capped by policy — no unscrutinised discounts or purchase orders." />
+            <ConceptCard icon={<Wrench />} title="Kill-switches" desc="Every agent has an off-switch and a documented rollback playbook." />
+          </Grid>
+        </SubSection>
+      </Reveal>
+
+      <KeyTakeaways
+        items={[
+          "Pair GenAI with predictive ML — GenAI reasons, ML forecasts. Together they outperform either alone.",
+          "Start where humans already follow checklists (RFQ negotiation, return triage) — fastest ROI, lowest risk.",
+          "Track MAPE, PPV, throughput, on-time %, and cost per unit — pick pilots that move real business KPIs.",
+          "Governance is a product surface: policy, audit, kill-switch, human review are non-negotiable at scale.",
+        ]}
+      />
+    </div>
+  );
+}
+
+/* ================================================================
+   MULTI-TENANT LLM APPLICATION TAB
+   ================================================================ */
+
+function IntroMultiTenant() {
+  return (
+    <div className="space-y-12">
+      <Reveal>
+        <QuickSummary
+          items={[
+            "A modern LLM SaaS is: Transformer model + FastAPI inference + React UI + Kafka/RabbitMQ + Postgres/Mongo + K8s + CI/CD.",
+            "Multi-tenancy = shared infra, isolated data. Choose Silo (per-tenant DB), Pool (shared with tenant_id + RLS), or Bridge (mixed stamps).",
+            "Kafka for event streaming and pub/sub; RabbitMQ for task queues, RPC, and complex routing.",
+            "Containerise everything, orchestrate with Kubernetes, secure with RBAC + JWT, ship via CI/CD with health checks and autoscaling.",
+          ]}
+        />
+      </Reveal>
+
+      <Reveal>
+        <HeroCard
+          icon={<Building2 className="h-6 w-6" />}
+          title="Build a Multi-Tenant LLM Application"
+          tag="LLM · SaaS · Cloud-Native"
+          body="This module is the end-to-end blueprint: design and train a Transformer LLM, wrap it in a REST/gRPC inference service, front it with a React/TypeScript UI, wire in messaging (Kafka/RabbitMQ), model data in Postgres and MongoDB with tenant isolation, and orchestrate the whole stack on Kubernetes with CI/CD. Each layer maps to a decision — tenancy model, queue technology, database engine — and each decision has trade-offs we make explicit."
+        />
+      </Reveal>
+
+      <Reveal>
+        <SubSection eyebrow="Stack overview" title="Reference Architecture">
+          <Diagram>
+            <MultiTenantArchDiagram />
+          </Diagram>
+        </SubSection>
+      </Reveal>
+
+      <Reveal>
+        <SubSection eyebrow="Isolation" title="Tenancy Patterns">
+          <Diagram>
+            <TenancyDiagram />
+          </Diagram>
+          <Grid cols={3}>
+            <ConceptCard icon={<Lock />} title="Silo" desc="Dedicated DB / cluster per tenant. Best isolation, highest cost. Regulated / enterprise plans." />
+            <ConceptCard icon={<Layers />} title="Pool" desc="One shared stack; tenant_id everywhere + Postgres RLS. Best economics; needs discipline." />
+            <ConceptCard icon={<GitBranch />} title="Bridge / Stamps" desc="Pool for small tenants, silo stamps for VIPs. Common at scale." />
+          </Grid>
+        </SubSection>
+      </Reveal>
+
+      <Reveal>
+        <SubSection eyebrow="LLM basics" title="Train → Serve Pipeline">
+          <NumberedSteps
+            items={[
+              { title: "Data pipeline", desc: "Crawl → clean → dedupe → tokenise (BPE / SentencePiece). Quality > quantity." },
+              { title: "Pretrain / Fine-tune", desc: "Foundation model + LoRA / PEFT for cheap adaptation. AdamW, warmup, gradient clipping." },
+              { title: "Distributed training", desc: "FSDP or DeepSpeed ZeRO for models that don't fit on one GPU. Mixed precision (BF16)." },
+              { title: "Evaluation", desc: "Perplexity, BLEU/ROUGE, plus human review. Automated metrics alone hide hallucinations." },
+              { title: "Optimise inference", desc: "Quantise (INT8/FP16), batch, cache prompts, serve on Triton / vLLM." },
+              { title: "Deploy", desc: "Containerise, Helm chart, Kubernetes Deployment + HPA, canary rollout." },
+            ]}
+          />
+        </SubSection>
+      </Reveal>
+
+      <Reveal>
+        <SubSection eyebrow="Messaging" title="Kafka vs RabbitMQ — Pick the Right Tool">
+          <Table
+            headers={["Dimension", "Kafka", "RabbitMQ"]}
+            rows={[
+              ["Primary model", "Log-based pub/sub, consumer offsets", "Broker with exchanges + queues"],
+              ["Best for", "Event streaming, analytics pipelines, high throughput", "Task queues, RPC, complex routing"],
+              ["Ordering", "Per-partition ordered", "Per-queue ordered"],
+              ["Retention", "Long (days–weeks); replayable", "Until consumed / ack'd"],
+              ["Delivery", "At-least-once (default)", "At-most / at-least / exactly-once via ack + tx"],
+              ["Ops complexity", "Higher (ZK/KRaft, partitions)", "Lower for typical workloads"],
+            ]}
+          />
+        </SubSection>
+      </Reveal>
+
+      <Reveal>
+        <SubSection eyebrow="Data layer" title="Postgres or Mongo?">
+          <Grid cols={2}>
+            <ConceptCard icon={<Database />} title="PostgreSQL" desc="Relational, ACID, Row-Level Security for pooled multi-tenancy, streaming replication, logical partitioning." />
+            <ConceptCard icon={<Database />} title="MongoDB" desc="Document, flexible schema, replica sets for HA, sharding on tenant_id for horizontal scale." />
+          </Grid>
+        </SubSection>
+      </Reveal>
+
+      <Reveal>
+        <SubSection eyebrow="Kubernetes" title="Minimal Deployment Manifest">
+          <Code
+            language="yaml"
+            code={`apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: llm-server
+spec:
+  replicas: 3
+  selector:
+    matchLabels: { app: llm }
+  template:
+    metadata:
+      labels: { app: llm }
+    spec:
+      containers:
+        - name: llm
+          image: registry.example.com/llm-server:\${SHA}
+          resources:
+            limits: { nvidia.com/gpu: "1", memory: "16Gi" }
+          env:
+            - name: TENANT_HEADER
+              value: "X-Tenant-Id"
+          readinessProbe:
+            httpGet: { path: /healthz, port: 8080 }
+---
+apiVersion: v1
+kind: Service
+metadata: { name: llm-server }
+spec:
+  selector: { app: llm }
+  ports: [{ port: 80, targetPort: 8080 }]`}
+          />
+        </SubSection>
+      </Reveal>
+
+      <Reveal>
+        <SubSection eyebrow="CI/CD" title="Pipeline Stages">
+          <Diagram>
+            <CICDPipelineDiagram />
+          </Diagram>
+        </SubSection>
+      </Reveal>
+
+      <Reveal>
+        <SubSection eyebrow="Security" title="Baseline Controls">
+          <Grid cols={4}>
+            <ConceptCard icon={<KeyRound />} title="RBAC + JWT" desc="Every request carries a tenant + role claim. Middleware enforces boundaries." />
+            <ConceptCard icon={<ShieldCheck />} title="Row-Level Security" desc="Postgres RLS on tenant_id — even a bug can't leak across tenants." />
+            <ConceptCard icon={<Gauge />} title="Quotas + Rate Limits" desc="Per-tenant token, request, and cost quotas prevent noisy-neighbour blow-ups." />
+            <ConceptCard icon={<Activity />} title="Observability" desc="Structured logs, traces, per-tenant metrics; alert on latency + error budgets." />
+          </Grid>
+        </SubSection>
+      </Reveal>
+
+      <KeyTakeaways
+        items={[
+          "Choose tenancy model early — refactoring from silo→pool (or the reverse) is painful.",
+          "Kafka for streams and audit logs; RabbitMQ for task queues and RPC. Don't force one to be the other.",
+          "Kubernetes + Helm + CI/CD is the paved road — spend time on golden templates, not one-off yamls.",
+          "Security is per-tenant by default: RLS, quotas, and per-tenant observability from day one.",
+        ]}
+      />
+    </div>
+  );
+}
+
+/* ================================================================
+   BUILDING & DEPLOYING LLMs WITH RAG TAB
+   ================================================================ */
+
+function IntroRAG() {
+  return (
+    <div className="space-y-12">
+      <Reveal>
+        <QuickSummary
+          items={[
+            "RAG = retrieve grounding docs from a vector store, then let the LLM generate an answer using them.",
+            "The pipeline: chunk → embed → index (FAISS/Milvus/Pinecone/Weaviate) → ANN search → augment prompt → generate.",
+            "Fine-tune cheaply with LoRA / PEFT — 10,000× fewer trainable params vs full fine-tuning.",
+            "Latency comes from batching, quantisation, KV caching, ANN indexes, and edge caches — not one silver bullet.",
+          ]}
+        />
+      </Reveal>
+
+      <Reveal>
+        <HeroCard
+          icon={<Search className="h-6 w-6" />}
+          title="Building & Deploying LLMs with RAG"
+          tag="RAG · Vector Search · Inference"
+          body="Retrieval-Augmented Generation grounds an LLM in your own documents so it stops hallucinating and starts citing. This module walks the full loop — data preparation, embedding strategy, vector databases, retrieval-then-generate vs fusion-in-decoder, LoRA fine-tuning, latency optimisation, secure deployment on AWS/GCP/Azure, and a production-readiness checklist."
+        />
+      </Reveal>
+
+      <Reveal>
+        <SubSection eyebrow="The core loop" title="RAG Pipeline">
+          <Diagram>
+            <RAGPipelineDiagram />
+          </Diagram>
+        </SubSection>
+      </Reveal>
+
+      <Reveal>
+        <SubSection eyebrow="Data prep" title="From Raw Docs to Retrievable Chunks">
+          <NumberedSteps
+            items={[
+              { title: "Collect", desc: "Aggregate domain corpora — docs, FAQs, tickets, contracts, wikis." },
+              { title: "Clean & dedupe", desc: "Unicode fix, boilerplate strip, exact + fuzzy + semantic dedupe (NVIDIA guidance)." },
+              { title: "Redact PII", desc: "Regex + ML detectors for names/emails/IDs. Consider differential privacy for sensitive domains." },
+              { title: "Chunk", desc: "200–500 tokens per chunk; overlap when context continuity matters." },
+              { title: "Embed", desc: "SentenceTransformers / OpenAI embeddings. L2-normalise before indexing." },
+              { title: "Index", desc: "FAISS (local), Milvus / Weaviate (self-host), Pinecone (managed). IVF-PQ or HNSW." },
+            ]}
+          />
+        </SubSection>
+      </Reveal>
+
+      <Reveal>
+        <SubSection eyebrow="Vector databases" title="Pick a Vector Store">
+          <Table
+            headers={["Store", "Hosting", "Strengths", "Watch out for"]}
+            rows={[
+              ["FAISS", "Library (local)", "Fastest for in-process ANN, no ops", "No persistence / multi-tenant story out of the box"],
+              ["Milvus", "Self-host / cloud", "Scale-out, hybrid search, GPU acceleration", "Ops complexity"],
+              ["Pinecone", "Managed SaaS", "Zero ops, incremental indexing, filters", "Vendor lock-in and cost at scale"],
+              ["Weaviate", "Self-host / cloud", "Built-in vectorizers, GraphQL, hybrid search", "Less mature multi-region story"],
+              ["pgvector", "Postgres extension", "Reuse your existing DB + RLS", "Slower for 100M+ vectors; needs HNSW"],
+            ]}
+          />
+        </SubSection>
+      </Reveal>
+
+      <Reveal>
+        <SubSection eyebrow="Fine-tune cheaply" title="LoRA / PEFT in ~15 Lines">
+          <Code
+            language="python"
+            code={`from transformers import AutoModelForCausalLM, AutoTokenizer
+from peft import LoraConfig, get_peft_model
+
+model = AutoModelForCausalLM.from_pretrained("gpt2")
+tokenizer = AutoTokenizer.from_pretrained("gpt2")
+
+lora = LoraConfig(
+    task_type="CAUSAL_LM",
+    r=8,
+    lora_alpha=32,
+    target_modules=["q_proj", "k_proj", "v_proj"],
+    lora_dropout=0.05,
+)
+model = get_peft_model(model, lora)
+model.print_trainable_parameters()   # ~0.1% of total params
+
+# Train as usual — only the LoRA adapters update.`}
+          />
+        </SubSection>
+      </Reveal>
+
+      <Reveal>
+        <SubSection eyebrow="Serve fast" title="Inference Latency Levers">
+          <Grid cols={4}>
+            <ConceptCard icon={<Zap />} title="Quantise" desc="INT8 / FP16 via TensorRT-LLM or bitsandbytes — 2–4× speedup, small quality loss." />
+            <ConceptCard icon={<Gauge />} title="Batch + KV cache" desc="Dynamic batching on Triton / vLLM; reuse KV for streaming tokens." />
+            <ConceptCard icon={<Database />} title="Approximate KNN" desc="HNSW / IVF-PQ over exact cosine — recall stays high, latency drops." />
+            <ConceptCard icon={<Cloud />} title="Edge cache" desc="Redis for identical prompts; CDN for static system prompts and few-shots." />
+          </Grid>
+        </SubSection>
+      </Reveal>
+
+      <Reveal>
+        <SubSection eyebrow="Cloud choice" title="Where to Run It">
+          <Table
+            headers={["Cloud", "Managed LLM Service", "Highlights"]}
+            rows={[
+              ["AWS", "SageMaker Endpoints / Bedrock", "Broad GPU inventory (A100/H100), Bedrock foundation-model API"],
+              ["GCP", "Vertex AI / Model Garden", "TPU access, tight BigQuery integration"],
+              ["Azure", "Azure OpenAI Service / AI Foundry", "Enterprise GPT-4/5, private networking, compliance"],
+            ]}
+          />
+        </SubSection>
+      </Reveal>
+
+      <Reveal>
+        <SubSection eyebrow="Production checklist" title="Before You Ship">
+          <Grid cols={4}>
+            <ConceptCard icon={<ShieldCheck />} title="Security" desc="PII redaction, prompt-injection defence, tenant-scoped indexes." />
+            <ConceptCard icon={<Activity />} title="Observability" desc="Trace prompt → retrieved docs → completion. Log latency, tokens, cost." />
+            <ConceptCard icon={<Wrench />} title="Evaluation" desc="Golden set + LLM-as-judge + human review; alert on regression." />
+            <ConceptCard icon={<Rocket />} title="Autoscaling" desc="Target 70% GPU utilisation; scale on QPS + queue depth, not just CPU." />
+          </Grid>
+        </SubSection>
+      </Reveal>
+
+      <KeyTakeaways
+        items={[
+          "RAG beats naked LLMs on factuality — grounding is cheaper than retraining.",
+          "Chunking + embedding quality drives retrieval accuracy more than the model size.",
+          "LoRA / PEFT makes domain adaptation affordable for small teams.",
+          "Ship with evaluation harnesses, per-tenant observability, and a rollback plan — treat the LLM like a database.",
+        ]}
+      />
+    </div>
+  );
+}
+
+/* ================================================================
+   NEW DIAGRAMS
+   ================================================================ */
+
+function SupplyChainDiagram() {
+  const stages = ["Plan", "Source", "Make / Store", "Move", "Deliver", "Return"];
+  return (
+    <div className="space-y-3">
+      <div className="grid gap-2 sm:grid-cols-6">
+        {stages.map((s) => (
+          <div key={s} className="rounded-xl border border-cyan-400/30 bg-cyan-500/15 px-3 py-2 text-center text-xs font-semibold text-cyan-50 backdrop-blur">
+            {s}
+          </div>
+        ))}
+      </div>
+      <div className="flex justify-center text-white/40">↓</div>
+      <div className="rounded-xl border border-fuchsia-400/30 bg-fuchsia-500/15 px-4 py-3 text-center text-sm font-semibold text-fuchsia-50 backdrop-blur">
+        GenAI Agents · Copilots · Forecast + Scenario Reasoning
+      </div>
+      <div className="flex justify-center text-white/40">↓</div>
+      <div className="grid gap-2 sm:grid-cols-3">
+        <DiagramRow label="ERP · WMS · TMS" tint="bg-indigo-500/15 border-indigo-400/30 text-indigo-50" />
+        <DiagramRow label="Data Platform + Feature Store" tint="bg-indigo-500/15 border-indigo-400/30 text-indigo-50" />
+        <DiagramRow label="External Signals (weather · social · macro)" tint="bg-indigo-500/15 border-indigo-400/30 text-indigo-50" />
+      </div>
+    </div>
+  );
+}
+
+function MultiTenantArchDiagram() {
+  return (
+    <div className="space-y-3">
+      <DiagramRow label="React / TypeScript UI (per-tenant subdomain)" tint="bg-emerald-500/15 border-emerald-400/30 text-emerald-50" />
+      <DiagramArrow />
+      <div className="grid gap-2 sm:grid-cols-3">
+        <DiagramRow label="API Gateway + JWT" tint="bg-amber-500/15 border-amber-400/30 text-amber-50" />
+        <DiagramRow label="OIDC Identity Provider" tint="bg-amber-500/15 border-amber-400/30 text-amber-50" />
+        <DiagramRow label="Rate Limits + Quotas" tint="bg-amber-500/15 border-amber-400/30 text-amber-50" />
+      </div>
+      <DiagramArrow />
+      <div className="grid gap-2 sm:grid-cols-3">
+        <DiagramRow label="FastAPI Inference (GPU)" tint="bg-fuchsia-500/15 border-fuchsia-400/30 text-fuchsia-50" />
+        <DiagramRow label="App Services" tint="bg-fuchsia-500/15 border-fuchsia-400/30 text-fuchsia-50" />
+        <DiagramRow label="Workers" tint="bg-fuchsia-500/15 border-fuchsia-400/30 text-fuchsia-50" />
+      </div>
+      <DiagramArrow />
+      <div className="grid gap-2 sm:grid-cols-2">
+        <DiagramRow label="Kafka (events / audit)" tint="bg-cyan-500/15 border-cyan-400/30 text-cyan-50" />
+        <DiagramRow label="RabbitMQ (task queues / RPC)" tint="bg-cyan-500/15 border-cyan-400/30 text-cyan-50" />
+      </div>
+      <DiagramArrow />
+      <div className="grid gap-2 sm:grid-cols-2">
+        <DiagramRow label="PostgreSQL + Row-Level Security" tint="bg-indigo-500/15 border-indigo-400/30 text-indigo-50" />
+        <DiagramRow label="MongoDB Replica Set" tint="bg-indigo-500/15 border-indigo-400/30 text-indigo-50" />
+      </div>
+      <DiagramArrow />
+      <DiagramRow label="Kubernetes · Helm · CI/CD · Observability" tint="bg-rose-500/15 border-rose-400/30 text-rose-50" />
+    </div>
+  );
+}
+
+function CICDPipelineDiagram() {
+  const steps = ["Commit", "CI Build + Test", "Docker Image", "Registry", "K8s Rollout", "Canary + Monitor"];
+  return (
+    <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-3">
+      {steps.map((s, i) => (
+        <div key={s} className="flex items-center gap-2">
+          <div className="rounded-full border border-white/10 bg-white/10 px-4 py-2 text-sm font-medium text-white backdrop-blur">
+            {s}
+          </div>
+          {i < steps.length - 1 && <span className="text-white/40">→</span>}
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function RAGPipelineDiagram() {
+  const steps = [
+    { label: "User Query", icon: <Users className="h-4 w-4" /> },
+    { label: "Embed", icon: <Sparkles className="h-4 w-4" /> },
+    { label: "Vector ANN Search", icon: <Search className="h-4 w-4" /> },
+    { label: "Top-K Docs", icon: <Database className="h-4 w-4" /> },
+    { label: "Augmented Prompt", icon: <Code2 className="h-4 w-4" /> },
+    { label: "LLM Answer", icon: <Brain className="h-4 w-4" /> },
+  ];
+  return (
+    <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-3">
+      {steps.map((s, i) => (
+        <div key={s.label} className="flex items-center gap-2">
+          <div className="flex items-center gap-2 rounded-full border border-white/10 bg-white/10 px-4 py-2 text-sm font-medium text-white backdrop-blur">
+            <span className="text-neon-cyan">{s.icon}</span>
+            {s.label}
+          </div>
+          {i < steps.length - 1 && <span className="text-white/40">→</span>}
+        </div>
+      ))}
+    </div>
+  );
+}
+
+/* ================================================================
+   QUICK SUMMARY GUIDE
+   ================================================================ */
+
+function QuickSummary({ items }: { items: string[] }) {
+  return (
+    <div className="relative overflow-hidden rounded-3xl border border-neon-cyan/30 bg-gradient-to-br from-neon-cyan/10 via-white/[0.03] to-fuchsia-500/10 p-6 shadow-glow backdrop-blur-xl">
+      <div className="mb-4 flex items-center gap-2">
+        <span className="grid h-8 w-8 place-items-center rounded-lg bg-brand-gradient text-white">
+          <Zap className="h-4 w-4" />
+        </span>
+        <div>
+          <div className="text-[11px] font-semibold uppercase tracking-widest text-neon-cyan">Quick Summary Guide</div>
+          <div className="font-display text-base font-bold text-white">Read this first — the whole module in 30 seconds</div>
+        </div>
+      </div>
+      <ul className="grid gap-2 sm:grid-cols-2">
+        {items.map((it) => (
+          <li key={it} className="flex items-start gap-2 rounded-xl border border-white/10 bg-white/5 p-3 text-sm text-white/85">
+            <CheckCircle2 className="mt-0.5 h-4 w-4 flex-shrink-0 text-neon-cyan" />
+            <span>{it}</span>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
+/* ================================================================
    REUSABLE PRESENTATION COMPONENTS
    ================================================================ */
+
 
 function HeroCard({ icon, title, tag, body }: { icon: React.ReactNode; title: string; tag: string; body: string }) {
   return (
