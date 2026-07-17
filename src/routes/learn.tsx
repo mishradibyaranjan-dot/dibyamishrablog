@@ -1654,7 +1654,7 @@ function HeroCard({ icon, title, tag, body }: { icon: React.ReactNode; title: st
         </div>
         <div className="min-w-0 flex-1">
           <Badge className="w-fit bg-white/10 text-white hover:bg-white/15">{tag}</Badge>
-          <h3 className="mt-3 font-display text-xl font-bold text-white sm:text-2xl md:text-3xl">{title}</h3>
+          <h2 className="mt-3 font-display text-xl font-bold text-white sm:text-2xl md:text-3xl">{title}</h2>
           <p className="mt-3 text-sm text-white/75 sm:text-base">{body}</p>
         </div>
       </div>
@@ -1677,7 +1677,7 @@ function SubSection({
     <div>
       <div className="mb-5">
         {eyebrow && <p className="text-xs font-semibold uppercase tracking-widest text-neon-cyan">{eyebrow}</p>}
-        <h3 className="mt-1 font-display text-xl font-bold text-white sm:text-2xl">{title}</h3>
+        <h2 className="mt-1 font-display text-xl font-bold text-white sm:text-2xl">{title}</h2>
         {subtitle && <p className="mt-2 text-sm text-white/65">{subtitle}</p>}
       </div>
       <div className="space-y-5">{children}</div>
