@@ -483,9 +483,20 @@
 */
 
 html, body {
-  background-color: #FAFBFC !important;
-  color: #1E293B !important;
-  color-scheme: light !important;
+  background-color: var(--color-background);
+  color: var(--color-foreground);
+  color-scheme: light;
+}
+
+/* Theme transition: smooth background/text color switches.
+   Disabled when the user prefers reduced motion. */
+@media (prefers-reduced-motion: no-preference) {
+  html.theme-transition,
+  html.theme-transition *,
+  html.theme-transition *::before,
+  html.theme-transition *::after {
+    transition: background-color 250ms ease-in-out, color 250ms ease-in-out, border-color 250ms ease-in-out, fill 250ms ease-in-out, stroke 250ms ease-in-out !important;
+  }
 }
 h1, h2, h3, h4, h5, h6, p, span, li, a, label, strong, em, blockquote, figcaption {
   color: inherit;
