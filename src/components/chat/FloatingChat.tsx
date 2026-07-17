@@ -145,8 +145,8 @@ export function FloatingChat() {
           role="dialog"
           aria-label="AI assistant"
           className={cn(
-            "fixed bottom-24 right-5 z-[60] flex w-[min(380px,calc(100vw-2.5rem))] flex-col overflow-hidden",
-            "h-[min(560px,calc(100vh-8rem))] rounded-2xl border border-blue-200 bg-white shadow-2xl",
+            "floating-chat-panel fixed bottom-24 right-5 z-[60] flex w-[min(380px,calc(100vw-2.5rem))] flex-col overflow-hidden",
+            "h-[min(560px,calc(100vh-8rem))] rounded-2xl border border-blue-200 bg-white shadow-2xl text-black",
           )}
         >
           <header className="flex items-center justify-between border-b border-blue-100 bg-gradient-to-r from-blue-50 via-white to-cyan-50 px-4 py-3">
@@ -160,7 +160,7 @@ export function FloatingChat() {
                 <img src={mascot} alt="" width={32} height={32} className="h-8 w-8" />
               </motion.span>
               <div className="flex flex-col leading-tight">
-                <p className="text-sm font-semibold text-slate-900">Learning Assistant</p>
+                <p className="text-sm font-semibold text-black">Learning Assistant</p>
                 <span className="text-[10px] font-medium uppercase tracking-wider text-blue-600">Online</span>
               </div>
             </div>
@@ -171,7 +171,7 @@ export function FloatingChat() {
                   size="icon"
                   aria-label="Clear conversation"
                   onClick={handleClear}
-                  className="text-slate-500 hover:bg-blue-50 hover:text-slate-900"
+                  className="text-slate-600 hover:bg-blue-50 hover:text-black"
                 >
                   <Trash2 className="h-4 w-4" />
                 </Button>
@@ -193,12 +193,12 @@ export function FloatingChat() {
                     .map((p) => (p.type === "text" ? p.text : ""))
                     .join("");
                   return (
-                    <Message key={m.id} from={m.role}>
-                      <MessageContent>
+                    <Message key={m.id} from={m.role} className="text-black">
+                      <MessageContent className="text-black">
                         {m.role === "assistant" ? (
-                          <MessageResponse>{text}</MessageResponse>
+                          <MessageResponse className="text-black">{text}</MessageResponse>
                         ) : (
-                          <span className="whitespace-pre-wrap">{text}</span>
+                          <span className="whitespace-pre-wrap text-black">{text}</span>
                         )}
                       </MessageContent>
                     </Message>
@@ -206,7 +206,7 @@ export function FloatingChat() {
                 })
               )}
               {status === "submitted" && (
-                <div className="px-3 py-2 text-sm">
+                <div className="px-3 py-2 text-sm text-black">
                   <Shimmer>Thinking...</Shimmer>
                 </div>
               )}
