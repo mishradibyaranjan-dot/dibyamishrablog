@@ -7,16 +7,9 @@ Disallow: /forgot-password
 Disallow: /reset-password
 Disallow: /email/
 
-# Protected app areas (redirect to auth for unauthenticated users)
-Disallow: /learn
-Disallow: /repository
-Disallow: /reports
-Disallow: /research
-Disallow: /projects
-Disallow: /case-studies
-
 # Internal / API routes
 Disallow: /api/
 Disallow: /lovable/
+Disallow: /reports
 
-Sitemap: https://dibyamishrablog.lovable.app/sitemap.xml
+Sitemap: https://www.dibyamishra.co.in/sitemap.xml
