@@ -1,105 +1,32 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { motion } from "framer-motion";
 import { Download, FileText, Sparkles } from "lucide-react";
+import { useState } from "react";
 import { Section, SectionHeader } from "@/components/layout/Section";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/lib/auth";
 import { supabase } from "@/integrations/supabase/client";
 
-import llm from "@/assets/repo/llm.pdf.asset.json" with { type: "json" };
-import rag from "@/assets/repo/building_and_deploying_rag.pdf.asset.json" with { type: "json" };
-import retail from "@/assets/repo/generative_ai_in_retail_supply_chains_white_paper.pdf.asset.json" with { type: "json" };
-import itil from "@/assets/repo/itil_kanban_whitepaper.pdf.asset.json" with { type: "json" };
-import execsum from "@/assets/repo/executive_summary.pdf.asset.json" with { type: "json" };
-import aiBeginner from "@/assets/repo/ai_beginner.pdf.asset.json" with { type: "json" };
-import introCloud from "@/assets/repo/intro_cloud.pdf.asset.json" with { type: "json" };
-import saasTutorial from "@/assets/repo/saas_tutorial.pdf.asset.json" with { type: "json" };
-import enterpriseBrief from "@/assets/repo/enterprise_brief.pdf.asset.json" with { type: "json" };
-
-const asset = (a: unknown) => (a as { url: string }).url;
-
 type Doc = {
+  key: string;
   title: string;
   description: string;
   category: string;
-  pages?: string;
-  url: string;
   filename: string;
 };
 
+// Only stable doc keys are referenced client-side; internal asset URLs live
+// server-side in src/routes/api/download.pdf.ts and are gated by JWT.
 const DOCS: Doc[] = [
-  {
-    title: "Comprehensive Beginner Guide to AI & AI Agents",
-    description:
-      "A ground-up introduction to Artificial Intelligence and modern AI Agents — concepts, architectures, tooling, and real-world use cases.",
-    category: "AI / Beginner",
-    url: asset(aiBeginner),
-    filename: "AI-and-AI-Agents-Beginner-Guide.pdf",
-  },
-  {
-    title: "Intro to Cloud & Basic Concepts of Cloud",
-    description:
-      "Foundations of cloud computing: service models (IaaS/PaaS/SaaS), deployment models, architecture patterns, and cost basics.",
-    category: "Cloud / Foundations",
-    url: asset(introCloud),
-    filename: "Intro-to-Cloud-Basics.pdf",
-  },
-  {
-    title: "Comprehensive SaaS Tutorial & Architecture Report",
-    description:
-      "End-to-end SaaS blueprint — multi-tenancy, pricing, security, observability, and architecture decisions for production platforms.",
-    category: "SaaS / Architecture",
-    url: asset(saasTutorial),
-    filename: "SaaS-Tutorial-and-Architecture.pdf",
-  },
-  {
-    title: "The Intelligent Enterprise Brief — July 2026",
-    description:
-      "Executive brief on the shift from AI experiments to governed enterprise agents across BFSI, retail, shipping, supply chain, and telecom.",
-    category: "Executive Brief",
-    url: asset(enterpriseBrief),
-    filename: "Intelligent-Enterprise-Brief-July-2026.pdf",
-  },
-  {
-    title: "Large Language Models — Foundations & Practice",
-    description:
-      "Comprehensive guide to LLM architectures, training, prompting, evaluation, and production deployment.",
-    category: "AI / LLM",
-    url: asset(llm),
-    filename: "LLM-Foundations-and-Practice.pdf",
-  },
-  {
-    title: "Building & Deploying RAG Systems",
-    description:
-      "End-to-end blueprint for Retrieval-Augmented Generation: chunking, embeddings, vector stores, retrievers, evaluation.",
-    category: "AI / RAG",
-    url: asset(rag),
-    filename: "Building-and-Deploying-RAG.pdf",
-  },
-  {
-    title: "Generative AI in Retail Supply Chains",
-    description:
-      "White paper on applying GenAI across demand forecasting, merchandising, logistics, and store operations.",
-    category: "Retail / Supply Chain",
-    url: asset(retail),
-    filename: "GenAI-Retail-Supply-Chains.pdf",
-  },
-  {
-    title: "Implementing ITIL with Kanban",
-    description:
-      "Incident, Change, Problem, and Service Request Management using Kanban — flow, WIP limits, SLAs, and governance.",
-    category: "IT Service Management",
-    url: asset(itil),
-    filename: "ITIL-with-Kanban.pdf",
-  },
-  {
-    title: "Executive Summary — The Intelligent Enterprise",
-    description:
-      "Executive brief on AI agents, cloud platforms, and industry-specific AI adoption across BFSI, retail, and telecom.",
-    category: "Executive Brief",
-    url: asset(execsum),
-    filename: "Executive-Summary.pdf",
-  },
+  { key: "ai-beginner", title: "Comprehensive Beginner Guide to AI & AI Agents", description: "A ground-up introduction to Artificial Intelligence and modern AI Agents — concepts, architectures, tooling, and real-world use cases.", category: "AI / Beginner", filename: "AI-and-AI-Agents-Beginner-Guide.pdf" },
+  { key: "intro-cloud", title: "Intro to Cloud & Basic Concepts of Cloud", description: "Foundations of cloud computing: service models (IaaS/PaaS/SaaS), deployment models, architecture patterns, and cost basics.", category: "Cloud / Foundations", filename: "Intro-to-Cloud-Basics.pdf" },
+  { key: "saas-tutorial", title: "Comprehensive SaaS Tutorial & Architecture Report", description: "End-to-end SaaS blueprint — multi-tenancy, pricing, security, observability, and architecture decisions for production platforms.", category: "SaaS / Architecture", filename: "SaaS-Tutorial-and-Architecture.pdf" },
+  { key: "enterprise-brief", title: "The Intelligent Enterprise Brief — July 2026", description: "Executive brief on the shift from AI experiments to governed enterprise agents across BFSI, retail, shipping, supply chain, and telecom.", category: "Executive Brief", filename: "Intelligent-Enterprise-Brief-July-2026.pdf" },
+  { key: "llm", title: "Large Language Models — Foundations & Practice", description: "Comprehensive guide to LLM architectures, training, prompting, evaluation, and production deployment.", category: "AI / LLM", filename: "LLM-Foundations-and-Practice.pdf" },
+  { key: "rag", title: "Building & Deploying RAG Systems", description: "End-to-end blueprint for Retrieval-Augmented Generation: chunking, embeddings, vector stores, retrievers, evaluation.", category: "AI / RAG", filename: "Building-and-Deploying-RAG.pdf" },
+  { key: "retail", title: "Generative AI in Retail Supply Chains", description: "White paper on applying GenAI across demand forecasting, merchandising, logistics, and store operations.", category: "Retail / Supply Chain", filename: "GenAI-Retail-Supply-Chains.pdf" },
+  { key: "itil", title: "Implementing ITIL with Kanban", description: "Incident, Change, Problem, and Service Request Management using Kanban — flow, WIP limits, SLAs, and governance.", category: "IT Service Management", filename: "ITIL-with-Kanban.pdf" },
+  { key: "executive-summary", title: "Executive Summary — The Intelligent Enterprise", description: "Executive brief on AI agents, cloud platforms, and industry-specific AI adoption across BFSI, retail, and telecom.", category: "Executive Brief", filename: "Executive-Summary.pdf" },
 ];
 
 export const Route = createFileRoute("/_authenticated/repository")({
@@ -109,9 +36,8 @@ export const Route = createFileRoute("/_authenticated/repository")({
       {
         name: "description",
         content:
-          "Members-only repository of downloadable PDF white papers on LLMs, RAG, multi-tenant SaaS, GenAI in retail, ITIL with Kanban, and more.",
+          "Members-only repository of downloadable PDF white papers on AI, Cloud, SaaS, RAG, and enterprise strategy.",
       },
-      { name: "robots", content: "noindex" },
     ],
   }),
   component: RepositoryPage,
@@ -119,16 +45,38 @@ export const Route = createFileRoute("/_authenticated/repository")({
 
 function RepositoryPage() {
   const { user } = useAuth();
+  const [busy, setBusy] = useState<string | null>(null);
 
-  const track = async (doc: Doc) => {
+  const download = async (doc: Doc) => {
+    setBusy(doc.key);
     try {
-      await supabase.from("resource_access").insert({
-        user_id: user?.id ?? null,
-        resource_type: "repository_pdf",
-        resource_id: doc.filename,
-      } as never);
-    } catch {
-      /* non-blocking */
+      const { data: sessionData } = await supabase.auth.getSession();
+      const token = sessionData.session?.access_token;
+      if (!token) {
+        alert("Please sign in again to download.");
+        return;
+      }
+      const res = await fetch(`/api/download/pdf?key=${encodeURIComponent(doc.key)}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      if (!res.ok) {
+        alert(`Download failed (${res.status}). Please try again.`);
+        return;
+      }
+      const blob = await res.blob();
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = doc.filename;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+    } catch (e) {
+      console.error(e);
+      alert("Download failed. Please try again.");
+    } finally {
+      setBusy(null);
     }
   };
 
@@ -152,7 +100,7 @@ function RepositoryPage() {
       <div className="grid gap-5 md:grid-cols-2">
         {DOCS.map((doc, i) => (
           <motion.article
-            key={doc.filename}
+            key={doc.key}
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: i * 0.05, duration: 0.4 }}
@@ -169,14 +117,13 @@ function RepositoryPage() {
             <div className="mt-5 flex items-center justify-between">
               <span className="text-xs text-white/50">PDF · Members only</span>
               <Button
-                asChild
                 size="sm"
                 className="bg-brand-gradient text-white shadow-neon"
-                onClick={() => track(doc)}
+                disabled={busy === doc.key}
+                onClick={() => download(doc)}
               >
-                <a href={doc.url} download={doc.filename} target="_blank" rel="noopener noreferrer">
-                  <Download className="mr-2 h-4 w-4" /> Download PDF
-                </a>
+                <Download className="mr-2 h-4 w-4" />
+                {busy === doc.key ? "Preparing…" : "Download PDF"}
               </Button>
             </div>
           </motion.article>
