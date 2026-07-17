@@ -28,7 +28,6 @@ import {
   LineChart,
   Lock,
   AlertTriangle,
-  ClipboardList,
   KanbanSquare,
   Wrench,
   Zap,
