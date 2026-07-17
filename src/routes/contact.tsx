@@ -3,6 +3,8 @@ import { useState } from "react";
 import { Mail, ExternalLink, Send, CheckCircle2, Loader2 } from "lucide-react";
 import { Section, SectionHeader } from "@/components/layout/Section";
 import { Button } from "@/components/ui/button";
+import heroContact from "@/assets/hero-contact.jpg";
+
 
 export const Route = createFileRoute("/contact")({
   head: () => ({
