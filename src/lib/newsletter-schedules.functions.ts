@@ -152,3 +152,93 @@ export const listScheduleHistory = createServerFn({ method: "GET" })
       failed_recipients: failures.filter((f) => f.run_id === r.id),
     }));
   });
+
+export const retryFailedRunRecipients = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d: unknown) => z.object({ runId: z.string().uuid() }).parse(d))
+  .handler(async ({ context, data }) => {
+    await assertAdmin(context);
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+
+    const { data: run, error: runErr } = await supabaseAdmin
+      .from("newsletter_send_runs")
+      .select("id, issue_id, title")
+      .eq("id", data.runId)
+      .single();
+    if (runErr || !run) throw new Error("Run not found");
+    if (!run.issue_id) throw new Error("Run has no associated issue to retry");
+
+    const { data: issue, error: issueErr } = await supabaseAdmin
+      .from("newsletter_issues")
+      .select("id, slug, title, summary, body_markdown")
+      .eq("id", run.issue_id)
+      .single();
+    if (issueErr || !issue) throw new Error("Issue not found");
+
+    const { data: failed, error: failErr } = await supabaseAdmin
+      .from("newsletter_send_recipients")
+      .select("id, email")
+      .eq("run_id", data.runId)
+      .eq("status", "failed");
+    if (failErr) throw new Error(failErr.message);
+    const list = failed ?? [];
+    if (list.length === 0) return { retried: 0, queued: 0, errors: 0 };
+
+    const { enqueueRenderedTemplate } = await import("./newsletter-core.server");
+    let queued = 0;
+    let errors = 0;
+    const updates: Array<{ id: string; status: "queued" | "failed"; error_message: string | null }> = [];
+
+    for (const rec of list) {
+      try {
+        const r = await enqueueRenderedTemplate({
+          templateName: "newsletter-issue",
+          recipientEmail: rec.email,
+          templateData: {
+            title: issue.title,
+            summary: issue.summary,
+            bodyMarkdown: issue.body_markdown,
+            slug: issue.slug,
+          },
+          // Fresh idempotency key so the queue processor treats retry as a new send.
+          idempotencyKey: `newsletter-${issue.id}-${rec.email}-retry-${Date.now()}`,
+        });
+        if (r.queued) {
+          queued++;
+          updates.push({ id: rec.id, status: "queued", error_message: null });
+        } else {
+          errors++;
+          updates.push({ id: rec.id, status: "failed", error_message: r.reason ?? "not queued" });
+        }
+      } catch (e) {
+        errors++;
+        updates.push({
+          id: rec.id,
+          status: "failed",
+          error_message: e instanceof Error ? e.message : String(e),
+        });
+      }
+    }
+
+    // Update recipient rows individually so the history reflects the retry outcome.
+    for (const u of updates) {
+      await supabaseAdmin
+        .from("newsletter_send_recipients")
+        .update({ status: u.status, error_message: u.error_message })
+        .eq("id", u.id);
+    }
+
+    // Recompute run counters from the recipient table (authoritative).
+    const { data: agg } = await supabaseAdmin
+      .from("newsletter_send_recipients")
+      .select("status")
+      .eq("run_id", data.runId);
+    const newQueued = (agg ?? []).filter((a) => a.status === "queued").length;
+    const newFailed = (agg ?? []).filter((a) => a.status === "failed").length;
+    await supabaseAdmin
+      .from("newsletter_send_runs")
+      .update({ queued_count: newQueued, failed_count: newFailed })
+      .eq("id", data.runId);
+
+    return { retried: list.length, queued, errors };
+  });
