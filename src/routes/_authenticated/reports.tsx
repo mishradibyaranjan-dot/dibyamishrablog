@@ -24,6 +24,7 @@ import { Section, SectionHeader } from "@/components/layout/Section";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth";
+import { NewsletterAdminPanel } from "@/components/admin/NewsletterAdminPanel";
 
 export const Route = createFileRoute("/_authenticated/reports")({
   head: () => ({
@@ -291,6 +292,10 @@ function Reports() {
             ))}
           </ul>
         </Panel>
+      </div>
+
+      <div className="mt-6">
+        <NewsletterAdminPanel />
       </div>
 
       <div className="mt-6">

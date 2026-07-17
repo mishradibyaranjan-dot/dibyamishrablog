@@ -185,6 +185,84 @@ export type Database = {
         }
         Relationships: []
       }
+      newsletter_issues: {
+        Row: {
+          body_markdown: string
+          created_at: string
+          created_by: string | null
+          emails_sent_at: string | null
+          hero_emoji: string
+          id: string
+          linkedin_post: string
+          linkedin_posted_at: string | null
+          published_at: string | null
+          slug: string
+          status: string
+          summary: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          body_markdown?: string
+          created_at?: string
+          created_by?: string | null
+          emails_sent_at?: string | null
+          hero_emoji?: string
+          id?: string
+          linkedin_post?: string
+          linkedin_posted_at?: string | null
+          published_at?: string | null
+          slug: string
+          status?: string
+          summary?: string
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          body_markdown?: string
+          created_at?: string
+          created_by?: string | null
+          emails_sent_at?: string | null
+          hero_emoji?: string
+          id?: string
+          linkedin_post?: string
+          linkedin_posted_at?: string | null
+          published_at?: string | null
+          slug?: string
+          status?: string
+          summary?: string
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      newsletter_subscribers: {
+        Row: {
+          email: string
+          id: string
+          source: string | null
+          status: string
+          subscribed_at: string
+          unsubscribed_at: string | null
+        }
+        Insert: {
+          email: string
+          id?: string
+          source?: string | null
+          status?: string
+          subscribed_at?: string
+          unsubscribed_at?: string | null
+        }
+        Update: {
+          email?: string
+          id?: string
+          source?: string | null
+          status?: string
+          subscribed_at?: string
+          unsubscribed_at?: string | null
+        }
+        Relationships: []
+      }
       page_visits: {
         Row: {
           duration_seconds: number | null
