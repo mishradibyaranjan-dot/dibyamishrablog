@@ -7,6 +7,7 @@ import { posts, categories } from "@/lib/content";
 import { cn } from "@/lib/utils";
 import { pageOgImages, SITE_ORIGIN } from "@/lib/og-images";
 import heroResearch from "@/assets/hero-research.jpg";
+import collabResearch from "@/assets/collab-research.jpg";
 
 
 export const Route = createFileRoute("/research")({

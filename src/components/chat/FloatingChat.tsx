@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
-import { X, Trash2, Bot } from "lucide-react";
+import { X, Trash2 } from "lucide-react";
+import mascot from "@/assets/assistant-mascot.png";
 import { motion } from "framer-motion";
 import { useChat } from "@ai-sdk/react";
 import { DefaultChatTransport, type UIMessage } from "ai";
@@ -128,12 +129,12 @@ export function FloatingChat() {
         ) : (
           <motion.span
             aria-hidden
-            animate={{ y: [0, -4, 0], rotate: [-4, 4, -4] }}
-            transition={{ duration: 2.4, repeat: Infinity, ease: "easeInOut" }}
+            animate={{ y: [0, -5, 0], rotate: [-6, 6, -6] }}
+            transition={{ duration: 2.6, repeat: Infinity, ease: "easeInOut" }}
             className="relative inline-flex"
           >
-            <Bot className="h-6 w-6" />
-            <span className="absolute -bottom-1 left-1/2 h-1 w-4 -translate-x-1/2 rounded-full bg-blue-400/50 blur-sm" />
+            <img src={mascot} alt="" width={44} height={44} className="h-11 w-11 drop-shadow-[0_6px_10px_rgba(59,130,246,0.35)]" />
+            <span className="absolute -bottom-1 left-1/2 h-1.5 w-6 -translate-x-1/2 rounded-full bg-blue-400/60 blur-md" />
           </motion.span>
         )}
       </button>
@@ -154,9 +155,9 @@ export function FloatingChat() {
                 aria-hidden
                 animate={{ y: [0, -3, 0] }}
                 transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-                className="grid h-7 w-7 place-items-center rounded-lg bg-blue-600 text-white shadow-[0_6px_16px_-4px_rgba(59,130,246,0.6)]"
+                className="inline-flex"
               >
-                <Bot className="h-4 w-4" />
+                <img src={mascot} alt="" width={32} height={32} className="h-8 w-8" />
               </motion.span>
               <div className="flex flex-col leading-tight">
                 <p className="text-sm font-semibold text-slate-900">Learning Assistant</p>

@@ -8,6 +8,7 @@ import { cn } from "@/lib/utils";
 import { CheckCircle2 } from "lucide-react";
 import { pageOgImages, SITE_ORIGIN } from "@/lib/og-images";
 import heroCaseStudies from "@/assets/hero-casestudies.jpg";
+import collabCaseStudies from "@/assets/collab-casestudies.jpg";
 
 
 export const Route = createFileRoute("/case-studies")({
@@ -59,6 +60,22 @@ function CaseStudies() {
           decoding="async"
           className="mb-8 aspect-[16/9] w-full rounded-3xl border border-slate-200 object-cover"
         />
+
+        <figure className="mb-8 overflow-hidden rounded-3xl border border-blue-100 bg-gradient-to-br from-blue-50 via-white to-emerald-50 shadow-[0_10px_30px_-16px_rgba(59,130,246,0.3)]">
+          <img
+            src={collabCaseStudies}
+            alt="Business leader and friendly robot reviewing rising enterprise KPI charts together"
+            width={1600}
+            height={700}
+            loading="lazy"
+            decoding="async"
+            className="aspect-[16/7] w-full object-cover"
+          />
+          <figcaption className="flex items-center gap-2 border-t border-blue-100 bg-white/70 px-5 py-3 text-sm text-slate-700">
+            <span className="inline-block h-2 w-2 rounded-full bg-blue-500" />
+            Outcomes shaped by humans and AI, working side by side.
+          </figcaption>
+        </figure>
 
         <div className="flex flex-wrap gap-2">
           {["All", ...categories].map((c) => (
