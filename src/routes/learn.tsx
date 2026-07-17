@@ -1703,13 +1703,13 @@ function Timeline({ items }: { items: { year: string; title: string; desc: strin
   return (
     <div className="relative">
       <div className="absolute left-[7px] top-1 bottom-1 w-px bg-gradient-to-b from-cyan-400/60 via-fuchsia-500/40 to-transparent sm:left-[11px]" />
-      <ol className="space-y-5">
+      <ol className="space-y-4 sm:space-y-5">
         {items.map((it) => (
           <li key={it.year + it.title} className="relative pl-7 sm:pl-10">
             <span className="absolute left-0 top-1.5 grid h-[15px] w-[15px] place-items-center rounded-full bg-brand-gradient shadow-neon sm:h-[23px] sm:w-[23px]">
               <History className="h-2.5 w-2.5 text-white sm:h-3 sm:w-3" />
             </span>
-            <div className="rounded-xl border border-white/10 bg-white/5 p-4 backdrop-blur-xl">
+            <div className="rounded-xl border border-white/10 bg-white/5 p-3 backdrop-blur-xl sm:p-4">
               <div className="flex flex-wrap items-baseline gap-x-3">
                 <span className="font-mono text-xs font-semibold text-neon-cyan">{it.year}</span>
                 <h5 className="text-sm font-semibold text-white">{it.title}</h5>
@@ -1725,11 +1725,11 @@ function Timeline({ items }: { items: { year: string; title: string; desc: strin
 
 function NumberedSteps({ items }: { items: { title: string; desc: string }[] }) {
   return (
-    <ol className="grid gap-4 sm:grid-cols-2">
+    <ol className="grid gap-3 sm:gap-4 sm:grid-cols-2">
       {items.map((it, idx) => (
         <li
           key={it.title}
-          className="rounded-2xl border border-white/10 bg-white/5 p-5 backdrop-blur-xl transition-shadow hover:shadow-glow"
+          className="rounded-2xl border border-white/10 bg-white/5 p-4 backdrop-blur-xl transition-shadow hover:shadow-glow sm:p-5"
         >
           <div className="flex items-start gap-3">
             <span className="grid h-8 w-8 shrink-0 place-items-center rounded-lg bg-brand-gradient text-sm font-bold text-white shadow-neon">
