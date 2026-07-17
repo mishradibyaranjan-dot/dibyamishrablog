@@ -2,8 +2,18 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { Section, SectionHeader } from "@/components/layout/Section";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Award, Briefcase, GraduationCap, Globe } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { Award, Briefcase, GraduationCap, Globe, Search } from "lucide-react";
 import photoAsset from "@/assets/dibya-mishra.png.asset.json";
+import * as React from "react";
 
 export const Route = createFileRoute("/about")({
   head: () => ({
