@@ -69,7 +69,7 @@ function AuthPage() {
           <span className="h-px flex-1 bg-slate-200" />
         </div>
 
-        <SocialButtons />
+        <SocialButtons redirect={redirect} />
 
         <p className="mt-6 text-center text-xs text-slate-500">
           <Link to="/forgot-password" className="hover:text-slate-900">Forgot your password?</Link>
@@ -200,11 +200,14 @@ function Field({
   );
 }
 
-function SocialButtons() {
+function SocialButtons({ redirect }: { redirect?: string }) {
   const [busy, setBusy] = useState<string | null>(null);
   const click = async (p: "google" | "apple") => {
     setBusy(p);
-    await lovable.auth.signInWithOAuth(p, { redirect_uri: window.location.origin });
+    const returnUrl = redirect
+      ? `${window.location.origin}/auth?redirect=${encodeURIComponent(redirect)}`
+      : window.location.origin;
+    await lovable.auth.signInWithOAuth(p, { redirect_uri: returnUrl });
     setBusy(null);
   };
   return (
