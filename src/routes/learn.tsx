@@ -1717,7 +1717,7 @@ function ConceptCard({ icon, title, desc }: { icon?: React.ReactNode; title: str
           {icon}
         </div>
       )}
-      <h4 className="relative z-[3] text-sm font-semibold text-white group-hover:text-gradient sm:text-base">{title}</h4>
+      <h3 className="relative z-[3] text-sm font-semibold text-white group-hover:text-gradient sm:text-base">{title}</h3>
       <p className="relative z-[3] mt-2 text-sm text-white/65">{desc}</p>
     </motion.div>
   );
