@@ -10,6 +10,8 @@ import dataBI from "@/assets/og/og-blog-data-platform-bi-at-scale.png.asset.json
 import projectsOg from "@/assets/og/og-projects.png.asset.json";
 import caseStudiesOg from "@/assets/og/og-case-studies.png.asset.json";
 import researchOg from "@/assets/og/og-research.png.asset.json";
+import learnOg from "@/assets/og/og-learn.png";
+import newsletterOg from "@/assets/og/og-newsletter.png";
 
 export const SITE_ORIGIN = "https://dibyamishrablog.lovable.app";
 
@@ -30,4 +32,7 @@ export const pageOgImages = {
   caseStudies: abs(caseStudiesOg.url),
   research: abs(researchOg.url),
   blog: abs(researchOg.url),
+  learn: abs(learnOg),
+  newsletter: abs(newsletterOg),
 };
+

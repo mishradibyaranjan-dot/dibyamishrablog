@@ -229,8 +229,10 @@ function QuickCards() {
               src={img}
               alt={alt}
               loading="lazy"
+              decoding="async"
               width={480}
               height={300}
+              sizes="(min-width: 1024px) 20vw, (min-width: 640px) 33vw, 50vw"
               className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
             />
             <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-black/40 to-transparent" />
