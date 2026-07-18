@@ -15,6 +15,7 @@ import { AuthProvider, useAuth } from "@/lib/auth";
 import { UserMenu } from "@/components/auth/UserMenu";
 
 import { useActivityTracker } from "@/lib/tracking";
+import { useVisitorTracker } from "@/lib/visitor-tracking";
 
 import drmLogo from "@/assets/drm-logo.png.asset.json";
 
