@@ -49,6 +49,7 @@ import heroLLM from "@/assets/learn/human-robot-llm.jpg";
 import heroRetail from "@/assets/learn/human-robot-retail.jpg";
 import heroMultiTenant from "@/assets/learn/human-robot-multitenant.jpg";
 import heroRAG from "@/assets/learn/human-robot-rag.jpg";
+import { pageOgImages, SITE_ORIGIN } from "@/lib/og-images";
 
 function TabHeroImage({ src, alt, caption }: { src: string; alt: string; caption: string }) {
   return (
