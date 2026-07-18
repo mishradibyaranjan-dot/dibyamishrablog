@@ -16,6 +16,9 @@ import {
 import { supabase } from "@/integrations/supabase/client";
 import cardNewsletter from "@/assets/card-newsletter.jpg";
 import cardLearn from "@/assets/card-learn.jpg";
+import cardCaseStudy from "@/assets/card-case-study.jpg";
+import cardResearch from "@/assets/collab-research.jpg";
+import cardProjects from "@/assets/collab-projects.jpg";
 import cardRepository from "@/assets/card-repository.jpg";
 import cardCaseStudy from "@/assets/card-case-study.jpg";
 
