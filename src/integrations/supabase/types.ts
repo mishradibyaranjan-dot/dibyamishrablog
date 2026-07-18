@@ -597,6 +597,39 @@ export type Database = {
         }
         Relationships: []
       }
+      spam_audit_log: {
+        Row: {
+          action_type: string
+          actor_id: string | null
+          created_at: string
+          domain: string | null
+          email: string | null
+          id: string
+          metadata: Json
+          reason: string | null
+        }
+        Insert: {
+          action_type: string
+          actor_id?: string | null
+          created_at?: string
+          domain?: string | null
+          email?: string | null
+          id?: string
+          metadata?: Json
+          reason?: string | null
+        }
+        Update: {
+          action_type?: string
+          actor_id?: string | null
+          created_at?: string
+          domain?: string | null
+          email?: string | null
+          id?: string
+          metadata?: Json
+          reason?: string | null
+        }
+        Relationships: []
+      }
       suppressed_emails: {
         Row: {
           created_at: string

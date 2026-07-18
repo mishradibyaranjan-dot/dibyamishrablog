@@ -10,6 +10,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { lovable } from "@/integrations/lovable";
 import { useAuth } from "@/lib/auth";
 import { isBlockedEmail, BLOCKED_EMAIL_MESSAGE, refreshBlockedDomains } from "@/lib/blocked-domains";
+import { logBlockedLoginAttempt } from "@/lib/spam-audit.functions";
 import { MathCaptcha, useCaptchaGate } from "@/components/security/CaptchaChallenge";
 
 const authSearchSchema = z.object({
@@ -106,6 +107,7 @@ function LoginForm() {
     }
     if (isBlockedEmail(parsed.data.email)) {
       setErr(BLOCKED_EMAIL_MESSAGE);
+      void logBlockedLoginAttempt({ data: { email: parsed.data.email, reason: "sign-in blocked: domain on blocklist" } });
       return;
     }
     if (!captcha.canSubmit) {
@@ -165,6 +167,7 @@ function RegisterForm() {
     }
     if (isBlockedEmail(parsed.data.email)) {
       setErr(BLOCKED_EMAIL_MESSAGE);
+      void logBlockedLoginAttempt({ data: { email: parsed.data.email, reason: "sign-up blocked: domain on blocklist" } });
       return;
     }
     if (!captcha.canSubmit) {
