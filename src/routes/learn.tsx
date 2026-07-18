@@ -101,6 +101,7 @@ export const Route = createFileRoute("/learn")({
         { name: "twitter:image", content: pageOgImages.learn },
       ],
       links: [{ rel: "canonical", href: url }],
+      scripts: [breadcrumbScript([{ name: "Learn", path: "/learn" }])],
     };
   },
   component: Learn,
