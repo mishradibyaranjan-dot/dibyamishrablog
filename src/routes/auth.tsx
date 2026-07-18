@@ -9,6 +9,7 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { supabase } from "@/integrations/supabase/client";
 import { lovable } from "@/integrations/lovable";
 import { useAuth } from "@/lib/auth";
+import { isBlockedEmail, BLOCKED_EMAIL_MESSAGE } from "@/lib/blocked-domains";
 
 const authSearchSchema = z.object({
   mode: z.enum(["login", "register"]).optional(),
@@ -97,6 +98,10 @@ function LoginForm() {
       setErr(parsed.error.issues[0].message);
       return;
     }
+    if (isBlockedEmail(parsed.data.email)) {
+      setErr(BLOCKED_EMAIL_MESSAGE);
+      return;
+    }
     setBusy(true);
     const { error } = await supabase.auth.signInWithPassword({ email: parsed.data.email, password: parsed.data.password });
     setBusy(false);
@@ -139,6 +144,10 @@ function RegisterForm() {
       .safeParse({ name, email, password });
     if (!parsed.success) {
       setErr(parsed.error.issues[0].message);
+      return;
+    }
+    if (isBlockedEmail(parsed.data.email)) {
+      setErr(BLOCKED_EMAIL_MESSAGE);
       return;
     }
     setBusy(true);

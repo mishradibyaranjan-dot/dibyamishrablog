@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { z } from "zod";
 import { corsHeadersFor, isAllowedOrigin } from "@/lib/origin.server";
+import { isBlockedEmail, BLOCKED_EMAIL_MESSAGE } from "@/lib/blocked-domains";
 
 const noCRLF = /^[^\r\n]*$/;
 const ContactSchema = z.object({
@@ -45,6 +46,9 @@ export const Route = createFileRoute("/api/public/contact")({
           );
         }
         const data = parsed.data;
+        if (isBlockedEmail(data.email)) {
+          return Response.json({ error: BLOCKED_EMAIL_MESSAGE }, { status: 400, headers: cors });
+        }
 
         try {
           const [React, { render }, { createClient }, { template }, { sendLovableEmail }] =
