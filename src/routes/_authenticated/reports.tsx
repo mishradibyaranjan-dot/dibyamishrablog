@@ -29,6 +29,8 @@ import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth";
 import { NewsletterAdminPanel } from "@/components/admin/NewsletterAdminPanel";
+import { getReports, type ReportsPayload } from "@/lib/reports.functions";
+import { useServerFn } from "@tanstack/react-start";
 
 export const Route = createFileRoute("/_authenticated/reports")({
   head: () => ({
@@ -52,107 +54,34 @@ type Counts = {
 function Reports() {
   const { isAdmin, loading } = useAuth();
   const [days, setDays] = useState(7);
-  const [counts, setCounts] = useState<Counts | null>(null);
-  const [series, setSeries] = useState<{ day: string; visits: number }[]>([]);
-  const [topPages, setTopPages] = useState<{ path: string; count: number }[]>([]);
-  const [topTabs, setTopTabs] = useState<{ name: string; count: number }[]>([]);
-  const [topQuestions, setTopQuestions] = useState<{ q: string; count: number }[]>([]);
+  const [payload, setPayload] = useState<ReportsPayload | null>(null);
+  const [err, setErr] = useState<string | null>(null);
+  const fetchReports = useServerFn(getReports);
 
   useEffect(() => {
     if (!isAdmin) return;
-    void load();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isAdmin, days]);
+    let cancelled = false;
+    setErr(null);
+    setPayload(null);
+    (async () => {
+      try {
+        const res = await fetchReports({ data: { days } });
+        if (!cancelled) setPayload(res);
+      } catch (e) {
+        if (!cancelled) setErr((e as Error).message ?? String(e));
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [isAdmin, days, fetchReports]);
 
-  async function load() {
-    const since = new Date(Date.now() - days * 86400000).toISOString();
-    const t24 = new Date(Date.now() - 86400000).toISOString();
-    const t7 = new Date(Date.now() - 7 * 86400000).toISOString();
-    const t30 = new Date(Date.now() - 30 * 86400000).toISOString();
+  const counts = payload?.counts ?? null;
+  const series = payload?.series ?? [];
+  const topPages = payload?.topPages ?? [];
+  const topTabs = payload?.topTabs ?? [];
+  const topQuestions = payload?.topQuestions ?? [];
 
-    const [usersR, act24R, act7R, act30R, chatsR, sessR, visitsR, tabsR, qR] = await Promise.all([
-      supabase.from("profiles").select("id", { count: "exact", head: true }),
-      supabase.from("login_sessions").select("user_id").gte("started_at", t24).limit(5000),
-      supabase.from("login_sessions").select("user_id").gte("started_at", t7).limit(5000),
-      supabase.from("login_sessions").select("user_id").gte("started_at", t30).limit(5000),
-      supabase.from("chatbot_messages").select("id", { count: "exact", head: true }).eq("role", "user"),
-      supabase.from("login_sessions").select("started_at, ended_at, duration_seconds").gte("started_at", since).limit(5000),
-      supabase.from("page_visits").select("path, visited_at").gte("visited_at", since).limit(5000),
-      supabase.from("tab_access").select("page, tab_id, opened_at").gte("opened_at", since).limit(5000),
-      supabase.from("chatbot_messages").select("content").eq("role", "user").gte("created_at", since).limit(2000),
-    ]);
-
-    const distinct = (rows: { user_id: string }[] | null) =>
-      rows ? new Set(rows.map((r) => r.user_id)).size : 0;
-
-    // Compute avg session: prefer duration_seconds; else ended_at - started_at; else now - started_at (still active, capped 1h)
-    const now = Date.now();
-    const durations = (sessR.data ?? []).map((r) => {
-      if (r.duration_seconds != null) return r.duration_seconds;
-      const start = new Date(r.started_at as string).getTime();
-      const end = r.ended_at ? new Date(r.ended_at as string).getTime() : now;
-      return Math.max(1, Math.min(3600, Math.round((end - start) / 1000)));
-    });
-    const avg = durations.length ? Math.round(durations.reduce((a, b) => a + b, 0) / durations.length) : 0;
-
-    setCounts({
-      totalUsers: usersR.count ?? 0,
-      active24: distinct(act24R.data as any),
-      active7d: distinct(act7R.data as any),
-      active30d: distinct(act30R.data as any),
-      totalChats: chatsR.count ?? 0,
-      avgSession: avg,
-    });
-
-    // Daily series
-    const buckets = new Map<string, number>();
-    for (let i = days - 1; i >= 0; i--) {
-      const d = new Date(Date.now() - i * 86400000).toISOString().slice(0, 10);
-      buckets.set(d, 0);
-    }
-    visitsR.data?.forEach((v) => {
-      const d = (v.visited_at as string).slice(0, 10);
-      buckets.set(d, (buckets.get(d) ?? 0) + 1);
-    });
-    setSeries(Array.from(buckets.entries()).map(([day, visits]) => ({ day: day.slice(5), visits })));
-
-    // Top pages
-    const pageMap = new Map<string, number>();
-    visitsR.data?.forEach((v) => pageMap.set(v.path as string, (pageMap.get(v.path as string) ?? 0) + 1));
-    setTopPages(
-      Array.from(pageMap.entries())
-        .sort((a, b) => b[1] - a[1])
-        .slice(0, 8)
-        .map(([path, count]) => ({ path, count })),
-    );
-
-    // Top tabs
-    const tabMap = new Map<string, number>();
-    tabsR.data?.forEach((t) => {
-      const k = `${t.page}#${t.tab_id}`;
-      tabMap.set(k, (tabMap.get(k) ?? 0) + 1);
-    });
-    setTopTabs(
-      Array.from(tabMap.entries())
-        .sort((a, b) => b[1] - a[1])
-        .slice(0, 8)
-        .map(([name, count]) => ({ name, count })),
-    );
-
-    // Top questions
-    const qMap = new Map<string, number>();
-    qR.data?.forEach((row) => {
-      const norm = (row.content as string).toLowerCase().trim().slice(0, 80);
-      if (norm.length < 4) return;
-      qMap.set(norm, (qMap.get(norm) ?? 0) + 1);
-    });
-    setTopQuestions(
-      Array.from(qMap.entries())
-        .sort((a, b) => b[1] - a[1])
-        .slice(0, 10)
-        .map(([q, count]) => ({ q, count })),
-    );
-  }
 
   const exportCsv = useMemo(
     () => () => {
@@ -216,7 +145,7 @@ function Reports() {
 
       <div className="mt-6 flex flex-wrap items-center justify-between gap-3">
         <div className="flex gap-2">
-          {[7, 30, 90].map((d) => (
+          {[7, 14, 30, 90].map((d) => (
             <button
               key={d}
               onClick={() => setDays(d)}
@@ -235,12 +164,28 @@ function Reports() {
         </Button>
       </div>
 
+      {err && (
+        <div className="mt-4 rounded-xl border border-red-200 bg-red-50 p-3 text-sm text-red-700">
+          Failed to load reports: {err}
+        </div>
+      )}
+      {!payload && !err && (
+        <div className="mt-4 rounded-xl border border-slate-200 bg-white p-3 text-sm text-slate-500">
+          Loading analytics…
+        </div>
+      )}
+
       <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         <Kpi icon={<Users />} label="Total users" value={counts?.totalUsers ?? "—"} />
         <Kpi icon={<Activity />} label="Active (24h)" value={counts?.active24 ?? "—"} />
-        <Kpi icon={<Activity />} label={`Active (${days <= 7 ? 7 : 30}d)`} value={(days <= 7 ? counts?.active7d : counts?.active30d) ?? "—"} />
+        <Kpi
+          icon={<Activity />}
+          label={`Active (${days <= 7 ? 7 : 30}d)`}
+          value={(days <= 7 ? counts?.active7d : counts?.active30d) ?? "—"}
+        />
         <Kpi icon={<Clock />} label="Avg session (s)" value={counts?.avgSession ?? "—"} />
       </div>
+
 
       <div className="mt-6 grid gap-4 lg:grid-cols-2">
         <Panel title="Daily page visits" icon={<BarChart3 className="h-4 w-4" />}>
@@ -299,12 +244,13 @@ function Reports() {
       </div>
 
       <div className="mt-8">
-        <TrafficAnalyticsPanel days={days} />
+        <TrafficAnalyticsPanel days={days} traffic={payload?.traffic ?? null} />
       </div>
 
       <div className="mt-8">
-        <IdentifiedVisitorsPanel days={days} />
+        <IdentifiedVisitorsPanel days={days} rowsData={payload?.visitors ?? null} />
       </div>
+
 
       <div className="mt-6">
         <NewsletterAdminPanel />
@@ -319,18 +265,6 @@ function Reports() {
 
 // ------------------- Traffic Analytics -------------------
 
-type VisitorLogRow = {
-  visitor_id: string;
-  session_id: string | null;
-  path: string | null;
-  referrer: string | null;
-  country: string | null;
-  device: string | null;
-  browser: string | null;
-  os: string | null;
-  created_at: string;
-};
-
 const PIE_COLORS = ["#2563eb", "#7c3aed", "#0891b2", "#f59e0b", "#ef4444", "#10b981", "#ec4899", "#64748b"];
 
 function hostFromReferrer(ref: string | null): string {
@@ -344,104 +278,22 @@ function hostFromReferrer(ref: string | null): string {
   }
 }
 
-function TrafficAnalyticsPanel({ days }: { days: number }) {
-  const [rows, setRows] = useState<VisitorLogRow[] | null>(null);
-  const [err, setErr] = useState<string | null>(null);
-
-  useEffect(() => {
-    let cancelled = false;
-    (async () => {
-      setErr(null);
-      setRows(null);
-      const since = new Date(Date.now() - days * 86400000).toISOString();
-      const all: VisitorLogRow[] = [];
-      const pageSize = 1000;
-      let from = 0;
-      try {
-        // eslint-disable-next-line no-constant-condition
-        while (true) {
-          const { data, error } = await supabase
-            .from("visitor_logs")
-            .select("visitor_id, session_id, path, referrer, country, device, browser, os, created_at")
-            .gte("created_at", since)
-            .order("created_at", { ascending: false })
-            .range(from, from + pageSize - 1);
-          if (error) throw error;
-          if (!data || data.length === 0) break;
-          all.push(...(data as VisitorLogRow[]));
-          if (data.length < pageSize || all.length >= 20000) break;
-          from += pageSize;
-        }
-        if (!cancelled) setRows(all);
-      } catch (e) {
-        if (!cancelled) setErr((e as Error).message ?? String(e));
-      }
-    })();
-    return () => {
-      cancelled = true;
-    };
-  }, [days]);
-
-  const stats = useMemo(() => {
-    if (!rows) return null;
-    const pageviews = rows.length;
-    const uniqueVisitors = new Set(rows.map((r) => r.visitor_id)).size;
-    const uniqueSessions = new Set(rows.filter((r) => r.session_id).map((r) => r.session_id!)).size;
-    const pvPerVisit = uniqueSessions ? +(pageviews / uniqueSessions).toFixed(2) : 0;
-
-    // Daily buckets
-    const buckets = new Map<string, { day: string; visitors: Set<string>; pageviews: number }>();
-    for (let i = days - 1; i >= 0; i--) {
-      const d = new Date(Date.now() - i * 86400000).toISOString().slice(0, 10);
-      buckets.set(d, { day: d.slice(5), visitors: new Set(), pageviews: 0 });
-    }
-    for (const r of rows) {
-      const d = r.created_at.slice(0, 10);
-      const b = buckets.get(d);
-      if (!b) continue;
-      b.pageviews++;
-      b.visitors.add(r.visitor_id);
-    }
-    const daily = Array.from(buckets.values()).map((b) => ({
-      day: b.day,
-      visitors: b.visitors.size,
-      pageviews: b.pageviews,
-    }));
-
-    const tally = (get: (r: VisitorLogRow) => string) => {
-      const m = new Map<string, number>();
-      for (const r of rows) {
-        const k = get(r) || "Unknown";
-        m.set(k, (m.get(k) ?? 0) + 1);
-      }
-      return Array.from(m.entries())
-        .sort((a, b) => b[1] - a[1])
-        .map(([label, value]) => ({ label, value }));
-    };
-
-    const topPages = tally((r) => r.path ?? "").slice(0, 10);
-    const topSources = tally((r) => hostFromReferrer(r.referrer)).slice(0, 10);
-    const topCountries = tally((r) => r.country ?? "Unknown").slice(0, 10);
-    const devices = tally((r) => r.device ?? "unknown").slice(0, 6);
-    const browsers = tally((r) => r.browser ?? "unknown").slice(0, 6);
-
-    return { pageviews, uniqueVisitors, uniqueSessions, pvPerVisit, daily, topPages, topSources, topCountries, devices, browsers };
-  }, [rows, days]);
-
-  if (err) {
-    return (
-      <Panel title="Traffic analytics" icon={<BarChart3 className="h-4 w-4" />}>
-        <p className="text-sm text-red-600">Failed to load: {err}</p>
-      </Panel>
-    );
-  }
-  if (!stats) {
+function TrafficAnalyticsPanel({
+  days,
+  traffic,
+}: {
+  days: number;
+  traffic: ReportsPayload["traffic"] | null;
+}) {
+  if (!traffic) {
     return (
       <Panel title="Traffic analytics" icon={<BarChart3 className="h-4 w-4" />}>
         <div className="h-24 animate-pulse rounded-xl bg-slate-100" />
       </Panel>
     );
   }
+  const stats = traffic;
+
 
   return (
     <div className="space-y-4">
@@ -730,34 +582,19 @@ type VisitorRow = {
   first_utm_source: string | null;
 };
 
-function IdentifiedVisitorsPanel({ days }: { days: number }) {
-  const [rows, setRows] = useState<VisitorRow[] | null>(null);
-  const [err, setErr] = useState<string | null>(null);
+function IdentifiedVisitorsPanel({
+  days,
+  rowsData,
+}: {
+  days: number;
+  rowsData: VisitorRow[] | null;
+}) {
+  const rows = rowsData;
+  const err: string | null = null;
   const [query, setQuery] = useState("");
   const [onlyIdentified, setOnlyIdentified] = useState(false);
+  void days;
 
-  useEffect(() => {
-    let cancelled = false;
-    (async () => {
-      setErr(null);
-      setRows(null);
-      const since = new Date(Date.now() - days * 86400000).toISOString();
-      const { data, error } = await supabase
-        .from("visitors")
-        .select(
-          "visitor_id, user_id, email, display_name, last_country, last_city, device, browser, os, total_visits, total_pageviews, first_seen_at, last_seen_at, identified_at, first_referrer, first_utm_source",
-        )
-        .gte("last_seen_at", since)
-        .order("last_seen_at", { ascending: false })
-        .limit(500);
-      if (cancelled) return;
-      if (error) setErr(error.message);
-      else setRows((data as VisitorRow[]) ?? []);
-    })();
-    return () => {
-      cancelled = true;
-    };
-  }, [days]);
 
   const filtered = useMemo(() => {
     if (!rows) return [];
