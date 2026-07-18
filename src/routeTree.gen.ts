@@ -40,6 +40,7 @@ import { Route as ApiPublicContactRouteImport } from './routes/api/public/contac
 import { Route as ApiPublicChatRouteImport } from './routes/api/public/chat'
 import { Route as ApiDownloadPdfRouteImport } from './routes/api/download.pdf'
 import { Route as Char91DotmcpChar93InvokeToolToolRouteImport } from './routes/[.mcp]/invoke-tool/$tool'
+import { Route as DotlovableOauthConsentRouteImport } from './routes/[.]lovable.oauth.consent'
 import { Route as LovableEmailTransactionalSendRouteImport } from './routes/lovable/email/transactional/send'
 import { Route as LovableEmailTransactionalPreviewRouteImport } from './routes/lovable/email/transactional/preview'
 import { Route as LovableEmailQueueProcessRouteImport } from './routes/lovable/email/queue/process'
@@ -206,6 +207,11 @@ const Char91DotmcpChar93InvokeToolToolRoute =
     path: '/.mcp/invoke-tool/$tool',
     getParentRoute: () => rootRouteImport,
   } as any)
+const DotlovableOauthConsentRoute = DotlovableOauthConsentRouteImport.update({
+  id: '/.lovable/oauth/consent',
+  path: '/.lovable/oauth/consent',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const LovableEmailTransactionalSendRoute =
   LovableEmailTransactionalSendRouteImport.update({
     id: '/lovable/email/transactional/send',
@@ -271,6 +277,7 @@ export interface FileRoutesByFullPath {
   '/newsletter/$slug': typeof NewsletterSlugRoute
   '/white-paper/agentic-ai-enterprise-automation': typeof WhitePaperAgenticAiEnterpriseAutomationRoute
   '/newsletter/': typeof NewsletterIndexRoute
+  '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
   '/api/download/pdf': typeof ApiDownloadPdfRoute
   '/api/public/chat': typeof ApiPublicChatRoute
@@ -310,6 +317,7 @@ export interface FileRoutesByTo {
   '/newsletter/$slug': typeof NewsletterSlugRoute
   '/white-paper/agentic-ai-enterprise-automation': typeof WhitePaperAgenticAiEnterpriseAutomationRoute
   '/newsletter': typeof NewsletterIndexRoute
+  '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
   '/api/download/pdf': typeof ApiDownloadPdfRoute
   '/api/public/chat': typeof ApiPublicChatRoute
@@ -351,6 +359,7 @@ export interface FileRoutesById {
   '/newsletter/$slug': typeof NewsletterSlugRoute
   '/white-paper/agentic-ai-enterprise-automation': typeof WhitePaperAgenticAiEnterpriseAutomationRoute
   '/newsletter/': typeof NewsletterIndexRoute
+  '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
   '/api/download/pdf': typeof ApiDownloadPdfRoute
   '/api/public/chat': typeof ApiPublicChatRoute
@@ -392,6 +401,7 @@ export interface FileRouteTypes {
     | '/newsletter/$slug'
     | '/white-paper/agentic-ai-enterprise-automation'
     | '/newsletter/'
+    | '/.lovable/oauth/consent'
     | '/.mcp/invoke-tool/$tool'
     | '/api/download/pdf'
     | '/api/public/chat'
@@ -431,6 +441,7 @@ export interface FileRouteTypes {
     | '/newsletter/$slug'
     | '/white-paper/agentic-ai-enterprise-automation'
     | '/newsletter'
+    | '/.lovable/oauth/consent'
     | '/.mcp/invoke-tool/$tool'
     | '/api/download/pdf'
     | '/api/public/chat'
@@ -471,6 +482,7 @@ export interface FileRouteTypes {
     | '/newsletter/$slug'
     | '/white-paper/agentic-ai-enterprise-automation'
     | '/newsletter/'
+    | '/.lovable/oauth/consent'
     | '/.mcp/invoke-tool/$tool'
     | '/api/download/pdf'
     | '/api/public/chat'
@@ -509,6 +521,7 @@ export interface RootRouteChildren {
   NewsletterSlugRoute: typeof NewsletterSlugRoute
   WhitePaperAgenticAiEnterpriseAutomationRoute: typeof WhitePaperAgenticAiEnterpriseAutomationRoute
   NewsletterIndexRoute: typeof NewsletterIndexRoute
+  DotlovableOauthConsentRoute: typeof DotlovableOauthConsentRoute
   Char91DotmcpChar93InvokeToolToolRoute: typeof Char91DotmcpChar93InvokeToolToolRoute
   ApiDownloadPdfRoute: typeof ApiDownloadPdfRoute
   ApiPublicChatRoute: typeof ApiPublicChatRoute
@@ -744,6 +757,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof Char91DotmcpChar93InvokeToolToolRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/.lovable/oauth/consent': {
+      id: '/.lovable/oauth/consent'
+      path: '/.lovable/oauth/consent'
+      fullPath: '/.lovable/oauth/consent'
+      preLoaderRoute: typeof DotlovableOauthConsentRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/lovable/email/transactional/send': {
       id: '/lovable/email/transactional/send'
       path: '/lovable/email/transactional/send'
@@ -843,6 +863,7 @@ const rootRouteChildren: RootRouteChildren = {
   WhitePaperAgenticAiEnterpriseAutomationRoute:
     WhitePaperAgenticAiEnterpriseAutomationRoute,
   NewsletterIndexRoute: NewsletterIndexRoute,
+  DotlovableOauthConsentRoute: DotlovableOauthConsentRoute,
   Char91DotmcpChar93InvokeToolToolRoute: Char91DotmcpChar93InvokeToolToolRoute,
   ApiDownloadPdfRoute: ApiDownloadPdfRoute,
   ApiPublicChatRoute: ApiPublicChatRoute,
