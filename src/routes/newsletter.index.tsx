@@ -40,6 +40,7 @@ export const Route = createFileRoute("/newsletter/")({
         { name: "twitter:image", content: pageOgImages.newsletter },
       ],
       links: [{ rel: "canonical", href: url }],
+      scripts: [breadcrumbScript([{ name: "Newsletter", path: "/newsletter" }])],
     };
   },
   component: NewsletterArchive,
