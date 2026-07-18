@@ -142,6 +142,10 @@ function RegisterForm() {
       setErr(parsed.error.issues[0].message);
       return;
     }
+    if (isBlockedEmail(parsed.data.email)) {
+      setErr(BLOCKED_EMAIL_MESSAGE);
+      return;
+    }
     setBusy(true);
     const { error } = await supabase.auth.signUp({
       email: parsed.data.email,
