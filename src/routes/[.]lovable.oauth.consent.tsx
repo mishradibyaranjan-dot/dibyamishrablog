@@ -39,8 +39,8 @@ export const Route = createFileRoute("/.lovable/oauth/consent")({
     const authorizationId = new URLSearchParams(location.search).get("authorization_id")!;
     const { data, error } = await sb.auth.oauth.getAuthorizationDetails(authorizationId);
     if (error) throw new Error(error.message);
-    const immediate = data?.redirect_url ?? data?.redirect_to;
-    if (immediate && !data?.client) throw redirect({ href: immediate });
+    const immediate = pickRedirect(data);
+    if (immediate && !pickClient(data)) throw redirect({ href: immediate });
     return data;
   },
   component: Consent,
