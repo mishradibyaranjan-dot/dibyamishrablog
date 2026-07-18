@@ -28,6 +28,10 @@ export const Route = createFileRoute("/api/public/newsletter")({
           return Response.json({ error: "Invalid email" }, { status: 400, headers: cors });
         }
         const email = parsed.data.email;
+        if (isBlockedEmail(email)) {
+          return Response.json({ error: BLOCKED_EMAIL_MESSAGE }, { status: 400, headers: cors });
+        }
+
 
         try {
           const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
