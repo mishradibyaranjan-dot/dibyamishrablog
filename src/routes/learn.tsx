@@ -1773,7 +1773,7 @@ function Timeline({ items }: { items: { year: string; title: string; desc: strin
             <div className="rounded-xl border border-white/10 bg-white/5 p-3 backdrop-blur-xl sm:p-4">
               <div className="flex flex-wrap items-baseline gap-x-3">
                 <span className="font-mono text-xs font-semibold text-neon-cyan">{it.year}</span>
-                <h5 className="text-sm font-semibold text-white">{it.title}</h5>
+                <h3 className="text-sm font-semibold text-white">{it.title}</h3>
               </div>
               <p className="mt-1.5 text-sm text-white/65">{it.desc}</p>
             </div>
