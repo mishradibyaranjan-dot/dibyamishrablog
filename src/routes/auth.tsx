@@ -9,7 +9,7 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { supabase } from "@/integrations/supabase/client";
 import { lovable } from "@/integrations/lovable";
 import { useAuth } from "@/lib/auth";
-import { isBlockedEmail, BLOCKED_EMAIL_MESSAGE } from "@/lib/blocked-domains";
+import { isBlockedEmail, BLOCKED_EMAIL_MESSAGE, refreshBlockedDomains } from "@/lib/blocked-domains";
 
 const authSearchSchema = z.object({
   mode: z.enum(["login", "register"]).optional(),
@@ -38,6 +38,10 @@ function AuthPage() {
       navigate({ to: redirect ?? "/learn" });
     }
   }, [user, loading, navigate, redirect]);
+
+  useEffect(() => {
+    void refreshBlockedDomains();
+  }, []);
 
   return (
     <Section className="pt-20 lg:pt-28">

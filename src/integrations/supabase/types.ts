@@ -14,6 +14,30 @@ export type Database = {
   }
   public: {
     Tables: {
+      blocked_email_domains: {
+        Row: {
+          created_at: string
+          created_by: string | null
+          domain: string
+          id: string
+          reason: string | null
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string | null
+          domain: string
+          id?: string
+          reason?: string | null
+        }
+        Update: {
+          created_at?: string
+          created_by?: string | null
+          domain?: string
+          id?: string
+          reason?: string | null
+        }
+        Relationships: []
+      }
       chatbot_messages: {
         Row: {
           content: string
@@ -839,6 +863,7 @@ export type Database = {
         Args: { payload: Json; queue_name: string }
         Returns: number
       }
+      is_blocked_email: { Args: { _email: string }; Returns: boolean }
       move_to_dlq: {
         Args: {
           dlq_name: string
