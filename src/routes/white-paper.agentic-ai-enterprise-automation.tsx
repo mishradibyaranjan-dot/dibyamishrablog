@@ -52,6 +52,9 @@ export const Route = createFileRoute("/white-paper/agentic-ai-enterprise-automat
           mainEntityOfPage: CANONICAL,
         }),
       },
+      breadcrumbScript([
+        { name: "White Paper", path: "/white-paper/agentic-ai-enterprise-automation" },
+      ]),
     ],
   }),
   component: WhitePaper,
