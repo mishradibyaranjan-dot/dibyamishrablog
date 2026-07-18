@@ -35,6 +35,13 @@ export const Route = createFileRoute("/api/public/newsletter")({
 
         try {
           const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+          const { data: disposable } = await supabaseAdmin.rpc("is_disposable_email", { _email: email });
+          if (disposable) {
+            return Response.json(
+              { error: "Please use a permanent email address — disposable providers are not accepted." },
+              { status: 400, headers: cors },
+            );
+          }
           // Detect whether this email was already an active subscriber so we
           // only send a welcome email on the first (or re-)subscribe.
           const { data: existing } = await supabaseAdmin
