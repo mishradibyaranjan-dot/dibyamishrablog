@@ -13,3 +13,5 @@ Disallow: /lovable/
 Disallow: /reports
 
 Sitemap: https://www.dibyamishra.co.in/sitemap.xml
+
+# RSS feed
