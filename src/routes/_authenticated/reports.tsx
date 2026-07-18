@@ -582,34 +582,19 @@ type VisitorRow = {
   first_utm_source: string | null;
 };
 
-function IdentifiedVisitorsPanel({ days }: { days: number }) {
-  const [rows, setRows] = useState<VisitorRow[] | null>(null);
-  const [err, setErr] = useState<string | null>(null);
+function IdentifiedVisitorsPanel({
+  days,
+  rowsData,
+}: {
+  days: number;
+  rowsData: VisitorRow[] | null;
+}) {
+  const rows = rowsData;
+  const err: string | null = null;
   const [query, setQuery] = useState("");
   const [onlyIdentified, setOnlyIdentified] = useState(false);
+  void days;
 
-  useEffect(() => {
-    let cancelled = false;
-    (async () => {
-      setErr(null);
-      setRows(null);
-      const since = new Date(Date.now() - days * 86400000).toISOString();
-      const { data, error } = await supabase
-        .from("visitors")
-        .select(
-          "visitor_id, user_id, email, display_name, last_country, last_city, device, browser, os, total_visits, total_pageviews, first_seen_at, last_seen_at, identified_at, first_referrer, first_utm_source",
-        )
-        .gte("last_seen_at", since)
-        .order("last_seen_at", { ascending: false })
-        .limit(500);
-      if (cancelled) return;
-      if (error) setErr(error.message);
-      else setRows((data as VisitorRow[]) ?? []);
-    })();
-    return () => {
-      cancelled = true;
-    };
-  }, [days]);
 
   const filtered = useMemo(() => {
     if (!rows) return [];
