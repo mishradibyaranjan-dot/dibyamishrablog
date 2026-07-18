@@ -275,6 +275,7 @@ function Footer() {
 
 function TrackerMount() {
   useActivityTracker();
+  useVisitorTracker();
   return null;
 }
 
