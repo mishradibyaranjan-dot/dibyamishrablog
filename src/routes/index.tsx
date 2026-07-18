@@ -62,7 +62,7 @@ export const Route = createFileRoute("/")({
           name: "Dibya Ranjan Mishra",
           jobTitle: "Vice President & Country Head",
           worksFor: { "@type": "Organization", name: "Crystal Tech Ventures" },
-          url: "https://dibyamishrablog.lovable.app/",
+          url: "https://www.dibyamishra.co.in/",
           sameAs: [
             "https://www.linkedin.com/in/dibya-mishra-55b94654",
             "https://github.com/mishradibyaranjan-dot/",
