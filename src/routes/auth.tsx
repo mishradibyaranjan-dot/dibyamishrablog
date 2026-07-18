@@ -39,6 +39,10 @@ function AuthPage() {
     }
   }, [user, loading, navigate, redirect]);
 
+  useEffect(() => {
+    void refreshBlockedDomains();
+  }, []);
+
   return (
     <Section className="pt-20 lg:pt-28">
       <motion.div
