@@ -119,11 +119,14 @@ function Contact() {
                     className="mt-1.5 w-full rounded-md border border-input bg-background px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-ring"
                   />
                 </div>
+                {captcha.required && (
+                  <MathCaptcha verified={captcha.verified} onSolved={captcha.markVerified} />
+                )}
                 {error && (
                   <p className="text-sm text-destructive" role="alert">{error}</p>
                 )}
                 <div className="flex flex-wrap items-center justify-end gap-3 border-t border-border pt-4">
-                  <Button type="submit" disabled={submitting} className="bg-brand-gradient text-white">
+                  <Button type="submit" disabled={submitting || !captcha.canSubmit} className="bg-brand-gradient text-white">
                     {submitting ? (
                       <><Loader2 className="mr-1 h-4 w-4 animate-spin" /> Sending…</>
                     ) : (
