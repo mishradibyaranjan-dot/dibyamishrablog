@@ -42,6 +42,7 @@ import { Route as ApiPublicNewsletterRouteImport } from './routes/api/public/new
 import { Route as ApiPublicContactRouteImport } from './routes/api/public/contact'
 import { Route as ApiPublicChatRouteImport } from './routes/api/public/chat'
 import { Route as ApiDownloadPdfRouteImport } from './routes/api/download.pdf'
+import { Route as AuthenticatedAdminBlockedDomainsRouteImport } from './routes/_authenticated/admin/blocked-domains'
 import { Route as Char91DotmcpChar93InvokeToolToolRouteImport } from './routes/[.mcp]/invoke-tool/$tool'
 import { Route as DotlovableOauthConsentRouteImport } from './routes/[.]lovable.oauth.consent'
 import { Route as LovableEmailTransactionalSendRouteImport } from './routes/lovable/email/transactional/send'
@@ -219,6 +220,12 @@ const ApiDownloadPdfRoute = ApiDownloadPdfRouteImport.update({
   path: '/api/download/pdf',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedAdminBlockedDomainsRoute =
+  AuthenticatedAdminBlockedDomainsRouteImport.update({
+    id: '/admin/blocked-domains',
+    path: '/admin/blocked-domains',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const Char91DotmcpChar93InvokeToolToolRoute =
   Char91DotmcpChar93InvokeToolToolRouteImport.update({
     id: '/.mcp/invoke-tool/$tool',
@@ -299,6 +306,7 @@ export interface FileRoutesByFullPath {
   '/newsletter/': typeof NewsletterIndexRoute
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
+  '/admin/blocked-domains': typeof AuthenticatedAdminBlockedDomainsRoute
   '/api/download/pdf': typeof ApiDownloadPdfRoute
   '/api/public/chat': typeof ApiPublicChatRoute
   '/api/public/contact': typeof ApiPublicContactRoute
@@ -342,6 +350,7 @@ export interface FileRoutesByTo {
   '/newsletter': typeof NewsletterIndexRoute
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
+  '/admin/blocked-domains': typeof AuthenticatedAdminBlockedDomainsRoute
   '/api/download/pdf': typeof ApiDownloadPdfRoute
   '/api/public/chat': typeof ApiPublicChatRoute
   '/api/public/contact': typeof ApiPublicContactRoute
@@ -387,6 +396,7 @@ export interface FileRoutesById {
   '/newsletter/': typeof NewsletterIndexRoute
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
+  '/_authenticated/admin/blocked-domains': typeof AuthenticatedAdminBlockedDomainsRoute
   '/api/download/pdf': typeof ApiDownloadPdfRoute
   '/api/public/chat': typeof ApiPublicChatRoute
   '/api/public/contact': typeof ApiPublicContactRoute
@@ -432,6 +442,7 @@ export interface FileRouteTypes {
     | '/newsletter/'
     | '/.lovable/oauth/consent'
     | '/.mcp/invoke-tool/$tool'
+    | '/admin/blocked-domains'
     | '/api/download/pdf'
     | '/api/public/chat'
     | '/api/public/contact'
@@ -475,6 +486,7 @@ export interface FileRouteTypes {
     | '/newsletter'
     | '/.lovable/oauth/consent'
     | '/.mcp/invoke-tool/$tool'
+    | '/admin/blocked-domains'
     | '/api/download/pdf'
     | '/api/public/chat'
     | '/api/public/contact'
@@ -519,6 +531,7 @@ export interface FileRouteTypes {
     | '/newsletter/'
     | '/.lovable/oauth/consent'
     | '/.mcp/invoke-tool/$tool'
+    | '/_authenticated/admin/blocked-domains'
     | '/api/download/pdf'
     | '/api/public/chat'
     | '/api/public/contact'
@@ -810,6 +823,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiDownloadPdfRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated/admin/blocked-domains': {
+      id: '/_authenticated/admin/blocked-domains'
+      path: '/admin/blocked-domains'
+      fullPath: '/admin/blocked-domains'
+      preLoaderRoute: typeof AuthenticatedAdminBlockedDomainsRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/.mcp/invoke-tool/$tool': {
       id: '/.mcp/invoke-tool/$tool'
       path: '/.mcp/invoke-tool/$tool'
@@ -879,11 +899,13 @@ declare module '@tanstack/react-router' {
 interface AuthenticatedRouteRouteChildren {
   AuthenticatedReportsRoute: typeof AuthenticatedReportsRoute
   AuthenticatedRepositoryRoute: typeof AuthenticatedRepositoryRoute
+  AuthenticatedAdminBlockedDomainsRoute: typeof AuthenticatedAdminBlockedDomainsRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedReportsRoute: AuthenticatedReportsRoute,
   AuthenticatedRepositoryRoute: AuthenticatedRepositoryRoute,
+  AuthenticatedAdminBlockedDomainsRoute: AuthenticatedAdminBlockedDomainsRoute,
 }
 
 const AuthenticatedRouteRouteWithChildren =
