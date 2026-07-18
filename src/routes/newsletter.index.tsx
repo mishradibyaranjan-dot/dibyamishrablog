@@ -19,22 +19,31 @@ type IssueRow = {
 export const Route = createFileRoute("/newsletter/")({
   head: () => {
     const url = `${SITE_ORIGIN}/newsletter`;
+    const title = "Newsletter — Dibya R. Mishra";
     const desc =
       "Monthly newsletter on Agentic AI, GenAI in retail supply chains, multi-tenant SaaS, and cloud architecture — by Dibya R. Mishra.";
     return {
       meta: [
-        { title: "Newsletter — Dibya R. Mishra" },
+        { title },
         { name: "description", content: desc },
-        { property: "og:title", content: "Newsletter — Dibya R. Mishra" },
+        { property: "og:title", content: title },
         { property: "og:description", content: desc },
         { property: "og:url", content: url },
+        { property: "og:type", content: "website" },
+        { property: "og:image", content: pageOgImages.newsletter },
+        { property: "og:image:width", content: "1200" },
+        { property: "og:image:height", content: "630" },
         { name: "twitter:card", content: "summary_large_image" },
+        { name: "twitter:title", content: title },
+        { name: "twitter:description", content: desc },
+        { name: "twitter:image", content: pageOgImages.newsletter },
       ],
       links: [{ rel: "canonical", href: url }],
     };
   },
   component: NewsletterArchive,
 });
+
 
 function NewsletterArchive() {
   const [issues, setIssues] = useState<IssueRow[]>([]);
