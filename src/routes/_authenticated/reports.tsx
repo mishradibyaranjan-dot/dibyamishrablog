@@ -302,6 +302,10 @@ function Reports() {
         <TrafficAnalyticsPanel days={days} />
       </div>
 
+      <div className="mt-8">
+        <IdentifiedVisitorsPanel days={days} />
+      </div>
+
       <div className="mt-6">
         <NewsletterAdminPanel />
       </div>
@@ -701,6 +705,203 @@ function Panel({ title, icon, children }: { title: string; icon: React.ReactNode
         {title}
       </div>
       {children}
+    </div>
+  );
+}
+
+// ------------------- Identified Visitors -------------------
+
+type VisitorRow = {
+  visitor_id: string;
+  user_id: string | null;
+  email: string | null;
+  display_name: string | null;
+  last_country: string | null;
+  last_city: string | null;
+  device: string | null;
+  browser: string | null;
+  os: string | null;
+  total_visits: number;
+  total_pageviews: number;
+  first_seen_at: string;
+  last_seen_at: string;
+  identified_at: string | null;
+  first_referrer: string | null;
+  first_utm_source: string | null;
+};
+
+function IdentifiedVisitorsPanel({ days }: { days: number }) {
+  const [rows, setRows] = useState<VisitorRow[] | null>(null);
+  const [err, setErr] = useState<string | null>(null);
+  const [query, setQuery] = useState("");
+  const [onlyIdentified, setOnlyIdentified] = useState(false);
+
+  useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      setErr(null);
+      setRows(null);
+      const since = new Date(Date.now() - days * 86400000).toISOString();
+      const { data, error } = await supabase
+        .from("visitors")
+        .select(
+          "visitor_id, user_id, email, display_name, last_country, last_city, device, browser, os, total_visits, total_pageviews, first_seen_at, last_seen_at, identified_at, first_referrer, first_utm_source",
+        )
+        .gte("last_seen_at", since)
+        .order("last_seen_at", { ascending: false })
+        .limit(500);
+      if (cancelled) return;
+      if (error) setErr(error.message);
+      else setRows((data as VisitorRow[]) ?? []);
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [days]);
+
+  const filtered = useMemo(() => {
+    if (!rows) return [];
+    const q = query.trim().toLowerCase();
+    return rows.filter((r) => {
+      if (onlyIdentified && !r.user_id) return false;
+      if (!q) return true;
+      return (
+        (r.email ?? "").toLowerCase().includes(q) ||
+        (r.display_name ?? "").toLowerCase().includes(q) ||
+        (r.last_country ?? "").toLowerCase().includes(q) ||
+        (r.last_city ?? "").toLowerCase().includes(q) ||
+        r.visitor_id.toLowerCase().includes(q)
+      );
+    });
+  }, [rows, query, onlyIdentified]);
+
+  const kpis = useMemo(() => {
+    if (!rows) return null;
+    const identified = rows.filter((r) => r.user_id).length;
+    const anon = rows.length - identified;
+    const totalVisits = rows.reduce((s, r) => s + (r.total_visits ?? 0), 0);
+    const totalPv = rows.reduce((s, r) => s + (r.total_pageviews ?? 0), 0);
+    return { identified, anon, totalVisits, totalPv, unique: rows.length };
+  }, [rows]);
+
+  const exportCsv = () => {
+    const cols = [
+      "visitor_id", "user_id", "email", "display_name", "last_country", "last_city",
+      "device", "browser", "os", "total_visits", "total_pageviews",
+      "first_seen_at", "last_seen_at", "identified_at", "first_referrer", "first_utm_source",
+    ];
+    const esc = (v: unknown) => `"${String(v ?? "").replace(/"/g, '""')}"`;
+    const csv = [
+      cols.join(","),
+      ...filtered.map((r) => cols.map((c) => esc((r as Record<string, unknown>)[c])).join(",")),
+    ].join("\n");
+    const blob = new Blob([csv], { type: "text/csv" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `visitors-${new Date().toISOString().slice(0, 10)}.csv`;
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+
+  return (
+    <div className="space-y-4">
+      <SectionHeader
+        eyebrow="People"
+        title="Visitors & identified users"
+        description={`Unique browsers seen in the last ${days} days, with sign-in identity when available.`}
+      />
+
+      {err && (
+        <Panel title="Visitors" icon={<Users className="h-4 w-4" />}>
+          <p className="text-sm text-red-600">Failed to load: {err}</p>
+        </Panel>
+      )}
+
+      {!err && !rows && <div className="h-24 animate-pulse rounded-2xl bg-slate-100" />}
+
+      {kpis && (
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          <Kpi icon={<Users />} label="Unique visitors" value={kpis.unique} />
+          <Kpi icon={<Users />} label="Identified (signed-in)" value={kpis.identified} />
+          <Kpi icon={<Users />} label="Anonymous" value={kpis.anon} />
+          <Kpi icon={<Activity />} label="Total pageviews" value={kpis.totalPv} />
+        </div>
+      )}
+
+      {rows && (
+        <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+          <div className="mb-3 flex flex-wrap items-center gap-2">
+            <input
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              placeholder="Search by email, name, country, city, visitor id"
+              className="w-full max-w-sm rounded-md border border-slate-200 bg-white px-3 py-1.5 text-sm text-slate-900 placeholder-slate-400 focus:border-blue-500 focus:outline-none"
+            />
+            <label className="flex items-center gap-2 text-xs text-slate-600">
+              <input type="checkbox" checked={onlyIdentified} onChange={(e) => setOnlyIdentified(e.target.checked)} />
+              Only identified
+            </label>
+            <div className="ml-auto text-xs text-slate-500">
+              Showing {filtered.length} of {rows.length}
+            </div>
+            <Button onClick={exportCsv} variant="outline" size="sm" className="border-slate-200 bg-white text-slate-900 hover:bg-slate-50">
+              <Download className="mr-2 h-4 w-4" /> Export CSV
+            </Button>
+          </div>
+
+          <div className="max-h-[560px] overflow-auto rounded-lg border border-slate-100">
+            <table className="w-full min-w-[900px] text-left text-xs">
+              <thead className="sticky top-0 bg-slate-50 text-slate-600">
+                <tr>
+                  <th className="px-3 py-2 font-semibold">User</th>
+                  <th className="px-3 py-2 font-semibold">Location</th>
+                  <th className="px-3 py-2 font-semibold">Device</th>
+                  <th className="px-3 py-2 font-semibold">Source</th>
+                  <th className="px-3 py-2 text-right font-semibold">Visits</th>
+                  <th className="px-3 py-2 text-right font-semibold">Pageviews</th>
+                  <th className="px-3 py-2 font-semibold">First seen</th>
+                  <th className="px-3 py-2 font-semibold">Last seen</th>
+                </tr>
+              </thead>
+              <tbody className="text-slate-800">
+                {filtered.map((r) => {
+                  const primary = r.display_name || r.email || (r.user_id ? "Signed-in user" : "Anonymous");
+                  const secondary = r.email && r.display_name ? r.email : `${r.visitor_id.slice(0, 10)}…`;
+                  const loc = [r.last_city, r.last_country].filter(Boolean).join(", ") || "—";
+                  const dev = [r.device, r.browser, r.os].filter(Boolean).join(" · ") || "—";
+                  const src = r.first_utm_source || (r.first_referrer ? hostFromReferrer(r.first_referrer) : "Direct");
+                  return (
+                    <tr key={r.visitor_id} className="border-t border-slate-100 hover:bg-slate-50/60">
+                      <td className="px-3 py-2">
+                        <div className="flex items-center gap-2">
+                          <span className={`inline-block h-2 w-2 rounded-full ${r.user_id ? "bg-emerald-500" : "bg-slate-300"}`} />
+                          <div>
+                            <div className="font-medium text-slate-900">{primary}</div>
+                            <div className="text-[11px] text-slate-500">{secondary}</div>
+                          </div>
+                        </div>
+                      </td>
+                      <td className="px-3 py-2">{loc}</td>
+                      <td className="px-3 py-2">{dev}</td>
+                      <td className="px-3 py-2">{src}</td>
+                      <td className="px-3 py-2 text-right tabular-nums">{r.total_visits}</td>
+                      <td className="px-3 py-2 text-right tabular-nums">{r.total_pageviews}</td>
+                      <td className="px-3 py-2 text-slate-600">{new Date(r.first_seen_at).toLocaleDateString()}</td>
+                      <td className="px-3 py-2 text-slate-600">{new Date(r.last_seen_at).toLocaleString()}</td>
+                    </tr>
+                  );
+                })}
+                {filtered.length === 0 && (
+                  <tr>
+                    <td colSpan={8} className="px-3 py-8 text-center text-slate-500">No visitors match your filter.</td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
