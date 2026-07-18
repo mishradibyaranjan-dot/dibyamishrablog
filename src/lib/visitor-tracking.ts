@@ -1,6 +1,7 @@
 import { useEffect, useRef } from "react";
 import { useRouterState } from "@tanstack/react-router";
 import { useAuth } from "@/lib/auth";
+import { supabase } from "@/integrations/supabase/client";
 
 const VISITOR_KEY = "drm_visitor_id";
 const SESSION_KEY = "drm_session_id";
