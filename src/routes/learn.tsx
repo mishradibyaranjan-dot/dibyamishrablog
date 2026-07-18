@@ -1717,7 +1717,7 @@ function ConceptCard({ icon, title, desc }: { icon?: React.ReactNode; title: str
           {icon}
         </div>
       )}
-      <h4 className="relative z-[3] text-sm font-semibold text-white group-hover:text-gradient sm:text-base">{title}</h4>
+      <h3 className="relative z-[3] text-sm font-semibold text-white group-hover:text-gradient sm:text-base">{title}</h3>
       <p className="relative z-[3] mt-2 text-sm text-white/65">{desc}</p>
     </motion.div>
   );
@@ -1731,7 +1731,7 @@ function FeatureCard({ icon, title, body }: { icon: React.ReactNode; title: stri
           {icon}
         </div>
         <div>
-          <h4 className="text-sm font-semibold text-white sm:text-base">{title}</h4>
+          <h3 className="text-sm font-semibold text-white sm:text-base">{title}</h3>
           <p className="mt-2 text-sm text-white/70">{body}</p>
         </div>
       </div>
@@ -1773,7 +1773,7 @@ function Timeline({ items }: { items: { year: string; title: string; desc: strin
             <div className="rounded-xl border border-white/10 bg-white/5 p-3 backdrop-blur-xl sm:p-4">
               <div className="flex flex-wrap items-baseline gap-x-3">
                 <span className="font-mono text-xs font-semibold text-neon-cyan">{it.year}</span>
-                <h5 className="text-sm font-semibold text-white">{it.title}</h5>
+                <h3 className="text-sm font-semibold text-white">{it.title}</h3>
               </div>
               <p className="mt-1.5 text-sm text-white/65">{it.desc}</p>
             </div>
@@ -1797,7 +1797,7 @@ function NumberedSteps({ items }: { items: { title: string; desc: string }[] }) 
               {idx + 1}
             </span>
             <div>
-              <h5 className="text-sm font-semibold text-white">{it.title}</h5>
+              <h3 className="text-sm font-semibold text-white">{it.title}</h3>
               <p className="mt-1 text-sm text-white/65">{it.desc}</p>
             </div>
           </div>
