@@ -12,6 +12,7 @@ import { ThemeToggle } from "@/components/theme/ThemeToggle";
 
 import { ReadAloudButton } from "@/components/voice/ReadAloudButton";
 import { AuthProvider, useAuth } from "@/lib/auth";
+import { SpamDomainGuard } from "@/components/auth/SpamDomainGuard";
 import { UserMenu } from "@/components/auth/UserMenu";
 
 import { useActivityTracker } from "@/lib/tracking";
@@ -284,17 +285,19 @@ export function SiteLayout() {
   return (
     <ThemeProvider>
       <AuthProvider>
-        <TrackerMount />
-        <div className="relative flex min-h-screen flex-col">
-          <AuroraBackground />
-          <Header />
-          
-          <main className="relative flex-1">
-            <PageTransition />
-          </main>
-          <Footer />
-          <FloatingChat />
-        </div>
+        <SpamDomainGuard>
+          <TrackerMount />
+          <div className="relative flex min-h-screen flex-col">
+            <AuroraBackground />
+            <Header />
+
+            <main className="relative flex-1">
+              <PageTransition />
+            </main>
+            <Footer />
+            <FloatingChat />
+          </div>
+        </SpamDomainGuard>
       </AuthProvider>
     </ThemeProvider>
   );
