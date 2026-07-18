@@ -54,107 +54,34 @@ type Counts = {
 function Reports() {
   const { isAdmin, loading } = useAuth();
   const [days, setDays] = useState(7);
-  const [counts, setCounts] = useState<Counts | null>(null);
-  const [series, setSeries] = useState<{ day: string; visits: number }[]>([]);
-  const [topPages, setTopPages] = useState<{ path: string; count: number }[]>([]);
-  const [topTabs, setTopTabs] = useState<{ name: string; count: number }[]>([]);
-  const [topQuestions, setTopQuestions] = useState<{ q: string; count: number }[]>([]);
+  const [payload, setPayload] = useState<ReportsPayload | null>(null);
+  const [err, setErr] = useState<string | null>(null);
+  const fetchReports = useServerFn(getReports);
 
   useEffect(() => {
     if (!isAdmin) return;
-    void load();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isAdmin, days]);
+    let cancelled = false;
+    setErr(null);
+    setPayload(null);
+    (async () => {
+      try {
+        const res = await fetchReports({ data: { days } });
+        if (!cancelled) setPayload(res);
+      } catch (e) {
+        if (!cancelled) setErr((e as Error).message ?? String(e));
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [isAdmin, days, fetchReports]);
 
-  async function load() {
-    const since = new Date(Date.now() - days * 86400000).toISOString();
-    const t24 = new Date(Date.now() - 86400000).toISOString();
-    const t7 = new Date(Date.now() - 7 * 86400000).toISOString();
-    const t30 = new Date(Date.now() - 30 * 86400000).toISOString();
+  const counts = payload?.counts ?? null;
+  const series = payload?.series ?? [];
+  const topPages = payload?.topPages ?? [];
+  const topTabs = payload?.topTabs ?? [];
+  const topQuestions = payload?.topQuestions ?? [];
 
-    const [usersR, act24R, act7R, act30R, chatsR, sessR, visitsR, tabsR, qR] = await Promise.all([
-      supabase.from("profiles").select("id", { count: "exact", head: true }),
-      supabase.from("login_sessions").select("user_id").gte("started_at", t24).limit(5000),
-      supabase.from("login_sessions").select("user_id").gte("started_at", t7).limit(5000),
-      supabase.from("login_sessions").select("user_id").gte("started_at", t30).limit(5000),
-      supabase.from("chatbot_messages").select("id", { count: "exact", head: true }).eq("role", "user"),
-      supabase.from("login_sessions").select("started_at, ended_at, duration_seconds").gte("started_at", since).limit(5000),
-      supabase.from("page_visits").select("path, visited_at").gte("visited_at", since).limit(5000),
-      supabase.from("tab_access").select("page, tab_id, opened_at").gte("opened_at", since).limit(5000),
-      supabase.from("chatbot_messages").select("content").eq("role", "user").gte("created_at", since).limit(2000),
-    ]);
-
-    const distinct = (rows: { user_id: string }[] | null) =>
-      rows ? new Set(rows.map((r) => r.user_id)).size : 0;
-
-    // Compute avg session: prefer duration_seconds; else ended_at - started_at; else now - started_at (still active, capped 1h)
-    const now = Date.now();
-    const durations = (sessR.data ?? []).map((r) => {
-      if (r.duration_seconds != null) return r.duration_seconds;
-      const start = new Date(r.started_at as string).getTime();
-      const end = r.ended_at ? new Date(r.ended_at as string).getTime() : now;
-      return Math.max(1, Math.min(3600, Math.round((end - start) / 1000)));
-    });
-    const avg = durations.length ? Math.round(durations.reduce((a, b) => a + b, 0) / durations.length) : 0;
-
-    setCounts({
-      totalUsers: usersR.count ?? 0,
-      active24: distinct(act24R.data as any),
-      active7d: distinct(act7R.data as any),
-      active30d: distinct(act30R.data as any),
-      totalChats: chatsR.count ?? 0,
-      avgSession: avg,
-    });
-
-    // Daily series
-    const buckets = new Map<string, number>();
-    for (let i = days - 1; i >= 0; i--) {
-      const d = new Date(Date.now() - i * 86400000).toISOString().slice(0, 10);
-      buckets.set(d, 0);
-    }
-    visitsR.data?.forEach((v) => {
-      const d = (v.visited_at as string).slice(0, 10);
-      buckets.set(d, (buckets.get(d) ?? 0) + 1);
-    });
-    setSeries(Array.from(buckets.entries()).map(([day, visits]) => ({ day: day.slice(5), visits })));
-
-    // Top pages
-    const pageMap = new Map<string, number>();
-    visitsR.data?.forEach((v) => pageMap.set(v.path as string, (pageMap.get(v.path as string) ?? 0) + 1));
-    setTopPages(
-      Array.from(pageMap.entries())
-        .sort((a, b) => b[1] - a[1])
-        .slice(0, 8)
-        .map(([path, count]) => ({ path, count })),
-    );
-
-    // Top tabs
-    const tabMap = new Map<string, number>();
-    tabsR.data?.forEach((t) => {
-      const k = `${t.page}#${t.tab_id}`;
-      tabMap.set(k, (tabMap.get(k) ?? 0) + 1);
-    });
-    setTopTabs(
-      Array.from(tabMap.entries())
-        .sort((a, b) => b[1] - a[1])
-        .slice(0, 8)
-        .map(([name, count]) => ({ name, count })),
-    );
-
-    // Top questions
-    const qMap = new Map<string, number>();
-    qR.data?.forEach((row) => {
-      const norm = (row.content as string).toLowerCase().trim().slice(0, 80);
-      if (norm.length < 4) return;
-      qMap.set(norm, (qMap.get(norm) ?? 0) + 1);
-    });
-    setTopQuestions(
-      Array.from(qMap.entries())
-        .sort((a, b) => b[1] - a[1])
-        .slice(0, 10)
-        .map(([q, count]) => ({ q, count })),
-    );
-  }
 
   const exportCsv = useMemo(
     () => () => {
