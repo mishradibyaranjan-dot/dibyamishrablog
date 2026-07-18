@@ -6,6 +6,7 @@ import {
   refreshBlockedDomains,
   BLOCKED_EMAIL_MESSAGE,
 } from "@/lib/blocked-domains";
+import { logBlockedLoginAttempt } from "@/lib/spam-audit.functions";
 
 /**
  * Site-wide guard: signs out any authenticated user whose email domain is on
@@ -26,6 +27,9 @@ export function SpamDomainGuard({ children }: { children: React.ReactNode }) {
       if (cancelled) return;
       if (isBlockedEmail(user.email!)) {
         setBlocked(true);
+        void logBlockedLoginAttempt({
+          data: { email: user.email!, reason: "active session sign-out: domain on blocklist" },
+        });
         try {
           await supabase.auth.signOut();
         } catch {
