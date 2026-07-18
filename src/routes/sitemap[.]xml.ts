@@ -24,6 +24,12 @@ const staticEntries: SitemapEntry[] = [
   { path: "/learn", changefreq: "weekly", priority: "0.8" },
   { path: "/repository", changefreq: "monthly", priority: "0.7" },
   { path: "/white-paper/agentic-ai-enterprise-automation", changefreq: "monthly", priority: "0.8" },
+  // Auth + utility routes (present in code; crawlers may still request them)
+  { path: "/auth", changefreq: "yearly", priority: "0.1" },
+  { path: "/forgot-password", changefreq: "yearly", priority: "0.1" },
+  { path: "/reset-password", changefreq: "yearly", priority: "0.1" },
+  { path: "/mcp", changefreq: "yearly", priority: "0.1" },
+  { path: "/.mcp/list-tools", changefreq: "yearly", priority: "0.1" },
 ];
 
 export const Route = createFileRoute("/sitemap.xml")({
