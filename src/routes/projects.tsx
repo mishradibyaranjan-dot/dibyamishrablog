@@ -49,7 +49,7 @@ export const Route = createFileRoute("/projects")({
             })),
           },
         }),
-      }],
+      }, breadcrumbScript([{ name: "Projects", path: "/projects" }])],
     };
   },
   component: Projects,
