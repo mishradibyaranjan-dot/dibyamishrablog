@@ -32,6 +32,7 @@ export const Route = createFileRoute("/case-studies")({
         { name: "twitter:image", content: pageOgImages.caseStudies },
       ],
       links: [{ rel: "canonical", href: url }],
+      scripts: [breadcrumbScript([{ name: "Case Studies", path: "/case-studies" }])],
     };
   },
   component: CaseStudies,
