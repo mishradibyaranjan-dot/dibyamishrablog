@@ -303,7 +303,7 @@ function About() {
                   </div>
                   <div className="flex flex-wrap gap-1.5">
                     {languages.map((l) => (
-                      <span key={l} className="rounded-full bg-accent px-2.5 py-1 text-xs font-medium">{l}</span>
+                      <span key={l.name} className="rounded-full bg-accent px-2.5 py-1 text-xs font-medium" title={l.level}>{l.name} · {l.level}</span>
                     ))}
                   </div>
                 </div>
