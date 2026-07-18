@@ -1,5 +1,5 @@
 import { Link, useNavigate } from "@tanstack/react-router";
-import { LogOut, LayoutDashboard, User as UserIcon, ShieldBan, ScrollText } from "lucide-react";
+import { LogOut, LayoutDashboard, User as UserIcon, ShieldBan, ScrollText, ShieldAlert } from "lucide-react";
 import { useAuth } from "@/lib/auth";
 import {
   DropdownMenu,
@@ -54,6 +54,11 @@ export function UserMenu() {
         {isAdmin && (
           <DropdownMenuItem asChild>
             <Link to="/admin/spam-audit"><ScrollText className="mr-2 h-4 w-4" /> Spam audit log</Link>
+          </DropdownMenuItem>
+        )}
+        {isAdmin && (
+          <DropdownMenuItem asChild>
+            <Link to="/admin/security-events"><ShieldAlert className="mr-2 h-4 w-4" /> Security events</Link>
           </DropdownMenuItem>
         )}
         <DropdownMenuSeparator />

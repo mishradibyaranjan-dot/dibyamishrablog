@@ -49,6 +49,16 @@ export const Route = createFileRoute("/api/public/contact")({
         if (isBlockedEmail(data.email)) {
           return Response.json({ error: BLOCKED_EMAIL_MESSAGE }, { status: 400, headers: cors });
         }
+        try {
+          const { supabaseAdmin: sbAdmin } = await import("@/integrations/supabase/client.server");
+          const { data: disposable } = await sbAdmin.rpc("is_disposable_email", { _email: data.email });
+          if (disposable) {
+            return Response.json(
+              { error: "Please use a permanent email address — disposable providers are not accepted." },
+              { status: 400, headers: cors },
+            );
+          }
+        } catch { /* fall open */ }
 
         try {
           const [React, { render }, { createClient }, { template }, { sendLovableEmail }] =

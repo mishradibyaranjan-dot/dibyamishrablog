@@ -68,6 +68,21 @@ export type Database = {
         }
         Relationships: []
       }
+      disposable_email_domains: {
+        Row: {
+          created_at: string
+          domain: string
+        }
+        Insert: {
+          created_at?: string
+          domain: string
+        }
+        Update: {
+          created_at?: string
+          domain?: string
+        }
+        Relationships: []
+      }
       email_send_log: {
         Row: {
           created_at: string
@@ -176,6 +191,36 @@ export type Database = {
           id?: string
           ip?: string | null
           reason?: string | null
+        }
+        Relationships: []
+      }
+      ip_blocks: {
+        Row: {
+          created_at: string
+          expires_at: string | null
+          id: string
+          ip_address: string
+          metadata: Json
+          reason: string
+          severity: Database["public"]["Enums"]["security_severity"]
+        }
+        Insert: {
+          created_at?: string
+          expires_at?: string | null
+          id?: string
+          ip_address: string
+          metadata?: Json
+          reason: string
+          severity?: Database["public"]["Enums"]["security_severity"]
+        }
+        Update: {
+          created_at?: string
+          expires_at?: string | null
+          id?: string
+          ip_address?: string
+          metadata?: Json
+          reason?: string
+          severity?: Database["public"]["Enums"]["security_severity"]
         }
         Relationships: []
       }
@@ -597,6 +642,48 @@ export type Database = {
         }
         Relationships: []
       }
+      security_events: {
+        Row: {
+          action_taken: string | null
+          created_at: string
+          event_type: string
+          id: string
+          ip_address: string | null
+          metadata: Json
+          severity: Database["public"]["Enums"]["security_severity"]
+          target_path: string | null
+          user_agent: string | null
+          user_email: string | null
+          user_id: string | null
+        }
+        Insert: {
+          action_taken?: string | null
+          created_at?: string
+          event_type: string
+          id?: string
+          ip_address?: string | null
+          metadata?: Json
+          severity?: Database["public"]["Enums"]["security_severity"]
+          target_path?: string | null
+          user_agent?: string | null
+          user_email?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          action_taken?: string | null
+          created_at?: string
+          event_type?: string
+          id?: string
+          ip_address?: string | null
+          metadata?: Json
+          severity?: Database["public"]["Enums"]["security_severity"]
+          target_path?: string | null
+          user_agent?: string | null
+          user_email?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       spam_audit_log: {
         Row: {
           action_type: string
@@ -887,6 +974,10 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      count_recent_failed_logins: {
+        Args: { _ip: string; _minutes?: number }
+        Returns: number
+      }
       delete_email: {
         Args: { message_id: number; queue_name: string }
         Returns: boolean
@@ -897,6 +988,8 @@ export type Database = {
         Returns: number
       }
       is_blocked_email: { Args: { _email: string }; Returns: boolean }
+      is_disposable_email: { Args: { _email: string }; Returns: boolean }
+      is_ip_blocked: { Args: { _ip: string }; Returns: boolean }
       move_to_dlq: {
         Args: {
           dlq_name: string
@@ -906,6 +999,7 @@ export type Database = {
         }
         Returns: number
       }
+      purge_expired_ip_blocks: { Args: never; Returns: number }
       read_email_batch: {
         Args: { batch_size: number; queue_name: string; vt: number }
         Returns: {
@@ -917,6 +1011,7 @@ export type Database = {
     }
     Enums: {
       app_role: "admin" | "user"
+      security_severity: "low" | "medium" | "critical"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -1045,6 +1140,7 @@ export const Constants = {
   public: {
     Enums: {
       app_role: ["admin", "user"],
+      security_severity: ["low", "medium", "critical"],
     },
   },
 } as const

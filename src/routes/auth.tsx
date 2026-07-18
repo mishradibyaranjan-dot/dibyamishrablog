@@ -11,6 +11,7 @@ import { lovable } from "@/integrations/lovable";
 import { useAuth } from "@/lib/auth";
 import { isBlockedEmail, BLOCKED_EMAIL_MESSAGE, refreshBlockedDomains } from "@/lib/blocked-domains";
 import { logBlockedLoginAttempt } from "@/lib/spam-audit.functions";
+import { recordClientFailedLogin, checkDisposableEmail } from "@/lib/security-events.functions";
 import { MathCaptcha, useCaptchaGate } from "@/components/security/CaptchaChallenge";
 
 const authSearchSchema = z.object({
@@ -121,6 +122,7 @@ function LoginForm() {
       setErr(error.message);
       captcha.recordFailure();
       supabase.from("failed_login_attempts").insert({ email: parsed.data.email, reason: error.message });
+      void recordClientFailedLogin({ data: { email: parsed.data.email, reason: error.message } });
     } else {
       captcha.reset();
     }
@@ -170,6 +172,13 @@ function RegisterForm() {
       void logBlockedLoginAttempt({ data: { email: parsed.data.email, reason: "sign-up blocked: domain on blocklist" } });
       return;
     }
+    try {
+      const { disposable } = await checkDisposableEmail({ data: { email: parsed.data.email } });
+      if (disposable) {
+        setErr("Please use a permanent email address — disposable / temporary email providers are not accepted.");
+        return;
+      }
+    } catch { /* fall open — don't block signup on infra error */ }
     if (!captcha.canSubmit) {
       setErr("Please complete the security check.");
       return;
