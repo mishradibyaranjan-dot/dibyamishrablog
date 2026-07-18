@@ -19,10 +19,12 @@ import { useActivityTracker } from "@/lib/tracking";
 import { useVisitorTracker } from "@/lib/visitor-tracking";
 
 import drmLogo from "@/assets/drm-logo.png.asset.json";
+import { MathCaptcha, useCaptchaGate } from "@/components/security/CaptchaChallenge";
 
 function NewsletterForm() {
   const [status, setStatus] = useState<"idle" | "sending" | "ok" | "error">("idle");
   const [error, setError] = useState<string | null>(null);
+  const captcha = useCaptchaGate("newsletter-form", 2);
   return (
     <form
       className="mt-3 flex gap-2"
