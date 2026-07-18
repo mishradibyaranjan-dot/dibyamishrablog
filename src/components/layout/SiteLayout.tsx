@@ -19,10 +19,12 @@ import { useActivityTracker } from "@/lib/tracking";
 import { useVisitorTracker } from "@/lib/visitor-tracking";
 
 import drmLogo from "@/assets/drm-logo.png.asset.json";
+import { MathCaptcha, useCaptchaGate } from "@/components/security/CaptchaChallenge";
 
 function NewsletterForm() {
   const [status, setStatus] = useState<"idle" | "sending" | "ok" | "error">("idle");
   const [error, setError] = useState<string | null>(null);
+  const captcha = useCaptchaGate("newsletter-form", 2);
   return (
     <form
       className="mt-3 flex gap-2"
@@ -31,6 +33,11 @@ function NewsletterForm() {
         const input = e.currentTarget.elements.namedItem("email") as HTMLInputElement;
         const email = input?.value?.trim();
         if (!email) return;
+        if (!captcha.canSubmit) {
+          setStatus("error");
+          setError("Please complete the security check.");
+          return;
+        }
         setStatus("sending");
         setError(null);
         try {
@@ -44,9 +51,11 @@ function NewsletterForm() {
             throw new Error(b?.error ?? `Failed (${res.status})`);
           }
           setStatus("ok");
+          captcha.reset();
           input.value = "";
         } catch (err) {
           setStatus("error");
+          captcha.recordFailure();
           setError(err instanceof Error ? err.message : "Subscription failed");
         }
       }}
@@ -66,12 +75,15 @@ function NewsletterForm() {
           <Button
             size="sm"
             type="submit"
-            disabled={status === "sending"}
+            disabled={status === "sending" || !captcha.canSubmit}
             className="bg-blue-600 text-white hover:bg-blue-700"
           >
             {status === "sending" ? "…" : "Join"}
           </Button>
         </div>
+        {captcha.required && (
+          <MathCaptcha verified={captcha.verified} onSolved={captcha.markVerified} />
+        )}
         {status === "ok" && (
           <p className="text-xs text-emerald-600">Thanks — you're subscribed!</p>
         )}

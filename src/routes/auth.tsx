@@ -10,6 +10,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { lovable } from "@/integrations/lovable";
 import { useAuth } from "@/lib/auth";
 import { isBlockedEmail, BLOCKED_EMAIL_MESSAGE, refreshBlockedDomains } from "@/lib/blocked-domains";
+import { MathCaptcha, useCaptchaGate } from "@/components/security/CaptchaChallenge";
 
 const authSearchSchema = z.object({
   mode: z.enum(["login", "register"]).optional(),
@@ -93,6 +94,7 @@ function LoginForm() {
   const [password, setPassword] = useState("");
   const [busy, setBusy] = useState(false);
   const [err, setErr] = useState<string | null>(null);
+  const captcha = useCaptchaGate("auth-login", 3);
 
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -106,12 +108,19 @@ function LoginForm() {
       setErr(BLOCKED_EMAIL_MESSAGE);
       return;
     }
+    if (!captcha.canSubmit) {
+      setErr("Please complete the security check.");
+      return;
+    }
     setBusy(true);
     const { error } = await supabase.auth.signInWithPassword({ email: parsed.data.email, password: parsed.data.password });
     setBusy(false);
     if (error) {
       setErr(error.message);
+      captcha.recordFailure();
       supabase.from("failed_login_attempts").insert({ email: parsed.data.email, reason: error.message });
+    } else {
+      captcha.reset();
     }
   };
 
@@ -119,8 +128,11 @@ function LoginForm() {
     <form onSubmit={onSubmit} className="space-y-3">
       <Field icon={<Mail className="h-4 w-4" />} value={email} onChange={setEmail} type="email" placeholder="you@example.com" autoComplete="email" />
       <Field icon={<Lock className="h-4 w-4" />} value={password} onChange={setPassword} type="password" placeholder="Password" autoComplete="current-password" />
+      {captcha.required && (
+        <MathCaptcha verified={captcha.verified} onSolved={captcha.markVerified} />
+      )}
       {err && <p className="text-xs text-red-400">{err}</p>}
-      <Button type="submit" disabled={busy} className="w-full bg-brand-gradient text-white shadow-neon">
+      <Button type="submit" disabled={busy || !captcha.canSubmit} className="w-full bg-brand-gradient text-white shadow-neon">
         {busy ? <Loader2 className="h-4 w-4 animate-spin" /> : "Sign in"}
       </Button>
     </form>
@@ -134,6 +146,7 @@ function RegisterForm() {
   const [busy, setBusy] = useState(false);
   const [err, setErr] = useState<string | null>(null);
   const [info, setInfo] = useState<string | null>(null);
+  const captcha = useCaptchaGate("auth-register", 2);
 
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -154,6 +167,10 @@ function RegisterForm() {
       setErr(BLOCKED_EMAIL_MESSAGE);
       return;
     }
+    if (!captcha.canSubmit) {
+      setErr("Please complete the security check.");
+      return;
+    }
     setBusy(true);
     const { error } = await supabase.auth.signUp({
       email: parsed.data.email,
@@ -164,8 +181,13 @@ function RegisterForm() {
       },
     });
     setBusy(false);
-    if (error) setErr(error.message);
-    else setInfo("Account created. If email confirmation is enabled, check your inbox.");
+    if (error) {
+      setErr(error.message);
+      captcha.recordFailure();
+    } else {
+      captcha.reset();
+      setInfo("Account created. If email confirmation is enabled, check your inbox.");
+    }
   };
 
   return (
@@ -173,9 +195,12 @@ function RegisterForm() {
       <Field icon={<UserIcon className="h-4 w-4" />} value={name} onChange={setName} placeholder="Full name" autoComplete="name" />
       <Field icon={<Mail className="h-4 w-4" />} value={email} onChange={setEmail} type="email" placeholder="you@example.com" autoComplete="email" />
       <Field icon={<Lock className="h-4 w-4" />} value={password} onChange={setPassword} type="password" placeholder="Password (min 8 chars)" autoComplete="new-password" />
+      {captcha.required && (
+        <MathCaptcha verified={captcha.verified} onSolved={captcha.markVerified} />
+      )}
       {err && <p className="text-xs text-red-400">{err}</p>}
       {info && <p className="text-xs text-emerald-400">{info}</p>}
-      <Button type="submit" disabled={busy} className="w-full bg-brand-gradient text-white shadow-neon">
+      <Button type="submit" disabled={busy || !captcha.canSubmit} className="w-full bg-brand-gradient text-white shadow-neon">
         {busy ? <Loader2 className="h-4 w-4 animate-spin" /> : "Create account"}
       </Button>
     </form>

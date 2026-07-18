@@ -5,6 +5,7 @@ import { Section, SectionHeader } from "@/components/layout/Section";
 import { Button } from "@/components/ui/button";
 import heroContact from "@/assets/hero-contact.jpg";
 import { breadcrumbScript } from "@/lib/breadcrumbs";
+import { MathCaptcha, useCaptchaGate } from "@/components/security/CaptchaChallenge";
 
 
 export const Route = createFileRoute("/contact")({
@@ -26,6 +27,7 @@ function Contact() {
   const [sent, setSent] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const captcha = useCaptchaGate("contact-form", 2);
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -37,6 +39,10 @@ function Contact() {
       subject: String(fd.get("subject") ?? ""),
       message: String(fd.get("message") ?? ""),
     };
+    if (!captcha.canSubmit) {
+      setError("Please complete the security check.");
+      return;
+    }
     setSubmitting(true);
     setError(null);
     try {
@@ -50,9 +56,11 @@ function Contact() {
         throw new Error(body?.error ?? `Request failed (${res.status})`);
       }
       setSent(true);
+      captcha.reset();
       form.reset();
     } catch (err) {
       console.error(err);
+      captcha.recordFailure();
       setError("Sorry — something went wrong sending your message. Please try again or email directly.");
     } finally {
       setSubmitting(false);
@@ -111,11 +119,14 @@ function Contact() {
                     className="mt-1.5 w-full rounded-md border border-input bg-background px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-ring"
                   />
                 </div>
+                {captcha.required && (
+                  <MathCaptcha verified={captcha.verified} onSolved={captcha.markVerified} />
+                )}
                 {error && (
                   <p className="text-sm text-destructive" role="alert">{error}</p>
                 )}
                 <div className="flex flex-wrap items-center justify-end gap-3 border-t border-border pt-4">
-                  <Button type="submit" disabled={submitting} className="bg-brand-gradient text-white">
+                  <Button type="submit" disabled={submitting || !captcha.canSubmit} className="bg-brand-gradient text-white">
                     {submitting ? (
                       <><Loader2 className="mr-1 h-4 w-4 animate-spin" /> Sending…</>
                     ) : (
