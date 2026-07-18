@@ -59,10 +59,25 @@ export const Route = createFileRoute("/api/public/track-visit")({
 
           const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
 
+          // SECURITY: Never trust client-supplied userId. Only accept a user
+          // identity when the caller presents a valid Supabase JWT that we can
+          // verify server-side. Anonymous visitors are stored without a user_id.
+          let verifiedUserId: string | null = null;
+          const authHeader = h.get("authorization") || h.get("Authorization");
+          const bearer = authHeader?.toLowerCase().startsWith("bearer ")
+            ? authHeader.slice(7).trim()
+            : null;
+          if (bearer) {
+            const { data: userData, error: userErr } = await supabaseAdmin.auth.getUser(bearer);
+            if (!userErr && userData?.user?.id) {
+              verifiedUserId = userData.user.id;
+            }
+          }
+
           const row = {
             visitor_id: visitorId,
             session_id: (body.sessionId as string) ?? null,
-            user_id: (body.userId as string) ?? null,
+            user_id: verifiedUserId,
             ip,
             ip_hash: ipHash,
             user_agent: ua,

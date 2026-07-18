@@ -1,6 +1,7 @@
 import { useEffect, useRef } from "react";
 import { useRouterState } from "@tanstack/react-router";
 import { useAuth } from "@/lib/auth";
+import { supabase } from "@/integrations/supabase/client";
 
 const VISITOR_KEY = "drm_visitor_id";
 const SESSION_KEY = "drm_session_id";
@@ -70,7 +71,7 @@ export function useVisitorTracker() {
       visitorId,
       sessionId,
       isNewSession: isNew,
-      userId: user?.id ?? null,
+      // Note: server ignores this and derives userId only from a verified JWT.
       path: pathname,
       referrer: document.referrer || null,
       userAgent: navigator.userAgent,
@@ -80,21 +81,45 @@ export function useVisitorTracker() {
       ...utm,
     };
 
-    try {
-      const body = JSON.stringify(payload);
-      if (navigator.sendBeacon) {
-        const blob = new Blob([body], { type: "application/json" });
-        navigator.sendBeacon("/api/public/track-visit", blob);
-      } else {
-        void fetch("/api/public/track-visit", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body,
-          keepalive: true,
-        });
+    (async () => {
+      try {
+        const body = JSON.stringify(payload);
+        let accessToken: string | null = null;
+        if (user?.id) {
+          try {
+            const { data } = await supabase.auth.getSession();
+            accessToken = data.session?.access_token ?? null;
+          } catch {
+            accessToken = null;
+          }
+        }
+
+        // If we have a token, we must use fetch (sendBeacon can't set headers)
+        // so the server can verify the caller's identity.
+        if (accessToken) {
+          void fetch("/api/public/track-visit", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${accessToken}`,
+            },
+            body,
+            keepalive: true,
+          });
+        } else if (navigator.sendBeacon) {
+          const blob = new Blob([body], { type: "application/json" });
+          navigator.sendBeacon("/api/public/track-visit", blob);
+        } else {
+          void fetch("/api/public/track-visit", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body,
+            keepalive: true,
+          });
+        }
+      } catch {
+        // ignore
       }
-    } catch {
-      // ignore
-    }
+    })();
   }, [pathname, user?.id]);
 }
