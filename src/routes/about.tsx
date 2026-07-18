@@ -86,7 +86,8 @@ const skillGroups = [
   { title: "Cloud & Infrastructure", items: ["AWS", "Azure", "GCP", "Cloud-Native Architecture", "DevSecOps & MLOps Pipelines", "CI/CD & Release Engineering", "Microservices & API Design", "Infrastructure as Code (IaC)", "Docker", "Kubernetes", "GitHub"] },
   { title: "Retail & Supply Chain", items: ["GCC Setup & Scaling", "Supply Chain Visibility & Automation", "Vessel / Fleet & Logistics Platforms", "Retail AI & Inventory Intelligence", "FinTech & BFSI Platforms", "Cross-Border Operations"] },
   { title: "Technology Stack", items: [".NET Core / C#", "React", "Angular", "TypeScript", "Node.js", "Python", "SQL / NoSQL / Data Platforms", "REST APIs", "BI & Analytics", "Mobile App Development"] },
-  { title: "Leadership & Delivery", items: ["P&L & Budget ($28M+)", "OKR Cascading", "Talent & Succession Planning", "C-Suite Engagement", "Vendor & Contract Mgmt", "Product Roadmap Ownership", "SAFe 6.0", "Scrum", "ITIL Service Mgmt", "Enterprise Architecture", "Lean Six Sigma", "Presales & Bid Mgmt"] },
+  { title: "Product Management", items: ["Product Roadmap Ownership", "Greenfield SaaS Product Builds", "Backlog Prioritisation & Grooming", "PI Planning & SAFe 6.0 Execution", "Presales, POC & Bid Management", "UX-Driven Feature Definition"] },
+  { title: "Leadership & Delivery", items: ["P&L & Budget ($28M+)", "OKR Cascading", "Talent & Succession Planning", "C-Suite Engagement", "Vendor & Contract Mgmt", "SAFe 6.0", "Scrum", "ITIL Service Mgmt", "Enterprise Architecture", "Lean Six Sigma", "Risk & Issue Management", "SLA / KPI Governance"] },
 ];
 
 const education = [
@@ -244,6 +245,24 @@ function About() {
 
 
       <Section className="border-t border-border">
+        <SectionHeader eyebrow="Domain Snapshot" title="Retail & supply chain" description="Focused delivery across GCC setup, logistics platforms, and retail AI." />
+        <div className="grid gap-4 sm:grid-cols-2">
+          {[
+            { k: "GCC Setup & Operations", v: "Leading ground-up establishment of a Global Capability Centre in India for an international retail & supply chain client — org design, hiring, governance, and delivery frameworks." },
+            { k: "Supply Chain & Logistics Platforms", v: "Delivered a cloud-native vessel management platform spanning onboarding, customs, prefunding, and agent payments across global ports (Inchcape Shipping Services)." },
+            { k: "Retail AI Solutions", v: "Shipped human-action detection and monitoring systems for 3 supply chain & retail clients, cutting manual monitoring hours by 40% per deployment." },
+            { k: "Cross-Border Delivery", v: "Directed engineering and delivery across India, Europe, and the Americas — aligning retail/supply-chain tech with regional compliance and business priorities." },
+          ].map((c) => (
+            <div key={c.k} className="card-flashy rounded-2xl glass-strong p-5">
+              <div className="text-xs font-semibold uppercase tracking-wider text-gradient">{c.k}</div>
+              <div className="mt-1 text-sm">{c.v}</div>
+            </div>
+          ))}
+        </div>
+      </Section>
+
+      <Section className="border-t border-border">
+
         <SectionHeader eyebrow="Capabilities" title="Skills & technology stack" />
         <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
           {skillGroups.map((g) => (
