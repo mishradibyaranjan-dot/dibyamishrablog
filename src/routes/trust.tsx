@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { motion } from "framer-motion";
 import { Shield, Lock, Database, Mail, Cookie, Users, AlertCircle, FileText } from "lucide-react";
+import { breadcrumbScript } from "@/lib/breadcrumbs";
 
 export const Route = createFileRoute("/trust")({
   component: TrustPage,
