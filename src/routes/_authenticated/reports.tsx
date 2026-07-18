@@ -244,12 +244,13 @@ function Reports() {
       </div>
 
       <div className="mt-8">
-        <TrafficAnalyticsPanel days={days} />
+        <TrafficAnalyticsPanel days={days} traffic={payload?.traffic ?? null} />
       </div>
 
       <div className="mt-8">
-        <IdentifiedVisitorsPanel days={days} />
+        <IdentifiedVisitorsPanel days={days} rowsData={payload?.visitors ?? null} />
       </div>
+
 
       <div className="mt-6">
         <NewsletterAdminPanel />
