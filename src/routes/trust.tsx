@@ -20,6 +20,7 @@ export const Route = createFileRoute("/trust")({
           "Plain-language overview of security, privacy, and data handling practices for dibyamishra.lovable.app.",
       },
     ],
+    scripts: [breadcrumbScript([{ name: "Trust & Privacy", path: "/trust" }])],
   }),
 });
 
