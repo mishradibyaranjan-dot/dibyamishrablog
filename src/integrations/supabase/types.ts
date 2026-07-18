@@ -669,6 +669,162 @@ export type Database = {
         }
         Relationships: []
       }
+      visitor_logs: {
+        Row: {
+          browser: string | null
+          city: string | null
+          country: string | null
+          created_at: string
+          device: string | null
+          id: string
+          ip: string | null
+          ip_hash: string | null
+          language: string | null
+          os: string | null
+          path: string | null
+          referrer: string | null
+          region: string | null
+          screen: string | null
+          session_id: string | null
+          timezone: string | null
+          user_agent: string | null
+          user_id: string | null
+          utm_campaign: string | null
+          utm_content: string | null
+          utm_medium: string | null
+          utm_source: string | null
+          utm_term: string | null
+          visitor_id: string
+        }
+        Insert: {
+          browser?: string | null
+          city?: string | null
+          country?: string | null
+          created_at?: string
+          device?: string | null
+          id?: string
+          ip?: string | null
+          ip_hash?: string | null
+          language?: string | null
+          os?: string | null
+          path?: string | null
+          referrer?: string | null
+          region?: string | null
+          screen?: string | null
+          session_id?: string | null
+          timezone?: string | null
+          user_agent?: string | null
+          user_id?: string | null
+          utm_campaign?: string | null
+          utm_content?: string | null
+          utm_medium?: string | null
+          utm_source?: string | null
+          utm_term?: string | null
+          visitor_id: string
+        }
+        Update: {
+          browser?: string | null
+          city?: string | null
+          country?: string | null
+          created_at?: string
+          device?: string | null
+          id?: string
+          ip?: string | null
+          ip_hash?: string | null
+          language?: string | null
+          os?: string | null
+          path?: string | null
+          referrer?: string | null
+          region?: string | null
+          screen?: string | null
+          session_id?: string | null
+          timezone?: string | null
+          user_agent?: string | null
+          user_id?: string | null
+          utm_campaign?: string | null
+          utm_content?: string | null
+          utm_medium?: string | null
+          utm_source?: string | null
+          utm_term?: string | null
+          visitor_id?: string
+        }
+        Relationships: []
+      }
+      visitors: {
+        Row: {
+          browser: string | null
+          device: string | null
+          display_name: string | null
+          email: string | null
+          first_country: string | null
+          first_ip: string | null
+          first_referrer: string | null
+          first_seen_at: string
+          first_utm_campaign: string | null
+          first_utm_medium: string | null
+          first_utm_source: string | null
+          identified_at: string | null
+          last_city: string | null
+          last_country: string | null
+          last_ip: string | null
+          last_seen_at: string
+          os: string | null
+          total_pageviews: number
+          total_visits: number
+          user_agent: string | null
+          user_id: string | null
+          visitor_id: string
+        }
+        Insert: {
+          browser?: string | null
+          device?: string | null
+          display_name?: string | null
+          email?: string | null
+          first_country?: string | null
+          first_ip?: string | null
+          first_referrer?: string | null
+          first_seen_at?: string
+          first_utm_campaign?: string | null
+          first_utm_medium?: string | null
+          first_utm_source?: string | null
+          identified_at?: string | null
+          last_city?: string | null
+          last_country?: string | null
+          last_ip?: string | null
+          last_seen_at?: string
+          os?: string | null
+          total_pageviews?: number
+          total_visits?: number
+          user_agent?: string | null
+          user_id?: string | null
+          visitor_id: string
+        }
+        Update: {
+          browser?: string | null
+          device?: string | null
+          display_name?: string | null
+          email?: string | null
+          first_country?: string | null
+          first_ip?: string | null
+          first_referrer?: string | null
+          first_seen_at?: string
+          first_utm_campaign?: string | null
+          first_utm_medium?: string | null
+          first_utm_source?: string | null
+          identified_at?: string | null
+          last_city?: string | null
+          last_country?: string | null
+          last_ip?: string | null
+          last_seen_at?: string
+          os?: string | null
+          total_pageviews?: number
+          total_visits?: number
+          user_agent?: string | null
+          user_id?: string | null
+          visitor_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never

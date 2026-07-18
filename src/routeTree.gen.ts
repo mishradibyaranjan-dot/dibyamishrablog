@@ -37,6 +37,7 @@ import { Route as Char91DotwellKnownChar93OauthProtectedResourceRouteImport } fr
 import { Route as Char91DotmcpChar93ListToolsRouteImport } from './routes/[.mcp]/list-tools'
 import { Route as LovableEmailSuppressionRouteImport } from './routes/lovable/email/suppression'
 import { Route as ApiPublicTtsRouteImport } from './routes/api/public/tts'
+import { Route as ApiPublicTrackVisitRouteImport } from './routes/api/public/track-visit'
 import { Route as ApiPublicNewsletterRouteImport } from './routes/api/public/newsletter'
 import { Route as ApiPublicContactRouteImport } from './routes/api/public/contact'
 import { Route as ApiPublicChatRouteImport } from './routes/api/public/chat'
@@ -193,6 +194,11 @@ const ApiPublicTtsRoute = ApiPublicTtsRouteImport.update({
   path: '/api/public/tts',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiPublicTrackVisitRoute = ApiPublicTrackVisitRouteImport.update({
+  id: '/api/public/track-visit',
+  path: '/api/public/track-visit',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiPublicNewsletterRoute = ApiPublicNewsletterRouteImport.update({
   id: '/api/public/newsletter',
   path: '/api/public/newsletter',
@@ -297,6 +303,7 @@ export interface FileRoutesByFullPath {
   '/api/public/chat': typeof ApiPublicChatRoute
   '/api/public/contact': typeof ApiPublicContactRoute
   '/api/public/newsletter': typeof ApiPublicNewsletterRoute
+  '/api/public/track-visit': typeof ApiPublicTrackVisitRoute
   '/api/public/tts': typeof ApiPublicTtsRoute
   '/lovable/email/suppression': typeof LovableEmailSuppressionRoute
   '/api/public/cron/monthly-newsletter': typeof ApiPublicCronMonthlyNewsletterRoute
@@ -339,6 +346,7 @@ export interface FileRoutesByTo {
   '/api/public/chat': typeof ApiPublicChatRoute
   '/api/public/contact': typeof ApiPublicContactRoute
   '/api/public/newsletter': typeof ApiPublicNewsletterRoute
+  '/api/public/track-visit': typeof ApiPublicTrackVisitRoute
   '/api/public/tts': typeof ApiPublicTtsRoute
   '/lovable/email/suppression': typeof LovableEmailSuppressionRoute
   '/api/public/cron/monthly-newsletter': typeof ApiPublicCronMonthlyNewsletterRoute
@@ -383,6 +391,7 @@ export interface FileRoutesById {
   '/api/public/chat': typeof ApiPublicChatRoute
   '/api/public/contact': typeof ApiPublicContactRoute
   '/api/public/newsletter': typeof ApiPublicNewsletterRoute
+  '/api/public/track-visit': typeof ApiPublicTrackVisitRoute
   '/api/public/tts': typeof ApiPublicTtsRoute
   '/lovable/email/suppression': typeof LovableEmailSuppressionRoute
   '/api/public/cron/monthly-newsletter': typeof ApiPublicCronMonthlyNewsletterRoute
@@ -427,6 +436,7 @@ export interface FileRouteTypes {
     | '/api/public/chat'
     | '/api/public/contact'
     | '/api/public/newsletter'
+    | '/api/public/track-visit'
     | '/api/public/tts'
     | '/lovable/email/suppression'
     | '/api/public/cron/monthly-newsletter'
@@ -469,6 +479,7 @@ export interface FileRouteTypes {
     | '/api/public/chat'
     | '/api/public/contact'
     | '/api/public/newsletter'
+    | '/api/public/track-visit'
     | '/api/public/tts'
     | '/lovable/email/suppression'
     | '/api/public/cron/monthly-newsletter'
@@ -512,6 +523,7 @@ export interface FileRouteTypes {
     | '/api/public/chat'
     | '/api/public/contact'
     | '/api/public/newsletter'
+    | '/api/public/track-visit'
     | '/api/public/tts'
     | '/lovable/email/suppression'
     | '/api/public/cron/monthly-newsletter'
@@ -553,6 +565,7 @@ export interface RootRouteChildren {
   ApiPublicChatRoute: typeof ApiPublicChatRoute
   ApiPublicContactRoute: typeof ApiPublicContactRoute
   ApiPublicNewsletterRoute: typeof ApiPublicNewsletterRoute
+  ApiPublicTrackVisitRoute: typeof ApiPublicTrackVisitRoute
   ApiPublicTtsRoute: typeof ApiPublicTtsRoute
   LovableEmailSuppressionRoute: typeof LovableEmailSuppressionRoute
   ApiPublicCronMonthlyNewsletterRoute: typeof ApiPublicCronMonthlyNewsletterRoute
@@ -762,6 +775,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPublicTtsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/track-visit': {
+      id: '/api/public/track-visit'
+      path: '/api/public/track-visit'
+      fullPath: '/api/public/track-visit'
+      preLoaderRoute: typeof ApiPublicTrackVisitRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/public/newsletter': {
       id: '/api/public/newsletter'
       path: '/api/public/newsletter'
@@ -911,6 +931,7 @@ const rootRouteChildren: RootRouteChildren = {
   ApiPublicChatRoute: ApiPublicChatRoute,
   ApiPublicContactRoute: ApiPublicContactRoute,
   ApiPublicNewsletterRoute: ApiPublicNewsletterRoute,
+  ApiPublicTrackVisitRoute: ApiPublicTrackVisitRoute,
   ApiPublicTtsRoute: ApiPublicTtsRoute,
   LovableEmailSuppressionRoute: LovableEmailSuppressionRoute,
   ApiPublicCronMonthlyNewsletterRoute: ApiPublicCronMonthlyNewsletterRoute,
