@@ -200,7 +200,7 @@ export const Route = createFileRoute("/about")({
           { "@type": "EducationalOrganization", name: "Utkal University, Odisha", sameAs: "https://utkaluniversity.ac.in" },
         ],
       }),
-    }],
+    }, breadcrumbScript([{ name: "About", path: "/about" }])],
   }),
   component: About,
 });
