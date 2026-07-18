@@ -77,7 +77,7 @@ export const Route = createFileRoute("/api/public/track-visit")({
           const row = {
             visitor_id: visitorId,
             session_id: (body.sessionId as string) ?? null,
-            user_id: (body.userId as string) ?? null,
+            user_id: verifiedUserId,
             ip,
             ip_hash: ipHash,
             user_agent: ua,
