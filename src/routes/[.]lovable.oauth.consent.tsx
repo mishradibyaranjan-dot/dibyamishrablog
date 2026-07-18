@@ -2,24 +2,19 @@ import { createFileRoute, redirect } from "@tanstack/react-router";
 import { useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 
-// Beta namespace wrapper — types may be missing on @supabase/supabase-js.
-type OAuthAuthorization = {
-  redirect_url?: string;
-  redirect_to?: string;
-  client?: { name?: string; redirect_uri?: string; scope?: string } | null;
-  scope?: string;
-};
-type OAuthResult<T> = { data: T | null; error: { message: string } | null };
-type SupabaseWithOAuth = typeof supabase & {
-  auth: {
-    oauth: {
-      getAuthorizationDetails(id: string): Promise<OAuthResult<OAuthAuthorization>>;
-      approveAuthorization(id: string): Promise<OAuthResult<OAuthAuthorization>>;
-      denyAuthorization(id: string): Promise<OAuthResult<OAuthAuthorization>>;
-    };
-  };
-};
-const sb = supabase as SupabaseWithOAuth;
+const sb = supabase;
+
+function pickRedirect(data: unknown): string | undefined {
+  if (!data || typeof data !== "object") return undefined;
+  const d = data as Record<string, unknown>;
+  const url = d.redirect_url ?? d.redirect_to;
+  return typeof url === "string" ? url : undefined;
+}
+function pickClient(data: unknown): { name?: string; redirect_uri?: string } | null {
+  if (!data || typeof data !== "object") return null;
+  const c = (data as Record<string, unknown>).client;
+  return c && typeof c === "object" ? (c as { name?: string; redirect_uri?: string }) : null;
+}
 
 export const Route = createFileRoute("/.lovable/oauth/consent")({
   ssr: false,
