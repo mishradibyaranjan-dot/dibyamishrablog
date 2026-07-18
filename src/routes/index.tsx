@@ -136,6 +136,12 @@ function Hero() {
   return (
     <section className="flex max-w-5xl flex-col gap-6 animate-fade-in">
       <div
+        className="text-sm font-semibold uppercase tracking-[0.2em]"
+        style={{ ...MONO, color: MUTED }}
+      >
+        Dibya Ranjan Mishra
+      </div>
+      <div
         className="inline-flex w-fit items-center gap-3 rounded-full border px-3 py-1"
         style={{
           backgroundColor: "rgba(59,130,246,0.06)",
