@@ -7,6 +7,8 @@ import { caseStudies, categories } from "@/lib/content";
 import { cn } from "@/lib/utils";
 import { CheckCircle2 } from "lucide-react";
 import { pageOgImages, SITE_ORIGIN } from "@/lib/og-images";
+import { breadcrumbScript } from "@/lib/breadcrumbs";
+import { caseStudies as caseStudyList } from "@/lib/content";
 import heroCaseStudies from "@/assets/hero-casestudies.jpg";
 import collabCaseStudies from "@/assets/collab-casestudies.jpg";
 
