@@ -71,7 +71,7 @@ function Consent() {
       setError(error.message);
       return;
     }
-    const target = data?.redirect_url ?? data?.redirect_to;
+    const target = pickRedirect(data);
     if (!target) {
       setBusy(null);
       setError("No redirect returned by the authorization server.");
