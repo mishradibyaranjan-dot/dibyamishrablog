@@ -102,8 +102,14 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       {
         rel: "alternate",
         type: "application/rss+xml",
-        title: "Dibya Ranjan Mishra — Blog & Research",
+        title: "Dibya Ranjan Mishra — Blog & Research (RSS)",
         href: "https://www.dibyamishra.co.in/rss.xml",
+      },
+      {
+        rel: "alternate",
+        type: "application/atom+xml",
+        title: "Dibya Ranjan Mishra — Blog & Research (Atom)",
+        href: "https://www.dibyamishra.co.in/atom.xml",
       },
     ],
   }),
