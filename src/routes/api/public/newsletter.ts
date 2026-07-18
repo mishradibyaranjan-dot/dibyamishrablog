@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { z } from "zod";
 import { corsHeadersFor, isAllowedOrigin } from "@/lib/origin.server";
+import { isBlockedEmail, BLOCKED_EMAIL_MESSAGE } from "@/lib/blocked-domains";
 
 const NewsletterSchema = z.object({
   email: z.string().trim().email().max(255).regex(/^[^\r\n]*$/),
