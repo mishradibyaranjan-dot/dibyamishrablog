@@ -51,6 +51,11 @@ export function UserMenu() {
             <Link to="/admin/blocked-domains"><ShieldBan className="mr-2 h-4 w-4" /> Blocked domains</Link>
           </DropdownMenuItem>
         )}
+        {isAdmin && (
+          <DropdownMenuItem asChild>
+            <Link to="/admin/spam-audit"><ScrollText className="mr-2 h-4 w-4" /> Spam audit log</Link>
+          </DropdownMenuItem>
+        )}
         <DropdownMenuSeparator />
         <DropdownMenuItem
           onClick={async () => {
