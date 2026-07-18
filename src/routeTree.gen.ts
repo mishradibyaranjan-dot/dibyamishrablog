@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as TrustRouteImport } from './routes/trust'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
+import { Route as RssDotxmlRouteImport } from './routes/rss[.]xml'
 import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as ResearchRouteImport } from './routes/research'
 import { Route as ProjectsRouteImport } from './routes/projects'
@@ -57,6 +58,11 @@ const TrustRoute = TrustRouteImport.update({
 const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
   id: '/sitemap.xml',
   path: '/sitemap.xml',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RssDotxmlRoute = RssDotxmlRouteImport.update({
+  id: '/rss.xml',
+  path: '/rss.xml',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ResetPasswordRoute = ResetPasswordRouteImport.update({
@@ -266,6 +272,7 @@ export interface FileRoutesByFullPath {
   '/projects': typeof ProjectsRoute
   '/research': typeof ResearchRoute
   '/reset-password': typeof ResetPasswordRoute
+  '/rss.xml': typeof RssDotxmlRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/trust': typeof TrustRoute
   '/.mcp/list-tools': typeof Char91DotmcpChar93ListToolsRoute
@@ -306,6 +313,7 @@ export interface FileRoutesByTo {
   '/projects': typeof ProjectsRoute
   '/research': typeof ResearchRoute
   '/reset-password': typeof ResetPasswordRoute
+  '/rss.xml': typeof RssDotxmlRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/trust': typeof TrustRoute
   '/.mcp/list-tools': typeof Char91DotmcpChar93ListToolsRoute
@@ -348,6 +356,7 @@ export interface FileRoutesById {
   '/projects': typeof ProjectsRoute
   '/research': typeof ResearchRoute
   '/reset-password': typeof ResetPasswordRoute
+  '/rss.xml': typeof RssDotxmlRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/trust': typeof TrustRoute
   '/.mcp/list-tools': typeof Char91DotmcpChar93ListToolsRoute
@@ -390,6 +399,7 @@ export interface FileRouteTypes {
     | '/projects'
     | '/research'
     | '/reset-password'
+    | '/rss.xml'
     | '/sitemap.xml'
     | '/trust'
     | '/.mcp/list-tools'
@@ -430,6 +440,7 @@ export interface FileRouteTypes {
     | '/projects'
     | '/research'
     | '/reset-password'
+    | '/rss.xml'
     | '/sitemap.xml'
     | '/trust'
     | '/.mcp/list-tools'
@@ -471,6 +482,7 @@ export interface FileRouteTypes {
     | '/projects'
     | '/research'
     | '/reset-password'
+    | '/rss.xml'
     | '/sitemap.xml'
     | '/trust'
     | '/.mcp/list-tools'
@@ -513,6 +525,7 @@ export interface RootRouteChildren {
   ProjectsRoute: typeof ProjectsRoute
   ResearchRoute: typeof ResearchRoute
   ResetPasswordRoute: typeof ResetPasswordRoute
+  RssDotxmlRoute: typeof RssDotxmlRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   TrustRoute: typeof TrustRoute
   Char91DotmcpChar93ListToolsRoute: typeof Char91DotmcpChar93ListToolsRoute
@@ -552,6 +565,13 @@ declare module '@tanstack/react-router' {
       path: '/sitemap.xml'
       fullPath: '/sitemap.xml'
       preLoaderRoute: typeof SitemapDotxmlRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/rss.xml': {
+      id: '/rss.xml'
+      path: '/rss.xml'
+      fullPath: '/rss.xml'
+      preLoaderRoute: typeof RssDotxmlRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/reset-password': {
@@ -853,6 +873,7 @@ const rootRouteChildren: RootRouteChildren = {
   ProjectsRoute: ProjectsRoute,
   ResearchRoute: ResearchRoute,
   ResetPasswordRoute: ResetPasswordRoute,
+  RssDotxmlRoute: RssDotxmlRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   TrustRoute: TrustRoute,
   Char91DotmcpChar93ListToolsRoute: Char91DotmcpChar93ListToolsRoute,
