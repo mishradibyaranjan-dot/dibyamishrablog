@@ -22,6 +22,7 @@ import { Route as ContactRouteImport } from './routes/contact'
 import { Route as CaseStudiesRouteImport } from './routes/case-studies'
 import { Route as BlogRouteImport } from './routes/blog'
 import { Route as AuthRouteImport } from './routes/auth'
+import { Route as AtomDotxmlRouteImport } from './routes/atom[.]xml'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as IndexRouteImport } from './routes/index'
@@ -113,6 +114,11 @@ const BlogRoute = BlogRouteImport.update({
 const AuthRoute = AuthRouteImport.update({
   id: '/auth',
   path: '/auth',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AtomDotxmlRoute = AtomDotxmlRouteImport.update({
+  id: '/atom.xml',
+  path: '/atom.xml',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AboutRoute = AboutRouteImport.update({
@@ -262,6 +268,7 @@ const ApiPublicCronMonthlyNewsletterRoute =
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/atom.xml': typeof AtomDotxmlRoute
   '/auth': typeof AuthRoute
   '/blog': typeof BlogRouteWithChildren
   '/case-studies': typeof CaseStudiesRoute
@@ -303,6 +310,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/atom.xml': typeof AtomDotxmlRoute
   '/auth': typeof AuthRoute
   '/blog': typeof BlogRouteWithChildren
   '/case-studies': typeof CaseStudiesRoute
@@ -346,6 +354,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/about': typeof AboutRoute
+  '/atom.xml': typeof AtomDotxmlRoute
   '/auth': typeof AuthRoute
   '/blog': typeof BlogRouteWithChildren
   '/case-studies': typeof CaseStudiesRoute
@@ -389,6 +398,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/about'
+    | '/atom.xml'
     | '/auth'
     | '/blog'
     | '/case-studies'
@@ -430,6 +440,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/about'
+    | '/atom.xml'
     | '/auth'
     | '/blog'
     | '/case-studies'
@@ -472,6 +483,7 @@ export interface FileRouteTypes {
     | '/'
     | '/_authenticated'
     | '/about'
+    | '/atom.xml'
     | '/auth'
     | '/blog'
     | '/case-studies'
@@ -515,6 +527,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
   AboutRoute: typeof AboutRoute
+  AtomDotxmlRoute: typeof AtomDotxmlRoute
   AuthRoute: typeof AuthRoute
   BlogRoute: typeof BlogRouteWithChildren
   CaseStudiesRoute: typeof CaseStudiesRoute
@@ -642,6 +655,13 @@ declare module '@tanstack/react-router' {
       path: '/auth'
       fullPath: '/auth'
       preLoaderRoute: typeof AuthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/atom.xml': {
+      id: '/atom.xml'
+      path: '/atom.xml'
+      fullPath: '/atom.xml'
+      preLoaderRoute: typeof AtomDotxmlRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/about': {
@@ -863,6 +883,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
   AboutRoute: AboutRoute,
+  AtomDotxmlRoute: AtomDotxmlRoute,
   AuthRoute: AuthRoute,
   BlogRoute: BlogRouteWithChildren,
   CaseStudiesRoute: CaseStudiesRoute,
