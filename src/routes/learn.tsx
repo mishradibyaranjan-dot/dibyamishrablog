@@ -78,19 +78,32 @@ function TabHeroImage({ src, alt, caption }: { src: string; alt: string; caption
 
 export const Route = createFileRoute("/learn")({
   head: () => {
+    const url = `${SITE_ORIGIN}/learn`;
     const description =
       "Beginner-friendly learning library on AI, Cloud, and SaaS — concepts, history, architecture diagrams, and code.";
+    const title = "Learn — AI, Cloud & SaaS Fundamentals";
     return {
       meta: [
-        { title: "Learn — AI, Cloud & SaaS Fundamentals" },
+        { title },
         { name: "description", content: description },
-        { property: "og:title", content: "Learn — AI, Cloud & SaaS Fundamentals" },
+        { property: "og:title", content: title },
         { property: "og:description", content: description },
+        { property: "og:url", content: url },
+        { property: "og:type", content: "website" },
+        { property: "og:image", content: pageOgImages.learn },
+        { property: "og:image:width", content: "1200" },
+        { property: "og:image:height", content: "630" },
+        { name: "twitter:card", content: "summary_large_image" },
+        { name: "twitter:title", content: title },
+        { name: "twitter:description", content: description },
+        { name: "twitter:image", content: pageOgImages.learn },
       ],
+      links: [{ rel: "canonical", href: url }],
     };
   },
   component: Learn,
 });
+
 
 type TabKey = "ai" | "cloud" | "saas" | "itil" | "llm" | "genai-retail" | "multitenant" | "rag";
 
