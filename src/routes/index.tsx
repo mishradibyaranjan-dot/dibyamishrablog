@@ -40,7 +40,7 @@ export const Route = createFileRoute("/")({
         content:
           "20+ years. Shipping Agentic AI in retail supply chains, RAG systems and multi-tenant SaaS at enterprise scale.",
       },
-      { property: "og:url", content: "https://dibyamishrablog.lovable.app/" },
+      { property: "og:url", content: "https://www.dibyamishra.co.in/" },
       {
         property: "og:image",
         content:
@@ -52,7 +52,7 @@ export const Route = createFileRoute("/")({
           "https://storage.googleapis.com/gpt-engineer-file-uploads/attachments/og-images/62feb90f-3c19-4765-9fa6-9b7f7701a7c6",
       },
     ],
-    links: [{ rel: "canonical", href: "https://dibyamishrablog.lovable.app/" }],
+    links: [{ rel: "canonical", href: "https://www.dibyamishra.co.in/" }],
     scripts: [
       {
         type: "application/ld+json",
@@ -62,7 +62,7 @@ export const Route = createFileRoute("/")({
           name: "Dibya Ranjan Mishra",
           jobTitle: "Vice President & Country Head",
           worksFor: { "@type": "Organization", name: "Crystal Tech Ventures" },
-          url: "https://dibyamishrablog.lovable.app/",
+          url: "https://www.dibyamishra.co.in/",
           sameAs: [
             "https://www.linkedin.com/in/dibya-mishra-55b94654",
             "https://github.com/mishradibyaranjan-dot/",
