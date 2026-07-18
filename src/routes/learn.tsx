@@ -1797,7 +1797,7 @@ function NumberedSteps({ items }: { items: { title: string; desc: string }[] }) 
               {idx + 1}
             </span>
             <div>
-              <h5 className="text-sm font-semibold text-white">{it.title}</h5>
+              <h3 className="text-sm font-semibold text-white">{it.title}</h3>
               <p className="mt-1 text-sm text-white/65">{it.desc}</p>
             </div>
           </div>
