@@ -48,10 +48,7 @@ export const listSecurityEvents = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((input: unknown) => listSchema.parse(input))
   .handler(async ({ data, context }) => {
-    const { data: isAdmin } = await context.supabase.from("user_roles").select("role").eq("user_id", context.userId).eq("role", "admin").maybeSingle().then((r) => ({ data: Boolean(r.data) })); void ({
-      _user_id: context.userId,
-      _role: "admin",
-    });
+    const { data: isAdmin } = await context.supabase.from("user_roles").select("role").eq("user_id", context.userId).eq("role", "admin").maybeSingle().then((r) => ({ data: Boolean(r.data) }));
     if (!isAdmin) throw new Error("Forbidden");
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
     let q = supabaseAdmin
@@ -82,10 +79,7 @@ export const listSecurityEvents = createServerFn({ method: "POST" })
 export const listIpBlocks = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .handler(async ({ context }) => {
-    const { data: isAdmin } = await context.supabase.from("user_roles").select("role").eq("user_id", context.userId).eq("role", "admin").maybeSingle().then((r) => ({ data: Boolean(r.data) })); void ({
-      _user_id: context.userId,
-      _role: "admin",
-    });
+    const { data: isAdmin } = await context.supabase.from("user_roles").select("role").eq("user_id", context.userId).eq("role", "admin").maybeSingle().then((r) => ({ data: Boolean(r.data) }));
     if (!isAdmin) throw new Error("Forbidden");
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
     const { data, error } = await supabaseAdmin
@@ -104,10 +98,7 @@ export const unblockIp = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((input: unknown) => unblockSchema.parse(input))
   .handler(async ({ data, context }) => {
-    const { data: isAdmin } = await context.supabase.from("user_roles").select("role").eq("user_id", context.userId).eq("role", "admin").maybeSingle().then((r) => ({ data: Boolean(r.data) })); void ({
-      _user_id: context.userId,
-      _role: "admin",
-    });
+    const { data: isAdmin } = await context.supabase.from("user_roles").select("role").eq("user_id", context.userId).eq("role", "admin").maybeSingle().then((r) => ({ data: Boolean(r.data) }));
     if (!isAdmin) throw new Error("Forbidden");
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
     const { error } = await supabaseAdmin.from("ip_blocks").delete().eq("ip_address", data.ip);
