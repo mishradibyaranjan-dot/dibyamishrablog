@@ -166,14 +166,16 @@ function About() {
               Vice President & Country Head — Crystal Tech Ventures
             </p>
             <p className="mt-5 text-lg text-muted-foreground">
-              Technology executive with 20+ years leading 500+ engineers, $28M+ budgets, and
-              cloud-native platforms across Shipping, BFSI, Insurance, and SaaS. Grew revenue
-              $1M → $20M in 24 months. 42 certifications spanning AI, Cloud, and Agile.
+              Technology executive with 20+ years leading engineering, product & delivery orgs across
+              Shipping, BFSI, Insurance, Retail/FinTech, and Enterprise SaaS. Currently VP & Country
+              Head driving a Global Capability Centre (GCC) setup in India and retail supply-chain
+              digital transformation for an international client — from org design through delivery.
             </p>
             <p className="mt-4 text-muted-foreground">
-              Delivers AI/ML and Agentic AI at scale, translating strategy into executable roadmaps.
-              Deep fluency in .NET Core, React, Node.js, Python, DevSecOps, and MLOps. Seeking
-              a VP Engineering or Senior Director role to drive transformational impact.
+              Scaled portfolio revenue $1M → $20M in 24 months, managed $28M+ combined budgets, and
+              led 500+ engineers across 5 time zones. Deep expertise in cloud-native architecture
+              (AWS · Azure · GCP), AI/ML & Agentic AI, DevSecOps/MLOps, and vessel/fleet & supply
+              chain platforms. Based in Hyderabad, India · dibyam1983@gmail.com · +91 73372 22545.
             </p>
 
             <div className="mt-7 flex flex-wrap gap-2">
