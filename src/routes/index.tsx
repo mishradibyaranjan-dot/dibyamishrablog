@@ -209,33 +209,47 @@ function Hero() {
 // ---------- QUICK CARDS ----------
 function QuickCards() {
   const items = [
-    { to: "/learn", label: "Learn", desc: "GenAI, RAG & SaaS deep dives", Icon: BookOpen },
-    { to: "/research", label: "Research", desc: "Notes on AI & cloud systems", Icon: FlaskConical },
-    { to: "/projects", label: "Projects", desc: "Shipped products & platforms", Icon: Layers },
-    { to: "/case-studies", label: "Case Studies", desc: "Enterprise transformations", Icon: Briefcase },
-    { to: "/newsletter", label: "Newsletter", desc: "Monthly intelligence brief", Icon: Mail },
+    { to: "/learn", label: "Learn", desc: "GenAI, RAG & SaaS deep dives", Icon: BookOpen, img: cardLearn, alt: "Learner and robot collaborating over books" },
+    { to: "/research", label: "Research", desc: "Notes on AI & cloud systems", Icon: FlaskConical, img: cardResearch, alt: "Researcher and AI reviewing data on screens" },
+    { to: "/projects", label: "Projects", desc: "Shipped products & platforms", Icon: Layers, img: cardProjects, alt: "Engineer and robot building products together" },
+    { to: "/case-studies", label: "Case Studies", desc: "Enterprise transformations", Icon: Briefcase, img: cardCaseStudy, alt: "Consultant and robot analyzing enterprise case study" },
+    { to: "/newsletter", label: "Newsletter", desc: "Monthly intelligence brief", Icon: Mail, img: cardNewsletter, alt: "Human and robot hands collaborating on a newsletter" },
   ] as const;
   return (
     <section className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
-      {items.map(({ to, label, desc, Icon }) => (
+      {items.map(({ to, label, desc, Icon, img, alt }) => (
         <Link
           key={to}
           to={to}
-          className="group flex flex-col gap-2 rounded-2xl border p-4 transition-all hover:-translate-y-0.5"
+          className="group flex flex-col overflow-hidden rounded-2xl border transition-all hover:-translate-y-0.5 hover:shadow-md"
           style={{ backgroundColor: SURFACE, borderColor: LINE, color: INK }}
         >
-          <div className="flex items-center justify-between">
-            <Icon className="h-5 w-5" style={{ color: ACCENT }} />
+          <div className="relative aspect-[16/10] overflow-hidden" style={{ backgroundColor: LINE }}>
+            <img
+              src={img}
+              alt={alt}
+              loading="lazy"
+              width={480}
+              height={300}
+              className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+            />
+            <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-black/40 to-transparent" />
+            <Icon
+              className="absolute left-3 top-3 h-5 w-5 rounded-md bg-white/90 p-0.5 shadow-sm"
+              style={{ color: ACCENT }}
+            />
             <ArrowUpRight
-              className="h-4 w-4 opacity-40 transition-all group-hover:translate-x-0.5 group-hover:opacity-100"
+              className="absolute right-3 top-3 h-5 w-5 rounded-md bg-white/90 p-0.5 opacity-80 shadow-sm transition-all group-hover:translate-x-0.5 group-hover:opacity-100"
               style={{ color: ACCENT }}
             />
           </div>
-          <div className="mt-1 text-base font-bold" style={{ ...HEADING, color: INK }}>
-            {label}
-          </div>
-          <div className="text-xs leading-relaxed" style={{ color: MUTED }}>
-            {desc}
+          <div className="flex flex-col gap-1 p-4">
+            <div className="text-base font-bold" style={{ ...HEADING, color: INK }}>
+              {label}
+            </div>
+            <div className="text-xs leading-relaxed" style={{ color: MUTED }}>
+              {desc}
+            </div>
           </div>
         </Link>
       ))}
