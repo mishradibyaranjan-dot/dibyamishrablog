@@ -123,6 +123,7 @@ function Home() {
     >
       <div className="mx-auto flex w-full max-w-7xl flex-col gap-14 px-6 py-16 sm:py-20 lg:py-24">
         <Hero />
+        <QuickCards />
         <BentoGrid latest={latest} />
         <ProofStrip />
       </div>
