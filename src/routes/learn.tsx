@@ -1731,7 +1731,7 @@ function FeatureCard({ icon, title, body }: { icon: React.ReactNode; title: stri
           {icon}
         </div>
         <div>
-          <h4 className="text-sm font-semibold text-white sm:text-base">{title}</h4>
+          <h3 className="text-sm font-semibold text-white sm:text-base">{title}</h3>
           <p className="mt-2 text-sm text-white/70">{body}</p>
         </div>
       </div>
