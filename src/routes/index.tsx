@@ -204,6 +204,42 @@ function Hero() {
   );
 }
 
+// ---------- QUICK CARDS ----------
+function QuickCards() {
+  const items = [
+    { to: "/learn", label: "Learn", desc: "GenAI, RAG & SaaS deep dives", Icon: BookOpen },
+    { to: "/research", label: "Research", desc: "Notes on AI & cloud systems", Icon: FlaskConical },
+    { to: "/projects", label: "Projects", desc: "Shipped products & platforms", Icon: Layers },
+    { to: "/case-studies", label: "Case Studies", desc: "Enterprise transformations", Icon: Briefcase },
+    { to: "/newsletter", label: "Newsletter", desc: "Monthly intelligence brief", Icon: Mail },
+  ] as const;
+  return (
+    <section className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
+      {items.map(({ to, label, desc, Icon }) => (
+        <Link
+          key={to}
+          to={to}
+          className="group flex flex-col gap-2 rounded-2xl border p-4 transition-all hover:-translate-y-0.5"
+          style={{ backgroundColor: SURFACE, borderColor: LINE, color: INK }}
+        >
+          <div className="flex items-center justify-between">
+            <Icon className="h-5 w-5" style={{ color: ACCENT }} />
+            <ArrowUpRight
+              className="h-4 w-4 opacity-40 transition-all group-hover:translate-x-0.5 group-hover:opacity-100"
+              style={{ color: ACCENT }}
+            />
+          </div>
+          <div className="mt-1 text-base font-bold" style={{ ...HEADING, color: INK }}>
+            {label}
+          </div>
+          <div className="text-xs leading-relaxed" style={{ color: MUTED }}>
+            {desc}
+          </div>
+        </Link>
+      ))}
+    </section>
+  );
+
 // ---------- BENTO ----------
 function BentoGrid({ latest }: { latest: LatestIssue | null }) {
   return (
