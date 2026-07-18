@@ -200,11 +200,14 @@ function Field({
   );
 }
 
-function SocialButtons() {
+function SocialButtons({ redirect }: { redirect?: string }) {
   const [busy, setBusy] = useState<string | null>(null);
   const click = async (p: "google" | "apple") => {
     setBusy(p);
-    await lovable.auth.signInWithOAuth(p, { redirect_uri: window.location.origin });
+    const returnUrl = redirect
+      ? `${window.location.origin}/auth?redirect=${encodeURIComponent(redirect)}`
+      : window.location.origin;
+    await lovable.auth.signInWithOAuth(p, { redirect_uri: returnUrl });
     setBusy(null);
   };
   return (
