@@ -80,8 +80,9 @@ function Consent() {
     window.location.href = target;
   }
 
-  const clientName = details?.client?.name ?? "an app";
-  const redirectUri = details?.client?.redirect_uri;
+  const client = pickClient(details);
+  const clientName = client?.name ?? "an app";
+  const redirectUri = client?.redirect_uri;
 
   return (
     <main className="mx-auto max-w-lg p-8">
