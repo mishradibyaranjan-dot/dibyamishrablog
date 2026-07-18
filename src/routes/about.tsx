@@ -231,6 +231,19 @@ function About() {
       </Section>
 
       <Section className="border-t border-border">
+        <SectionHeader eyebrow="Impact" title="Key achievements" description="Measurable outcomes delivered across two decades of engineering leadership." />
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          {keyAchievements.map((a) => (
+            <div key={a.k} className="card-flashy rounded-2xl glass-strong p-5">
+              <div className="text-xs font-semibold uppercase tracking-wider text-gradient">{a.k}</div>
+              <div className="mt-1 text-sm">{a.v}</div>
+            </div>
+          ))}
+        </div>
+      </Section>
+
+
+      <Section className="border-t border-border">
         <SectionHeader eyebrow="Capabilities" title="Skills & technology stack" />
         <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
           {skillGroups.map((g) => (
