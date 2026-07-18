@@ -68,7 +68,7 @@ async function fetchAll<T>(
   const out: T[] = [];
   while (out.length < cap) {
     const { data, error } = await admin
-      .from(table)
+      .from(table as never)
       .select(cols)
       .gte(timeCol, sinceIso)
       .range(from, from + pageSize - 1);
