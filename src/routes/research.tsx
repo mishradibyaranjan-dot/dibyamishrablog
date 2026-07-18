@@ -47,7 +47,7 @@ export const Route = createFileRoute("/research")({
             url: `${SITE_ORIGIN}/blog/${p.slug}`,
           })),
         }),
-      }],
+      }, breadcrumbScript([{ name: "Research", path: "/research" }])],
     };
   },
   component: Research,
