@@ -127,7 +127,7 @@ function Header() {
             alt="DRM logo"
             className="h-9 w-9 shrink-0 rounded-lg object-contain"
           />
-          <span className="truncate text-slate-900">Dibya R. Mishra</span>
+          <span className="truncate text-slate-900">Dibya Ranjan Mishra</span>
         </Link>
 
         <nav className="hidden items-center gap-1 lg:flex" data-site-nav>
