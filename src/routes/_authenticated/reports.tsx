@@ -302,6 +302,10 @@ function Reports() {
         <TrafficAnalyticsPanel days={days} />
       </div>
 
+      <div className="mt-8">
+        <IdentifiedVisitorsPanel days={days} />
+      </div>
+
       <div className="mt-6">
         <NewsletterAdminPanel />
       </div>
