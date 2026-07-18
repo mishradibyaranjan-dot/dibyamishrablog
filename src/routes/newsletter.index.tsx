@@ -4,7 +4,7 @@ import { Mail, ArrowRight, FileText } from "lucide-react";
 import { Section, SectionHeader } from "@/components/layout/Section";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
-import { SITE_ORIGIN } from "@/lib/og-images";
+import { SITE_ORIGIN, pageOgImages } from "@/lib/og-images";
 import collabNewsletter from "@/assets/collab-newsletter.jpg";
 
 type IssueRow = {
