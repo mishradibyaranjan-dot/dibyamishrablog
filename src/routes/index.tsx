@@ -239,6 +239,9 @@ function QuickCards() {
       ))}
     </section>
   );
+}
+
+
 
 // ---------- BENTO ----------
 function BentoGrid({ latest }: { latest: LatestIssue | null }) {
