@@ -897,10 +897,6 @@ export type Database = {
         Returns: number
       }
       is_blocked_email: { Args: { _email: string }; Returns: boolean }
-      log_blocked_login_attempt: {
-        Args: { _email: string; _reason?: string }
-        Returns: undefined
-      }
       move_to_dlq: {
         Args: {
           dlq_name: string
