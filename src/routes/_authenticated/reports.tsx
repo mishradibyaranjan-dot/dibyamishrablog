@@ -265,18 +265,6 @@ function Reports() {
 
 // ------------------- Traffic Analytics -------------------
 
-type VisitorLogRow = {
-  visitor_id: string;
-  session_id: string | null;
-  path: string | null;
-  referrer: string | null;
-  country: string | null;
-  device: string | null;
-  browser: string | null;
-  os: string | null;
-  created_at: string;
-};
-
 const PIE_COLORS = ["#2563eb", "#7c3aed", "#0891b2", "#f59e0b", "#ef4444", "#10b981", "#ec4899", "#64748b"];
 
 function hostFromReferrer(ref: string | null): string {
@@ -290,104 +278,22 @@ function hostFromReferrer(ref: string | null): string {
   }
 }
 
-function TrafficAnalyticsPanel({ days }: { days: number }) {
-  const [rows, setRows] = useState<VisitorLogRow[] | null>(null);
-  const [err, setErr] = useState<string | null>(null);
-
-  useEffect(() => {
-    let cancelled = false;
-    (async () => {
-      setErr(null);
-      setRows(null);
-      const since = new Date(Date.now() - days * 86400000).toISOString();
-      const all: VisitorLogRow[] = [];
-      const pageSize = 1000;
-      let from = 0;
-      try {
-        // eslint-disable-next-line no-constant-condition
-        while (true) {
-          const { data, error } = await supabase
-            .from("visitor_logs")
-            .select("visitor_id, session_id, path, referrer, country, device, browser, os, created_at")
-            .gte("created_at", since)
-            .order("created_at", { ascending: false })
-            .range(from, from + pageSize - 1);
-          if (error) throw error;
-          if (!data || data.length === 0) break;
-          all.push(...(data as VisitorLogRow[]));
-          if (data.length < pageSize || all.length >= 20000) break;
-          from += pageSize;
-        }
-        if (!cancelled) setRows(all);
-      } catch (e) {
-        if (!cancelled) setErr((e as Error).message ?? String(e));
-      }
-    })();
-    return () => {
-      cancelled = true;
-    };
-  }, [days]);
-
-  const stats = useMemo(() => {
-    if (!rows) return null;
-    const pageviews = rows.length;
-    const uniqueVisitors = new Set(rows.map((r) => r.visitor_id)).size;
-    const uniqueSessions = new Set(rows.filter((r) => r.session_id).map((r) => r.session_id!)).size;
-    const pvPerVisit = uniqueSessions ? +(pageviews / uniqueSessions).toFixed(2) : 0;
-
-    // Daily buckets
-    const buckets = new Map<string, { day: string; visitors: Set<string>; pageviews: number }>();
-    for (let i = days - 1; i >= 0; i--) {
-      const d = new Date(Date.now() - i * 86400000).toISOString().slice(0, 10);
-      buckets.set(d, { day: d.slice(5), visitors: new Set(), pageviews: 0 });
-    }
-    for (const r of rows) {
-      const d = r.created_at.slice(0, 10);
-      const b = buckets.get(d);
-      if (!b) continue;
-      b.pageviews++;
-      b.visitors.add(r.visitor_id);
-    }
-    const daily = Array.from(buckets.values()).map((b) => ({
-      day: b.day,
-      visitors: b.visitors.size,
-      pageviews: b.pageviews,
-    }));
-
-    const tally = (get: (r: VisitorLogRow) => string) => {
-      const m = new Map<string, number>();
-      for (const r of rows) {
-        const k = get(r) || "Unknown";
-        m.set(k, (m.get(k) ?? 0) + 1);
-      }
-      return Array.from(m.entries())
-        .sort((a, b) => b[1] - a[1])
-        .map(([label, value]) => ({ label, value }));
-    };
-
-    const topPages = tally((r) => r.path ?? "").slice(0, 10);
-    const topSources = tally((r) => hostFromReferrer(r.referrer)).slice(0, 10);
-    const topCountries = tally((r) => r.country ?? "Unknown").slice(0, 10);
-    const devices = tally((r) => r.device ?? "unknown").slice(0, 6);
-    const browsers = tally((r) => r.browser ?? "unknown").slice(0, 6);
-
-    return { pageviews, uniqueVisitors, uniqueSessions, pvPerVisit, daily, topPages, topSources, topCountries, devices, browsers };
-  }, [rows, days]);
-
-  if (err) {
-    return (
-      <Panel title="Traffic analytics" icon={<BarChart3 className="h-4 w-4" />}>
-        <p className="text-sm text-red-600">Failed to load: {err}</p>
-      </Panel>
-    );
-  }
-  if (!stats) {
+function TrafficAnalyticsPanel({
+  days,
+  traffic,
+}: {
+  days: number;
+  traffic: ReportsPayload["traffic"] | null;
+}) {
+  if (!traffic) {
     return (
       <Panel title="Traffic analytics" icon={<BarChart3 className="h-4 w-4" />}>
         <div className="h-24 animate-pulse rounded-xl bg-slate-100" />
       </Panel>
     );
   }
+  const stats = traffic;
+
 
   return (
     <div className="space-y-4">
