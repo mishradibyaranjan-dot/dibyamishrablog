@@ -86,7 +86,8 @@ const skillGroups = [
   { title: "Cloud & Infrastructure", items: ["AWS", "Azure", "GCP", "Cloud-Native Architecture", "DevSecOps & MLOps Pipelines", "CI/CD & Release Engineering", "Microservices & API Design", "Infrastructure as Code (IaC)", "Docker", "Kubernetes", "GitHub"] },
   { title: "Retail & Supply Chain", items: ["GCC Setup & Scaling", "Supply Chain Visibility & Automation", "Vessel / Fleet & Logistics Platforms", "Retail AI & Inventory Intelligence", "FinTech & BFSI Platforms", "Cross-Border Operations"] },
   { title: "Technology Stack", items: [".NET Core / C#", "React", "Angular", "TypeScript", "Node.js", "Python", "SQL / NoSQL / Data Platforms", "REST APIs", "BI & Analytics", "Mobile App Development"] },
-  { title: "Leadership & Delivery", items: ["P&L & Budget ($28M+)", "OKR Cascading", "Talent & Succession Planning", "C-Suite Engagement", "Vendor & Contract Mgmt", "Product Roadmap Ownership", "SAFe 6.0", "Scrum", "ITIL Service Mgmt", "Enterprise Architecture", "Lean Six Sigma", "Presales & Bid Mgmt"] },
+  { title: "Product Management", items: ["Product Roadmap Ownership", "Greenfield SaaS Product Builds", "Backlog Prioritisation & Grooming", "PI Planning & SAFe 6.0 Execution", "Presales, POC & Bid Management", "UX-Driven Feature Definition"] },
+  { title: "Leadership & Delivery", items: ["P&L & Budget ($28M+)", "OKR Cascading", "Talent & Succession Planning", "C-Suite Engagement", "Vendor & Contract Mgmt", "SAFe 6.0", "Scrum", "ITIL Service Mgmt", "Enterprise Architecture", "Lean Six Sigma", "Risk & Issue Management", "SLA / KPI Governance"] },
 ];
 
 const education = [
