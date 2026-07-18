@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { motion } from "framer-motion";
 import { Shield, Lock, Database, Mail, Cookie, Users, AlertCircle, FileText } from "lucide-react";
+import { breadcrumbScript } from "@/lib/breadcrumbs";
 
 export const Route = createFileRoute("/trust")({
   component: TrustPage,
@@ -19,6 +20,7 @@ export const Route = createFileRoute("/trust")({
           "Plain-language overview of security, privacy, and data handling practices for dibyamishra.lovable.app.",
       },
     ],
+    scripts: [breadcrumbScript([{ name: "Trust & Privacy", path: "/trust" }])],
   }),
 });
 

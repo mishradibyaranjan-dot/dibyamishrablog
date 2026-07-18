@@ -14,6 +14,7 @@ import {
 import { Award, Briefcase, GraduationCap, Globe, Search } from "lucide-react";
 import photoAsset from "@/assets/dibya-mishra.png.asset.json";
 import * as React from "react";
+import { breadcrumbScript } from "@/lib/breadcrumbs";
 
 export const Route = createFileRoute("/about")({
   head: () => ({
@@ -200,7 +201,7 @@ export const Route = createFileRoute("/about")({
           { "@type": "EducationalOrganization", name: "Utkal University, Odisha", sameAs: "https://utkaluniversity.ac.in" },
         ],
       }),
-    }],
+    }, breadcrumbScript([{ name: "About", path: "/about" }])],
   }),
   component: About,
 });

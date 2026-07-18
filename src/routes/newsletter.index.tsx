@@ -5,6 +5,7 @@ import { Section, SectionHeader } from "@/components/layout/Section";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 import { SITE_ORIGIN, pageOgImages } from "@/lib/og-images";
+import { breadcrumbScript } from "@/lib/breadcrumbs";
 import collabNewsletter from "@/assets/collab-newsletter.jpg";
 
 type IssueRow = {
@@ -39,6 +40,7 @@ export const Route = createFileRoute("/newsletter/")({
         { name: "twitter:image", content: pageOgImages.newsletter },
       ],
       links: [{ rel: "canonical", href: url }],
+      scripts: [breadcrumbScript([{ name: "Newsletter", path: "/newsletter" }])],
     };
   },
   component: NewsletterArchive,

@@ -50,6 +50,7 @@ import heroRetail from "@/assets/learn/human-robot-retail.jpg";
 import heroMultiTenant from "@/assets/learn/human-robot-multitenant.jpg";
 import heroRAG from "@/assets/learn/human-robot-rag.jpg";
 import { pageOgImages, SITE_ORIGIN } from "@/lib/og-images";
+import { breadcrumbScript } from "@/lib/breadcrumbs";
 
 function TabHeroImage({ src, alt, caption }: { src: string; alt: string; caption: string }) {
   return (
@@ -100,6 +101,7 @@ export const Route = createFileRoute("/learn")({
         { name: "twitter:image", content: pageOgImages.learn },
       ],
       links: [{ rel: "canonical", href: url }],
+      scripts: [breadcrumbScript([{ name: "Learn", path: "/learn" }])],
     };
   },
   component: Learn,

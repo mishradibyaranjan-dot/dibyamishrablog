@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { projects, caseStudies, categories } from "@/lib/content";
 import { cn } from "@/lib/utils";
 import { pageOgImages, SITE_ORIGIN } from "@/lib/og-images";
+import { breadcrumbScript } from "@/lib/breadcrumbs";
 import heroProjects from "@/assets/hero-projects.jpg";
 import collabProjects from "@/assets/collab-projects.jpg";
 
@@ -48,7 +49,7 @@ export const Route = createFileRoute("/projects")({
             })),
           },
         }),
-      }],
+      }, breadcrumbScript([{ name: "Projects", path: "/projects" }])],
     };
   },
   component: Projects,

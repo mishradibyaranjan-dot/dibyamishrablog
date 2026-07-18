@@ -5,6 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { posts } from "@/lib/content";
 import { postOgImages, pageOgImages, SITE_ORIGIN } from "@/lib/og-images";
+import { breadcrumbScript } from "@/lib/breadcrumbs";
 
 export const Route = createFileRoute("/blog/$slug")({
   loader: ({ params }) => {
@@ -40,17 +41,24 @@ export const Route = createFileRoute("/blog/$slug")({
           type: "application/ld+json",
           children: JSON.stringify({
             "@context": "https://schema.org",
-            "@type": "Article",
+            "@type": "BlogPosting",
             headline: post?.title,
             description: post?.summary,
             image,
             datePublished: post?.date,
             dateModified: post?.date,
-            author: { "@type": "Person", name: "Dibya Ranjan Mishra" },
-            publisher: { "@type": "Person", name: "Dibya Ranjan Mishra" },
-            mainEntityOfPage: url,
+            author: { "@type": "Person", name: "Dibya Ranjan Mishra", url: `${SITE_ORIGIN}/about` },
+            publisher: { "@type": "Person", name: "Dibya Ranjan Mishra", url: `${SITE_ORIGIN}/about` },
+            mainEntityOfPage: { "@type": "WebPage", "@id": url },
+            articleSection: post?.category,
+            keywords: post?.category,
+            url,
           }),
         },
+        breadcrumbScript([
+          { name: "Blog", path: "/blog" },
+          { name: post?.title ?? "Article", path: `/blog/${params.slug}` },
+        ]),
       ],
     };
   },

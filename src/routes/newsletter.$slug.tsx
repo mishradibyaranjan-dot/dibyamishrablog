@@ -4,6 +4,7 @@ import { Section } from "@/components/layout/Section";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 import { SITE_ORIGIN } from "@/lib/og-images";
+import { breadcrumbScript } from "@/lib/breadcrumbs";
 import collabNewsletter from "@/assets/collab-newsletter.jpg";
 
 type Issue = {
@@ -44,6 +45,27 @@ export const Route = createFileRoute("/newsletter/$slug")({
         { name: "twitter:card", content: "summary_large_image" },
       ],
       links: [{ rel: "canonical", href: url }],
+      scripts: [
+        {
+          type: "application/ld+json",
+          children: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "Article",
+            headline: title,
+            description: desc,
+            datePublished: issue?.published_at ?? undefined,
+            dateModified: issue?.published_at ?? undefined,
+            author: { "@type": "Person", name: "Dibya Ranjan Mishra", url: `${SITE_ORIGIN}/about` },
+            publisher: { "@type": "Person", name: "Dibya Ranjan Mishra", url: `${SITE_ORIGIN}/about` },
+            mainEntityOfPage: { "@type": "WebPage", "@id": url },
+            url,
+          }),
+        },
+        breadcrumbScript([
+          { name: "Newsletter", path: "/newsletter" },
+          { name: title, path: `/newsletter/${issue?.slug ?? ""}` },
+        ]),
+      ],
     };
   },
   pendingMs: 200,

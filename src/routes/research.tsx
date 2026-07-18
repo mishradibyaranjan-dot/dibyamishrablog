@@ -6,6 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { posts, categories } from "@/lib/content";
 import { cn } from "@/lib/utils";
 import { pageOgImages, SITE_ORIGIN } from "@/lib/og-images";
+import { breadcrumbScript } from "@/lib/breadcrumbs";
 import heroResearch from "@/assets/hero-research.jpg";
 import collabResearch from "@/assets/collab-research.jpg";
 
@@ -46,7 +47,7 @@ export const Route = createFileRoute("/research")({
             url: `${SITE_ORIGIN}/blog/${p.slug}`,
           })),
         }),
-      }],
+      }, breadcrumbScript([{ name: "Research", path: "/research" }])],
     };
   },
   component: Research,
