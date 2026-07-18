@@ -24,10 +24,15 @@ const staticEntries: SitemapEntry[] = [
   { path: "/learn", changefreq: "weekly", priority: "0.8" },
   { path: "/repository", changefreq: "monthly", priority: "0.7" },
   { path: "/white-paper/agentic-ai-enterprise-automation", changefreq: "monthly", priority: "0.8" },
+  // Feeds
+  { path: "/rss.xml", changefreq: "daily", priority: "0.5" },
+  { path: "/atom.xml", changefreq: "daily", priority: "0.5" },
   // Auth + utility routes (present in code; crawlers may still request them)
   { path: "/auth", changefreq: "yearly", priority: "0.1" },
   { path: "/forgot-password", changefreq: "yearly", priority: "0.1" },
   { path: "/reset-password", changefreq: "yearly", priority: "0.1" },
+  { path: "/reports", changefreq: "yearly", priority: "0.1" },
+  { path: "/email/unsubscribe", changefreq: "yearly", priority: "0.1" },
   { path: "/mcp", changefreq: "yearly", priority: "0.1" },
   { path: "/.mcp/list-tools", changefreq: "yearly", priority: "0.1" },
 ];
