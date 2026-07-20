@@ -71,7 +71,12 @@ export const Route = createFileRoute("/api/download/pdf")({
           /* non-fatal */
         }
 
-        const upstream = await fetch(doc.url);
+        // Asset URLs are stored as site-relative paths (e.g. "/__l5e/assets-v1/...").
+        // fetch() in the Worker requires an absolute URL — resolve against the request origin.
+        const assetUrl = doc.url.startsWith("http")
+          ? doc.url
+          : new URL(doc.url, request.url).toString();
+        const upstream = await fetch(assetUrl);
         if (!upstream.ok || !upstream.body) {
           return new Response("Upstream fetch failed", { status: 502 });
         }
