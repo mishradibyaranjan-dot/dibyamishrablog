@@ -31,65 +31,99 @@ export const Route = createFileRoute("/api/download/pdf")({
   server: {
     handlers: {
       GET: async ({ request }) => {
+        const reqId = crypto.randomUUID().slice(0, 8);
+        const log = (msg: string, extra?: Record<string, unknown>) =>
+          console.log(`[download.pdf ${reqId}] ${msg}`, extra ?? "");
+        const errJson = (status: number, code: string, message: string, extra?: Record<string, unknown>) => {
+          console.error(`[download.pdf ${reqId}] ${code}: ${message}`, extra ?? "");
+          return new Response(
+            JSON.stringify({ error: code, message, requestId: reqId, ...(extra ?? {}) }),
+            { status, headers: { "Content-Type": "application/json" } },
+          );
+        };
+
         const supabaseUrl = process.env.SUPABASE_URL;
         const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
         if (!supabaseUrl || !serviceKey) {
-          return new Response("Server misconfigured", { status: 500 });
+          return errJson(500, "server_misconfigured", "Backend credentials are not configured. Please contact the site owner.");
         }
 
-        // Require a valid Supabase user JWT
         const auth = request.headers.get("authorization") ?? "";
         if (!auth.toLowerCase().startsWith("bearer ")) {
-          return new Response("Unauthorized", { status: 401 });
+          return errJson(401, "missing_auth", "You must be signed in to download this file.");
         }
         const token = auth.slice(7).trim();
         const supabase = createClient(supabaseUrl, serviceKey);
-        const { data: { user }, error } = await supabase.auth.getUser(token);
-        if (error || !user) {
-          return new Response("Unauthorized", { status: 401 });
+        const { data: { user }, error: authErr } = await supabase.auth.getUser(token);
+        if (authErr || !user) {
+          return errJson(401, "invalid_session", "Your session has expired. Please sign in again and retry.", {
+            detail: authErr?.message,
+          });
         }
+        log("authenticated", { userId: user.id });
 
         const url = new URL(request.url);
         const key = url.searchParams.get("key") ?? "";
         const doc = REPO[key];
         if (!doc) {
-          return new Response("Not found", { status: 404 });
+          return errJson(404, "unknown_document", `No document is registered for key "${key}".`, {
+            availableKeys: Object.keys(REPO),
+          });
         }
+        log("resolved doc", { key, filename: doc.filename, assetUrl: doc.url });
 
-        // Best-effort access log (uses caller's token so RLS "own resource insert" applies)
         try {
           const userScoped = createClient(supabaseUrl, process.env.SUPABASE_PUBLISHABLE_KEY ?? "", {
             global: { headers: { Authorization: `Bearer ${token}` } },
             auth: { persistSession: false },
           });
-          await userScoped.from("resource_access").insert({
+          const { error: logErr } = await userScoped.from("resource_access").insert({
             user_id: user.id,
             resource_type: "repository_pdf",
             resource_id: doc.filename,
           });
-        } catch {
-          /* non-fatal */
+          if (logErr) log("resource_access insert failed (non-fatal)", { error: logErr.message });
+        } catch (e) {
+          log("resource_access insert threw (non-fatal)", { error: (e as Error).message });
         }
 
-        // Asset URLs are stored as site-relative paths (e.g. "/__l5e/assets-v1/...").
-        // fetch() in the Worker requires an absolute URL — resolve against the request origin.
         const assetUrl = doc.url.startsWith("http")
           ? doc.url
           : new URL(doc.url, request.url).toString();
-        const upstream = await fetch(assetUrl);
-        if (!upstream.ok || !upstream.body) {
-          return new Response("Upstream fetch failed", { status: 502 });
+        log("fetching upstream", { assetUrl });
+
+        let upstream: Response;
+        try {
+          upstream = await fetch(assetUrl);
+        } catch (e) {
+          return errJson(502, "upstream_unreachable", "The file storage is temporarily unreachable. Please try again in a moment.", {
+            detail: (e as Error).message,
+            assetUrl,
+          });
         }
 
+        if (!upstream.ok || !upstream.body) {
+          const bodyPreview = await upstream.text().catch(() => "");
+          return errJson(502, "upstream_error", `File storage returned ${upstream.status} for "${doc.filename}".`, {
+            upstreamStatus: upstream.status,
+            upstreamStatusText: upstream.statusText,
+            assetUrl,
+            preview: bodyPreview.slice(0, 200),
+          });
+        }
+
+        log("streaming response", { status: upstream.status });
         return new Response(upstream.body, {
           status: 200,
           headers: {
             "Content-Type": "application/pdf",
             "Content-Disposition": `attachment; filename="${doc.filename}"`,
             "Cache-Control": "private, no-store",
+            "X-Request-Id": reqId,
           },
         });
       },
+
     },
   },
 });
