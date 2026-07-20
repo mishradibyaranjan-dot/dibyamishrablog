@@ -60,7 +60,18 @@ function RepositoryPage() {
         headers: { Authorization: `Bearer ${token}` },
       });
       if (!res.ok) {
-        alert(`Download failed (${res.status}). Please try again.`);
+        let msg = `Download failed (${res.status}).`;
+        let reqId = res.headers.get("X-Request-Id") ?? undefined;
+        try {
+          const body = await res.json();
+          if (body?.message) msg = body.message;
+          if (body?.requestId) reqId = body.requestId;
+          console.error("[repository download] server error", body);
+        } catch {
+          const text = await res.text().catch(() => "");
+          if (text) console.error("[repository download] server error text", text);
+        }
+        alert(reqId ? `${msg}\n\nReference: ${reqId}` : msg);
         return;
       }
       const blob = await res.blob();
