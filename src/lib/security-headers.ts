@@ -25,6 +25,7 @@ export const SECURITY_HEADERS: Readonly<Record<string, string>> = Object.freeze(
     "img-src 'self' data: blob: https:",
     "connect-src 'self' https: wss:",
     "media-src 'self' blob: data:",
+    "frame-src 'self' https://www.youtube-nocookie.com https://www.youtube.com",
     "upgrade-insecure-requests",
   ].join("; "),
 
