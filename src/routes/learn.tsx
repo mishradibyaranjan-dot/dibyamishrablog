@@ -2091,3 +2091,533 @@ function DiagramArrow() {
     </div>
   );
 }
+
+/* ================================================================
+   MULTI-AGENT SYSTEMS TAB
+   ================================================================ */
+
+const MAS_PATTERN_SCORES = [
+  { pattern: "Centralized", scalability: 4, resilience: 3, optimality: 9, simplicity: 8 },
+  { pattern: "Decentralized", scalability: 9, resilience: 9, optimality: 5, simplicity: 5 },
+  { pattern: "Peer-to-peer", scalability: 8, resilience: 8, optimality: 4, simplicity: 4 },
+  { pattern: "Blackboard", scalability: 5, resilience: 6, optimality: 7, simplicity: 4 },
+  { pattern: "Broker", scalability: 7, resilience: 6, optimality: 7, simplicity: 6 },
+  { pattern: "Hierarchical", scalability: 8, resilience: 7, optimality: 8, simplicity: 6 },
+];
+
+const MAS_TRANSPORT_RADAR = [
+  { axis: "Latency", "ROS 2 / DDS": 9, "MQTT v5": 7, gRPC: 9, REST: 4 },
+  { axis: "Throughput", "ROS 2 / DDS": 9, "MQTT v5": 6, gRPC: 8, REST: 5 },
+  { axis: "Typed contracts", "ROS 2 / DDS": 8, "MQTT v5": 4, gRPC: 9, REST: 5 },
+  { axis: "Interoperability", "ROS 2 / DDS": 5, "MQTT v5": 8, gRPC: 7, REST: 10 },
+  { axis: "Ops simplicity", "ROS 2 / DDS": 4, "MQTT v5": 8, gRPC: 7, REST: 9 },
+  { axis: "QoS control", "ROS 2 / DDS": 10, "MQTT v5": 7, gRPC: 5, REST: 3 },
+];
+
+const MAS_VIDEOS = [
+  {
+    id: "kopoLzvh5jY",
+    title: "Multi-Agent Hide and Seek",
+    author: "OpenAI",
+    note: "Emergent tool use and counter-strategies from self-play — the classic demonstration of learning agents.",
+  },
+  {
+    id: "qgb0gyrpiGk",
+    title: "Introduction to Multi-Agent Reinforcement Learning",
+    author: "MATLAB",
+    note: "Centralised vs decentralised training, non-stationarity, and reward shaping for MARL.",
+  },
+  {
+    id: "QzHaNSgWdlI",
+    title: "ROS 2 Multi-Robot Simulation: Autonomous Fleet Control",
+    author: "Felipe Alves",
+    note: "Fleet coordination over ROS 2 / DDS — namespacing, topics, and shared world state in simulation.",
+  },
+  {
+    id: "6dCbe4ItxPY",
+    title: "ROS 2 multi-robot: namespacing, teleop, SLAM Toolbox & Nav2",
+    author: "Alysson Ribeiro da Silva",
+    note: "Hands-on walkthrough of the runtime plumbing behind a multi-robot stack.",
+  },
+  {
+    id: "cc8Sd2vVG9M",
+    title: "Multi-Agent Negotiation — Contract Net Protocol explained",
+    author: "Padhai Nest",
+    note: "CFP → propose → accept/reject: the allocation protocol used in the warehouse reference design.",
+  },
+  {
+    id: "tBEOf6xzEeo",
+    title: "3D Swarm in the Real World: Robot Swarms Guided by a UAV",
+    author: "More-Than-One Robotics Laboratory",
+    note: "Local rules, no central planner — swarm behaviour on real hardware.",
+  },
+];
+
+function VideoCard({ id, title, author, note }: { id: string; title: string; author: string; note: string }) {
+  const [playing, setPlaying] = useState(false);
+  return (
+    <div className="group overflow-hidden rounded-2xl border border-white/10 bg-white/5 backdrop-blur-xl transition hover:border-neon-cyan/50">
+      <div className="relative aspect-video w-full bg-black/40">
+        {playing ? (
+          <iframe
+            className="absolute inset-0 h-full w-full"
+            src={`https://www.youtube-nocookie.com/embed/${id}?autoplay=1&rel=0`}
+            title={title}
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowFullScreen
+            loading="lazy"
+          />
+        ) : (
+          <button
+            type="button"
+            onClick={() => setPlaying(true)}
+            aria-label={`Play video: ${title}`}
+            className="absolute inset-0 h-full w-full"
+          >
+            <img
+              src={`https://i.ytimg.com/vi/${id}/hqdefault.jpg`}
+              alt={title}
+              width={480}
+              height={360}
+              loading="lazy"
+              className="h-full w-full object-cover transition duration-500 group-hover:scale-[1.03]"
+            />
+            <span className="absolute inset-0 grid place-items-center bg-black/25 transition group-hover:bg-black/10">
+              <PlayCircle className="h-14 w-14 text-white drop-shadow-lg" />
+            </span>
+          </button>
+        )}
+      </div>
+      <div className="p-4">
+        <div className="text-[11px] font-semibold uppercase tracking-widest text-neon-cyan">{author}</div>
+        <h4 className="mt-1 font-display text-sm font-bold text-white sm:text-base">{title}</h4>
+        <p className="mt-1.5 text-sm text-white/70">{note}</p>
+      </div>
+    </div>
+  );
+}
+
+function ChartCard({ title, subtitle, children }: { title: string; subtitle: string; children: React.ReactNode }) {
+  return (
+    <div className="rounded-2xl border border-white/10 bg-gradient-to-br from-white/[0.06] to-white/[0.02] p-4 backdrop-blur-xl sm:p-6">
+      <div className="mb-4">
+        <div className="font-display text-base font-bold text-white">{title}</div>
+        <p className="text-sm text-white/60">{subtitle}</p>
+      </div>
+      <div className="h-[320px] w-full">{children}</div>
+    </div>
+  );
+}
+
+function MASLayerDiagram() {
+  return (
+    <StackDiagram
+      layers={[
+        { label: "Environment / market / plant — sensors, actuators, external APIs", tint: "border-white/10 bg-white/5 text-white/80" },
+        { label: "Agent layer — reactive · deliberative / BDI · learning agents", tint: "border-blue-400/30 bg-blue-400/10 text-white" },
+        { label: "Coordination & semantics — directory, negotiation, planning, ontologies", tint: "border-cyan-400/30 bg-cyan-400/10 text-white" },
+        { label: "Communication substrate — DDS · MQTT · gRPC · REST · message schemas", tint: "border-fuchsia-400/30 bg-fuchsia-400/10 text-white" },
+        { label: "Operations & trust — security policy, telemetry, tracing, CI/CD", tint: "border-emerald-400/30 bg-emerald-400/10 text-white" },
+      ]}
+    />
+  );
+}
+
+function ContractNetDiagram() {
+  const steps = [
+    { label: "Task arrives", icon: <Workflow className="h-4 w-4" /> },
+    { label: "CFP broadcast", icon: <Radio className="h-4 w-4" /> },
+    { label: "Proposals (cost · ETA · battery)", icon: <Share2 className="h-4 w-4" /> },
+    { label: "Accept / reject", icon: <CheckCircle2 className="h-4 w-4" /> },
+    { label: "Reserve resources", icon: <Lock className="h-4 w-4" /> },
+    { label: "inform-progress → inform-result", icon: <Activity className="h-4 w-4" /> },
+  ];
+  return (
+    <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-3">
+      {steps.map((s, i) => (
+        <div key={s.label} className="flex items-center gap-2">
+          <div className="flex items-center gap-2 rounded-full border border-white/10 bg-white/10 px-4 py-2 text-sm font-medium text-white backdrop-blur">
+            <span className="text-neon-cyan">{s.icon}</span>
+            {s.label}
+          </div>
+          {i < steps.length - 1 && <span className="text-white/40">→</span>}
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function SwarmDiagram() {
+  return (
+    <div className="grid gap-3 sm:grid-cols-2">
+      {["Robot i", "Robot j"].map((robot) => (
+        <div key={robot} className="rounded-2xl border border-white/10 bg-white/5 p-4">
+          <div className="mb-3 flex items-center gap-2 text-sm font-semibold text-white">
+            <Bot className="h-4 w-4 text-neon-cyan" /> {robot}
+          </div>
+          <div className="space-y-2">
+            {["Local sensing", "Reactive safety loop", "Local planner / policy", "Neighbour coordination"].map((l) => (
+              <DiagramRow key={l} label={l} tint="border-white/10 bg-white/5 text-white/80" />
+            ))}
+          </div>
+        </div>
+      ))}
+      <p className="sm:col-span-2 text-center text-xs text-white/50">
+        No remote planner sits in the safety loop. Neighbour messages carry compact intent, never full world models.
+      </p>
+    </div>
+  );
+}
+
+function IntroMAS() {
+  return (
+    <div className="space-y-12">
+      <TabHeroImage
+        src={heroMAS}
+        alt="Engineer coordinating a group of autonomous robots with a holographic agent network graph"
+        caption="Multi-agent systems — autonomy at the edges, explicit coordination in the middle."
+      />
+
+      <Reveal>
+        <QuickSummary
+          items={[
+            "A MAS is not “many agents” — it is coordination topology + timing model + trust boundary, decided before any framework.",
+            "Pick the fabric by workload: ROS 2 / DDS for real-time robotics, MQTT v5 for constrained IoT, gRPC for typed service calls, REST for partner interop.",
+            "FIPA ACL still earns its place as the semantic conversation layer (performative, ontology, conversation-id, deadlines) on top of a modern transport.",
+            "Simulate first — Gazebo, Webots, PettingZoo, VMAS, Unity ML-Agents, ABIDES — and benchmark the socio-technical system, not one agent's IQ.",
+            "Zero trust by default: NIST SP 800-207 + AI RMF, DDS Security / SROS 2, OAuth 2.0 / OIDC / mTLS, OpenTelemetry traces without raw payloads.",
+          ]}
+        />
+      </Reveal>
+
+      <Reveal>
+        <HeroCard
+          icon={<Bot className="h-6 w-6" />}
+          title="Building Multi-Agent Systems"
+          tag="MAS · Coordination · Robotics · Markets"
+          body="A distributed architecture in which autonomous processes sense an environment, reason under partial information, coordinate through explicit protocols, and act through tools, APIs, or actuators. This module walks the full engineering path — MAS taxonomy, layered reference architecture, coordination patterns, protocol and framework selection, ontology strategy, simulation and benchmarking, fault tolerance and security, and three end-to-end reference designs (swarm, warehouse, marketplace) with an implementation roadmap."
+        />
+      </Reveal>
+
+      <Reveal>
+        <SubSection eyebrow="Taxonomy" title="Six Kinds of Agent, Six Failure Modes">
+          <Table
+            headers={["MAS type", "Core control idea", "Strengths", "Main liabilities", "Best fit"]}
+            rows={[
+              ["Reactive", "Tight perception-to-action coupling, minimal symbolic state", "Very low latency, robust under fast dynamics", "Weak long-horizon planning and explainability", "Obstacle avoidance, local safety controllers"],
+              ["Deliberative", "Explicit world/task models with planning or search", "Long-horizon optimisation, constraint handling", "Higher latency, model brittleness", "Mission planning, scheduling, optimisation agents"],
+              ["Hybrid", "Reactive layer for immediacy + deliberative layer for goals", "Balances responsiveness and strategy", "Integration complexity, fragile arbitration", "Mobile robots, warehouse orchestration, CPS"],
+              ["BDI", "Beliefs, desires, intentions with explicit commitments", "Interpretable commitment model, mature literature", "Engineering cost above pure reactive", "Enterprise decision support, human-agent workflows"],
+              ["Learning agents", "Policy/value adaptation via RL or MARL", "Exploits complex patterns, adapts online or offline", "Sample inefficiency, non-stationarity, reproducibility", "Simulation-rich domains, routing, market policy"],
+              ["Swarm", "Many simple agents following local rules", "Excellent scalability, graceful degradation", "Weak global guarantees without careful design", "Coverage, flocking, search, distributed monitoring"],
+            ]}
+          />
+        </SubSection>
+      </Reveal>
+
+      <Reveal>
+        <SubSection eyebrow="Reference architecture" title="Five Layers That Change Independently">
+          <Diagram>
+            <MASLayerDiagram />
+          </Diagram>
+          <div className="mt-6">
+            <Grid cols={4}>
+              <ConceptCard icon={<Cpu />} title="Agent runtime" desc="Lifecycle, local state, behaviours, bounded mailbox, tool access. JADE, SPADE, ROS 2 nodes, RLlib policies." />
+              <ConceptCard icon={<Globe2 />} title="Environment model" desc="World / simulation / market state and dynamics. Gazebo, Webots, Unity, VMAS, ABIDES, Open-RMF." />
+              <ConceptCard icon={<Network />} title="Communication middleware" desc="Discovery, routing, delivery semantics, QoS, backpressure. DDS, MQTT v5, gRPC, HTTP/REST, XMPP." />
+              <ConceptCard icon={<Database />} title="Schema & serialization" desc="Type contracts, versioning, validation. Protobuf, ROS IDL, JSON Schema, FIPA ACL parameters." />
+              <ConceptCard icon={<Search />} title="Directory services" desc="White pages / yellow pages, capability registration and matching. FIPA AMS + DF, ROS graph, broker registries." />
+              <ConceptCard icon={<Brain />} title="Planning & reasoning" desc="Task decomposition, scheduling, constraint solving, BDI plan execution." />
+              <ConceptCard icon={<Activity />} title="Observability" desc="OpenTelemetry traces + Prometheus metrics keyed on conversation-id, not raw payloads." />
+              <ConceptCard icon={<ShieldCheck />} title="Security & policy" desc="Zero trust, DDS Security / SROS 2, OAuth 2.0 / OIDC / mTLS, admissibility checks." />
+            </Grid>
+          </div>
+        </SubSection>
+      </Reveal>
+
+      <Reveal>
+        <SubSection eyebrow="Interactive" title="Coordination Patterns Scored">
+          <ChartCard
+            title="Pattern trade-off profile"
+            subtitle="Qualitative 0–10 scores. Hover a bar for the exact value — nothing scores high on every axis."
+          >
+            <ResponsiveContainer width="100%" height="100%">
+              <BarChart data={MAS_PATTERN_SCORES} margin={{ top: 8, right: 8, left: -16, bottom: 8 }}>
+                <CartesianGrid strokeDasharray="3 3" stroke="rgba(148,163,184,0.25)" />
+                <XAxis dataKey="pattern" tick={{ fontSize: 11 }} interval={0} angle={-12} dy={8} />
+                <YAxis domain={[0, 10]} tick={{ fontSize: 11 }} />
+                <RTooltip />
+                <Legend wrapperStyle={{ fontSize: 12 }} />
+                <Bar dataKey="scalability" name="Scalability" fill="#2563eb" radius={[4, 4, 0, 0]} />
+                <Bar dataKey="resilience" name="Resilience" fill="#06b6d4" radius={[4, 4, 0, 0]} />
+                <Bar dataKey="optimality" name="Global optimality" fill="#8b5cf6" radius={[4, 4, 0, 0]} />
+                <Bar dataKey="simplicity" name="Operational simplicity" fill="#10b981" radius={[4, 4, 0, 0]} />
+              </BarChart>
+            </ResponsiveContainer>
+          </ChartCard>
+          <div className="mt-6">
+            <Table
+              headers={["Pattern", "Strengths", "Risks", "Best domains"]}
+              rows={[
+                ["Centralized", "Simpler optimisation, easier governance and debugging", "Single bottleneck, weaker fault isolation", "Warehouse orchestration, compliance-heavy workflows"],
+                ["Decentralized", "Resilience and locality", "Harder global optimality, trickier consistency", "Swarms, edge IoT, resilient sensing"],
+                ["Peer-to-peer", "No central dependency, natural scaling", "Coordination complexity, weak policy enforcement", "Ad hoc collaboration, open agent platforms"],
+                ["Blackboard", "Great for heterogeneous specialists and opportunistic reasoning", "Shared-state contention", "Research assistants, knowledge fusion"],
+                ["Broker", "Simpler clients, strong policy control", "Broker becomes bottleneck / trust choke-point", "Dynamic service discovery, marketplaces, federated MAS"],
+                ["Hierarchical", "Strong decomposition for large programs", "Layer coupling, slow adaptation if rigid", "Multi-robot fleets, mission planning, enterprise workflows"],
+              ]}
+            />
+          </div>
+          <p className="mt-4 text-sm text-white/60">
+            Default guidance: hierarchical-centralized when a visible control plane matters (throughput, compliance,
+            human supervision); decentralized-hybrid when locality, intermittent connectivity, or safety loops dominate.
+          </p>
+        </SubSection>
+      </Reveal>
+
+      <Reveal>
+        <SubSection eyebrow="Interactive" title="Transport Fit — Six Axes">
+          <ChartCard
+            title="Protocol radar"
+            subtitle="ROS 2/DDS wins QoS and real-time control; MQTT wins constrained networks; gRPC wins typed service calls; REST wins interoperability."
+          >
+            <ResponsiveContainer width="100%" height="100%">
+              <RadarChart data={MAS_TRANSPORT_RADAR} outerRadius="72%">
+                <PolarGrid stroke="rgba(148,163,184,0.35)" />
+                <PolarAngleAxis dataKey="axis" tick={{ fontSize: 11 }} />
+                <PolarRadiusAxis domain={[0, 10]} tick={{ fontSize: 10 }} />
+                <Radar name="ROS 2 / DDS" dataKey="ROS 2 / DDS" stroke="#2563eb" fill="#2563eb" fillOpacity={0.25} />
+                <Radar name="MQTT v5" dataKey="MQTT v5" stroke="#06b6d4" fill="#06b6d4" fillOpacity={0.2} />
+                <Radar name="gRPC" dataKey="gRPC" stroke="#8b5cf6" fill="#8b5cf6" fillOpacity={0.18} />
+                <Radar name="REST" dataKey="REST" stroke="#f59e0b" fill="#f59e0b" fillOpacity={0.15} />
+                <Legend wrapperStyle={{ fontSize: 12 }} />
+                <RTooltip />
+              </RadarChart>
+            </ResponsiveContainer>
+          </ChartCard>
+          <div className="mt-6">
+            <Table
+              headers={["Protocol", "Interaction model", "Payload style", "Most suitable role"]}
+              rows={[
+                ["FIPA ACL", "Speech-act semantics + interaction protocols", "Performative, content, ontology, conversation-id", "Negotiation, directory-aware conversations, explainable workflows"],
+                ["ROS 2 on DDS", "Data-centric pub/sub, services, actions, discovery, QoS", "ROS IDL over DDS serialization", "Multi-robot coordination, sensor streams, edge robotics"],
+                ["MQTT v5", "Brokered lightweight pub/sub + request-response", "Small binary/text payloads + user properties", "Telemetry and low-overhead command/event fabrics"],
+                ["gRPC", "Typed RPC and streaming over HTTP/2", "Protocol Buffers", "Planning, policy and risk services; low-latency internal APIs"],
+                ["REST / HTTP", "Request-response over stable resource URLs", "JSON", "External partner integration, tooling, broad interoperability"],
+              ]}
+            />
+          </div>
+        </SubSection>
+      </Reveal>
+
+      <Reveal>
+        <SubSection eyebrow="Frameworks" title="What to Build On">
+          <Table
+            headers={["Framework", "Language", "Maturity", "Scalability", "Best use", "Key caution"]}
+            rows={[
+              ["JADE", "Java", "High", "Medium", "Classical FIPA-style MAS, teaching, prototyping", "Older ecosystem, awkward for ML-heavy pipelines"],
+              ["SPADE", "Python", "Medium-High", "Medium", "Python-native agent services, XMPP messaging, LLM-adjacent agents", "XMPP-centric; not for low-latency cyber-physical loops"],
+              ["ROS 2 + Open-RMF", "C++ / Python", "High", "High", "Multi-robot fleets, sensor-rich cyber-physical MAS", "Higher operational complexity than software-only stacks"],
+              ["PettingZoo + Gymnasium", "Python", "High", "Medium", "Standardised MARL environments, benchmark portability", "Environment API only — not a production runtime"],
+              ["Ray RLlib", "Python", "High", "High", "Scalable MARL training and distributed RL", "Training stack, not an agent-management platform"],
+              ["Unity ML-Agents", "C# + Python", "High", "Medium-High", "3D embodied simulation, perception-rich MARL", "Unity-centred; plan runtime portability explicitly"],
+            ]}
+          />
+          <p className="mt-4 text-sm text-white/60">
+            Caveat worth repeating: OpenAI Gym has been unmaintained since 2022. For new multi-agent work use
+            Gymnasium + PettingZoo, with compatibility wrappers only where legacy Gym is unavoidable.
+          </p>
+        </SubSection>
+      </Reveal>
+
+      <Reveal>
+        <SubSection eyebrow="Semantics" title="Three Levels of Meaning">
+          <NumberedSteps
+            items={[
+              { title: "Transport level", desc: "Efficient typed schemas — Protocol Buffers or ROS IDL — for runtime traffic." },
+              { title: "API / document level", desc: "JSON + JSON Schema for validation, versioning, and external contracts." },
+              { title: "Semantic-integration level", desc: "RDF / RDFS / OWL when agents must share richer domain meaning or a cross-system knowledge graph." },
+              { title: "Message envelope", desc: "Keep FIPA ACL's explicit fields — content language, encoding, ontology, protocol, conversation-id — whatever the wire format." },
+            ]}
+          />
+        </SubSection>
+      </Reveal>
+
+      <Reveal>
+        <SubSection eyebrow="Protocol in motion" title="Contract Net — Task Allocation Loop">
+          <Diagram>
+            <ContractNetDiagram />
+          </Diagram>
+          <div className="mt-6">
+            <Code
+              language="python"
+              code={`# Contract Net over any transport — the semantics are what matter.
+from dataclasses import dataclass
+
+@dataclass
+class ACL:
+    performative: str        # cfp | propose | accept-proposal | reject-proposal | inform | failure
+    sender: str
+    receiver: str
+    conversation_id: str
+    ontology: str
+    reply_by: float          # explicit deadline -> retries & dead-lettering
+    content: dict
+
+async def allocate(task, agents, bus, deadline=2.0):
+    cid = new_conversation_id()
+    await bus.broadcast(ACL("cfp", "orchestrator", "*", cid, "warehouse.v1", deadline,
+                            {"task": task, "constraints": task.constraints}))
+
+    proposals = await bus.collect(cid, performative="propose", timeout=deadline)
+    if not proposals:
+        return None                                   # explicit failure state, not silence
+
+    winner = min(proposals, key=lambda p: p.content["cost"])
+    await bus.send(ACL("accept-proposal", "orchestrator", winner.sender, cid,
+                       "warehouse.v1", deadline, {"task_id": task.id}))
+    for loser in (p for p in proposals if p is not winner):
+        await bus.send(ACL("reject-proposal", "orchestrator", loser.sender, cid,
+                           "warehouse.v1", deadline, {"task_id": task.id}))
+    return winner.sender`}
+            />
+          </div>
+        </SubSection>
+      </Reveal>
+
+      <Reveal>
+        <SubSection eyebrow="Watch it work" title="Live Video Examples">
+          <p className="mb-5 text-sm text-white/60">
+            Six short walkthroughs covering emergent multi-agent behaviour, MARL fundamentals, ROS 2 fleet plumbing,
+            contract-net negotiation, and real-hardware swarms. Click a thumbnail to play inline.
+          </p>
+          <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
+            {MAS_VIDEOS.map((v) => (
+              <VideoCard key={v.id} {...v} />
+            ))}
+          </div>
+        </SubSection>
+      </Reveal>
+
+      <Reveal>
+        <SubSection eyebrow="Reference design 1" title="Robotic Swarm — Decentralized Hybrid">
+          <Diagram>
+            <SwarmDiagram />
+          </Diagram>
+          <div className="mt-6">
+            <Grid cols={4}>
+              <FeatureCard icon={<Cpu className="h-5 w-5" />} title="Stack" body="ROS 2 nodes per robot, DDS QoS tuned per stream, Protobuf/ROS IDL schemas, OWL only for mission metadata." />
+              <FeatureCard icon={<Timer className="h-5 w-5" />} title="Timing" body="Safety loop stays local and non-blocking. No remote planner in the control path." />
+              <FeatureCard icon={<Gauge className="h-5 w-5" />} title="Metrics" body="Coverage, collision rate, task yield, message volume, resilience under agent dropout." />
+              <FeatureCard icon={<RadarIcon className="h-5 w-5" />} title="Simulation" body="VMAS / MPE2 for fast policy iteration, then Gazebo or Webots before hardware-in-the-loop." />
+            </Grid>
+          </div>
+        </SubSection>
+      </Reveal>
+
+      <Reveal>
+        <SubSection eyebrow="Reference design 2" title="Multi-Robot Warehouse — Central Plane + Contract Net">
+          <NumberedSteps
+            items={[
+              { title: "Warehouse manager issues a pick task", desc: "WMS integrates over REST or gRPC; the MAS owns scheduling, not the WMS." },
+              { title: "Fleet orchestrator broadcasts a CFP", desc: "Open-RMF provides task queuing and conflict-free resource scheduling across vendor fleets." },
+              { title: "Robots propose cost, ETA, battery", desc: "Transparent, extensible allocation with conversation IDs and deadlines." },
+              { title: "Accept / reject + resource reservation", desc: "Doors, elevators and chargers are reserved before motion starts." },
+              { title: "inform-progress → inform-result", desc: "ROS actions for long-running navigation; explicit failure states drive recovery." },
+            ]}
+          />
+          <div className="mt-6">
+            <Grid cols={3}>
+              <ConceptCard icon={<ShieldCheck />} title="Security" desc="SROS 2 + DDS Security for protected comms; separate telemetry and command QoS profiles." />
+              <ConceptCard icon={<LineChart />} title="Benchmarks" desc="RWARE / TA-RWARE for allocation experiments; Gazebo or Webots for congestion tests." />
+              <ConceptCard icon={<Gauge />} title="KPIs" desc="Order lines/hour, mean task latency, makespan, blockage rate, battery utilisation, plan recovery time." />
+            </Grid>
+          </div>
+        </SubSection>
+      </Reveal>
+
+      <Reveal>
+        <SubSection eyebrow="Reference design 3" title="Trading & Marketplace — Brokered">
+          <Diagram>
+            <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-3">
+              {[
+                { label: "Market data / listings", icon: <Globe2 className="h-4 w-4" /> },
+                { label: "Strategy agents", icon: <Brain className="h-4 w-4" /> },
+                { label: "Risk & policy agent", icon: <ShieldCheck className="h-4 w-4" /> },
+                { label: "Execution / negotiation", icon: <Workflow className="h-4 w-4" /> },
+                { label: "Exchange / matching core", icon: <Boxes className="h-4 w-4" /> },
+                { label: "Event log & replay", icon: <History className="h-4 w-4" /> },
+              ].map((s, i, arr) => (
+                <div key={s.label} className="flex items-center gap-2">
+                  <div className="flex items-center gap-2 rounded-full border border-white/10 bg-white/10 px-4 py-2 text-sm font-medium text-white backdrop-blur">
+                    <span className="text-neon-cyan">{s.icon}</span>
+                    {s.label}
+                  </div>
+                  {i < arr.length - 1 && <span className="text-white/40">→</span>}
+                </div>
+              ))}
+            </div>
+          </Diagram>
+          <p className="mt-4 text-sm text-white/60">
+            Use gRPC/Protobuf for strategy → risk → execution flows, keep the exchange simulation event-driven
+            (ABIDES / ABIDES-Gym with configurable pairwise latencies), and centralise admissibility and limit
+            enforcement in the policy agent. Metrics: execution delay, fill ratio, inventory path, portfolio
+            evolution, policy stability under latency variation.
+          </p>
+        </SubSection>
+      </Reveal>
+
+      <Reveal>
+        <SubSection eyebrow="Evaluation" title="Benchmark the System, Not the Agent">
+          <Table
+            headers={["Dimension", "Representative metrics", "Benchmarks / tools"]}
+            rows={[
+              ["Task success & coordination", "Completion rate, makespan, throughput, missed tasks, conflicts", "Open-RMF demos, RWARE, TA-RWARE"],
+              ["Communication quality", "End-to-end latency, deadline misses, reliability, loss, bandwidth", "ROS 2 QoS experiments, DDS deployments, MQTT load tests"],
+              ["Learning quality", "Episodic return, sample efficiency, regret, generalisation, seed reproducibility", "PettingZoo, BenchMARL, SMAC, Melting Pot"],
+              ["Swarm performance", "Coverage, collision rate, connectivity, energy per task, resilience to agent loss", "VMAS, MPE2, swarm-robotics surveys"],
+              ["Market behaviour", "Execution quality, latency sensitivity, inventory path, fill ratio, order-flow impact", "ABIDES, ABIDES-Gym"],
+            ]}
+          />
+        </SubSection>
+      </Reveal>
+
+      <Reveal>
+        <SubSection eyebrow="Trust" title="Fault Tolerance, Security & Privacy">
+          <Grid cols={4}>
+            <ConceptCard icon={<AlertTriangle />} title="Explicit conversation state" desc="Deadlines, conversation IDs, accept/reject, failure and not-understood states are the hooks for retries, supervisors, dead-letters and compensation." />
+            <ConceptCard icon={<Lock />} title="Zero trust" desc="NIST SP 800-207 — no implicit trust, continuous verification. mTLS, OAuth 2.0, OIDC for service-centric MAS." />
+            <ConceptCard icon={<ShieldCheck />} title="Robotics security" desc="SROS 2 and DDS Security give authentication, access control and encryption at the transport layer." />
+            <ConceptCard icon={<Activity />} title="Privacy-aware telemetry" desc="Minimise agent-visible data, separate telemetry from sensitive payloads, log trace IDs — not secrets. OpenTelemetry + Prometheus." />
+          </Grid>
+        </SubSection>
+      </Reveal>
+
+      <Reveal>
+        <SubSection eyebrow="Roadmap" title="Interface-First, Simulation-First">
+          <Timeline
+            items={[
+              { year: "M1", title: "Problem framing & assumptions", desc: "Domain boundaries, agent roles, objectives, trust boundary, latency classes, success metrics. Write ADRs with measurable acceptance criteria." },
+              { year: "M2", title: "Schema & ontology baseline", desc: "Message contracts, versioning rules, domain vocabulary. Protobuf/ROS IDL for runtime, JSON Schema for APIs, optional OWL/RDF for shared semantics." },
+              { year: "M3", title: "Minimal communication substrate", desc: "One dominant internal fabric, message validation, mailbox abstractions, conversation identifiers, explicit compatibility surfaces." },
+              { year: "M4", title: "Core agent runtime", desc: "Lifecycle, local state, behaviour scheduling, retries, timeouts, health endpoints. Bounded inboxes, idempotent handlers, explicit failure states." },
+              { year: "M5", title: "Coordination & directory", desc: "Capability registration, matching, contract-net or auction allocation, supervisor recovery paths." },
+              { year: "M6", title: "Simulation & benchmarks", desc: "Reproducible seeds, scenario library, latency injection, agent-dropout drills, regression thresholds in CI." },
+              { year: "M7", title: "Trust & operations", desc: "Zero-trust identity, policy enforcement, OpenTelemetry traces, Prometheus alerting, CI/CD with traceable rollback." },
+            ]}
+          />
+        </SubSection>
+      </Reveal>
+
+      <KeyTakeaways
+        items={[
+          "Choose coordination topology, timing model and trust boundary before choosing a framework.",
+          "Standardise interfaces and protocols hard; leave internal agent cognition to the application.",
+          "Make coordination explicit — CFPs, proposals, deadlines, conversation IDs and failure states are what make a MAS debuggable.",
+          "Simulate and benchmark the whole socio-technical system; Gymnasium + PettingZoo, not legacy Gym.",
+          "Treat observability, security and safety as first-class components, not post-launch add-ons.",
+        ]}
+      />
+    </div>
+  );
+}
