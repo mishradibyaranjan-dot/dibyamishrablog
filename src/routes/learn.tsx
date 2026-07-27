@@ -187,6 +187,9 @@ function Learn() {
         <TabsContent value="rag" className="mt-8 space-y-12">
           <IntroRAG />
         </TabsContent>
+        <TabsContent value="mas" className="mt-8 space-y-12">
+          <IntroMAS />
+        </TabsContent>
       </Tabs>
     </Section>
   );
