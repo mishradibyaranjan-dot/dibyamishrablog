@@ -73,6 +73,10 @@ import heroRAG from "@/assets/learn/human-robot-rag.jpg";
 import heroMAS from "@/assets/learn/human-robot-mas.jpg";
 import { pageOgImages, SITE_ORIGIN } from "@/lib/og-images";
 import { breadcrumbScript } from "@/lib/breadcrumbs";
+import { LEARN_MODULES } from "@/lib/learn-catalog";
+import { useLearnProgress } from "@/lib/learn-progress";
+import { LearnSearch } from "@/components/learn/LearnSearch";
+import { ModulePdf } from "@/components/learn/ModulePdf";
 
 function TabHeroImage({ src, alt, caption }: { src: string; alt: string; caption: string }) {
   return (
@@ -132,14 +136,54 @@ export const Route = createFileRoute("/learn")({
 
 type TabKey = "ai" | "cloud" | "saas" | "itil" | "llm" | "genai-retail" | "multitenant" | "rag" | "mas";
 
+const TAB_CONTENT: Record<TabKey, () => React.ReactElement> = {
+  ai: () => <IntroAI />,
+  cloud: () => <IntroCloud />,
+  saas: () => <IntroSaaS />,
+  itil: () => <IntroITIL />,
+  llm: () => <IntroLLM />,
+  "genai-retail": () => <IntroGenAIRetail />,
+  multitenant: () => <IntroMultiTenant />,
+  rag: () => <IntroRAG />,
+  mas: () => <IntroMAS />,
+};
+
+const TAB_ICONS: Record<TabKey, React.ReactNode> = {
+  ai: <Brain className="h-4 w-4" />,
+  cloud: <Cloud className="h-4 w-4" />,
+  saas: <Layers className="h-4 w-4" />,
+  itil: <KanbanSquare className="h-4 w-4" />,
+  llm: <Cpu className="h-4 w-4" />,
+  "genai-retail": <ShoppingCart className="h-4 w-4" />,
+  multitenant: <Building2 className="h-4 w-4" />,
+  rag: <Search className="h-4 w-4" />,
+  mas: <Bot className="h-4 w-4" />,
+};
+
 function Learn() {
   const { user } = useAuth();
   const [tab, setTab] = useState<TabKey>("ai");
+  const { progress, hydrated, toggleModule, setLastModule } = useLearnProgress();
+  const [resumed, setResumed] = useState(false);
+
+  // Resume where the reader left off (once, after hydration).
+  useEffect(() => {
+    if (!hydrated || resumed) return;
+    setResumed(true);
+    const last = progress.lastModule as TabKey | null;
+    if (last && last in TAB_CONTENT && last !== tab) setTab(last);
+  }, [hydrated, resumed, progress.lastModule, tab]);
+
+  useEffect(() => {
+    if (hydrated) setLastModule(tab);
+  }, [tab, hydrated, setLastModule]);
 
   useEffect(() => {
     if (!user) return;
     supabase.from("tab_access").insert({ user_id: user.id, page: "/learn", tab_id: tab });
   }, [tab, user]);
+
+  const completedCount = LEARN_MODULES.filter((m) => progress.modules[m.key]).length;
 
   return (
     <Section className="pb-4 pt-16 lg:pt-24">
@@ -150,52 +194,92 @@ function Learn() {
         description="Nine self-contained mini-courses with quick-summary guides, concepts, history, architecture diagrams, interactive charts, video walkthroughs, comparison tables, code snippets, and security guidance. Each module opens with a Quick Summary Guide so you get the key takeaways in under a minute."
       />
 
+      <div className="mt-6 space-y-4">
+        <LearnSearch onOpenModule={(k) => setTab(k as TabKey)} completedModules={progress.modules} />
+        <div className="flex flex-wrap items-center gap-3 rounded-2xl border border-blue-200/70 bg-blue-50/60 px-4 py-3 text-sm text-slate-700">
+          <CheckCircle2 className="h-4 w-4 text-emerald-600" />
+          <span>
+            <strong>{completedCount}</strong> of {LEARN_MODULES.length} modules completed
+          </span>
+          <div className="h-1.5 min-w-[140px] flex-1 overflow-hidden rounded-full bg-white">
+            <div
+              className="h-full rounded-full bg-blue-600 transition-all"
+              style={{ width: `${(completedCount / LEARN_MODULES.length) * 100}%` }}
+            />
+          </div>
+        </div>
+      </div>
+
       <Tabs value={tab} onValueChange={(v) => setTab(v as TabKey)} className="mt-6">
         <TabsList className="grid h-auto w-full grid-cols-1 gap-1.5 rounded-none bg-transparent p-0 sm:grid-cols-2 sm:gap-2 lg:grid-cols-4">
-          <TabPill value="ai" icon={<Brain className="h-4 w-4" />} label="Intro to AI" />
-          <TabPill value="cloud" icon={<Cloud className="h-4 w-4" />} label="Intro to Cloud" />
-          <TabPill value="saas" icon={<Layers className="h-4 w-4" />} label="Intro to SaaS" />
-          <TabPill value="itil" icon={<KanbanSquare className="h-4 w-4" />} label="ITIL & Kanban" />
-          <TabPill value="llm" icon={<Cpu className="h-4 w-4" />} label="LLM Engineering" />
-          <TabPill value="genai-retail" icon={<ShoppingCart className="h-4 w-4" />} label="GenAI in Retail" />
-          <TabPill value="multitenant" icon={<Building2 className="h-4 w-4" />} label="Multi-Tenant Apps" />
-          <TabPill value="rag" icon={<Search className="h-4 w-4" />} label="RAG Systems" />
-          <TabPill value="mas" icon={<Bot className="h-4 w-4" />} label="Multi-Agent Systems" />
+          {LEARN_MODULES.map((m) => (
+            <TabPill
+              key={m.key}
+              value={m.key}
+              icon={TAB_ICONS[m.key as TabKey]}
+              label={m.label}
+              done={!!progress.modules[m.key]}
+            />
+          ))}
         </TabsList>
 
-        <TabsContent value="ai" className="mt-8 space-y-12">
-          <IntroAI />
-        </TabsContent>
-        <TabsContent value="cloud" className="mt-8 space-y-12">
-          <IntroCloud />
-        </TabsContent>
-        <TabsContent value="saas" className="mt-8 space-y-12">
-          <IntroSaaS />
-        </TabsContent>
-        <TabsContent value="itil" className="mt-8 space-y-12">
-          <IntroITIL />
-        </TabsContent>
-        <TabsContent value="llm" className="mt-8 space-y-12">
-          <IntroLLM />
-        </TabsContent>
-        <TabsContent value="genai-retail" className="mt-8 space-y-12">
-          <IntroGenAIRetail />
-        </TabsContent>
-        <TabsContent value="multitenant" className="mt-8 space-y-12">
-          <IntroMultiTenant />
-        </TabsContent>
-        <TabsContent value="rag" className="mt-8 space-y-12">
-          <IntroRAG />
-        </TabsContent>
-        <TabsContent value="mas" className="mt-8 space-y-12">
-          <IntroMAS />
-        </TabsContent>
+        {LEARN_MODULES.map((m) => {
+          const Content = TAB_CONTENT[m.key as TabKey];
+          return (
+            <TabsContent key={m.key} value={m.key} className="mt-8 space-y-12">
+              <Content />
+              {m.docKey && (
+                <Reveal>
+                  <ModulePdf docKey={m.docKey} title={m.title} />
+                </Reveal>
+              )}
+              <ModuleCompletion
+                done={!!progress.modules[m.key]}
+                title={m.label}
+                onToggle={() => toggleModule(m.key)}
+              />
+            </TabsContent>
+          );
+        })}
       </Tabs>
     </Section>
   );
 }
 
-function TabPill({ value, icon, label }: { value: string; icon: React.ReactNode; label: string }) {
+function ModuleCompletion({ done, title, onToggle }: { done: boolean; title: string; onToggle: () => void }) {
+  return (
+    <div className="flex flex-wrap items-center justify-between gap-3 rounded-3xl border border-blue-200/70 bg-white p-5">
+      <div className="flex items-center gap-3">
+        <CheckCircle2 className={`h-6 w-6 ${done ? "text-emerald-600" : "text-slate-300"}`} />
+        <div>
+          <p className="font-semibold text-slate-900">{done ? `${title} completed` : `Finished ${title}?`}</p>
+          <p className="text-sm text-slate-600">Your progress is saved on this device and restored next visit.</p>
+        </div>
+      </div>
+      <button
+        type="button"
+        onClick={onToggle}
+        className={`rounded-full px-4 py-2 text-sm font-semibold transition ${
+          done ? "border border-slate-200 bg-white text-slate-600 hover:border-slate-300" : "bg-blue-600 text-white hover:bg-blue-700"
+        }`}
+      >
+        {done ? "Mark as not complete" : "Mark as complete"}
+      </button>
+    </div>
+  );
+}
+
+function TabPill({
+  value,
+  icon,
+  label,
+  done,
+}: {
+  value: string;
+  icon: React.ReactNode;
+  label: string;
+  done?: boolean;
+}) {
   return (
     <TabsTrigger
       value={value}
@@ -203,6 +287,7 @@ function TabPill({ value, icon, label }: { value: string; icon: React.ReactNode;
     >
       <span className="grid h-7 w-7 place-items-center rounded-lg bg-white/10 text-white">{icon}</span>
       {label}
+      {done && <CheckCircle2 className="ml-auto h-4 w-4 text-emerald-500" aria-label="Completed" />}
     </TabsTrigger>
   );
 }
@@ -2155,6 +2240,12 @@ const MAS_VIDEOS = [
 
 function VideoCard({ id, title, author, note }: { id: string; title: string; author: string; note: string }) {
   const [playing, setPlaying] = useState(false);
+  const { progress, toggleVideo } = useLearnProgress();
+  const watched = !!progress.videos[id];
+  const start = () => {
+    setPlaying(true);
+    toggleVideo(id, true);
+  };
   return (
     <div className="group overflow-hidden rounded-2xl border border-white/10 bg-white/5 backdrop-blur-xl transition hover:border-neon-cyan/50">
       <div className="relative aspect-video w-full bg-black/40">
@@ -2170,7 +2261,7 @@ function VideoCard({ id, title, author, note }: { id: string; title: string; aut
         ) : (
           <button
             type="button"
-            onClick={() => setPlaying(true)}
+            onClick={start}
             aria-label={`Play video: ${title}`}
             className="absolute inset-0 h-full w-full"
           >
@@ -2187,11 +2278,23 @@ function VideoCard({ id, title, author, note }: { id: string; title: string; aut
             </span>
           </button>
         )}
+        {watched && (
+          <span className="absolute right-2 top-2 z-10 inline-flex items-center gap-1 rounded-full bg-emerald-600/90 px-2 py-0.5 text-[10px] font-semibold text-white">
+            <CheckCircle2 className="h-3 w-3" /> Watched
+          </span>
+        )}
       </div>
       <div className="p-4">
         <div className="text-[11px] font-semibold uppercase tracking-widest text-neon-cyan">{author}</div>
         <h4 className="mt-1 font-display text-sm font-bold text-white sm:text-base">{title}</h4>
         <p className="mt-1.5 text-sm text-white/70">{note}</p>
+        <button
+          type="button"
+          onClick={() => toggleVideo(id)}
+          className="mt-3 text-xs font-semibold text-neon-cyan underline-offset-2 hover:underline"
+        >
+          {watched ? "Mark as unwatched" : "Mark as watched"}
+        </button>
       </div>
     </div>
   );

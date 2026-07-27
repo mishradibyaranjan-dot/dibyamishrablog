@@ -26,6 +26,8 @@ export const SECURITY_HEADERS: Readonly<Record<string, string>> = Object.freeze(
     "connect-src 'self' https: wss:",
     "media-src 'self' blob: data:",
     "frame-src 'self' https://www.youtube-nocookie.com https://www.youtube.com",
+    // pdf.js renders the inline Learn PDF reader in a same-origin/blob worker.
+    "worker-src 'self' blob:",
     "upgrade-insecure-requests",
   ].join("; "),
 
