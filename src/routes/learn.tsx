@@ -130,7 +130,7 @@ export const Route = createFileRoute("/learn")({
 });
 
 
-type TabKey = "ai" | "cloud" | "saas" | "itil" | "llm" | "genai-retail" | "multitenant" | "rag";
+type TabKey = "ai" | "cloud" | "saas" | "itil" | "llm" | "genai-retail" | "multitenant" | "rag" | "mas";
 
 function Learn() {
   const { user } = useAuth();
