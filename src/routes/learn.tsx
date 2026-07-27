@@ -2240,6 +2240,12 @@ const MAS_VIDEOS = [
 
 function VideoCard({ id, title, author, note }: { id: string; title: string; author: string; note: string }) {
   const [playing, setPlaying] = useState(false);
+  const { progress, toggleVideo } = useLearnProgress();
+  const watched = !!progress.videos[id];
+  const start = () => {
+    setPlaying(true);
+    toggleVideo(id, true);
+  };
   return (
     <div className="group overflow-hidden rounded-2xl border border-white/10 bg-white/5 backdrop-blur-xl transition hover:border-neon-cyan/50">
       <div className="relative aspect-video w-full bg-black/40">
