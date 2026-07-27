@@ -160,6 +160,7 @@ function Learn() {
           <TabPill value="genai-retail" icon={<ShoppingCart className="h-4 w-4" />} label="GenAI in Retail" />
           <TabPill value="multitenant" icon={<Building2 className="h-4 w-4" />} label="Multi-Tenant Apps" />
           <TabPill value="rag" icon={<Search className="h-4 w-4" />} label="RAG Systems" />
+          <TabPill value="mas" icon={<Bot className="h-4 w-4" />} label="Multi-Agent Systems" />
         </TabsList>
 
         <TabsContent value="ai" className="mt-8 space-y-12">
