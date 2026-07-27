@@ -2261,7 +2261,7 @@ function VideoCard({ id, title, author, note }: { id: string; title: string; aut
         ) : (
           <button
             type="button"
-            onClick={() => setPlaying(true)}
+            onClick={start}
             aria-label={`Play video: ${title}`}
             className="absolute inset-0 h-full w-full"
           >
@@ -2278,11 +2278,23 @@ function VideoCard({ id, title, author, note }: { id: string; title: string; aut
             </span>
           </button>
         )}
+        {watched && (
+          <span className="absolute right-2 top-2 z-10 inline-flex items-center gap-1 rounded-full bg-emerald-600/90 px-2 py-0.5 text-[10px] font-semibold text-white">
+            <CheckCircle2 className="h-3 w-3" /> Watched
+          </span>
+        )}
       </div>
       <div className="p-4">
         <div className="text-[11px] font-semibold uppercase tracking-widest text-neon-cyan">{author}</div>
         <h4 className="mt-1 font-display text-sm font-bold text-white sm:text-base">{title}</h4>
         <p className="mt-1.5 text-sm text-white/70">{note}</p>
+        <button
+          type="button"
+          onClick={() => toggleVideo(id)}
+          className="mt-3 text-xs font-semibold text-neon-cyan underline-offset-2 hover:underline"
+        >
+          {watched ? "Mark as unwatched" : "Mark as watched"}
+        </button>
       </div>
     </div>
   );
