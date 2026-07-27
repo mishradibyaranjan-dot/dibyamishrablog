@@ -34,7 +34,28 @@ import {
   ShoppingCart,
   Building2,
   Search,
+  Bot,
+  Radio,
+  Share2,
+  PlayCircle,
+  Radar as RadarIcon,
+  Timer,
 } from "lucide-react";
+import {
+  ResponsiveContainer,
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip as RTooltip,
+  Legend,
+  RadarChart,
+  PolarGrid,
+  PolarAngleAxis,
+  PolarRadiusAxis,
+  Radar,
+} from "recharts";
 import { Section, SectionHeader } from "@/components/layout/Section";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
@@ -49,6 +70,7 @@ import heroLLM from "@/assets/learn/human-robot-llm.jpg";
 import heroRetail from "@/assets/learn/human-robot-retail.jpg";
 import heroMultiTenant from "@/assets/learn/human-robot-multitenant.jpg";
 import heroRAG from "@/assets/learn/human-robot-rag.jpg";
+import heroMAS from "@/assets/learn/human-robot-mas.jpg";
 import { pageOgImages, SITE_ORIGIN } from "@/lib/og-images";
 import { breadcrumbScript } from "@/lib/breadcrumbs";
 
