@@ -73,6 +73,10 @@ import heroRAG from "@/assets/learn/human-robot-rag.jpg";
 import heroMAS from "@/assets/learn/human-robot-mas.jpg";
 import { pageOgImages, SITE_ORIGIN } from "@/lib/og-images";
 import { breadcrumbScript } from "@/lib/breadcrumbs";
+import { LEARN_MODULES } from "@/lib/learn-catalog";
+import { useLearnProgress } from "@/lib/learn-progress";
+import { LearnSearch } from "@/components/learn/LearnSearch";
+import { ModulePdf } from "@/components/learn/ModulePdf";
 
 function TabHeroImage({ src, alt, caption }: { src: string; alt: string; caption: string }) {
   return (
