@@ -136,7 +136,7 @@ export const Route = createFileRoute("/learn")({
 
 type TabKey = "ai" | "cloud" | "saas" | "itil" | "llm" | "genai-retail" | "multitenant" | "rag" | "mas";
 
-const TAB_CONTENT: Record<TabKey, () => JSX.Element> = {
+const TAB_CONTENT: Record<TabKey, () => React.ReactElement> = {
   ai: () => <IntroAI />,
   cloud: () => <IntroCloud />,
   saas: () => <IntroSaaS />,
