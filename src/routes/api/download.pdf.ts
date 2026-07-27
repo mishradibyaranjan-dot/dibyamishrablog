@@ -10,6 +10,7 @@ import aiBeginner from "@/assets/repo/ai_beginner.pdf.asset.json" with { type: "
 import introCloud from "@/assets/repo/intro_cloud.pdf.asset.json" with { type: "json" };
 import saasTutorial from "@/assets/repo/saas_tutorial.pdf.asset.json" with { type: "json" };
 import enterpriseBrief from "@/assets/repo/enterprise_brief.pdf.asset.json" with { type: "json" };
+import multiAgent from "@/assets/repo/multi_agent_systems.pdf.asset.json" with { type: "json" };
 
 // Server-side allow-list mapping stable doc keys → internal asset URLs.
 // The upstream asset URLs are never exposed to the client.
