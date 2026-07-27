@@ -24,6 +24,8 @@ const REPO: Record<string, { url: string; filename: string }> = {
   "retail": { url: (retail as { url: string }).url, filename: "GenAI-Retail-Supply-Chains.pdf" },
   "itil": { url: (itil as { url: string }).url, filename: "ITIL-with-Kanban.pdf" },
   "executive-summary": { url: (execsum as { url: string }).url, filename: "Executive-Summary.pdf" },
+  "multi-agent-systems": { url: (multiAgent as { url: string }).url, filename: "Building-Multi-Agent-Systems.pdf" },
+
 };
 
 export const REPO_KEYS = Object.keys(REPO);
