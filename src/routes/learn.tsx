@@ -146,8 +146,8 @@ function Learn() {
       <SectionHeader
         as="h1"
         eyebrow="Learning Library"
-        title="Learn — AI, Cloud, SaaS, ITIL, LLM, GenAI Retail, Multi-Tenant & RAG"
-        description="Eight self-contained mini-courses with quick-summary guides, concepts, history, architecture diagrams, comparison tables, code snippets, and security guidance. Each module opens with a Quick Summary Guide so you get the key takeaways in under a minute."
+        title="Learn — AI, Cloud, SaaS, ITIL, LLM, GenAI Retail, Multi-Tenant, RAG & Multi-Agent Systems"
+        description="Nine self-contained mini-courses with quick-summary guides, concepts, history, architecture diagrams, interactive charts, video walkthroughs, comparison tables, code snippets, and security guidance. Each module opens with a Quick Summary Guide so you get the key takeaways in under a minute."
       />
 
       <Tabs value={tab} onValueChange={(v) => setTab(v as TabKey)} className="mt-6">
