@@ -10,7 +10,8 @@
     "preview": "vite preview",
     "lint": "eslint .",
     "test": "vitest run",
-    "format": "prettier --write ."
+    "format": "prettier --write .",
+    "security:scan": "node scripts/security-scan.mjs"
   },
   "dependencies": {
     "@ai-sdk/openai-compatible": "^2.0.51",
