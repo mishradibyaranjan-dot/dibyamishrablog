@@ -232,7 +232,8 @@ function QuickCards() {
             <img
               src={img}
               alt={alt}
-              loading="lazy"
+              loading={index === 0 ? "eager" : "lazy"}
+              fetchPriority={index === 0 ? "high" : "auto"}
               decoding="async"
               width={480}
               height={300}
