@@ -6,7 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { breadcrumbScript } from "@/lib/breadcrumbs";
 
 const CANONICAL =
-  "https://dibyamishrablog.lovable.app/white-paper/agentic-ai-enterprise-automation";
+  "https://www.dibyamishra.co.in/white-paper/agentic-ai-enterprise-automation";
 
 export const Route = createFileRoute("/white-paper/agentic-ai-enterprise-automation")({
   head: () => ({
