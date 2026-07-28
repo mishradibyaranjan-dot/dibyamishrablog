@@ -554,9 +554,13 @@ function ProofStrip() {
   ];
   return (
     <section
+      aria-labelledby="focus-areas-heading"
       className="mt-6 flex flex-col gap-8 border-t pt-12 md:flex-row md:items-center md:justify-between"
       style={{ borderColor: LINE }}
     >
+      <h2 id="focus-areas-heading" className="sr-only">
+        Focus areas and contact
+      </h2>
       <div
         className="text-2xl font-bold"
         style={{ ...HEADING, color: INK, letterSpacing: "-0.02em" }}
