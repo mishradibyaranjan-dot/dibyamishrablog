@@ -216,8 +216,12 @@ function QuickCards() {
     { to: "/newsletter", label: "Newsletter", desc: "Monthly intelligence brief", Icon: Mail, img: cardNewsletter, alt: "Human and robot hands collaborating on a newsletter" },
   ] as const;
   return (
-    <section className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
-      {items.map(({ to, label, desc, Icon, img, alt }) => (
+    <section aria-labelledby="explore-heading">
+      <h2 id="explore-heading" className="sr-only">
+        Explore the site
+      </h2>
+      <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
+      {items.map(({ to, label, desc, Icon, img, alt }, index) => (
         <Link
           key={to}
           to={to}
