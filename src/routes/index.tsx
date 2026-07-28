@@ -270,12 +270,17 @@ function QuickCards() {
 // ---------- BENTO ----------
 function BentoGrid({ latest }: { latest: LatestIssue | null }) {
   return (
-    <div className="grid grid-cols-1 gap-6 md:grid-cols-12">
-      <NewsletterTile latest={latest} />
-      <LearnTile />
-      <RepositoryTile />
-      <CaseStudyTile />
-    </div>
+    <section aria-labelledby="highlights-heading">
+      <h2 id="highlights-heading" className="sr-only">
+        Highlights
+      </h2>
+      <div className="grid grid-cols-1 gap-6 md:grid-cols-12">
+        <NewsletterTile latest={latest} />
+        <LearnTile />
+        <RepositoryTile />
+        <CaseStudyTile />
+      </div>
+    </section>
   );
 }
 
