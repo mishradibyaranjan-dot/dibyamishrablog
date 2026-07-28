@@ -7,9 +7,13 @@ Disallow: /forgot-password
 Disallow: /reset-password
 Disallow: /email/
 
-# Internal / API routes
+# Internal / API / admin routes (intentionally not in sitemap)
 Disallow: /api/
 Disallow: /lovable/
+Disallow: /.lovable/
+Disallow: /.mcp/
+Disallow: /.well-known/
+Disallow: /admin/
 Disallow: /reports
 
 Sitemap: https://www.dibyamishra.co.in/sitemap.xml
