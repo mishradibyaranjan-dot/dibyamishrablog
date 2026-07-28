@@ -62,7 +62,7 @@ export const Route = createFileRoute("/newsletter/$slug")({
           children: JSON.stringify({
             "@context": "https://schema.org",
             "@type": "Article",
-            headline: title,
+            headline: rawTitle,
             description: desc,
             datePublished: issue?.published_at ?? undefined,
             dateModified: issue?.published_at ?? undefined,
@@ -74,7 +74,7 @@ export const Route = createFileRoute("/newsletter/$slug")({
         },
         breadcrumbScript([
           { name: "Newsletter", path: "/newsletter" },
-          { name: title, path: `/newsletter/${issue?.slug ?? ""}` },
+          { name: rawTitle, path: `/newsletter/${issue?.slug ?? ""}` },
         ]),
       ],
     };
