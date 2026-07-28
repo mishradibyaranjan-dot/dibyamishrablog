@@ -127,7 +127,20 @@ export const Route = createFileRoute("/learn")({
         { name: "twitter:image", content: pageOgImages.learn },
       ],
       links: [{ rel: "canonical", href: url }],
-      scripts: [breadcrumbScript([{ name: "Learn", path: "/learn" }])],
+      scripts: [
+        {
+          type: "application/ld+json",
+          children: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "CollectionPage",
+            name: title,
+            description,
+            url,
+            isPartOf: { "@type": "WebSite", name: "Dibya Ranjan Mishra", url: SITE_ORIGIN },
+          }),
+        },
+        breadcrumbScript([{ name: "Learn", path: "/learn" }]),
+      ],
     };
   },
   component: Learn,

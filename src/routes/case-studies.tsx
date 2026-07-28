@@ -33,7 +33,20 @@ export const Route = createFileRoute("/case-studies")({
         { name: "twitter:image", content: pageOgImages.caseStudies },
       ],
       links: [{ rel: "canonical", href: url }],
-      scripts: [breadcrumbScript([{ name: "Case Studies", path: "/case-studies" }])],
+      scripts: [
+        {
+          type: "application/ld+json",
+          children: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "CollectionPage",
+            name: "Case Studies — Dibya Ranjan Mishra",
+            description: desc,
+            url,
+            isPartOf: { "@type": "WebSite", name: "Dibya Ranjan Mishra", url: SITE_ORIGIN },
+          }),
+        },
+        breadcrumbScript([{ name: "Case Studies", path: "/case-studies" }]),
+      ],
     };
   },
   component: CaseStudies,
