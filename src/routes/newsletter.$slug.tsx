@@ -32,17 +32,28 @@ export const Route = createFileRoute("/newsletter/$slug")({
   head: ({ loaderData }) => {
     const issue = loaderData as Issue | undefined;
     const url = `${SITE_ORIGIN}/newsletter/${issue?.slug ?? ""}`;
-    const title = issue?.title ?? "Newsletter";
-    const desc = issue?.summary ?? "Monthly newsletter by Dibya R. Mishra.";
+    const rawTitle = issue?.title ?? "Newsletter";
+    const title = `${rawTitle} — Newsletter`.length > 60 ? rawTitle.slice(0, 60) : `${rawTitle} — Newsletter`;
+    const rawDesc = issue?.summary?.trim() ?? "";
+    const desc = (
+      rawDesc.length >= 50
+        ? rawDesc
+        : `${rawTitle} — an issue of the monthly newsletter by Dibya Ranjan Mishra on AI, cloud and enterprise SaaS.`
+    ).slice(0, 158);
+    const image = pageOgImages.newsletter;
     return {
       meta: [
-        { title: `${title} — Newsletter` },
+        { title },
         { name: "description", content: desc },
-        { property: "og:title", content: title },
+        { property: "og:title", content: rawTitle },
         { property: "og:description", content: desc },
         { property: "og:type", content: "article" },
         { property: "og:url", content: url },
+        { property: "og:image", content: image },
+        { property: "og:image:width", content: "1200" },
+        { property: "og:image:height", content: "630" },
         { name: "twitter:card", content: "summary_large_image" },
+        { name: "twitter:image", content: image },
       ],
       links: [{ rel: "canonical", href: url }],
       scripts: [
