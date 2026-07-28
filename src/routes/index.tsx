@@ -259,7 +259,7 @@ function QuickCards() {
             </div>
           </div>
         </Link>
-      ))}
+      </div>
     </section>
   );
 }
