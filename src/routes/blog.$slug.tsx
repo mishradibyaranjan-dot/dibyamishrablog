@@ -16,8 +16,14 @@ export const Route = createFileRoute("/blog/$slug")({
   head: ({ loaderData, params }) => {
     const post = loaderData?.post;
     const rawTitle = post?.title ?? "Article";
-    const title = `${rawTitle} — Dibya Ranjan Mishra`;
-    const desc = (post?.summary ?? "Article").slice(0, 158);
+    const suffixed = `${rawTitle} — Dibya Ranjan Mishra`;
+    const title = suffixed.length <= 60 ? suffixed : rawTitle.slice(0, 60);
+    const summary = post?.summary?.trim() ?? "";
+    const desc = (
+      summary.length >= 50
+        ? summary
+        : `${rawTitle} — an in-depth article by Dibya Ranjan Mishra on AI, cloud architecture and enterprise engineering.`
+    ).slice(0, 158);
     const url = `${SITE_ORIGIN}/blog/${params.slug}`;
     const image = postOgImages[params.slug] ?? pageOgImages.blog;
     return {
