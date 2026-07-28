@@ -23,7 +23,7 @@ export const Route = createFileRoute("/about")({
       { name: "description", content: "VP Engineering with 20+ years leading 500+ engineers and $28M+ budgets across Shipping, BFSI, Insurance and SaaS." },
       { property: "og:title", content: "About Dibya Ranjan Mishra — Engineering Leader" },
       { property: "og:description", content: "VP Engineering with 20+ years, 500+ engineers, $28M+ budgets, and AI/Cloud transformation across global enterprises." },
-      { property: "og:url", content: "https://dibyamishrablog.lovable.app/about" },
+      { property: "og:url", content: "https://www.dibyamishra.co.in/about" },
       { property: "og:type", content: "profile" },
       { property: "og:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/pI8mCXobICTShgzD4uthW89NKmv1/social-images/social-1781504443585-picofme_(4).webp" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -32,7 +32,7 @@ export const Route = createFileRoute("/about")({
       { name: "twitter:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/pI8mCXobICTShgzD4uthW89NKmv1/social-images/social-1781504443585-picofme_(4).webp" },
 
     ],
-    links: [{ rel: "canonical", href: "https://dibyamishrablog.lovable.app/about" }],
+    links: [{ rel: "canonical", href: "https://www.dibyamishra.co.in/about" }],
     scripts: [{
       type: "application/ld+json",
       children: JSON.stringify({
@@ -49,7 +49,7 @@ export const Route = createFileRoute("/about")({
           "Engineering Leader",
         ],
         description: "Technology executive with 20+ years leading engineering, product & delivery organisations across Shipping, BFSI, Insurance, Retail/FinTech, and Enterprise SaaS. Scaled portfolio revenue $1M to $20M in 24 months, managed $28M+ combined budgets, and led 500+ engineers across 5 time zones. Deep expertise in cloud-native architecture (AWS, Azure, GCP), AI/ML & Agentic AI, DevSecOps/MLOps, and vessel/fleet & supply chain platforms.",
-        url: "https://dibyamishrablog.lovable.app/about",
+        url: "https://www.dibyamishra.co.in/about",
         image: "https://storage.googleapis.com/gpt-engineer-file-uploads/pI8mCXobICTShgzD4uthW89NKmv1/social-images/social-1781504443585-picofme_(4).webp",
         email: "dibyam1983@gmail.com",
         telephone: "+91-73372-22545",
@@ -63,7 +63,7 @@ export const Route = createFileRoute("/about")({
           "https://www.linkedin.com/in/dibya-mishra-55b94654",
           "https://github.com/mishradibyaranjan-dot/",
           "https://bold.pro/my/dibya-mishra-260203120923",
-          "https://dibyamishrablog.lovable.app",
+          "https://www.dibyamishra.co.in",
         ],
         knowsAbout: [
           "Artificial Intelligence",
@@ -130,7 +130,7 @@ export const Route = createFileRoute("/about")({
         worksFor: {
           "@type": "Organization",
           name: "Crystal Tech Ventures",
-          url: "https://dibyamishrablog.lovable.app",
+          url: "https://www.dibyamishra.co.in",
           description: "International retail & supply chain technology and Global Capability Centre (GCC) setup.",
           employee: {
             "@type": "EmployeeRole",

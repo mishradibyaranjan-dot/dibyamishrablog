@@ -216,8 +216,12 @@ function QuickCards() {
     { to: "/newsletter", label: "Newsletter", desc: "Monthly intelligence brief", Icon: Mail, img: cardNewsletter, alt: "Human and robot hands collaborating on a newsletter" },
   ] as const;
   return (
-    <section className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
-      {items.map(({ to, label, desc, Icon, img, alt }) => (
+    <section aria-labelledby="explore-heading">
+      <h2 id="explore-heading" className="sr-only">
+        Explore the site
+      </h2>
+      <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
+      {items.map(({ to, label, desc, Icon, img, alt }, index) => (
         <Link
           key={to}
           to={to}
@@ -228,7 +232,8 @@ function QuickCards() {
             <img
               src={img}
               alt={alt}
-              loading="lazy"
+              loading={index === 0 ? "eager" : "lazy"}
+              fetchPriority={index === 0 ? "high" : "auto"}
               decoding="async"
               width={480}
               height={300}
@@ -255,6 +260,7 @@ function QuickCards() {
           </div>
         </Link>
       ))}
+      </div>
     </section>
   );
 }
@@ -264,12 +270,17 @@ function QuickCards() {
 // ---------- BENTO ----------
 function BentoGrid({ latest }: { latest: LatestIssue | null }) {
   return (
-    <div className="grid grid-cols-1 gap-6 md:grid-cols-12">
-      <NewsletterTile latest={latest} />
-      <LearnTile />
-      <RepositoryTile />
-      <CaseStudyTile />
-    </div>
+    <section aria-labelledby="highlights-heading">
+      <h2 id="highlights-heading" className="sr-only">
+        Highlights
+      </h2>
+      <div className="grid grid-cols-1 gap-6 md:grid-cols-12">
+        <NewsletterTile latest={latest} />
+        <LearnTile />
+        <RepositoryTile />
+        <CaseStudyTile />
+      </div>
+    </section>
   );
 }
 
@@ -548,9 +559,13 @@ function ProofStrip() {
   ];
   return (
     <section
+      aria-labelledby="focus-areas-heading"
       className="mt-6 flex flex-col gap-8 border-t pt-12 md:flex-row md:items-center md:justify-between"
       style={{ borderColor: LINE }}
     >
+      <h2 id="focus-areas-heading" className="sr-only">
+        Focus areas and contact
+      </h2>
       <div
         className="text-2xl font-bold"
         style={{ ...HEADING, color: INK, letterSpacing: "-0.02em" }}

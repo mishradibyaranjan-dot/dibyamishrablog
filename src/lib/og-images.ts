@@ -13,7 +13,7 @@ import researchOg from "@/assets/og/og-research.png.asset.json";
 import learnOg from "@/assets/og/og-learn.png";
 import newsletterOg from "@/assets/og/og-newsletter.png";
 
-export const SITE_ORIGIN = "https://dibyamishrablog.lovable.app";
+export const SITE_ORIGIN = "https://www.dibyamishra.co.in";
 
 const abs = (u: string) => (u.startsWith("http") ? u : `${SITE_ORIGIN}${u}`);
 
