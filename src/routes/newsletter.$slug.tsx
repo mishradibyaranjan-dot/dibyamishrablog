@@ -3,7 +3,7 @@ import { AlertTriangle, ArrowLeft, Loader2 } from "lucide-react";
 import { Section } from "@/components/layout/Section";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
-import { SITE_ORIGIN } from "@/lib/og-images";
+import { SITE_ORIGIN, pageOgImages } from "@/lib/og-images";
 import { breadcrumbScript } from "@/lib/breadcrumbs";
 import collabNewsletter from "@/assets/collab-newsletter.jpg";
 
