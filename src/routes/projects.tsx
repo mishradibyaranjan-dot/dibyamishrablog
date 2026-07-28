@@ -23,6 +23,7 @@ export const Route = createFileRoute("/projects")({
         { property: "og:title", content: "Projects — Dibya Ranjan Mishra" },
         { property: "og:description", content: desc },
         { property: "og:url", content: url },
+        { property: "og:type", content: "website" },
         { property: "og:image", content: pageOgImages.projects },
         { property: "og:image:width", content: "1200" },
         { property: "og:image:height", content: "630" },

@@ -23,6 +23,7 @@ export const Route = createFileRoute("/case-studies")({
         { property: "og:title", content: "Case Studies — Dibya Ranjan Mishra" },
         { property: "og:description", content: desc },
         { property: "og:url", content: url },
+        { property: "og:type", content: "website" },
         { property: "og:image", content: pageOgImages.caseStudies },
         { property: "og:image:width", content: "1200" },
         { property: "og:image:height", content: "630" },
@@ -32,7 +33,20 @@ export const Route = createFileRoute("/case-studies")({
         { name: "twitter:image", content: pageOgImages.caseStudies },
       ],
       links: [{ rel: "canonical", href: url }],
-      scripts: [breadcrumbScript([{ name: "Case Studies", path: "/case-studies" }])],
+      scripts: [
+        {
+          type: "application/ld+json",
+          children: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "CollectionPage",
+            name: "Case Studies — Dibya Ranjan Mishra",
+            description: desc,
+            url,
+            isPartOf: { "@type": "WebSite", name: "Dibya Ranjan Mishra", url: SITE_ORIGIN },
+          }),
+        },
+        breadcrumbScript([{ name: "Case Studies", path: "/case-studies" }]),
+      ],
     };
   },
   component: CaseStudies,

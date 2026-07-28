@@ -138,7 +138,7 @@ function Header() {
             whileHover={{ rotate: 8, scale: 1.06 }}
             transition={{ type: "spring", stiffness: 280, damping: 18 }}
             src={drmLogo.url}
-            alt="DRM logo"
+            alt="Dibya Ranjan Mishra personal brand logo"
             className="h-9 w-9 shrink-0 rounded-lg object-contain"
           />
           <span className="truncate text-slate-900">Dibya Ranjan Mishra</span>
