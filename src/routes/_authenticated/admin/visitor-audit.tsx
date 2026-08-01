@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
 import {
-  Loader2, ShieldAlert, ChevronLeft, ChevronRight, RefreshCw, Trash2, BellRing, Search, Gauge,
+  Loader2, ShieldAlert, ChevronLeft, ChevronRight, RefreshCw, Trash2, BellRing, Search, Gauge, Layers, X, Send,
 } from "lucide-react";
 import {
   Area, AreaChart, Bar, BarChart, CartesianGrid, Cell, Legend, ResponsiveContainer, Tooltip, XAxis, YAxis,
@@ -17,6 +17,8 @@ import {
   updateVisitorAuditSettings,
   purgeVisitorAudit,
   runVisitorAuditSpikeCheck,
+  getVisitorAuditDrilldown,
+  sendVisitorAuditTestAlert,
 } from "@/lib/visitor-audit.functions";
 
 export const Route = createFileRoute("/_authenticated/admin/visitor-audit")({
@@ -48,6 +50,15 @@ type Row = {
 
 type Analytics = Awaited<ReturnType<typeof getVisitorAuditAnalytics>>["analytics"];
 type Settings = Awaited<ReturnType<typeof getVisitorAuditAnalytics>>["settings"];
+type Drilldown = Awaited<ReturnType<typeof getVisitorAuditDrilldown>>;
+type DrilldownInput = {
+  from?: string;
+  to?: string;
+  path?: string;
+  country?: string;
+  reason?: string;
+  label: string;
+};
 
 const OUTCOMES: Record<string, { label: string; className: string }> = {
   accepted: { label: "Accepted", className: "bg-emerald-50 text-emerald-700 border-emerald-200" },
@@ -80,10 +91,21 @@ function Card({ label, value }: { label: string; value: string | number }) {
 }
 
 
-function TopList({ title, items }: { title: string; items: { label: string; count: number }[] }) {
+function TopList({
+  title,
+  items,
+  onSelect,
+  hint,
+}: {
+  title: string;
+  items: { label: string; count: number }[];
+  onSelect?: (label: string) => void;
+  hint?: string;
+}) {
   return (
     <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
       <h3 className="text-sm font-semibold text-slate-900">{title}</h3>
+      {hint && <p className="mt-0.5 text-xs text-slate-500">{hint}</p>}
       {items.length === 0 ? (
         <p className="mt-3 text-xs text-slate-500">No data in this window.</p>
       ) : (
@@ -94,7 +116,15 @@ function TopList({ title, items }: { title: string; items: { label: string; coun
               <XAxis type="number" tick={{ fontSize: 11 }} />
               <YAxis type="category" dataKey="label" width={140} tick={{ fontSize: 11 }} />
               <Tooltip />
-              <Bar dataKey="count" radius={[0, 4, 4, 0]}>
+              <Bar
+                dataKey="count"
+                radius={[0, 4, 4, 0]}
+                cursor={onSelect ? "pointer" : undefined}
+                onClick={(d: unknown) => {
+                  const label = (d as { payload?: { label?: string } })?.payload?.label;
+                  if (onSelect && label) onSelect(label);
+                }}
+              >
                 {items.map((_, i) => (
                   <Cell key={i} fill={BAR_COLORS[i % BAR_COLORS.length]} />
                 ))}
