@@ -17,6 +17,7 @@ import { Route as ResearchRouteImport } from './routes/research'
 import { Route as ProjectsRouteImport } from './routes/projects'
 import { Route as McpRouteImport } from './routes/mcp'
 import { Route as LearnRouteImport } from './routes/learn'
+import { Route as GuideRouteImport } from './routes/guide'
 import { Route as ForgotPasswordRouteImport } from './routes/forgot-password'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as CaseStudiesRouteImport } from './routes/case-studies'
@@ -95,6 +96,11 @@ const McpRoute = McpRouteImport.update({
 const LearnRoute = LearnRouteImport.update({
   id: '/learn',
   path: '/learn',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const GuideRoute = GuideRouteImport.update({
+  id: '/guide',
+  path: '/guide',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ForgotPasswordRoute = ForgotPasswordRouteImport.update({
@@ -315,6 +321,7 @@ export interface FileRoutesByFullPath {
   '/case-studies': typeof CaseStudiesRoute
   '/contact': typeof ContactRoute
   '/forgot-password': typeof ForgotPasswordRoute
+  '/guide': typeof GuideRoute
   '/learn': typeof LearnRoute
   '/mcp': typeof McpRoute
   '/projects': typeof ProjectsRoute
@@ -363,6 +370,7 @@ export interface FileRoutesByTo {
   '/case-studies': typeof CaseStudiesRoute
   '/contact': typeof ContactRoute
   '/forgot-password': typeof ForgotPasswordRoute
+  '/guide': typeof GuideRoute
   '/learn': typeof LearnRoute
   '/mcp': typeof McpRoute
   '/projects': typeof ProjectsRoute
@@ -413,6 +421,7 @@ export interface FileRoutesById {
   '/case-studies': typeof CaseStudiesRoute
   '/contact': typeof ContactRoute
   '/forgot-password': typeof ForgotPasswordRoute
+  '/guide': typeof GuideRoute
   '/learn': typeof LearnRoute
   '/mcp': typeof McpRoute
   '/projects': typeof ProjectsRoute
@@ -463,6 +472,7 @@ export interface FileRouteTypes {
     | '/case-studies'
     | '/contact'
     | '/forgot-password'
+    | '/guide'
     | '/learn'
     | '/mcp'
     | '/projects'
@@ -511,6 +521,7 @@ export interface FileRouteTypes {
     | '/case-studies'
     | '/contact'
     | '/forgot-password'
+    | '/guide'
     | '/learn'
     | '/mcp'
     | '/projects'
@@ -560,6 +571,7 @@ export interface FileRouteTypes {
     | '/case-studies'
     | '/contact'
     | '/forgot-password'
+    | '/guide'
     | '/learn'
     | '/mcp'
     | '/projects'
@@ -610,6 +622,7 @@ export interface RootRouteChildren {
   CaseStudiesRoute: typeof CaseStudiesRoute
   ContactRoute: typeof ContactRoute
   ForgotPasswordRoute: typeof ForgotPasswordRoute
+  GuideRoute: typeof GuideRoute
   LearnRoute: typeof LearnRoute
   McpRoute: typeof McpRoute
   ProjectsRoute: typeof ProjectsRoute
@@ -699,6 +712,13 @@ declare module '@tanstack/react-router' {
       path: '/learn'
       fullPath: '/learn'
       preLoaderRoute: typeof LearnRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/guide': {
+      id: '/guide'
+      path: '/guide'
+      fullPath: '/guide'
+      preLoaderRoute: typeof GuideRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/forgot-password': {
@@ -1018,6 +1038,7 @@ const rootRouteChildren: RootRouteChildren = {
   CaseStudiesRoute: CaseStudiesRoute,
   ContactRoute: ContactRoute,
   ForgotPasswordRoute: ForgotPasswordRoute,
+  GuideRoute: GuideRoute,
   LearnRoute: LearnRoute,
   McpRoute: McpRoute,
   ProjectsRoute: ProjectsRoute,
