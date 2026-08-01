@@ -2845,6 +2845,8 @@ function IntroVector() {
             poster={vectorPoster.url}
             title="Vector Search — animated walkthrough with narration"
             chapters={VECTOR_LESSON_CHAPTERS}
+            cues={VECTOR_SEARCH_CUES}
+
           />
         </SubSection>
       </Reveal>
