@@ -92,23 +92,25 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
 
     links: [
       { rel: "stylesheet", href: appCss },
-      {
-        rel: "preconnect",
-        href: "https://fonts.googleapis.com",
-      },
-      { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "" },
-      // Start the font CSS fetch as early as possible so the hero heading
-      // (the LCP element) is not waiting on a late-discovered request chain.
+      // Fonts are self-hosted (see src/styles.css @font-face). Preload only the
+      // two faces used above the fold so the hero heading paints immediately.
       {
         rel: "preload",
-        as: "style",
+        as: "font",
+        type: "font/woff2",
+        href: "/fonts/space-grotesk.woff2",
+        crossOrigin: "anonymous",
         fetchPriority: "high",
-        href: "https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap",
       },
       {
-        rel: "stylesheet",
-        href: "https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap",
+        rel: "preload",
+        as: "font",
+        type: "font/woff2",
+        href: "/fonts/dm-sans.woff2",
+        crossOrigin: "anonymous",
+        fetchPriority: "high",
       },
+
       {
         rel: "alternate",
         type: "application/rss+xml",
