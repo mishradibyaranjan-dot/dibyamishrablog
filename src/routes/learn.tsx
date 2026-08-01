@@ -94,7 +94,7 @@ function TabHeroImage({ src, alt, caption }: { src: string; alt: string; caption
         animate={{ opacity: 1, y: 0 }}
         className="relative overflow-hidden rounded-3xl border border-border bg-card shadow-[0_20px_60px_-30px_rgba(59,130,246,0.35)]"
       >
-        <div className="absolute inset-0 bg-gradient-to-tr from-blue-50 via-white to-cyan-50" aria-hidden />
+        <div className="absolute inset-0 bg-gradient-to-tr from-primary/10 via-card to-info/10" aria-hidden />
         <img
           src={src}
           alt={alt}
@@ -1769,7 +1769,7 @@ function RAGPipelineDiagram() {
 
 function QuickSummary({ items }: { items: string[] }) {
   return (
-    <div className="relative overflow-hidden rounded-3xl border border-neon-cyan/30 bg-gradient-to-br from-neon-cyan/10 via-white/[0.03] to-fuchsia-500/10 p-4 shadow-glow backdrop-blur-xl sm:p-6">
+    <div className="relative overflow-hidden rounded-3xl border border-neon-cyan/30 bg-gradient-to-br from-neon-cyan/10 via-card/40 to-special/10 p-4 shadow-glow backdrop-blur-xl sm:p-6">
       <div className="mb-4 flex items-center gap-2">
         <span className="grid h-8 w-8 place-items-center rounded-lg bg-brand-gradient text-foreground">
           <Zap className="h-4 w-4" />
@@ -1881,7 +1881,7 @@ function FeatureCard({ icon, title, body }: { icon: React.ReactNode; title: stri
 function KeyTakeaways({ items }: { items: string[] }) {
   return (
     <Reveal>
-      <div className="rounded-3xl border border-border bg-gradient-to-br from-white/[0.04] to-white/[0.02] p-4 backdrop-blur-xl sm:p-7">
+      <div className="rounded-3xl border border-border bg-gradient-to-br from-muted/30 to-muted/10 p-4 backdrop-blur-xl sm:p-7">
         <div className="flex items-center gap-2">
           <Sparkles className="h-4 w-4 text-neon-cyan" />
           <p className="text-xs font-semibold uppercase tracking-widest text-neon-cyan">Key Takeaways</p>
@@ -2000,7 +2000,7 @@ function Code({ language, code }: { language: string; code: string }) {
 
 function Diagram({ children }: { children: React.ReactNode }) {
   return (
-    <div className="rounded-2xl border border-border bg-gradient-to-br from-white/[0.06] to-white/[0.02] p-6 backdrop-blur-xl">
+    <div className="rounded-2xl border border-border bg-gradient-to-br from-muted/30 to-muted/10 p-6 backdrop-blur-xl">
       {children}
     </div>
   );
@@ -2257,7 +2257,7 @@ function LessonVideo() {
 
 function ChartCard({ title, subtitle, children }: { title: string; subtitle: string; children: React.ReactNode }) {
   return (
-    <div className="rounded-2xl border border-border bg-gradient-to-br from-white/[0.06] to-white/[0.02] p-4 backdrop-blur-xl sm:p-6">
+    <div className="rounded-2xl border border-border bg-gradient-to-br from-muted/30 to-muted/10 p-4 backdrop-blur-xl sm:p-6">
       <div className="mb-4">
         <div className="font-display text-base font-bold text-foreground">{title}</div>
         <p className="text-sm text-muted-foreground">{subtitle}</p>
