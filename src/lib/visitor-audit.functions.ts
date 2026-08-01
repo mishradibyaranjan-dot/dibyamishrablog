@@ -132,5 +132,11 @@ export const runVisitorAuditSpikeCheck = createServerFn({ method: "POST" })
   .handler(async ({ context }) => {
     await assertAdmin(context.supabase, context.userId);
     const { evaluateAuditSpike } = await import("@/lib/visitor-audit.server");
-    return await evaluateAuditSpike();
+    const res = await evaluateAuditSpike();
+    return {
+      checked: res.checked,
+      alerted: res.alerted,
+      reason: res.reason ?? null,
+      stats: res.stats ? JSON.stringify(res.stats) : null,
+    };
   });
