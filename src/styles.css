@@ -736,39 +736,70 @@ table th, table td { border-color: var(--color-border); }
 .bg-black\/60,
 .bg-black\/80 { background-color: color-mix(in oklch, var(--color-foreground) 55%, transparent) !important; }
 
-/* ============== Chat panel text overrides ==============
-   Force all text inside the floating chat panel to pure black for visibility.
-*/
-.floating-chat-panel,
-.floating-chat-panel *,
-.floating-chat-panel ::placeholder {
-  color: #000000 !important;
+/* ============== Hardcoded black / gray text → theme tokens ============== */
+.text-black,
+.hover\:text-black:hover,
+.group-hover\:text-black,
+.text-gray-900,
+.text-gray-800,
+.text-gray-700,
+.text-zinc-900,
+.text-neutral-900 { color: var(--color-foreground) !important; }
+.text-gray-600,
+.text-gray-500,
+.text-gray-400 { color: var(--color-muted-foreground) !important; }
+
+/* ============== Chat panel text ==============
+   Theme-aware: the panel uses card/foreground tokens so the assistant stays
+   legible in every theme (light and dark) instead of forcing pure black. */
+.floating-chat-panel {
+  background-color: var(--color-card) !important;
+  color: var(--color-card-foreground) !important;
 }
+.floating-chat-panel *:not(svg):not(path) {
+  color: var(--color-card-foreground) !important;
+}
+.floating-chat-panel ::placeholder { color: var(--color-muted-foreground) !important; }
 .floating-chat-panel .text-muted-foreground,
-.floating-chat-panel .text-slate-500,
-.floating-chat-panel .text-blue-600 {
-  color: #000000 !important;
-}
+.floating-chat-panel .text-slate-500 { color: var(--color-muted-foreground) !important; }
+.floating-chat-panel .text-blue-600 { color: var(--color-brand-1) !important; }
 .floating-chat-panel .is-user .bg-secondary,
 .floating-chat-panel .is-user > div,
 .floating-chat-panel .is-user [class*="bg-secondary"] {
-  background-color: #EFF6FF !important;
-  color: #000000 !important;
-  border: 1px solid #BFDBFE !important;
+  background-color: color-mix(in oklch, var(--color-brand-1) 12%, var(--color-card)) !important;
+  color: var(--color-card-foreground) !important;
+  border: 1px solid color-mix(in oklch, var(--color-brand-1) 30%, transparent) !important;
 }
 .floating-chat-panel .is-assistant > div,
 .floating-chat-panel .is-assistant [class*="text-foreground"] {
-  color: #000000 !important;
+  color: var(--color-card-foreground) !important;
 }
 .floating-chat-panel input,
 .floating-chat-panel textarea,
 .floating-chat-panel [data-slot="prompt-input-textarea"] {
-  background-color: #FFFFFF !important;
-  color: #000000 !important;
-  border-color: #BFDBFE !important;
+  background-color: var(--color-background) !important;
+  color: var(--color-foreground) !important;
+  border-color: color-mix(in oklch, var(--color-brand-1) 30%, transparent) !important;
 }
-.floating-chat-panel button svg {
-  color: #000000 !important;
+.floating-chat-panel button svg { color: var(--color-card-foreground) !important; }
+/* Solid brand buttons inside the panel keep light ink */
+.floating-chat-panel .bg-brand-gradient,
+.floating-chat-panel .bg-brand-gradient *,
+.floating-chat-panel .bg-primary,
+.floating-chat-panel .bg-primary *,
+.floating-chat-panel .bg-blue-600,
+.floating-chat-panel .bg-blue-600 * { color: var(--color-primary-foreground) !important; }
+
+/* Chat header gradient — theme aware */
+.floating-chat-panel header {
+  background: linear-gradient(
+    to right,
+    color-mix(in oklch, var(--color-brand-1) 12%, var(--color-card)),
+    var(--color-card),
+    color-mix(in oklch, var(--color-brand-2) 12%, var(--color-card))
+  ) !important;
+  border-color: var(--color-border) !important;
 }
+
 
 
