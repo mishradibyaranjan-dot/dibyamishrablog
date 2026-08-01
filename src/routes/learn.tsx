@@ -84,6 +84,8 @@ import { useLearnProgress } from "@/lib/learn-progress";
 import { LearnSearch } from "@/components/learn/LearnSearch";
 import { ModulePdf } from "@/components/learn/ModulePdf";
 import { LessonPlayer } from "@/components/learn/LessonPlayer";
+import { MULTI_AGENT_CUES, VECTOR_SEARCH_CUES } from "@/lib/video-captions";
+
 
 function TabHeroImage({ src, alt, caption }: { src: string; alt: string; caption: string }) {
   return (
@@ -2243,114 +2245,20 @@ const MAS_LESSON_CHAPTERS = [
 
 const MAS_LESSON_ID = "mas-lesson-video";
 
-/** Self-hosted lesson player with chapter seeking. No third-party embeds. */
+/** Self-hosted lesson player with chapters, captions and audio controls. */
 function LessonVideo() {
-  const ref = useRef<HTMLVideoElement | null>(null);
-  const [started, setStarted] = useState(false);
-  const [activeId, setActiveId] = useState(MAS_LESSON_CHAPTERS[0]!.id);
-  const { progress, toggleVideo } = useLearnProgress();
-  const watched = !!progress.videos[MAS_LESSON_ID];
-
-  useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-    const onTime = () => {
-      const c = [...MAS_LESSON_CHAPTERS].reverse().find((x) => el.currentTime + 0.25 >= x.start);
-      if (c) setActiveId((id) => (id === c.id ? id : c.id));
-    };
-    el.addEventListener("timeupdate", onTime);
-    return () => el.removeEventListener("timeupdate", onTime);
-  }, []);
-
-  const seek = (start: number) => {
-    const el = ref.current;
-    if (!el) return;
-    el.currentTime = start;
-    void el.play();
-    setStarted(true);
-    toggleVideo(MAS_LESSON_ID, true);
-  };
-
   return (
-    <div className="grid gap-5 lg:grid-cols-[1.5fr_1fr]">
-      <div className="group relative overflow-hidden rounded-2xl border border-white/10 bg-black/40 backdrop-blur-xl">
-        <div className="relative aspect-video w-full">
-          <video
-            ref={ref}
-            className="absolute inset-0 h-full w-full bg-white object-cover"
-            src={lessonVideo.url}
-            poster={lessonPoster.url}
-            preload="metadata"
-            playsInline
-            controls={started}
-            onPlay={() => {
-              setStarted(true);
-              toggleVideo(MAS_LESSON_ID, true);
-            }}
-          />
-          {!started && (
-            <button
-              type="button"
-              onClick={() => seek(0)}
-              aria-label="Play the Multi-Agent Systems lesson video"
-              className="absolute inset-0 h-full w-full"
-            >
-              <span className="absolute inset-0 grid place-items-center bg-black/25 transition group-hover:bg-black/10">
-                <PlayCircle className="h-14 w-14 text-white drop-shadow-lg" />
-              </span>
-            </button>
-          )}
-          {watched && (
-            <span className="absolute right-2 top-2 z-10 inline-flex items-center gap-1 rounded-full bg-emerald-600/90 px-2 py-0.5 text-[10px] font-semibold text-white">
-              <CheckCircle2 className="h-3 w-3" /> Watched
-            </span>
-          )}
-        </div>
-        <div className="flex flex-wrap items-center justify-between gap-3 p-4">
-          <div>
-            <div className="text-[11px] font-semibold uppercase tracking-widest text-neon-cyan">
-              Original lesson · self-hosted
-            </div>
-            <h4 className="mt-1 font-display text-sm font-bold text-white sm:text-base">
-              Multi-Agent Systems — animated walkthrough
-            </h4>
-          </div>
-          <button
-            type="button"
-            onClick={() => toggleVideo(MAS_LESSON_ID)}
-            className="text-xs font-semibold text-neon-cyan underline-offset-2 hover:underline"
-          >
-            {watched ? "Mark as unwatched" : "Mark as watched"}
-          </button>
-        </div>
-      </div>
-
-      <ol className="flex flex-col gap-2">
-        {MAS_LESSON_CHAPTERS.map((c, i) => (
-          <li key={c.id}>
-            <button
-              type="button"
-              onClick={() => seek(c.start)}
-              aria-current={activeId === c.id}
-              className={cn(
-                "w-full rounded-xl border p-3 text-left transition",
-                activeId === c.id
-                  ? "border-neon-cyan/60 bg-white/10"
-                  : "border-white/10 bg-white/[0.04] hover:border-neon-cyan/40 hover:bg-white/[0.07]",
-              )}
-            >
-              <div className="flex items-center gap-2 text-[11px] font-semibold uppercase tracking-widest text-neon-cyan">
-                <span>{String(i + 1).padStart(2, "0")}</span>
-                <span>{c.title}</span>
-              </div>
-              <p className="mt-1 text-xs leading-relaxed text-white/70">{c.note}</p>
-            </button>
-          </li>
-        ))}
-      </ol>
-    </div>
+    <LessonPlayer
+      videoId={MAS_LESSON_ID}
+      src={lessonVideo.url}
+      poster={lessonPoster.url}
+      title="Multi-Agent Systems — animated walkthrough with narration"
+      chapters={MAS_LESSON_CHAPTERS}
+      cues={MULTI_AGENT_CUES}
+    />
   );
 }
+
 
 
 function ChartCard({ title, subtitle, children }: { title: string; subtitle: string; children: React.ReactNode }) {
@@ -2937,6 +2845,8 @@ function IntroVector() {
             poster={vectorPoster.url}
             title="Vector Search — animated walkthrough with narration"
             chapters={VECTOR_LESSON_CHAPTERS}
+            cues={VECTOR_SEARCH_CUES}
+
           />
         </SubSection>
       </Reveal>

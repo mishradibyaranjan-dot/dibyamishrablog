@@ -18,6 +18,8 @@ import { Section, SectionHeader } from "@/components/layout/Section";
 import { SITE_ORIGIN } from "@/lib/og-images";
 import { breadcrumbScript } from "@/lib/breadcrumbs";
 import { cn } from "@/lib/utils";
+import { AccessibleVideo } from "@/components/video/AccessibleVideo";
+import { TOUR_CUES } from "@/lib/video-captions";
 import tourVideo from "@/assets/video/site-tour.mp4.asset.json";
 import tourPoster from "@/assets/video/site-tour-poster.jpg.asset.json";
 
@@ -140,51 +142,23 @@ const QUICK_LINKS = [
 function VideoStage({
   chapter,
   videoRef,
-  onPlayChapter,
+  onTime,
 }: {
   chapter: Chapter;
   videoRef: React.RefObject<HTMLVideoElement | null>;
-  onPlayChapter: () => void;
+  onTime: (t: number, d: number) => void;
 }) {
-  const [started, setStarted] = useState(false);
-
-  const play = () => {
-    setStarted(true);
-    onPlayChapter();
-  };
-
   return (
     <div className="relative self-start overflow-hidden rounded-3xl border border-blue-200 bg-slate-900 shadow-[0_30px_80px_-40px_rgba(15,23,42,0.55)]">
-      <div className="relative aspect-video w-full">
-        <video
-          ref={videoRef}
-          className="absolute inset-0 h-full w-full bg-white object-cover"
-          src={tourVideo.url}
-          poster={tourPoster.url}
-          preload="metadata"
-          playsInline
-          controls={started}
-          onPlay={() => setStarted(true)}
-        />
-        {!started && (
-          <button
-            type="button"
-            onClick={play}
-            aria-label={`Play the site tour: ${chapter.title}`}
-            className="group absolute inset-0 h-full w-full"
-          >
-            <span className="absolute inset-0 grid place-items-center bg-slate-950/35 transition group-hover:bg-slate-950/20">
-              <motion.span
-                animate={{ scale: [1, 1.08, 1] }}
-                transition={{ duration: 2.2, repeat: Infinity, ease: "easeInOut" }}
-                className="inline-flex"
-              >
-                <PlayCircle className="h-16 w-16 text-white drop-shadow-lg" />
-              </motion.span>
-            </span>
-          </button>
-        )}
-      </div>
+      <AccessibleVideo
+        src={tourVideo.url}
+        poster={tourPoster.url}
+        title="the guided site tour"
+        cues={TOUR_CUES}
+        videoRef={videoRef}
+        tone="dark"
+        onTime={onTime}
+      />
       <div className="flex flex-wrap items-center justify-between gap-3 border-t border-white/10 px-5 py-4">
         <div>
           <p className="text-[11px] font-semibold uppercase tracking-wider text-cyan-300">
@@ -192,7 +166,7 @@ function VideoStage({
           </p>
           <p className="text-sm font-semibold text-white">{chapter.title}</p>
           <p className="mt-0.5 text-[11px] text-white/60">
-            Self-hosted walkthrough — no third-party video embeds.
+            Self-hosted walkthrough — captions, volume and chapter jumps included.
           </p>
         </div>
         <Link
@@ -200,7 +174,7 @@ function VideoStage({
           className="inline-flex items-center gap-1.5 rounded-full bg-blue-600 px-3.5 py-2 text-xs font-semibold text-white transition hover:bg-blue-700"
         >
           {chapter.cta}
-          <ArrowRight className="h-3.5 w-3.5" />
+          <ArrowRight className="h-3.5 w-3.5" aria-hidden />
         </Link>
       </div>
     </div>
@@ -210,40 +184,50 @@ function VideoStage({
 function GuidePage() {
   const [activeId, setActiveId] = useState(CHAPTERS[0]!.id);
   const [seen, setSeen] = useState<Record<string, boolean>>({ [CHAPTERS[0]!.id]: true });
+  const [time, setTime] = useState(0);
+  const [duration, setDuration] = useState(0);
   const active = CHAPTERS.find((c) => c.id === activeId) ?? CHAPTERS[0]!;
-  const progress = Math.round((Object.keys(seen).length / CHAPTERS.length) * 100);
   const videoRef = useRef<HTMLVideoElement | null>(null);
 
-  /** Follow playback: highlight + tick off the chapter currently on screen. */
-  useEffect(() => {
-    const el = videoRef.current;
-    if (!el) return;
-    const onTime = () => {
-      const current = [...CHAPTERS].reverse().find((c) => el.currentTime + 0.25 >= c.start);
-      if (!current) return;
-      setActiveId((id) => (id === current.id ? id : current.id));
-      setSeen((s) => (s[current.id] ? s : { ...s, [current.id]: true }));
-    };
-    el.addEventListener("timeupdate", onTime);
-    return () => el.removeEventListener("timeupdate", onTime);
-  }, []);
+  /** Rail progress follows the narration position, not just the chapters clicked. */
+  const total = duration || CHAPTERS[CHAPTERS.length - 1]!.start + 5;
+  const progress = Math.min(100, Math.round((time / total) * 100));
 
-  const seek = (c: Chapter) => {
-    const el = videoRef.current;
-    if (!el) return;
-    try {
-      el.currentTime = c.start;
-      void el.play();
-    } catch {
-      // ignore — metadata may not be ready yet
-    }
+  /** Fraction of the active chapter that has been narrated so far. */
+  const chapterEnd = (c: Chapter) => {
+    const i = CHAPTERS.indexOf(c);
+    return i === CHAPTERS.length - 1 ? total : CHAPTERS[i + 1]!.start;
+  };
+  const chapterPct = (c: Chapter) => {
+    const end = chapterEnd(c);
+    if (time >= end) return 100;
+    if (time <= c.start) return 0;
+    return Math.round(((time - c.start) / (end - c.start)) * 100);
+  };
+
+  /** Follow playback: highlight + tick off the chapter currently narrated. */
+  const handleTime = (t: number, d: number) => {
+    setTime(t);
+    if (d) setDuration(d);
+    const current = [...CHAPTERS].reverse().find((c) => t + 0.25 >= c.start);
+    if (!current) return;
+    setActiveId((id) => (id === current.id ? id : current.id));
+    setSeen((s) => (s[current.id] ? s : { ...s, [current.id]: true }));
   };
 
   const select = (id: string) => {
     setActiveId(id);
     setSeen((s) => ({ ...s, [id]: true }));
     const c = CHAPTERS.find((x) => x.id === id);
-    if (c) seek(c);
+    const el = videoRef.current;
+    if (!c || !el) return;
+    try {
+      el.currentTime = c.start;
+      el.muted = false;
+      void el.play().catch(() => {});
+    } catch {
+      // ignore — metadata may not be ready yet
+    }
   };
 
   return (
@@ -256,28 +240,46 @@ function GuidePage() {
           description={DESC}
         />
 
-        {/* interactive progress rail */}
+        {/* progress rail synchronised with the narration playback position */}
         <div className="mb-8 rounded-2xl border border-blue-200 bg-white/70 p-4 backdrop-blur">
           <div className="flex items-center justify-between text-xs font-medium text-slate-600">
-            <span>Tour progress</span>
+            <span>Narration progress · {active.label.replace(/^\d+\s·\s/, "")}</span>
             <span className="text-blue-700">{progress}%</span>
           </div>
-          <div className="mt-2 h-2 w-full overflow-hidden rounded-full bg-slate-200">
-            <motion.div
-              className="h-full rounded-full bg-gradient-to-r from-blue-600 to-cyan-400"
-              animate={{ width: `${progress}%` }}
-              transition={{ type: "spring", stiffness: 120, damping: 20 }}
+          <div
+            className="mt-2 h-2 w-full overflow-hidden rounded-full bg-slate-200"
+            role="progressbar"
+            aria-label="Guided tour narration progress"
+            aria-valuemin={0}
+            aria-valuemax={100}
+            aria-valuenow={progress}
+          >
+            <div
+              className="h-full rounded-full bg-gradient-to-r from-blue-600 to-cyan-400 transition-[width] duration-200 ease-linear"
+              style={{ width: `${progress}%` }}
             />
+          </div>
+          {/* per-chapter segments, each filling as its narration plays */}
+          <div
+            className="mt-2 grid gap-1"
+            style={{ gridTemplateColumns: `repeat(${CHAPTERS.length}, minmax(0, 1fr))` }}
+          >
+            {CHAPTERS.map((c) => (
+              <div key={c.id} className="h-1 overflow-hidden rounded-full bg-slate-200" aria-hidden>
+                <div
+                  className={cn(
+                    "h-full rounded-full transition-[width] duration-200 ease-linear",
+                    c.id === activeId ? "bg-blue-600" : "bg-blue-400/70",
+                  )}
+                  style={{ width: `${chapterPct(c)}%` }}
+                />
+              </div>
+            ))}
           </div>
         </div>
 
         <div className="grid items-start gap-8 lg:grid-cols-[1.4fr_1fr]">
-          <VideoStage
-            chapter={active}
-            videoRef={videoRef}
-            onPlayChapter={() => seek(active)}
-          />
-
+          <VideoStage chapter={active} videoRef={videoRef} onTime={handleTime} />
 
           <ol className="flex flex-col gap-3">
             {CHAPTERS.map((c) => {
@@ -313,7 +315,10 @@ function GuidePage() {
                             {c.label}
                           </p>
                           {seen[c.id] && (
-                            <CheckCircle2 className="h-3.5 w-3.5 text-emerald-600" aria-label="Viewed" />
+                            <CheckCircle2
+                              className="h-3.5 w-3.5 text-emerald-600"
+                              aria-label="Viewed"
+                            />
                           )}
                         </div>
                         <h3 className="text-sm font-semibold text-slate-900">{c.title}</h3>
@@ -353,7 +358,9 @@ function GuidePage() {
                   <span className="relative grid h-10 w-10 place-items-center rounded-xl border border-blue-200 bg-blue-50 text-blue-600">
                     <Icon className="h-5 w-5" />
                   </span>
-                  <h3 className="relative mt-4 text-base font-semibold text-slate-900">{q.label}</h3>
+                  <h3 className="relative mt-4 text-base font-semibold text-slate-900">
+                    {q.label}
+                  </h3>
                   <p className="relative mt-1 text-sm text-slate-600">{q.note}</p>
                   <span className="relative mt-3 inline-flex items-center gap-1 text-xs font-semibold text-blue-700">
                     Open
@@ -369,7 +376,8 @@ function GuidePage() {
           <div>
             <h3 className="text-lg font-semibold text-slate-900">Still not sure where to start?</h3>
             <p className="mt-1 text-sm text-slate-600">
-              Ask the Learning Assistant — it can summarise any module or point you to the right page.
+              Ask the Learning Assistant — it can summarise any module or point you to the right
+              page.
             </p>
           </div>
           <button
