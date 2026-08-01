@@ -11,8 +11,7 @@
  *   (default) lint GUARDED paths only — used by CI and pre-publish
  *   --all     report legacy colors across src/ (informational, never fails)
  */
-import { readFileSync } from "node:fs";
-import { readdirSync, statSync } from "node:fs";
+import { readFileSync, readdirSync, statSync } from "node:fs";
 import path from "node:path";
 
 const ROOT = process.cwd();
@@ -42,22 +41,22 @@ const INLINE_STYLE_COLOR = /(?:color|background|backgroundColor|borderColor)\s*:
 
 const ALLOW_COMMENT = "theme-lint-allow";
 
-function walk(target) {
+function walk(target: string): string[] {
   const abs = path.join(ROOT, target);
   const st = statSync(abs);
   if (st.isFile()) return [target];
   return readdirSync(abs).flatMap((entry) => walk(path.join(target, entry)));
 }
 
-function collect(paths) {
+function collect(paths: string[]): string[] {
   return paths
     .flatMap((p) => walk(p))
     .filter((p) => /\.(tsx|ts|jsx|js)$/.test(p) && !p.endsWith(".test.tsx") && !p.endsWith(".test.ts"));
 }
 
-/** @returns {{file:string,line:number,text:string,match:string}[]} */
-export function findLegacyColors(paths) {
-  const findings = [];
+export type Finding = { file: string; line: number; text: string; match: string };
+export function findLegacyColors(paths: string[]): Finding[] {
+  const findings: Finding[] = [];
   for (const file of collect(paths)) {
     const lines = readFileSync(path.join(ROOT, file), "utf8").split("\n");
     lines.forEach((text, i) => {
@@ -80,7 +79,7 @@ function main() {
   const findings = findLegacyColors(targets);
 
   if (all) {
-    const byFile = findings.reduce((acc, f) => ((acc[f.file] = (acc[f.file] ?? 0) + 1), acc), {});
+    const byFile = findings.reduce<Record<string, number>>((acc, f) => ((acc[f.file] = (acc[f.file] ?? 0) + 1), acc), {});
     Object.entries(byFile)
       .sort((a, b) => b[1] - a[1])
       .forEach(([f, n]) => console.log(`${String(n).padStart(4)}  ${f}`));

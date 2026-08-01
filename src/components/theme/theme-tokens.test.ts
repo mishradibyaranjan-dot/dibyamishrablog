@@ -1,6 +1,6 @@
 import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
-import { GUARDED, findLegacyColors } from "../../../scripts/theme-token-lint.mjs";
+import { GUARDED, findLegacyColors } from "../../../scripts/theme-token-lint";
 
 const css = readFileSync("src/styles.css", "utf8");
 
