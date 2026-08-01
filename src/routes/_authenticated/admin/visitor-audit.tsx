@@ -70,14 +70,15 @@ const emptyFilters = {
   search: "",
 };
 
-function Card({ label, value, tone = "slate" }: { label: string; value: string | number; tone?: string }) {
+function Card({ label, value }: { label: string; value: string | number }) {
   return (
     <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
       <p className="text-xs uppercase tracking-wider text-slate-500">{label}</p>
-      <p className={`mt-1 text-2xl font-semibold text-${tone}-900`}>{value}</p>
+      <p className="mt-1 text-2xl font-semibold text-slate-900">{value}</p>
     </div>
   );
 }
+
 
 function TopList({ title, items }: { title: string; items: { label: string; count: number }[] }) {
   return (
