@@ -127,11 +127,32 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
   errorComponent: ErrorComponent,
 });
 
+/**
+ * Applies the visitor's saved theme before first paint so switching to a
+ * light palette (Daylight, Paper, Sand, Arctic) doesn't flash the dark default.
+ */
+const THEME_BOOTSTRAP = `(function(){try{
+var t=localStorage.getItem('drm-theme');
+var all=['cinematic','midnight','aurora','sunset','noir','emerald','light','paper','sand','arctic'];
+if(all.indexOf(t)<0)return;
+var light=['light','paper','sand','arctic'];
+var m=light.indexOf(t)>=0?'light':'dark';
+var r=document.documentElement;
+r.dataset.theme=t;r.classList.toggle('dark',m==='dark');r.style.colorScheme=m;
+}catch(e){}})();`;
+
 function RootShell({ children }: { children: ReactNode }) {
   return (
-    <html lang="en" data-theme="midnight" className="dark" style={{ colorScheme: "dark" }}>
+    <html
+      lang="en"
+      data-theme="midnight"
+      className="dark"
+      style={{ colorScheme: "dark" }}
+      suppressHydrationWarning
+    >
       <head>
         <HeadContent />
+        <ScriptOnce>{THEME_BOOTSTRAP}</ScriptOnce>
       </head>
       <body>
         {children}
@@ -140,6 +161,7 @@ function RootShell({ children }: { children: ReactNode }) {
     </html>
   );
 }
+
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
