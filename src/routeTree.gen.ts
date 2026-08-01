@@ -53,6 +53,7 @@ import { Route as LovableEmailTransactionalPreviewRouteImport } from './routes/l
 import { Route as LovableEmailQueueProcessRouteImport } from './routes/lovable/email/queue/process'
 import { Route as LovableEmailAuthWebhookRouteImport } from './routes/lovable/email/auth/webhook'
 import { Route as LovableEmailAuthPreviewRouteImport } from './routes/lovable/email/auth/preview'
+import { Route as ApiPublicCronVisitorAuditAlertsRouteImport } from './routes/api/public/cron/visitor-audit-alerts'
 import { Route as ApiPublicCronNewsletterSchedulerRouteImport } from './routes/api/public/cron/newsletter-scheduler'
 import { Route as ApiPublicCronMonthlyNewsletterRouteImport } from './routes/api/public/cron/monthly-newsletter'
 
@@ -286,6 +287,12 @@ const LovableEmailAuthPreviewRoute = LovableEmailAuthPreviewRouteImport.update({
   path: '/lovable/email/auth/preview',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiPublicCronVisitorAuditAlertsRoute =
+  ApiPublicCronVisitorAuditAlertsRouteImport.update({
+    id: '/api/public/cron/visitor-audit-alerts',
+    path: '/api/public/cron/visitor-audit-alerts',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const ApiPublicCronNewsletterSchedulerRoute =
   ApiPublicCronNewsletterSchedulerRouteImport.update({
     id: '/api/public/cron/newsletter-scheduler',
@@ -340,6 +347,7 @@ export interface FileRoutesByFullPath {
   '/lovable/email/suppression': typeof LovableEmailSuppressionRoute
   '/api/public/cron/monthly-newsletter': typeof ApiPublicCronMonthlyNewsletterRoute
   '/api/public/cron/newsletter-scheduler': typeof ApiPublicCronNewsletterSchedulerRoute
+  '/api/public/cron/visitor-audit-alerts': typeof ApiPublicCronVisitorAuditAlertsRoute
   '/lovable/email/auth/preview': typeof LovableEmailAuthPreviewRoute
   '/lovable/email/auth/webhook': typeof LovableEmailAuthWebhookRoute
   '/lovable/email/queue/process': typeof LovableEmailQueueProcessRoute
@@ -387,6 +395,7 @@ export interface FileRoutesByTo {
   '/lovable/email/suppression': typeof LovableEmailSuppressionRoute
   '/api/public/cron/monthly-newsletter': typeof ApiPublicCronMonthlyNewsletterRoute
   '/api/public/cron/newsletter-scheduler': typeof ApiPublicCronNewsletterSchedulerRoute
+  '/api/public/cron/visitor-audit-alerts': typeof ApiPublicCronVisitorAuditAlertsRoute
   '/lovable/email/auth/preview': typeof LovableEmailAuthPreviewRoute
   '/lovable/email/auth/webhook': typeof LovableEmailAuthWebhookRoute
   '/lovable/email/queue/process': typeof LovableEmailQueueProcessRoute
@@ -436,6 +445,7 @@ export interface FileRoutesById {
   '/lovable/email/suppression': typeof LovableEmailSuppressionRoute
   '/api/public/cron/monthly-newsletter': typeof ApiPublicCronMonthlyNewsletterRoute
   '/api/public/cron/newsletter-scheduler': typeof ApiPublicCronNewsletterSchedulerRoute
+  '/api/public/cron/visitor-audit-alerts': typeof ApiPublicCronVisitorAuditAlertsRoute
   '/lovable/email/auth/preview': typeof LovableEmailAuthPreviewRoute
   '/lovable/email/auth/webhook': typeof LovableEmailAuthWebhookRoute
   '/lovable/email/queue/process': typeof LovableEmailQueueProcessRoute
@@ -485,6 +495,7 @@ export interface FileRouteTypes {
     | '/lovable/email/suppression'
     | '/api/public/cron/monthly-newsletter'
     | '/api/public/cron/newsletter-scheduler'
+    | '/api/public/cron/visitor-audit-alerts'
     | '/lovable/email/auth/preview'
     | '/lovable/email/auth/webhook'
     | '/lovable/email/queue/process'
@@ -532,6 +543,7 @@ export interface FileRouteTypes {
     | '/lovable/email/suppression'
     | '/api/public/cron/monthly-newsletter'
     | '/api/public/cron/newsletter-scheduler'
+    | '/api/public/cron/visitor-audit-alerts'
     | '/lovable/email/auth/preview'
     | '/lovable/email/auth/webhook'
     | '/lovable/email/queue/process'
@@ -580,6 +592,7 @@ export interface FileRouteTypes {
     | '/lovable/email/suppression'
     | '/api/public/cron/monthly-newsletter'
     | '/api/public/cron/newsletter-scheduler'
+    | '/api/public/cron/visitor-audit-alerts'
     | '/lovable/email/auth/preview'
     | '/lovable/email/auth/webhook'
     | '/lovable/email/queue/process'
@@ -622,6 +635,7 @@ export interface RootRouteChildren {
   LovableEmailSuppressionRoute: typeof LovableEmailSuppressionRoute
   ApiPublicCronMonthlyNewsletterRoute: typeof ApiPublicCronMonthlyNewsletterRoute
   ApiPublicCronNewsletterSchedulerRoute: typeof ApiPublicCronNewsletterSchedulerRoute
+  ApiPublicCronVisitorAuditAlertsRoute: typeof ApiPublicCronVisitorAuditAlertsRoute
   LovableEmailAuthPreviewRoute: typeof LovableEmailAuthPreviewRoute
   LovableEmailAuthWebhookRoute: typeof LovableEmailAuthWebhookRoute
   LovableEmailQueueProcessRoute: typeof LovableEmailQueueProcessRoute
@@ -939,6 +953,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LovableEmailAuthPreviewRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/cron/visitor-audit-alerts': {
+      id: '/api/public/cron/visitor-audit-alerts'
+      path: '/api/public/cron/visitor-audit-alerts'
+      fullPath: '/api/public/cron/visitor-audit-alerts'
+      preLoaderRoute: typeof ApiPublicCronVisitorAuditAlertsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/public/cron/newsletter-scheduler': {
       id: '/api/public/cron/newsletter-scheduler'
       path: '/api/public/cron/newsletter-scheduler'
@@ -1024,6 +1045,7 @@ const rootRouteChildren: RootRouteChildren = {
   LovableEmailSuppressionRoute: LovableEmailSuppressionRoute,
   ApiPublicCronMonthlyNewsletterRoute: ApiPublicCronMonthlyNewsletterRoute,
   ApiPublicCronNewsletterSchedulerRoute: ApiPublicCronNewsletterSchedulerRoute,
+  ApiPublicCronVisitorAuditAlertsRoute: ApiPublicCronVisitorAuditAlertsRoute,
   LovableEmailAuthPreviewRoute: LovableEmailAuthPreviewRoute,
   LovableEmailAuthWebhookRoute: LovableEmailAuthWebhookRoute,
   LovableEmailQueueProcessRoute: LovableEmailQueueProcessRoute,
