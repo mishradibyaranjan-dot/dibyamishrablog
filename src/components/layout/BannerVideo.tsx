@@ -33,11 +33,17 @@ export function BannerVideo({ className }: { className?: string }) {
         /* autoplay blocked — poster stays visible */
       });
     };
-    const idle = (cb: () => void) =>
-      "requestIdleCallback" in window
-        ? (window as unknown as { requestIdleCallback: (c: () => void, o?: { timeout: number }) => number })
-            .requestIdleCallback(cb, { timeout: 3000 })
-        : window.setTimeout(cb, 2000);
+    const idle = (cb: () => void) => {
+      const w = window as unknown as {
+        requestIdleCallback?: (c: () => void, o?: { timeout: number }) => number;
+      };
+      if (typeof w.requestIdleCallback === "function") {
+        w.requestIdleCallback(cb, { timeout: 3000 });
+        return;
+      }
+      window.setTimeout(cb, 2000);
+    };
+
 
     if (document.readyState === "complete") {
       idle(start);
