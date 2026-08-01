@@ -288,7 +288,7 @@ function ModuleCompletion({ done, title, onToggle }: { done: boolean; title: str
         type="button"
         onClick={onToggle}
         className={`rounded-full px-4 py-2 text-sm font-semibold transition ${
-          done ? "border border-slate-200 bg-white text-slate-600 hover:border-slate-300" : "bg-blue-600 text-white hover:bg-blue-700"
+          done ? "border border-border bg-card text-foreground hover:bg-accent" : "bg-blue-600 text-white hover:bg-blue-700"
         }`}
       >
         {done ? "Mark as not complete" : "Mark as complete"}
