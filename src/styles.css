@@ -30,7 +30,9 @@
   --color-input: var(--input);
   --color-ring: var(--ring);
   --color-brand: var(--brand);
+  --color-brand-1: var(--brand);
   --color-brand-2: var(--brand-2);
+
   --color-neon-blue: var(--neon-blue);
   --color-neon-purple: var(--neon-purple);
   --color-neon-cyan: var(--neon-cyan);
