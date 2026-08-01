@@ -85,6 +85,8 @@ export function PageTransition() {
           className="absolute left-0 right-0 top-1/2 h-px bg-brand-gradient shadow-neon"
         />
       </motion.div>
+      )}
+
     </AnimatePresence>
   );
 }
