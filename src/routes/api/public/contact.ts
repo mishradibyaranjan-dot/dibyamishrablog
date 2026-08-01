@@ -14,7 +14,7 @@ const ContactSchema = z.object({
 const SITE_NAME = "dibyamishrablog";
 const SENDER_DOMAIN = "notify.dibyamishra.co.in";
 const FROM_DOMAIN = "notify.dibyamishra.co.in";
-const OWNER_EMAIL = "mishra.dibyaranjan@gmail.com";
+const OWNER_EMAILS = ["mishra.dibyaranjan@gmail.com", "contactme@dibyamishra.co.in"];
 
 function generateToken(): string {
   const bytes = new Uint8Array(32);
