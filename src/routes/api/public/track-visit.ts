@@ -67,7 +67,7 @@ async function writeAudit(row: AuditRow) {
       user_agent: (row.user_agent ?? "").slice(0, 500) || null,
       duration_ms: row.duration_ms ?? null,
       error_message: row.error_message ? String(row.error_message).slice(0, 1000) : null,
-      metadata: row.metadata ?? {},
+      metadata: (row.metadata ?? {}) as never,
     });
     if (error) console.error("[track-visit:audit]", error.message);
   } catch (e) {
