@@ -65,7 +65,7 @@
   --secondary: oklch(0.18 0.04 270);
   --secondary-foreground: oklch(0.98 0.01 250);
   --muted: oklch(0.18 0.03 270);
-  --muted-foreground: oklch(0.72 0.03 260);
+  --muted-foreground: oklch(0.80 0.03 260); /* WCAG AA: >=4.5:1 on dark surfaces */
   --accent: oklch(0.22 0.07 285);
   --accent-foreground: oklch(0.98 0.01 250);
   --destructive: oklch(0.65 0.22 25);
@@ -81,7 +81,8 @@
                    radial-gradient(ellipse 60% 50% at 90% 100%, oklch(0.68 0.27 305 / 0.3), transparent 70%),
                    linear-gradient(135deg, oklch(0.09 0.02 265), oklch(0.06 0.05 280));
   --gradient-brand: linear-gradient(135deg, oklch(0.7 0.22 255), oklch(0.68 0.27 305) 55%, oklch(0.82 0.18 200));
-  --gradient-text: linear-gradient(120deg, oklch(0.95 0.05 250), oklch(0.78 0.2 260) 45%, oklch(0.78 0.25 305));
+  /* Stops kept ≥ L 0.84 so small-caps gradient labels clear WCAG AA (4.5:1). */
+  --gradient-text: linear-gradient(120deg, oklch(0.96 0.05 250), oklch(0.86 0.16 260) 45%, oklch(0.86 0.18 305));
   --gradient-aurora: conic-gradient(from 180deg at 50% 50%, oklch(0.7 0.22 255 / 0.6), oklch(0.68 0.27 305 / 0.55), oklch(0.82 0.18 200 / 0.5), oklch(0.7 0.22 255 / 0.6));
 
   --shadow-glow: 0 25px 80px -20px oklch(0.7 0.22 255 / 0.55), 0 0 0 1px oklch(0.7 0.22 255 / 0.15);
@@ -96,18 +97,18 @@
   --card: oklch(0.11 0.04 260 / 0.65);
   --popover: oklch(0.09 0.04 260);
   --neon-blue: oklch(0.68 0.18 250);
-  --neon-purple: oklch(0.6 0.22 280);
+  --neon-purple: oklch(0.82 0.14 280);
   --neon-cyan: oklch(0.78 0.12 220);
   --primary: oklch(0.68 0.18 250);
   --ring: oklch(0.68 0.18 250);
   --accent: oklch(0.2 0.08 270);
   --brand: oklch(0.68 0.18 250);
-  --brand-2: oklch(0.6 0.22 280);
+  --brand-2: oklch(0.82 0.14 280);
   --gradient-hero: radial-gradient(ellipse 90% 70% at 50% 0%, oklch(0.55 0.2 260 / 0.4), transparent 65%),
                    radial-gradient(ellipse 60% 50% at 90% 100%, oklch(0.5 0.2 280 / 0.3), transparent 70%),
                    linear-gradient(135deg, oklch(0.06 0.03 260), oklch(0.04 0.04 270));
   --gradient-brand: linear-gradient(135deg, oklch(0.55 0.2 260), oklch(0.6 0.22 280) 55%, oklch(0.78 0.12 220));
-  --gradient-text: linear-gradient(120deg, oklch(0.95 0.04 250), oklch(0.72 0.18 260) 50%, oklch(0.75 0.2 280));
+  --gradient-text: linear-gradient(120deg, oklch(0.95 0.04 250), oklch(0.85 0.14 260) 50%, oklch(0.86 0.15 280));
   --gradient-aurora: conic-gradient(from 180deg at 50% 50%, oklch(0.55 0.2 260 / 0.55), oklch(0.6 0.22 280 / 0.5), oklch(0.78 0.12 220 / 0.45), oklch(0.55 0.2 260 / 0.55));
   --shadow-glow: 0 25px 80px -20px oklch(0.55 0.22 260 / 0.55), 0 0 0 1px oklch(0.55 0.22 260 / 0.15);
   --shadow-neon: 0 0 28px oklch(0.55 0.22 260 / 0.55), 0 0 60px oklch(0.6 0.22 280 / 0.4);
@@ -507,9 +508,22 @@ a:hover { color: var(--color-brand-2); }
 .text-white\/60 { color: var(--color-muted-foreground) !important; }
 .text-white\/65 { color: var(--color-muted-foreground) !important; }
 .text-white\/70 { color: var(--color-muted-foreground) !important; }
-.text-white\/75 { color: var(--color-secondary-foreground) !important; }
+.text-white\/75 { color: var(--color-muted-foreground) !important; }
 .text-white\/80 { color: var(--color-foreground) !important; }
 .placeholder\:text-white\/40::placeholder { color: var(--color-muted-foreground) !important; }
+
+/* …but keep light text legible on solid brand / dark surfaces, where the
+   neutralising rules above would otherwise put dark ink on a blue button.
+   Blue-600/700 stay dark in both themes, so those need literal white
+   (contrast ≈ 5.8:1); token-paired surfaces keep their pairing token. */
+.bg-blue-500, .bg-blue-600, .bg-blue-700, .bg-brand-gradient,
+.bg-blue-500 *, .bg-blue-600 *, .bg-blue-700 *, .bg-brand-gradient * {
+  color: #ffffff !important;
+}
+.bg-primary, .bg-primary * { color: var(--color-primary-foreground) !important; }
+.bg-secondary, .bg-secondary * { color: var(--color-secondary-foreground) !important; }
+.bg-destructive, .bg-destructive * { color: var(--color-destructive-foreground, #fff) !important; }
+.bg-foreground, .bg-foreground * { color: var(--color-background) !important; }
 .bg-white\/5   { background-color: var(--color-card) !important; }
 .bg-white\/10  { background-color: var(--color-background) !important; }
 .hover\:bg-white\/10:hover { background-color: var(--color-secondary) !important; }
@@ -649,7 +663,8 @@ table th, table td { border-color: var(--color-border); }
 .group:hover .group-hover\:bg-accent,
 .group:hover .group-hover\:bg-accent\/50 {
   background-color: color-mix(in oklch, var(--color-primary) 12%, transparent) !important;
-  color: var(--color-brand-2) !important;
+  /* foreground (not brand-2) so small pill text clears WCAG AA on the tint */
+  color: var(--color-foreground) !important;
 }
 
 /* Map common hardcoded Tailwind slate colours to theme variables so they
