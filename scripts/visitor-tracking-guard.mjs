@@ -86,7 +86,12 @@ for (const file of files) {
         if (dropsDeny) t.denyWrites = null;
       }
 
-      if (lower.startsWith("grant") && /\b(insert|update|delete|all)\b/i.test(lower) && /\b(anon|authenticated|public)\b/i.test(lower)) {
+      const grantRoles = lower.startsWith("grant") ? (s.split(/\bto\b/i)[1] ?? "") : "";
+      if (
+        lower.startsWith("grant") &&
+        /\b(insert|update|delete|all)\b/i.test(lower.split(/\bon\b/i)[0] ?? "") &&
+        /\b(anon|authenticated|public)\b/i.test(grantRoles)
+      ) {
         t.grants.push(`${file}: grants write privileges on public.${table} to a client role`);
       }
     }
