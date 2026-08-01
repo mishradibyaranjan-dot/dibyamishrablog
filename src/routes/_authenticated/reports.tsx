@@ -36,11 +36,16 @@ export const Route = createFileRoute("/_authenticated/reports")({
   head: () => ({
     meta: [
       { title: "Admin Reports" },
-      { name: "robots", content: "noindex" },
+      { name: "robots", content: "noindex, nofollow" },
     ],
   }),
-  component: Reports,
+  component: () => (
+    <RequireAdmin>
+      <Reports />
+    </RequireAdmin>
+  ),
 });
+
 
 type Counts = {
   totalUsers: number;
