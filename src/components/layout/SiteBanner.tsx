@@ -69,6 +69,8 @@ function BannerGraphic({ className }: { className?: string }) {
 export function SiteBanner() {
   const [visible, setVisible] = useState(false);
   const [index, setIndex] = useState(0);
+  /** Clip while the open/close height animation runs, then let popovers escape. */
+  const [settled, setSettled] = useState(false);
 
   useEffect(() => {
     try {
@@ -85,6 +87,7 @@ export function SiteBanner() {
   }, [visible]);
 
   const dismiss = () => {
+    setSettled(false);
     setVisible(false);
     try {
       window.sessionStorage.setItem(DISMISS_KEY, "1");
@@ -102,9 +105,14 @@ export function SiteBanner() {
           animate={{ height: "auto", opacity: 1 }}
           exit={{ height: 0, opacity: 0 }}
           transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+          onAnimationComplete={() => setSettled(true)}
           aria-label="Site announcement"
-          className="relative z-[55] overflow-hidden border-b border-blue-200 bg-gradient-to-r from-blue-50 via-white to-cyan-50"
+          className={cn(
+            "relative z-[55] border-b border-blue-200 bg-gradient-to-r from-blue-50 via-white to-cyan-50",
+            settled ? "overflow-visible" : "overflow-hidden",
+          )}
         >
+
           {/* animated graphics layer */}
           <div className="absolute inset-0 opacity-70">
             <BannerGraphic />
