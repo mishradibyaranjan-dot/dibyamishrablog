@@ -183,40 +183,50 @@ function VideoStage({
 function GuidePage() {
   const [activeId, setActiveId] = useState(CHAPTERS[0]!.id);
   const [seen, setSeen] = useState<Record<string, boolean>>({ [CHAPTERS[0]!.id]: true });
+  const [time, setTime] = useState(0);
+  const [duration, setDuration] = useState(0);
   const active = CHAPTERS.find((c) => c.id === activeId) ?? CHAPTERS[0]!;
-  const progress = Math.round((Object.keys(seen).length / CHAPTERS.length) * 100);
   const videoRef = useRef<HTMLVideoElement | null>(null);
 
-  /** Follow playback: highlight + tick off the chapter currently on screen. */
-  useEffect(() => {
-    const el = videoRef.current;
-    if (!el) return;
-    const onTime = () => {
-      const current = [...CHAPTERS].reverse().find((c) => el.currentTime + 0.25 >= c.start);
-      if (!current) return;
-      setActiveId((id) => (id === current.id ? id : current.id));
-      setSeen((s) => (s[current.id] ? s : { ...s, [current.id]: true }));
-    };
-    el.addEventListener("timeupdate", onTime);
-    return () => el.removeEventListener("timeupdate", onTime);
-  }, []);
+  /** Rail progress follows the narration position, not just the chapters clicked. */
+  const total = duration || CHAPTERS[CHAPTERS.length - 1]!.start + 5;
+  const progress = Math.min(100, Math.round((time / total) * 100));
 
-  const seek = (c: Chapter) => {
-    const el = videoRef.current;
-    if (!el) return;
-    try {
-      el.currentTime = c.start;
-      void el.play();
-    } catch {
-      // ignore — metadata may not be ready yet
-    }
+  /** Fraction of the active chapter that has been narrated so far. */
+  const chapterEnd = (c: Chapter) => {
+    const i = CHAPTERS.indexOf(c);
+    return i === CHAPTERS.length - 1 ? total : CHAPTERS[i + 1]!.start;
+  };
+  const chapterPct = (c: Chapter) => {
+    const end = chapterEnd(c);
+    if (time >= end) return 100;
+    if (time <= c.start) return 0;
+    return Math.round(((time - c.start) / (end - c.start)) * 100);
+  };
+
+  /** Follow playback: highlight + tick off the chapter currently narrated. */
+  const handleTime = (t: number, d: number) => {
+    setTime(t);
+    if (d) setDuration(d);
+    const current = [...CHAPTERS].reverse().find((c) => t + 0.25 >= c.start);
+    if (!current) return;
+    setActiveId((id) => (id === current.id ? id : current.id));
+    setSeen((s) => (s[current.id] ? s : { ...s, [current.id]: true }));
   };
 
   const select = (id: string) => {
     setActiveId(id);
     setSeen((s) => ({ ...s, [id]: true }));
     const c = CHAPTERS.find((x) => x.id === id);
-    if (c) seek(c);
+    const el = videoRef.current;
+    if (!c || !el) return;
+    try {
+      el.currentTime = c.start;
+      el.muted = false;
+      void el.play().catch(() => {});
+    } catch {
+      // ignore — metadata may not be ready yet
+    }
   };
 
   return (
@@ -229,27 +239,47 @@ function GuidePage() {
           description={DESC}
         />
 
-        {/* interactive progress rail */}
+        {/* progress rail synchronised with the narration playback position */}
         <div className="mb-8 rounded-2xl border border-blue-200 bg-white/70 p-4 backdrop-blur">
           <div className="flex items-center justify-between text-xs font-medium text-slate-600">
-            <span>Tour progress</span>
+            <span>
+              Narration progress · {active.label.replace(/^\d+\s·\s/, "")}
+            </span>
             <span className="text-blue-700">{progress}%</span>
           </div>
-          <div className="mt-2 h-2 w-full overflow-hidden rounded-full bg-slate-200">
-            <motion.div
-              className="h-full rounded-full bg-gradient-to-r from-blue-600 to-cyan-400"
-              animate={{ width: `${progress}%` }}
-              transition={{ type: "spring", stiffness: 120, damping: 20 }}
+          <div
+            className="mt-2 h-2 w-full overflow-hidden rounded-full bg-slate-200"
+            role="progressbar"
+            aria-label="Guided tour narration progress"
+            aria-valuemin={0}
+            aria-valuemax={100}
+            aria-valuenow={progress}
+          >
+            <div
+              className="h-full rounded-full bg-gradient-to-r from-blue-600 to-cyan-400 transition-[width] duration-200 ease-linear"
+              style={{ width: `${progress}%` }}
             />
+          </div>
+          {/* per-chapter segments, each filling as its narration plays */}
+          <div className="mt-2 grid gap-1" style={{ gridTemplateColumns: `repeat(${CHAPTERS.length}, minmax(0, 1fr))` }}>
+            {CHAPTERS.map((c) => (
+              <div key={c.id} className="h-1 overflow-hidden rounded-full bg-slate-200" aria-hidden>
+                <div
+                  className={cn(
+                    "h-full rounded-full transition-[width] duration-200 ease-linear",
+                    c.id === activeId ? "bg-blue-600" : "bg-blue-400/70",
+                  )}
+                  style={{ width: `${chapterPct(c)}%` }}
+                />
+              </div>
+            ))}
           </div>
         </div>
 
         <div className="grid items-start gap-8 lg:grid-cols-[1.4fr_1fr]">
-          <VideoStage
-            chapter={active}
-            videoRef={videoRef}
-            onPlayChapter={() => seek(active)}
-          />
+          <VideoStage chapter={active} videoRef={videoRef} onTime={handleTime} />
+
+
 
 
           <ol className="flex flex-col gap-3">
