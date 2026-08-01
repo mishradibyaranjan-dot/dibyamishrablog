@@ -3,6 +3,8 @@ import { useEffect, useRef, useState } from "react";
 import { cn } from "@/lib/utils";
 import lessonVideo from "@/assets/video/learn-multi-agent.mp4.asset.json";
 import lessonPoster from "@/assets/video/learn-multi-agent-poster.jpg.asset.json";
+import vectorVideo from "@/assets/video/learn-vector-search.mp4.asset.json";
+import vectorPoster from "@/assets/video/learn-vector-search-poster.jpg.asset.json";
 import { motion } from "framer-motion";
 import {
   Brain,
@@ -74,12 +76,14 @@ import heroRetail from "@/assets/learn/human-robot-retail.jpg";
 import heroMultiTenant from "@/assets/learn/human-robot-multitenant.jpg";
 import heroRAG from "@/assets/learn/human-robot-rag.jpg";
 import heroMAS from "@/assets/learn/human-robot-mas.jpg";
+import heroVector from "@/assets/learn/human-robot-vector.jpg";
 import { pageOgImages, SITE_ORIGIN } from "@/lib/og-images";
 import { breadcrumbScript } from "@/lib/breadcrumbs";
 import { LEARN_MODULES } from "@/lib/learn-catalog";
 import { useLearnProgress } from "@/lib/learn-progress";
 import { LearnSearch } from "@/components/learn/LearnSearch";
 import { ModulePdf } from "@/components/learn/ModulePdf";
+import { LessonPlayer } from "@/components/learn/LessonPlayer";
 
 function TabHeroImage({ src, alt, caption }: { src: string; alt: string; caption: string }) {
   return (
@@ -150,7 +154,17 @@ export const Route = createFileRoute("/learn")({
 });
 
 
-type TabKey = "ai" | "cloud" | "saas" | "itil" | "llm" | "genai-retail" | "multitenant" | "rag" | "mas";
+type TabKey =
+  | "ai"
+  | "cloud"
+  | "saas"
+  | "itil"
+  | "llm"
+  | "genai-retail"
+  | "multitenant"
+  | "rag"
+  | "mas"
+  | "vector";
 
 const TAB_CONTENT: Record<TabKey, () => React.ReactElement> = {
   ai: () => <IntroAI />,
@@ -162,6 +176,7 @@ const TAB_CONTENT: Record<TabKey, () => React.ReactElement> = {
   multitenant: () => <IntroMultiTenant />,
   rag: () => <IntroRAG />,
   mas: () => <IntroMAS />,
+  vector: () => <IntroVector />,
 };
 
 const TAB_ICONS: Record<TabKey, React.ReactNode> = {
@@ -174,6 +189,7 @@ const TAB_ICONS: Record<TabKey, React.ReactNode> = {
   multitenant: <Building2 className="h-4 w-4" />,
   rag: <Search className="h-4 w-4" />,
   mas: <Bot className="h-4 w-4" />,
+  vector: <Search className="h-4 w-4" />,
 };
 
 function Learn() {
@@ -206,8 +222,8 @@ function Learn() {
       <SectionHeader
         as="h1"
         eyebrow="Learning Library"
-        title="Learn — AI, Cloud, SaaS, ITIL, LLM, GenAI Retail, Multi-Tenant, RAG & Multi-Agent Systems"
-        description="Nine self-contained mini-courses with quick-summary guides, concepts, history, architecture diagrams, interactive charts, video walkthroughs, comparison tables, code snippets, and security guidance. Each module opens with a Quick Summary Guide so you get the key takeaways in under a minute."
+        title="Learn — AI, Cloud, SaaS, ITIL, LLM, GenAI Retail, Multi-Tenant, RAG, Multi-Agent Systems & Vector Search"
+        description="Ten self-contained mini-courses with quick-summary guides, concepts, history, architecture diagrams, interactive charts, video walkthroughs, comparison tables, code snippets, and security guidance. Each module opens with a Quick Summary Guide so you get the key takeaways in under a minute."
       />
 
       <div className="mt-6 space-y-4">
