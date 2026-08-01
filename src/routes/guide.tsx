@@ -140,51 +140,23 @@ const QUICK_LINKS = [
 function VideoStage({
   chapter,
   videoRef,
-  onPlayChapter,
+  onTime,
 }: {
   chapter: Chapter;
   videoRef: React.RefObject<HTMLVideoElement | null>;
-  onPlayChapter: () => void;
+  onTime: (t: number, d: number) => void;
 }) {
-  const [started, setStarted] = useState(false);
-
-  const play = () => {
-    setStarted(true);
-    onPlayChapter();
-  };
-
   return (
     <div className="relative self-start overflow-hidden rounded-3xl border border-blue-200 bg-slate-900 shadow-[0_30px_80px_-40px_rgba(15,23,42,0.55)]">
-      <div className="relative aspect-video w-full">
-        <video
-          ref={videoRef}
-          className="absolute inset-0 h-full w-full bg-white object-cover"
-          src={tourVideo.url}
-          poster={tourPoster.url}
-          preload="metadata"
-          playsInline
-          controls={started}
-          onPlay={() => setStarted(true)}
-        />
-        {!started && (
-          <button
-            type="button"
-            onClick={play}
-            aria-label={`Play the site tour: ${chapter.title}`}
-            className="group absolute inset-0 h-full w-full"
-          >
-            <span className="absolute inset-0 grid place-items-center bg-slate-950/35 transition group-hover:bg-slate-950/20">
-              <motion.span
-                animate={{ scale: [1, 1.08, 1] }}
-                transition={{ duration: 2.2, repeat: Infinity, ease: "easeInOut" }}
-                className="inline-flex"
-              >
-                <PlayCircle className="h-16 w-16 text-white drop-shadow-lg" />
-              </motion.span>
-            </span>
-          </button>
-        )}
-      </div>
+      <AccessibleVideo
+        src={tourVideo.url}
+        poster={tourPoster.url}
+        title="the guided site tour"
+        cues={TOUR_CUES}
+        videoRef={videoRef}
+        tone="dark"
+        onTime={onTime}
+      />
       <div className="flex flex-wrap items-center justify-between gap-3 border-t border-white/10 px-5 py-4">
         <div>
           <p className="text-[11px] font-semibold uppercase tracking-wider text-cyan-300">
@@ -192,7 +164,7 @@ function VideoStage({
           </p>
           <p className="text-sm font-semibold text-white">{chapter.title}</p>
           <p className="mt-0.5 text-[11px] text-white/60">
-            Self-hosted walkthrough — no third-party video embeds.
+            Self-hosted walkthrough — captions, volume and chapter jumps included.
           </p>
         </div>
         <Link
@@ -200,12 +172,13 @@ function VideoStage({
           className="inline-flex items-center gap-1.5 rounded-full bg-blue-600 px-3.5 py-2 text-xs font-semibold text-white transition hover:bg-blue-700"
         >
           {chapter.cta}
-          <ArrowRight className="h-3.5 w-3.5" />
+          <ArrowRight className="h-3.5 w-3.5" aria-hidden />
         </Link>
       </div>
     </div>
   );
 }
+
 
 function GuidePage() {
   const [activeId, setActiveId] = useState(CHAPTERS[0]!.id);
