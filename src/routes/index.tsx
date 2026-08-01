@@ -54,12 +54,10 @@ export const Route = createFileRoute("/")({
     ],
     links: [
       { rel: "canonical", href: "https://www.dibyamishra.co.in/" },
-      {
-        rel: "preload",
-        as: "image",
-        href: cardLearn,
-        fetchpriority: "high",
-      },
+      // No high-priority image preload here: the LCP element is the hero <h1>
+      // (text), so preloading a card image only competes for bandwidth with
+      // the render-critical CSS/font requests.
+
     ],
     scripts: [
       {
