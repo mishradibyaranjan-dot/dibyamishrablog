@@ -1,5 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { cn } from "@/lib/utils";
+import lessonVideo from "@/assets/video/learn-multi-agent.mp4.asset.json";
+import lessonPoster from "@/assets/video/learn-multi-agent-poster.jpg.asset.json";
 import { motion } from "framer-motion";
 import {
   Brain,
