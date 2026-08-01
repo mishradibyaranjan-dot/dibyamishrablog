@@ -23,7 +23,6 @@ import { TOUR_CUES } from "@/lib/video-captions";
 import tourVideo from "@/assets/video/site-tour.mp4.asset.json";
 import tourPoster from "@/assets/video/site-tour-poster.jpg.asset.json";
 
-
 const DESC =
   "A guided video walkthrough of this site — where to find research, the Learn modules, projects, case studies, the document repository, and the AI Learning Assistant.";
 const TITLE = "Site Guide — Video Walkthrough | Dibya Ranjan Mishra";
@@ -182,7 +181,6 @@ function VideoStage({
   );
 }
 
-
 function GuidePage() {
   const [activeId, setActiveId] = useState(CHAPTERS[0]!.id);
   const [seen, setSeen] = useState<Record<string, boolean>>({ [CHAPTERS[0]!.id]: true });
@@ -245,9 +243,7 @@ function GuidePage() {
         {/* progress rail synchronised with the narration playback position */}
         <div className="mb-8 rounded-2xl border border-blue-200 bg-white/70 p-4 backdrop-blur">
           <div className="flex items-center justify-between text-xs font-medium text-slate-600">
-            <span>
-              Narration progress · {active.label.replace(/^\d+\s·\s/, "")}
-            </span>
+            <span>Narration progress · {active.label.replace(/^\d+\s·\s/, "")}</span>
             <span className="text-blue-700">{progress}%</span>
           </div>
           <div
@@ -264,7 +260,10 @@ function GuidePage() {
             />
           </div>
           {/* per-chapter segments, each filling as its narration plays */}
-          <div className="mt-2 grid gap-1" style={{ gridTemplateColumns: `repeat(${CHAPTERS.length}, minmax(0, 1fr))` }}>
+          <div
+            className="mt-2 grid gap-1"
+            style={{ gridTemplateColumns: `repeat(${CHAPTERS.length}, minmax(0, 1fr))` }}
+          >
             {CHAPTERS.map((c) => (
               <div key={c.id} className="h-1 overflow-hidden rounded-full bg-slate-200" aria-hidden>
                 <div
@@ -281,9 +280,6 @@ function GuidePage() {
 
         <div className="grid items-start gap-8 lg:grid-cols-[1.4fr_1fr]">
           <VideoStage chapter={active} videoRef={videoRef} onTime={handleTime} />
-
-
-
 
           <ol className="flex flex-col gap-3">
             {CHAPTERS.map((c) => {
@@ -319,7 +315,10 @@ function GuidePage() {
                             {c.label}
                           </p>
                           {seen[c.id] && (
-                            <CheckCircle2 className="h-3.5 w-3.5 text-emerald-600" aria-label="Viewed" />
+                            <CheckCircle2
+                              className="h-3.5 w-3.5 text-emerald-600"
+                              aria-label="Viewed"
+                            />
                           )}
                         </div>
                         <h3 className="text-sm font-semibold text-slate-900">{c.title}</h3>
@@ -359,7 +358,9 @@ function GuidePage() {
                   <span className="relative grid h-10 w-10 place-items-center rounded-xl border border-blue-200 bg-blue-50 text-blue-600">
                     <Icon className="h-5 w-5" />
                   </span>
-                  <h3 className="relative mt-4 text-base font-semibold text-slate-900">{q.label}</h3>
+                  <h3 className="relative mt-4 text-base font-semibold text-slate-900">
+                    {q.label}
+                  </h3>
                   <p className="relative mt-1 text-sm text-slate-600">{q.note}</p>
                   <span className="relative mt-3 inline-flex items-center gap-1 text-xs font-semibold text-blue-700">
                     Open
@@ -375,7 +376,8 @@ function GuidePage() {
           <div>
             <h3 className="text-lg font-semibold text-slate-900">Still not sure where to start?</h3>
             <p className="mt-1 text-sm text-slate-600">
-              Ask the Learning Assistant — it can summarise any module or point you to the right page.
+              Ask the Learning Assistant — it can summarise any module or point you to the right
+              page.
             </p>
           </div>
           <button

@@ -86,7 +86,6 @@ export function LessonPlayer({
         </div>
       </div>
 
-
       <ol className="flex flex-col gap-2">
         {chapters.map((c, i) => (
           <li key={c.id}>

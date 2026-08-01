@@ -204,7 +204,11 @@ export function AccessibleVideo({
           aria-label={playing ? `Pause ${title}` : `Play ${title}`}
           className="grid h-11 w-11 shrink-0 place-items-center rounded-full bg-blue-600 text-white transition hover:bg-blue-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500"
         >
-          {playing ? <Pause className="h-4 w-4" aria-hidden /> : <Play className="h-4 w-4" aria-hidden />}
+          {playing ? (
+            <Pause className="h-4 w-4" aria-hidden />
+          ) : (
+            <Play className="h-4 w-4" aria-hidden />
+          )}
         </button>
 
         <div className="flex min-w-[140px] flex-1 items-center gap-2">
@@ -296,7 +300,11 @@ export function AccessibleVideo({
               <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
                 Caption font size
               </p>
-              <div className="mt-2 grid grid-cols-4 gap-1.5" role="group" aria-label="Caption font size">
+              <div
+                className="mt-2 grid grid-cols-4 gap-1.5"
+                role="group"
+                aria-label="Caption font size"
+              >
                 {SIZES.map((s) => (
                   <button
                     key={s}
@@ -346,7 +354,9 @@ export function AccessibleVideo({
       <details
         className={cn(
           "border-t px-3 py-2 text-xs sm:px-4",
-          dark ? "border-white/10 bg-slate-900 text-white/70" : "border-slate-200 bg-white text-slate-600",
+          dark
+            ? "border-white/10 bg-slate-900 text-white/70"
+            : "border-slate-200 bg-white text-slate-600",
         )}
       >
         <summary className="cursor-pointer font-semibold">Transcript</summary>
