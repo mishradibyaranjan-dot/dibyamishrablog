@@ -294,8 +294,8 @@ function GuidePage() {
                     className={cn(
                       "group w-full rounded-2xl border p-4 text-left transition",
                       isActive
-                        ? "border-blue-400 bg-blue-50/80 shadow-[0_16px_40px_-24px_rgba(37,99,235,0.7)]"
-                        : "border-slate-200 bg-white/70 hover:border-blue-300 hover:bg-blue-50/50",
+                        ? "border-primary bg-primary/10 shadow-[0_16px_40px_-24px_rgba(37,99,235,0.7)]"
+                        : "border-border bg-card hover:border-primary/50 hover:bg-primary/5",
                     )}
                   >
                     <div className="flex items-start gap-3">
@@ -303,15 +303,15 @@ function GuidePage() {
                         className={cn(
                           "mt-0.5 grid h-9 w-9 shrink-0 place-items-center rounded-xl border transition",
                           isActive
-                            ? "border-blue-400 bg-white text-blue-600"
-                            : "border-slate-200 bg-white text-slate-500 group-hover:text-blue-600",
+                            ? "border-primary bg-card text-primary"
+                            : "border-border bg-card text-muted-foreground group-hover:text-primary",
                         )}
                       >
                         <Icon className="h-4.5 w-4.5" />
                       </span>
                       <div className="min-w-0">
                         <div className="flex items-center gap-2">
-                          <p className="text-[11px] font-semibold uppercase tracking-wider text-blue-700">
+                          <p className="text-[11px] font-semibold uppercase tracking-wider text-primary">
                             {c.label}
                           </p>
                           {seen[c.id] && (
@@ -321,8 +321,11 @@ function GuidePage() {
                             />
                           )}
                         </div>
-                        <h3 className="text-sm font-semibold text-slate-900">{c.title}</h3>
-                        <p className="mt-1 text-xs leading-relaxed text-slate-600">{c.blurb}</p>
+                        <h3 className="text-sm font-semibold text-foreground">{c.title}</h3>
+                        <p className="mt-1 text-xs leading-relaxed text-muted-foreground">{c.blurb}</p>
+                      </div>
+                    </div>
+
                       </div>
                     </div>
                   </button>
