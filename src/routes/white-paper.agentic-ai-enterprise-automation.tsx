@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Section, SectionHeader } from "@/components/layout/Section";
 import { Badge } from "@/components/ui/badge";
 import { breadcrumbScript } from "@/lib/breadcrumbs";
+import { pageOgImages } from "@/lib/og-images";
 
 const CANONICAL =
   "https://www.dibyamishra.co.in/white-paper/agentic-ai-enterprise-automation";
@@ -30,12 +31,14 @@ export const Route = createFileRoute("/white-paper/agentic-ai-enterprise-automat
           "Autonomous agents are moving from research to production. This white paper analyzes how Agentic AI patterns are reshaping enterprise workflows, governance, and ROI.",
       },
       { property: "og:url", content: CANONICAL },
+      { property: "og:image", content: pageOgImages.whitePaperAgenticAi },
       { name: "twitter:card", content: "summary_large_image" },
       { name: "twitter:title", content: "How Agentic AI Is Changing Enterprise Automation" },
       {
         name: "twitter:description",
         content: "White paper on Agentic AI, enterprise automation, governance, and ROI.",
       },
+      { name: "twitter:image", content: pageOgImages.whitePaperAgenticAi },
     ],
     links: [{ rel: "canonical", href: CANONICAL }],
     scripts: [
