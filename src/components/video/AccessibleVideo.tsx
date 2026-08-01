@@ -159,7 +159,7 @@ export function AccessibleVideo({
           <button
             type="button"
             onClick={toggle}
-            aria-label={`Play ${title}`}
+            aria-label={`Start playing ${title}`}
             className="group absolute inset-0 h-full w-full"
           >
             <span className="absolute inset-0 grid place-items-center bg-slate-950/35 transition group-hover:bg-slate-950/20">
