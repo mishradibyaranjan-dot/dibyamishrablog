@@ -122,19 +122,28 @@ export function SiteBanner() {
               Guided tour
             </span>
 
-            <div className="min-w-0 flex-1 overflow-hidden">
-              <AnimatePresence mode="wait">
-                <motion.p
-                  key={index}
-                  initial={{ y: 10, opacity: 0 }}
-                  animate={{ y: 0, opacity: 1 }}
-                  exit={{ y: -10, opacity: 0 }}
-                  transition={{ duration: 0.35 }}
-                  className="truncate text-sm font-medium text-slate-800"
-                >
-                  {HEADLINES[index]}
-                </motion.p>
-              </AnimatePresence>
+            {/* Highlighted headline with the silent video preview beside it */}
+            <div className="flex min-w-0 flex-1 items-center gap-3">
+              <BannerVideo />
+              <div className="min-w-0 flex-1 overflow-hidden">
+                <AnimatePresence mode="wait">
+                  <motion.p
+                    key={index}
+                    initial={{ y: 10, opacity: 0 }}
+                    animate={{ y: 0, opacity: 1 }}
+                    exit={{ y: -10, opacity: 0 }}
+                    transition={{ duration: 0.35 }}
+                    className="truncate text-sm font-medium text-slate-800"
+                  >
+                    {HEADLINES[index]}
+                  </motion.p>
+                </AnimatePresence>
+                <p className="hidden truncate text-[11px] text-slate-600 sm:block">
+                  30-second narrated preview — or open{" "}
+                  <span className="font-semibold text-blue-700">What&apos;s here?</span> for every
+                  option explained.
+                </p>
+              </div>
             </div>
 
             <div className="flex items-center gap-2">
@@ -143,18 +152,21 @@ export function SiteBanner() {
                 className="group inline-flex items-center gap-1.5 rounded-full bg-blue-600 px-3 py-1.5 text-xs font-semibold text-white shadow-[0_10px_24px_-12px_rgba(37,99,235,0.9)] transition hover:bg-blue-700"
               >
                 <PlayCircle className="h-4 w-4" />
-                Watch the tour
+                <span className="hidden sm:inline">Watch the tour</span>
+                <span className="sm:hidden">Tour</span>
                 <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
               </Link>
+              <BannerInfoLinks />
               <button
                 type="button"
                 onClick={() =>
                   window.dispatchEvent(new CustomEvent("drm:open-assistant"))
                 }
-                className="hidden rounded-full border border-blue-300 bg-white px-3 py-1.5 text-xs font-semibold text-blue-700 transition hover:bg-blue-50 sm:inline-flex"
+                className="hidden rounded-full border border-blue-300 bg-white px-3 py-1.5 text-xs font-semibold text-blue-700 transition hover:bg-blue-50 lg:inline-flex"
               >
                 Ask the assistant
               </button>
+
               <button
                 type="button"
                 onClick={dismiss}
