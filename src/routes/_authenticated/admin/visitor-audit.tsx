@@ -630,7 +630,25 @@ function VisitorAuditPage() {
                   />
                   Alerts enabled
                 </label>
+                <label className="flex items-center gap-2 pt-5 text-xs text-slate-600">
+                  <input
+                    type="checkbox" checked={settings.alert_email_enabled}
+                    onChange={(e) => setSettings({ ...settings, alert_email_enabled: e.target.checked })}
+                  />
+                  Email alerts
+                </label>
+                <label className="flex items-center gap-2 pt-5 text-xs text-slate-600">
+                  <input
+                    type="checkbox" checked={settings.alert_slack_enabled}
+                    onChange={(e) => setSettings({ ...settings, alert_slack_enabled: e.target.checked })}
+                  />
+                  Slack webhook alerts
+                </label>
               </div>
+              <p className="mt-2 text-xs text-slate-500">
+                Slack delivery posts to the incoming webhook stored in the <code>SECURITY_ALERT_SLACK_WEBHOOK_URL</code> secret and
+                uses exactly the thresholds above.
+              </p>
               <p className="mt-2 text-xs text-slate-500">
                 Last alert: {settings.last_alert_at ? new Date(settings.last_alert_at).toLocaleString() : "never"}
               </p>
@@ -648,6 +666,8 @@ function VisitorAuditPage() {
                           alert_window_minutes: settings.alert_window_minutes,
                           alert_min_events: settings.alert_min_events,
                           alert_failure_pct: settings.alert_failure_pct,
+                          alert_email_enabled: settings.alert_email_enabled,
+                          alert_slack_enabled: settings.alert_slack_enabled,
                         },
                       });
                       setNotice("Policy saved.");
@@ -687,6 +707,24 @@ function VisitorAuditPage() {
                   }}
                 >
                   <Trash2 className="mr-1 h-3.5 w-3.5" /> Delete older than 7 days
+                </Button>
+                <Button
+                  size="sm" variant="outline" className="border-slate-300"
+                  onClick={async () => {
+                    setNotice(null);
+                    try {
+                      const res = await sendTestAlert({});
+                      setNotice(
+                        `Test alert — email: ${res.email ? "sent" : "off"}, Slack: ${
+                          res.slack ? "sent" : `not sent (${res.slackReason ?? "off"})`
+                        }.`,
+                      );
+                    } catch (e) {
+                      setErr(e instanceof Error ? e.message : "Test alert failed");
+                    }
+                  }}
+                >
+                  <Send className="mr-1 h-3.5 w-3.5" /> Send test alert
                 </Button>
               </div>
             </div>
