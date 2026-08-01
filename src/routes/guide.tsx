@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import {
   PlayCircle,
@@ -18,6 +18,8 @@ import { Section, SectionHeader } from "@/components/layout/Section";
 import { SITE_ORIGIN } from "@/lib/og-images";
 import { breadcrumbScript } from "@/lib/breadcrumbs";
 import { cn } from "@/lib/utils";
+import tourVideo from "@/assets/video/site-tour.mp4.asset.json";
+import tourPoster from "@/assets/video/site-tour-poster.jpg.asset.json";
 
 const DESC =
   "A guided video walkthrough of this site — where to find research, the Learn modules, projects, case studies, the document repository, and the AI Learning Assistant.";
