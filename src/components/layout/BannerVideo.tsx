@@ -77,7 +77,7 @@ export function BannerVideo({ className }: { className?: string }) {
         muted
         loop
         playsInline
-        preload="metadata"
+        preload="none"
         tabIndex={-1}
         aria-hidden
         onCanPlay={() => setReady(true)}
