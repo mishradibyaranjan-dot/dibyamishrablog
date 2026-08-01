@@ -11,6 +11,8 @@ import projectsOg from "@/assets/og/og-projects.png.asset.json";
 import caseStudiesOg from "@/assets/og/og-case-studies.png.asset.json";
 import researchOg from "@/assets/og/og-research.png.asset.json";
 import learnOg from "@/assets/og/og-learn.png";
+import trustOg from "@/assets/og/og-trust.png";
+import whitePaperAgenticOg from "@/assets/og/og-white-paper-agentic-ai.png";
 import newsletterOg from "@/assets/og/og-newsletter.png";
 
 export const SITE_ORIGIN = "https://www.dibyamishra.co.in";
