@@ -100,8 +100,10 @@ export function useActivityTracker() {
     window.addEventListener("pagehide", close);
     return () => {
       cancelled = true;
+      authSub.subscription.unsubscribe();
       window.removeEventListener("beforeunload", close);
       window.removeEventListener("pagehide", close);
+
       if (sessionIdRef.current) {
         const id = sessionIdRef.current;
         const startedAt = sessionStartRef.current;
