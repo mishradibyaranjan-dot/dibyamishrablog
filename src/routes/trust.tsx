@@ -2,6 +2,9 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { motion } from "framer-motion";
 import { Shield, Lock, Database, Mail, Cookie, Users, AlertCircle, FileText } from "lucide-react";
 import { breadcrumbScript } from "@/lib/breadcrumbs";
+import { pageOgImages, SITE_ORIGIN } from "@/lib/og-images";
+
+const CANONICAL = `${SITE_ORIGIN}/trust`;
 
 export const Route = createFileRoute("/trust")({
   component: TrustPage,
@@ -13,13 +16,25 @@ export const Route = createFileRoute("/trust")({
         content:
           "How this site handles data, security, subprocessors, cookies, and privacy requests. Maintained by Dibya Ranjan Mishra.",
       },
+      { property: "og:type", content: "website" },
       { property: "og:title", content: "Trust & Privacy | Dibya Ranjan Mishra" },
       {
         property: "og:description",
         content:
-          "Plain-language overview of security, privacy, and data handling practices for dibyamishra.lovable.app.",
+          "Plain-language overview of security, privacy, and data handling practices for dibyamishra.co.in.",
       },
+      { property: "og:url", content: CANONICAL },
+      { property: "og:image", content: pageOgImages.trust },
+      { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: "Trust & Privacy | Dibya Ranjan Mishra" },
+      {
+        name: "twitter:description",
+        content:
+          "Security, privacy, and data handling practices for dibyamishra.co.in — in plain language.",
+      },
+      { name: "twitter:image", content: pageOgImages.trust },
     ],
+    links: [{ rel: "canonical", href: CANONICAL }],
     scripts: [breadcrumbScript([{ name: "Trust & Privacy", path: "/trust" }])],
   }),
 });
