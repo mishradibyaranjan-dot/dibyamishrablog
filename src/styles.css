@@ -2,6 +2,33 @@
 @source "../src";
 @import "tw-animate-css";
 
+/* Self-hosted fonts (latin subset, variable). Serving these first-party keeps
+   the render-critical path free of a third-party Google Fonts stylesheet,
+   which was the main contributor to a slow hero-heading LCP. */
+@font-face {
+  font-family: "DM Sans";
+  font-style: normal;
+  font-weight: 100 1000;
+  font-display: swap;
+  src: url("/fonts/dm-sans.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Space Grotesk";
+  font-style: normal;
+  font-weight: 300 700;
+  font-display: swap;
+  src: url("/fonts/space-grotesk.woff2") format("woff2");
+}
+@font-face {
+  font-family: "JetBrains Mono";
+  font-style: normal;
+  font-weight: 100 800;
+  font-display: swap;
+  src: url("/fonts/jetbrains-mono.woff2") format("woff2");
+}
+
+
+
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
