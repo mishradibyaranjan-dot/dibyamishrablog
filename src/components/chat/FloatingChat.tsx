@@ -28,6 +28,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth";
 
 const STORAGE_KEY = "drm-floating-chat:v1";
+const AUTO_GREET_KEY = "drm-floating-chat-autogreet:v1";
 
 function loadInitialMessages(): UIMessage[] {
   if (typeof window === "undefined") return [];
@@ -87,6 +88,36 @@ export function FloatingChat() {
     }
   }, [messages]);
 
+  // Auto-greet: pop the assistant open shortly after the first visit of a session,
+  // and allow any page to open it via the `drm:open-assistant` event.
+  useEffect(() => {
+    const openIt = () => setOpen(true);
+    window.addEventListener("drm:open-assistant", openIt as EventListener);
+
+    let timer: number | undefined;
+    let alreadyGreeted = true;
+    try {
+      alreadyGreeted = window.sessionStorage.getItem(AUTO_GREET_KEY) === "1";
+    } catch {
+      alreadyGreeted = true;
+    }
+    if (!alreadyGreeted) {
+      timer = window.setTimeout(() => {
+        try {
+          window.sessionStorage.setItem(AUTO_GREET_KEY, "1");
+        } catch {
+          // ignore
+        }
+        setOpen(true);
+      }, 6000);
+    }
+
+    return () => {
+      window.removeEventListener("drm:open-assistant", openIt as EventListener);
+      if (timer) window.clearTimeout(timer);
+    };
+  }, []);
+
   // Focus textarea when opening + seed a friendly greeting on first open
   useEffect(() => {
     if (open) {
@@ -98,7 +129,7 @@ export function FloatingChat() {
             parts: [
               {
                 type: "text",
-                text: "👋 Hi there! I'm your Learning Assistant — happy to help you explore AI, Cloud, SaaS, research, projects, and case studies. What would you like to learn today?",
+                text: "👋 Hello and welcome! I'm your Learning Assistant — happy to help you explore AI, Cloud, SaaS, research, projects, and case studies. What would you like to learn today?",
               },
             ],
           } as UIMessage,
