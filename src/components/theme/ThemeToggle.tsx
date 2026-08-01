@@ -36,7 +36,7 @@ export function ThemeToggle() {
   const dark = THEMES.filter((t) => t.mode === "dark");
   const light = THEMES.filter((t) => t.mode === "light");
 
-  const group = (label: string, items: typeof dark) => (
+  const group = (label: string, items: readonly (typeof THEMES)[number][]) => (
     <>
       <DropdownMenuLabel className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
         {label}
