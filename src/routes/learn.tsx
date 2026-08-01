@@ -92,7 +92,7 @@ function TabHeroImage({ src, alt, caption }: { src: string; alt: string; caption
       <motion.figure
         initial={{ opacity: 0, y: 12 }}
         animate={{ opacity: 1, y: 0 }}
-        className="relative overflow-hidden rounded-3xl border border-border bg-card shadow-[0_20px_60px_-30px_rgba(59,130,246,0.35)]"
+        className="relative overflow-hidden rounded-3xl border border-border bg-card shadow-card-soft"
       >
         <div className="absolute inset-0 bg-gradient-to-tr from-primary/10 via-card to-info/10" aria-hidden />
         <img
@@ -1979,7 +1979,7 @@ function Table({ headers, rows }: { headers: string[]; rows: string[][] }) {
 
 function Code({ language, code }: { language: string; code: string }) {
   return (
-    <div className="overflow-hidden rounded-2xl border border-border bg-[#0a0d1a]/80 backdrop-blur-xl">
+    <div className="overflow-hidden rounded-2xl border border-border bg-card/80 backdrop-blur-xl">
       <div className="flex items-center justify-between border-b border-border px-4 py-2">
         <div className="flex items-center gap-2">
           <Code2 className="h-3.5 w-3.5 text-neon-cyan" />
@@ -2401,15 +2401,15 @@ function IntroMAS() {
           >
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={MAS_PATTERN_SCORES} margin={{ top: 8, right: 8, left: -16, bottom: 8 }}>
-                <CartesianGrid strokeDasharray="3 3" stroke="rgba(148,163,184,0.25)" />
+                <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" />
                 <XAxis dataKey="pattern" tick={{ fontSize: 11 }} interval={0} angle={-12} dy={8} />
                 <YAxis domain={[0, 10]} tick={{ fontSize: 11 }} />
                 <RTooltip />
                 <Legend wrapperStyle={{ fontSize: 12 }} />
-                <Bar dataKey="scalability" name="Scalability" fill="#2563eb" radius={[4, 4, 0, 0]} />
-                <Bar dataKey="resilience" name="Resilience" fill="#06b6d4" radius={[4, 4, 0, 0]} />
-                <Bar dataKey="optimality" name="Global optimality" fill="#8b5cf6" radius={[4, 4, 0, 0]} />
-                <Bar dataKey="simplicity" name="Operational simplicity" fill="#10b981" radius={[4, 4, 0, 0]} />
+                <Bar dataKey="scalability" name="Scalability" fill="var(--primary)" radius={[4, 4, 0, 0]} />
+                <Bar dataKey="resilience" name="Resilience" fill="var(--info)" radius={[4, 4, 0, 0]} />
+                <Bar dataKey="optimality" name="Global optimality" fill="var(--special)" radius={[4, 4, 0, 0]} />
+                <Bar dataKey="simplicity" name="Operational simplicity" fill="var(--success)" radius={[4, 4, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
           </ChartCard>
@@ -2441,13 +2441,13 @@ function IntroMAS() {
           >
             <ResponsiveContainer width="100%" height="100%">
               <RadarChart data={MAS_TRANSPORT_RADAR} outerRadius="72%">
-                <PolarGrid stroke="rgba(148,163,184,0.35)" />
+                <PolarGrid stroke="var(--border)" />
                 <PolarAngleAxis dataKey="axis" tick={{ fontSize: 11 }} />
                 <PolarRadiusAxis domain={[0, 10]} tick={{ fontSize: 10 }} />
-                <Radar name="ROS 2 / DDS" dataKey="ROS 2 / DDS" stroke="#2563eb" fill="#2563eb" fillOpacity={0.25} />
-                <Radar name="MQTT v5" dataKey="MQTT v5" stroke="#06b6d4" fill="#06b6d4" fillOpacity={0.2} />
-                <Radar name="gRPC" dataKey="gRPC" stroke="#8b5cf6" fill="#8b5cf6" fillOpacity={0.18} />
-                <Radar name="REST" dataKey="REST" stroke="#f59e0b" fill="#f59e0b" fillOpacity={0.15} />
+                <Radar name="ROS 2 / DDS" dataKey="ROS 2 / DDS" stroke="var(--primary)" fill="var(--primary)" fillOpacity={0.25} />
+                <Radar name="MQTT v5" dataKey="MQTT v5" stroke="var(--info)" fill="var(--info)" fillOpacity={0.2} />
+                <Radar name="gRPC" dataKey="gRPC" stroke="var(--special)" fill="var(--special)" fillOpacity={0.18} />
+                <Radar name="REST" dataKey="REST" stroke="var(--warning)" fill="var(--warning)" fillOpacity={0.15} />
                 <Legend wrapperStyle={{ fontSize: 12 }} />
                 <RTooltip />
               </RadarChart>
@@ -2802,14 +2802,14 @@ function IntroVector() {
             <ChartCard title="Recall, speed and memory by index family" subtitle="Illustrative profile — always re-measure on your own corpus.">
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={VECTOR_INDEX_SCORES} margin={{ top: 8, right: 8, left: -16, bottom: 8 }}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.08)" />
-                  <XAxis dataKey="index" stroke="rgba(255,255,255,0.5)" fontSize={12} />
-                  <YAxis stroke="rgba(255,255,255,0.5)" fontSize={12} />
+                  <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" />
+                  <XAxis dataKey="index" stroke="var(--muted-foreground)" fontSize={12} />
+                  <YAxis stroke="var(--muted-foreground)" fontSize={12} />
                   <RTooltip contentStyle={{ background: "#0b1220", border: "1px solid rgba(255,255,255,0.12)", borderRadius: 12, color: "#fff" }} />
                   <Legend wrapperStyle={{ fontSize: 12 }} />
-                  <Bar dataKey="recall" name="Recall" fill="#22d3ee" radius={[6, 6, 0, 0]} />
-                  <Bar dataKey="speed" name="Queries/sec" fill="#2563eb" radius={[6, 6, 0, 0]} />
-                  <Bar dataKey="memory" name="Memory use" fill="#a855f7" radius={[6, 6, 0, 0]} />
+                  <Bar dataKey="recall" name="Recall" fill="var(--info)" radius={[6, 6, 0, 0]} />
+                  <Bar dataKey="speed" name="Queries/sec" fill="var(--primary)" radius={[6, 6, 0, 0]} />
+                  <Bar dataKey="memory" name="Memory use" fill="var(--special)" radius={[6, 6, 0, 0]} />
                 </BarChart>
               </ResponsiveContainer>
             </ChartCard>
@@ -2817,12 +2817,12 @@ function IntroVector() {
             <ChartCard title="Where each index gives ground" subtitle="Nothing dominates — the shape of the compromise is the decision.">
               <ResponsiveContainer width="100%" height="100%">
                 <RadarChart data={VECTOR_TRADEOFF_RADAR} outerRadius="72%">
-                  <PolarGrid stroke="rgba(255,255,255,0.12)" />
-                  <PolarAngleAxis dataKey="axis" stroke="rgba(255,255,255,0.6)" fontSize={11} />
-                  <PolarRadiusAxis stroke="rgba(255,255,255,0.25)" fontSize={10} />
-                  <Radar name="HNSW" dataKey="HNSW" stroke="#22d3ee" fill="#22d3ee" fillOpacity={0.28} />
-                  <Radar name="IVF-PQ" dataKey="IVF-PQ" stroke="#a855f7" fill="#a855f7" fillOpacity={0.22} />
-                  <Radar name="Flat" dataKey="Flat" stroke="#2563eb" fill="#2563eb" fillOpacity={0.16} />
+                  <PolarGrid stroke="var(--border)" />
+                  <PolarAngleAxis dataKey="axis" stroke="var(--muted-foreground)" fontSize={11} />
+                  <PolarRadiusAxis stroke="var(--border)" fontSize={10} />
+                  <Radar name="HNSW" dataKey="HNSW" stroke="var(--info)" fill="var(--info)" fillOpacity={0.28} />
+                  <Radar name="IVF-PQ" dataKey="IVF-PQ" stroke="var(--special)" fill="var(--special)" fillOpacity={0.22} />
+                  <Radar name="Flat" dataKey="Flat" stroke="var(--primary)" fill="var(--primary)" fillOpacity={0.16} />
                   <Legend wrapperStyle={{ fontSize: 12 }} />
                 </RadarChart>
               </ResponsiveContainer>
