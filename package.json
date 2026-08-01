@@ -11,7 +11,8 @@
     "lint": "eslint .",
     "test": "vitest run",
     "format": "prettier --write .",
-    "security:scan": "node scripts/security-scan.mjs"
+    "security:scan": "node scripts/security-scan.mjs",
+    "security:visitor-tracking": "node scripts/visitor-tracking-guard.mjs"
   },
   "dependencies": {
     "@ai-sdk/openai-compatible": "^2.0.51",
