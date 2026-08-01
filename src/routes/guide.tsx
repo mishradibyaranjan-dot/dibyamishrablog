@@ -138,7 +138,7 @@ function VideoStage({ chapter }: { chapter: Chapter }) {
   const [playing, setPlaying] = useState(false);
 
   return (
-    <div className="relative overflow-hidden rounded-3xl border border-blue-200 bg-slate-900 shadow-[0_30px_80px_-40px_rgba(15,23,42,0.55)]">
+    <div className="relative self-start overflow-hidden rounded-3xl border border-blue-200 bg-slate-900 shadow-[0_30px_80px_-40px_rgba(15,23,42,0.55)]">
       <div className="relative aspect-video w-full">
         {playing ? (
           <iframe
@@ -232,7 +232,7 @@ function GuidePage() {
           </div>
         </div>
 
-        <div className="grid gap-8 lg:grid-cols-[1.4fr_1fr]">
+        <div className="grid items-start gap-8 lg:grid-cols-[1.4fr_1fr]">
           <VideoStage chapter={active} />
 
           <ol className="flex flex-col gap-3">
