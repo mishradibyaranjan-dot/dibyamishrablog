@@ -92,7 +92,7 @@ function TabHeroImage({ src, alt, caption }: { src: string; alt: string; caption
       <motion.figure
         initial={{ opacity: 0, y: 12 }}
         animate={{ opacity: 1, y: 0 }}
-        className="relative overflow-hidden rounded-3xl border border-blue-200/70 bg-white shadow-[0_20px_60px_-30px_rgba(59,130,246,0.35)]"
+        className="relative overflow-hidden rounded-3xl border border-border bg-card shadow-[0_20px_60px_-30px_rgba(59,130,246,0.35)]"
       >
         <div className="absolute inset-0 bg-gradient-to-tr from-blue-50 via-white to-cyan-50" aria-hidden />
         <img
@@ -103,8 +103,8 @@ function TabHeroImage({ src, alt, caption }: { src: string; alt: string; caption
           loading="lazy"
           className="relative z-[1] h-56 w-full object-cover sm:h-72 md:h-96"
         />
-        <figcaption className="relative z-[1] flex items-center gap-2 border-t border-blue-100 bg-white/90 px-4 py-3 text-xs font-medium text-slate-600 backdrop-blur sm:text-sm">
-          <span className="inline-flex h-1.5 w-1.5 rounded-full bg-blue-500" />
+        <figcaption className="relative z-[1] flex items-center gap-2 border-t border-border bg-card/90 px-4 py-3 text-xs font-medium text-muted-foreground backdrop-blur sm:text-sm">
+          <span className="inline-flex h-1.5 w-1.5 rounded-full bg-primary" />
           {caption}
         </figcaption>
       </motion.figure>
@@ -230,13 +230,13 @@ function Learn() {
       <div className="mt-6 space-y-4">
         <LearnSearch onOpenModule={(k) => setTab(k as TabKey)} completedModules={progress.modules} />
         <div className="flex flex-wrap items-center gap-3 rounded-2xl border border-border bg-accent/40 px-4 py-3 text-sm text-foreground">
-          <CheckCircle2 className="h-4 w-4 text-emerald-600" />
+          <CheckCircle2 className="h-4 w-4 text-success" />
           <span>
             <strong>{completedCount}</strong> of {LEARN_MODULES.length} modules completed
           </span>
-          <div className="h-1.5 min-w-[140px] flex-1 overflow-hidden rounded-full bg-white">
+          <div className="h-1.5 min-w-[140px] flex-1 overflow-hidden rounded-full bg-card">
             <div
-              className="h-full rounded-full bg-blue-600 transition-all"
+              className="h-full rounded-full bg-primary transition-all"
               style={{ width: `${(completedCount / LEARN_MODULES.length) * 100}%` }}
             />
           </div>
@@ -276,19 +276,19 @@ function Learn() {
 
 function ModuleCompletion({ done, title, onToggle }: { done: boolean; title: string; onToggle: () => void }) {
   return (
-    <div className="flex flex-wrap items-center justify-between gap-3 rounded-3xl border border-blue-200/70 bg-white p-5">
+    <div className="flex flex-wrap items-center justify-between gap-3 rounded-3xl border border-border bg-card p-5">
       <div className="flex items-center gap-3">
-        <CheckCircle2 className={`h-6 w-6 ${done ? "text-emerald-600" : "text-slate-300"}`} />
+        <CheckCircle2 className={`h-6 w-6 ${done ? "text-success" : "text-muted-foreground"}`} />
         <div>
-          <p className="font-semibold text-slate-900">{done ? `${title} completed` : `Finished ${title}?`}</p>
-          <p className="text-sm text-slate-600">Your progress is saved on this device and restored next visit.</p>
+          <p className="font-semibold text-foreground">{done ? `${title} completed` : `Finished ${title}?`}</p>
+          <p className="text-sm text-muted-foreground">Your progress is saved on this device and restored next visit.</p>
         </div>
       </div>
       <button
         type="button"
         onClick={onToggle}
         className={`rounded-full px-4 py-2 text-sm font-semibold transition ${
-          done ? "border border-border bg-card text-foreground hover:bg-accent" : "bg-blue-600 text-white hover:bg-blue-700"
+          done ? "border border-border bg-card text-foreground hover:bg-accent" : "bg-primary text-foreground hover:bg-primary/90"
         }`}
       >
         {done ? "Mark as not complete" : "Mark as complete"}
@@ -311,11 +311,11 @@ function TabPill({
   return (
     <TabsTrigger
       value={value}
-      className="group relative w-full justify-start gap-2 rounded-2xl border border-white/10 bg-white/5 px-4 py-2.5 text-sm font-medium text-white/70 backdrop-blur-xl transition-all data-[state=active]:border-transparent data-[state=active]:bg-brand-gradient data-[state=active]:text-white data-[state=active]:shadow-neon hover:text-white sm:px-5 sm:py-3"
+      className="group relative w-full justify-start gap-2 rounded-2xl border border-border bg-muted/30 px-4 py-2.5 text-sm font-medium text-muted-foreground backdrop-blur-xl transition-all data-[state=active]:border-transparent data-[state=active]:bg-brand-gradient data-[state=active]:text-foreground data-[state=active]:shadow-neon hover:text-foreground sm:px-5 sm:py-3"
     >
-      <span className="grid h-7 w-7 place-items-center rounded-lg bg-white/10 text-white">{icon}</span>
+      <span className="grid h-7 w-7 place-items-center rounded-lg bg-muted/40 text-foreground">{icon}</span>
       {label}
-      {done && <CheckCircle2 className="ml-auto h-4 w-4 text-emerald-500" aria-label="Completed" />}
+      {done && <CheckCircle2 className="ml-auto h-4 w-4 text-success" aria-label="Completed" />}
     </TabsTrigger>
   );
 }
@@ -353,11 +353,11 @@ function IntroAI() {
           <Diagram>
             <StackDiagram
               layers={[
-                { label: "AI Agents & Generative Apps", tint: "from-fuchsia-500/40 to-cyan-400/40" },
-                { label: "Foundation Models (LLMs, Diffusion, Multimodal)", tint: "from-indigo-500/35 to-fuchsia-500/35" },
-                { label: "Deep Learning (CNN, RNN, Transformer)", tint: "from-blue-500/30 to-indigo-500/30" },
-                { label: "Machine Learning (Supervised, Unsupervised, RL)", tint: "from-cyan-500/25 to-blue-500/25" },
-                { label: "Artificial Intelligence (the broad discipline)", tint: "from-emerald-500/20 to-cyan-500/20" },
+                { label: "AI Agents & Generative Apps", tint: "from-fuchsia-500/40 to-info/40" },
+                { label: "Foundation Models (LLMs, Diffusion, Multimodal)", tint: "from-special/35 to-fuchsia-500/35" },
+                { label: "Deep Learning (CNN, RNN, Transformer)", tint: "from-primary/30 to-special/30" },
+                { label: "Machine Learning (Supervised, Unsupervised, RL)", tint: "from-info/25 to-primary/25" },
+                { label: "Artificial Intelligence (the broad discipline)", tint: "from-success/20 to-info/20" },
               ]}
             />
           </Diagram>
@@ -557,7 +557,7 @@ function IntroCloud() {
           <Diagram>
             <CloudArchitectureDiagram />
           </Diagram>
-          <p className="mt-4 text-sm text-white/70">
+          <p className="mt-4 text-sm text-muted-foreground">
             Identity and policy wrap the environment; workloads live in networks inside regions; resilience comes from
             zones; workloads consume storage and managed services. This mental model maps to AWS, Azure, and Google
             Cloud — only the product names change.
@@ -628,11 +628,11 @@ aws ec2 describe-instances \\
   --query "Reservations[].Instances[].[InstanceId,State.Name]" \\
   --output table`}
           />
-          <p className="mt-3 text-sm text-white/65">
-            Equivalent commands exist for Azure (<code className="rounded bg-white/10 px-1 py-0.5">az vm create</code>,{" "}
-            <code className="rounded bg-white/10 px-1 py-0.5">az storage blob upload</code>) and Google Cloud
-            (<code className="rounded bg-white/10 px-1 py-0.5">gcloud compute instances create</code>,{" "}
-            <code className="rounded bg-white/10 px-1 py-0.5">gcloud storage cp</code>).
+          <p className="mt-3 text-sm text-muted-foreground">
+            Equivalent commands exist for Azure (<code className="rounded bg-muted/40 px-1 py-0.5">az vm create</code>,{" "}
+            <code className="rounded bg-muted/40 px-1 py-0.5">az storage blob upload</code>) and Google Cloud
+            (<code className="rounded bg-muted/40 px-1 py-0.5">gcloud compute instances create</code>,{" "}
+            <code className="rounded bg-muted/40 px-1 py-0.5">gcloud storage cp</code>).
           </p>
         </SubSection>
       </Reveal>
@@ -912,7 +912,7 @@ function IntroITIL() {
           <Diagram>
             <KanbanBoardDiagram />
           </Diagram>
-          <p className="mt-4 text-sm text-white/70">
+          <p className="mt-4 text-sm text-muted-foreground">
             Each column has a WIP limit. When a column is full, upstream work stops until the team pulls a card
             through. Blocked cards get a red flag and a swarm rule for P1/P2 severity.
           </p>
@@ -977,7 +977,7 @@ function IntroITIL() {
 
       <Reveal>
         <SubSection eyebrow="Launch" title="Pre-go-live checklist">
-          <div className="rounded-2xl border border-white/10 bg-white/5 p-6 backdrop-blur-xl">
+          <div className="rounded-2xl border border-border bg-muted/30 p-6 backdrop-blur-xl">
             <ul className="grid gap-2.5 sm:grid-cols-2">
               {[
                 "Ticket taxonomy & priority matrix defined",
@@ -991,8 +991,8 @@ function IntroITIL() {
                 "Knowledge base seeded with top-20 articles",
                 "Reporting pack + KPI baseline captured",
               ].map((it) => (
-                <li key={it} className="flex items-start gap-2.5 text-sm text-white/80">
-                  <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-emerald-400" />
+                <li key={it} className="flex items-start gap-2.5 text-sm text-muted-foreground">
+                  <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-success" />
                   <span>{it}</span>
                 </li>
               ))}
@@ -1168,21 +1168,21 @@ Trainer(
 function ITILFlowDiagram() {
   return (
     <div className="space-y-3">
-      <DiagramRow label="User or Monitoring Event" tint="bg-emerald-500/15 border-emerald-400/30 text-emerald-50" />
+      <DiagramRow label="User or Monitoring Event" tint="bg-success-soft border-success-border text-foreground" />
       <DiagramArrow />
-      <DiagramRow label="Service Desk · Intake · Classify" tint="bg-amber-500/15 border-amber-400/30 text-amber-50" />
+      <DiagramRow label="Service Desk · Intake · Classify" tint="bg-warning-soft border-warning-border text-foreground" />
       <DiagramArrow />
       <div className="grid gap-2 sm:grid-cols-2">
         <DiagramRow label="Incident Management (Kanban)" tint="bg-fuchsia-500/15 border-fuchsia-400/30 text-fuchsia-50" />
-        <DiagramRow label="Service Request (Catalog)" tint="bg-cyan-500/15 border-cyan-400/30 text-cyan-50" />
+        <DiagramRow label="Service Request (Catalog)" tint="bg-info-soft border-info-border text-foreground" />
       </div>
       <DiagramArrow />
       <div className="grid gap-2 sm:grid-cols-2">
-        <DiagramRow label="Problem Management (RCA)" tint="bg-indigo-500/15 border-indigo-400/30 text-indigo-50" />
-        <DiagramRow label="Change Enablement (Std · Normal · Emergency)" tint="bg-rose-500/15 border-rose-400/30 text-rose-50" />
+        <DiagramRow label="Problem Management (RCA)" tint="bg-special-soft border-special-border text-foreground" />
+        <DiagramRow label="Change Enablement (Std · Normal · Emergency)" tint="bg-danger-soft border-danger-border text-foreground" />
       </div>
       <DiagramArrow />
-      <DiagramRow label="Validation · Knowledge · Known Error · Runbook" tint="bg-emerald-500/15 border-emerald-400/30 text-emerald-50" />
+      <DiagramRow label="Validation · Knowledge · Known Error · Runbook" tint="bg-success-soft border-success-border text-foreground" />
     </div>
   );
 }
@@ -1198,10 +1198,10 @@ function KanbanBoardDiagram() {
   return (
     <div className="grid gap-3 sm:grid-cols-5">
       {cols.map((c) => (
-        <div key={c.name} className="rounded-xl border border-white/10 bg-white/5 p-3 backdrop-blur">
+        <div key={c.name} className="rounded-xl border border-border bg-muted/30 p-3 backdrop-blur">
           <div className="mb-2 flex items-center justify-between">
-            <span className="font-display text-xs font-bold text-white">{c.name}</span>
-            <span className="rounded bg-white/10 px-1.5 py-0.5 text-[10px] font-mono text-neon-cyan">WIP {c.wip}</span>
+            <span className="font-display text-xs font-bold text-foreground">{c.name}</span>
+            <span className="rounded bg-muted/40 px-1.5 py-0.5 text-[10px] font-mono text-neon-cyan">WIP {c.wip}</span>
           </div>
           <div className="space-y-1.5">
             {c.cards.map((card) => (
@@ -1209,8 +1209,8 @@ function KanbanBoardDiagram() {
                 key={card}
                 className={`rounded-md px-2 py-1.5 text-[11px] font-medium ${
                   card.includes("🚩")
-                    ? "border border-rose-400/40 bg-rose-500/20 text-rose-100"
-                    : "border border-cyan-400/30 bg-cyan-500/15 text-cyan-50"
+                    ? "border border-danger-border bg-danger-soft text-foreground"
+                    : "border border-info-border bg-info-soft text-foreground"
                 }`}
               >
                 {card}
@@ -1226,12 +1226,12 @@ function KanbanBoardDiagram() {
 function LLMArchitectureDiagram() {
   return (
     <div className="space-y-3">
-      <DiagramRow label="Users · Clients · Agents" tint="bg-emerald-500/15 border-emerald-400/30 text-emerald-50" />
+      <DiagramRow label="Users · Clients · Agents" tint="bg-success-soft border-success-border text-foreground" />
       <DiagramArrow />
       <div className="grid gap-2 sm:grid-cols-3">
-        <DiagramRow label="API Gateway / WAF" tint="bg-amber-500/15 border-amber-400/30 text-amber-50" />
-        <DiagramRow label="Auth · Rate limit · Quotas" tint="bg-amber-500/15 border-amber-400/30 text-amber-50" />
-        <DiagramRow label="Router (model + tenant)" tint="bg-amber-500/15 border-amber-400/30 text-amber-50" />
+        <DiagramRow label="API Gateway / WAF" tint="bg-warning-soft border-warning-border text-foreground" />
+        <DiagramRow label="Auth · Rate limit · Quotas" tint="bg-warning-soft border-warning-border text-foreground" />
+        <DiagramRow label="Router (model + tenant)" tint="bg-warning-soft border-warning-border text-foreground" />
       </div>
       <DiagramArrow />
       <div className="grid gap-2 sm:grid-cols-3">
@@ -1241,11 +1241,11 @@ function LLMArchitectureDiagram() {
       </div>
       <DiagramArrow />
       <div className="grid gap-2 sm:grid-cols-2">
-        <DiagramRow label="Model Registry (S3 / GCS)" tint="bg-indigo-500/15 border-indigo-400/30 text-indigo-50" />
-        <DiagramRow label="Fine-tune Jobs · MLflow" tint="bg-indigo-500/15 border-indigo-400/30 text-indigo-50" />
+        <DiagramRow label="Model Registry (S3 / GCS)" tint="bg-special-soft border-special-border text-foreground" />
+        <DiagramRow label="Fine-tune Jobs · MLflow" tint="bg-special-soft border-special-border text-foreground" />
       </div>
       <DiagramArrow />
-      <DiagramRow label="Observability · Cost · Safety · Audit" tint="bg-rose-500/15 border-rose-400/30 text-rose-50" />
+      <DiagramRow label="Observability · Cost · Safety · Audit" tint="bg-danger-soft border-danger-border text-foreground" />
     </div>
   );
 }
@@ -1672,20 +1672,20 @@ function SupplyChainDiagram() {
     <div className="space-y-3">
       <div className="grid gap-2 sm:grid-cols-6">
         {stages.map((s) => (
-          <div key={s} className="rounded-xl border border-cyan-400/30 bg-cyan-500/15 px-3 py-2 text-center text-xs font-semibold text-cyan-50 backdrop-blur">
+          <div key={s} className="rounded-xl border border-info-border bg-info-soft px-3 py-2 text-center text-xs font-semibold text-foreground backdrop-blur">
             {s}
           </div>
         ))}
       </div>
-      <div className="flex justify-center text-white/40">↓</div>
+      <div className="flex justify-center text-muted-foreground">↓</div>
       <div className="rounded-xl border border-fuchsia-400/30 bg-fuchsia-500/15 px-4 py-3 text-center text-sm font-semibold text-fuchsia-50 backdrop-blur">
         GenAI Agents · Copilots · Forecast + Scenario Reasoning
       </div>
-      <div className="flex justify-center text-white/40">↓</div>
+      <div className="flex justify-center text-muted-foreground">↓</div>
       <div className="grid gap-2 sm:grid-cols-3">
-        <DiagramRow label="ERP · WMS · TMS" tint="bg-indigo-500/15 border-indigo-400/30 text-indigo-50" />
-        <DiagramRow label="Data Platform + Feature Store" tint="bg-indigo-500/15 border-indigo-400/30 text-indigo-50" />
-        <DiagramRow label="External Signals (weather · social · macro)" tint="bg-indigo-500/15 border-indigo-400/30 text-indigo-50" />
+        <DiagramRow label="ERP · WMS · TMS" tint="bg-special-soft border-special-border text-foreground" />
+        <DiagramRow label="Data Platform + Feature Store" tint="bg-special-soft border-special-border text-foreground" />
+        <DiagramRow label="External Signals (weather · social · macro)" tint="bg-special-soft border-special-border text-foreground" />
       </div>
     </div>
   );
@@ -1694,12 +1694,12 @@ function SupplyChainDiagram() {
 function MultiTenantArchDiagram() {
   return (
     <div className="space-y-3">
-      <DiagramRow label="React / TypeScript UI (per-tenant subdomain)" tint="bg-emerald-500/15 border-emerald-400/30 text-emerald-50" />
+      <DiagramRow label="React / TypeScript UI (per-tenant subdomain)" tint="bg-success-soft border-success-border text-foreground" />
       <DiagramArrow />
       <div className="grid gap-2 sm:grid-cols-3">
-        <DiagramRow label="API Gateway + JWT" tint="bg-amber-500/15 border-amber-400/30 text-amber-50" />
-        <DiagramRow label="OIDC Identity Provider" tint="bg-amber-500/15 border-amber-400/30 text-amber-50" />
-        <DiagramRow label="Rate Limits + Quotas" tint="bg-amber-500/15 border-amber-400/30 text-amber-50" />
+        <DiagramRow label="API Gateway + JWT" tint="bg-warning-soft border-warning-border text-foreground" />
+        <DiagramRow label="OIDC Identity Provider" tint="bg-warning-soft border-warning-border text-foreground" />
+        <DiagramRow label="Rate Limits + Quotas" tint="bg-warning-soft border-warning-border text-foreground" />
       </div>
       <DiagramArrow />
       <div className="grid gap-2 sm:grid-cols-3">
@@ -1709,16 +1709,16 @@ function MultiTenantArchDiagram() {
       </div>
       <DiagramArrow />
       <div className="grid gap-2 sm:grid-cols-2">
-        <DiagramRow label="Kafka (events / audit)" tint="bg-cyan-500/15 border-cyan-400/30 text-cyan-50" />
-        <DiagramRow label="RabbitMQ (task queues / RPC)" tint="bg-cyan-500/15 border-cyan-400/30 text-cyan-50" />
+        <DiagramRow label="Kafka (events / audit)" tint="bg-info-soft border-info-border text-foreground" />
+        <DiagramRow label="RabbitMQ (task queues / RPC)" tint="bg-info-soft border-info-border text-foreground" />
       </div>
       <DiagramArrow />
       <div className="grid gap-2 sm:grid-cols-2">
-        <DiagramRow label="PostgreSQL + Row-Level Security" tint="bg-indigo-500/15 border-indigo-400/30 text-indigo-50" />
-        <DiagramRow label="MongoDB Replica Set" tint="bg-indigo-500/15 border-indigo-400/30 text-indigo-50" />
+        <DiagramRow label="PostgreSQL + Row-Level Security" tint="bg-special-soft border-special-border text-foreground" />
+        <DiagramRow label="MongoDB Replica Set" tint="bg-special-soft border-special-border text-foreground" />
       </div>
       <DiagramArrow />
-      <DiagramRow label="Kubernetes · Helm · CI/CD · Observability" tint="bg-rose-500/15 border-rose-400/30 text-rose-50" />
+      <DiagramRow label="Kubernetes · Helm · CI/CD · Observability" tint="bg-danger-soft border-danger-border text-foreground" />
     </div>
   );
 }
@@ -1729,10 +1729,10 @@ function CICDPipelineDiagram() {
     <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-3">
       {steps.map((s, i) => (
         <div key={s} className="flex items-center gap-2">
-          <div className="rounded-full border border-white/10 bg-white/10 px-4 py-2 text-sm font-medium text-white backdrop-blur">
+          <div className="rounded-full border border-border bg-muted/40 px-4 py-2 text-sm font-medium text-foreground backdrop-blur">
             {s}
           </div>
-          {i < steps.length - 1 && <span className="text-white/40">→</span>}
+          {i < steps.length - 1 && <span className="text-muted-foreground">→</span>}
         </div>
       ))}
     </div>
@@ -1752,11 +1752,11 @@ function RAGPipelineDiagram() {
     <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-3">
       {steps.map((s, i) => (
         <div key={s.label} className="flex items-center gap-2">
-          <div className="flex items-center gap-2 rounded-full border border-white/10 bg-white/10 px-4 py-2 text-sm font-medium text-white backdrop-blur">
+          <div className="flex items-center gap-2 rounded-full border border-border bg-muted/40 px-4 py-2 text-sm font-medium text-foreground backdrop-blur">
             <span className="text-neon-cyan">{s.icon}</span>
             {s.label}
           </div>
-          {i < steps.length - 1 && <span className="text-white/40">→</span>}
+          {i < steps.length - 1 && <span className="text-muted-foreground">→</span>}
         </div>
       ))}
     </div>
@@ -1771,17 +1771,17 @@ function QuickSummary({ items }: { items: string[] }) {
   return (
     <div className="relative overflow-hidden rounded-3xl border border-neon-cyan/30 bg-gradient-to-br from-neon-cyan/10 via-white/[0.03] to-fuchsia-500/10 p-4 shadow-glow backdrop-blur-xl sm:p-6">
       <div className="mb-4 flex items-center gap-2">
-        <span className="grid h-8 w-8 place-items-center rounded-lg bg-brand-gradient text-white">
+        <span className="grid h-8 w-8 place-items-center rounded-lg bg-brand-gradient text-foreground">
           <Zap className="h-4 w-4" />
         </span>
         <div>
           <div className="text-[11px] font-semibold uppercase tracking-widest text-neon-cyan">Quick Summary Guide</div>
-          <div className="font-display text-base font-bold text-white">Read this first — the whole module in 30 seconds</div>
+          <div className="font-display text-base font-bold text-foreground">Read this first — the whole module in 30 seconds</div>
         </div>
       </div>
       <ul className="grid gap-2 sm:grid-cols-2">
         {items.map((it) => (
-          <li key={it} className="flex items-start gap-2 rounded-xl border border-white/10 bg-white/5 p-2.5 text-sm text-white/85 sm:p-3">
+          <li key={it} className="flex items-start gap-2 rounded-xl border border-border bg-muted/30 p-2.5 text-sm text-muted-foreground sm:p-3">
             <CheckCircle2 className="mt-0.5 h-4 w-4 flex-shrink-0 text-neon-cyan" />
             <span>{it}</span>
           </li>
@@ -1804,13 +1804,13 @@ function HeroCard({ icon, title, tag, body }: { icon: React.ReactNode; title: st
       className="card-flashy rounded-3xl glass-strong p-5 shadow-glow sm:p-8 md:p-10"
     >
       <div className="relative z-[3] flex flex-col gap-4 sm:gap-6 sm:flex-row sm:items-start">
-        <div className="grid h-12 w-12 shrink-0 place-items-center rounded-2xl bg-white/10 text-white backdrop-blur sm:h-14 sm:w-14">
+        <div className="grid h-12 w-12 shrink-0 place-items-center rounded-2xl bg-muted/40 text-foreground backdrop-blur sm:h-14 sm:w-14">
           {icon}
         </div>
         <div className="min-w-0 flex-1">
-          <Badge className="w-fit bg-white/10 text-white hover:bg-white/15">{tag}</Badge>
-          <h2 className="mt-3 font-display text-xl font-bold text-white sm:text-2xl md:text-3xl">{title}</h2>
-          <p className="mt-3 text-sm text-white/75 sm:text-base">{body}</p>
+          <Badge className="w-fit bg-muted/40 text-foreground hover:bg-muted/40">{tag}</Badge>
+          <h2 className="mt-3 font-display text-xl font-bold text-foreground sm:text-2xl md:text-3xl">{title}</h2>
+          <p className="mt-3 text-sm text-muted-foreground sm:text-base">{body}</p>
         </div>
       </div>
     </motion.div>
@@ -1832,8 +1832,8 @@ function SubSection({
     <div>
       <div className="mb-5">
         {eyebrow && <p className="text-xs font-semibold uppercase tracking-widest text-neon-cyan">{eyebrow}</p>}
-        <h2 className="mt-1 font-display text-xl font-bold text-white sm:text-2xl">{title}</h2>
-        {subtitle && <p className="mt-2 text-sm text-white/65">{subtitle}</p>}
+        <h2 className="mt-1 font-display text-xl font-bold text-foreground sm:text-2xl">{title}</h2>
+        {subtitle && <p className="mt-2 text-sm text-muted-foreground">{subtitle}</p>}
       </div>
       <div className="space-y-5">{children}</div>
     </div>
@@ -1849,29 +1849,29 @@ function ConceptCard({ icon, title, desc }: { icon?: React.ReactNode; title: str
   return (
     <motion.div
       whileHover={{ y: -3 }}
-      className="card-flashy group flex h-full flex-col rounded-2xl border border-white/10 bg-white/5 p-4 backdrop-blur-xl transition-shadow hover:shadow-glow sm:p-5"
+      className="card-flashy group flex h-full flex-col rounded-2xl border border-border bg-muted/30 p-4 backdrop-blur-xl transition-shadow hover:shadow-glow sm:p-5"
     >
       {icon && (
-        <div className="relative z-[3] mb-3 grid h-9 w-9 place-items-center rounded-xl bg-white/10 text-white sm:h-10 sm:w-10">
+        <div className="relative z-[3] mb-3 grid h-9 w-9 place-items-center rounded-xl bg-muted/40 text-foreground sm:h-10 sm:w-10">
           {icon}
         </div>
       )}
-      <h3 className="relative z-[3] text-sm font-semibold text-white group-hover:text-gradient sm:text-base">{title}</h3>
-      <p className="relative z-[3] mt-2 text-sm text-white/65">{desc}</p>
+      <h3 className="relative z-[3] text-sm font-semibold text-foreground group-hover:text-gradient sm:text-base">{title}</h3>
+      <p className="relative z-[3] mt-2 text-sm text-muted-foreground">{desc}</p>
     </motion.div>
   );
 }
 
 function FeatureCard({ icon, title, body }: { icon: React.ReactNode; title: string; body: string }) {
   return (
-    <div className="rounded-2xl border border-white/10 bg-white/5 p-4 backdrop-blur-xl sm:p-6">
+    <div className="rounded-2xl border border-border bg-muted/30 p-4 backdrop-blur-xl sm:p-6">
       <div className="flex items-start gap-3 sm:gap-4">
-        <div className="grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-brand-gradient text-white shadow-neon sm:h-10 sm:w-10">
+        <div className="grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-brand-gradient text-foreground shadow-neon sm:h-10 sm:w-10">
           {icon}
         </div>
         <div>
-          <h3 className="text-sm font-semibold text-white sm:text-base">{title}</h3>
-          <p className="mt-2 text-sm text-white/70">{body}</p>
+          <h3 className="text-sm font-semibold text-foreground sm:text-base">{title}</h3>
+          <p className="mt-2 text-sm text-muted-foreground">{body}</p>
         </div>
       </div>
     </div>
@@ -1881,15 +1881,15 @@ function FeatureCard({ icon, title, body }: { icon: React.ReactNode; title: stri
 function KeyTakeaways({ items }: { items: string[] }) {
   return (
     <Reveal>
-      <div className="rounded-3xl border border-white/10 bg-gradient-to-br from-white/[0.04] to-white/[0.02] p-4 backdrop-blur-xl sm:p-7">
+      <div className="rounded-3xl border border-border bg-gradient-to-br from-white/[0.04] to-white/[0.02] p-4 backdrop-blur-xl sm:p-7">
         <div className="flex items-center gap-2">
           <Sparkles className="h-4 w-4 text-neon-cyan" />
           <p className="text-xs font-semibold uppercase tracking-widest text-neon-cyan">Key Takeaways</p>
         </div>
         <ul className="mt-4 space-y-2.5">
           {items.map((it) => (
-            <li key={it} className="flex items-start gap-3 text-sm text-white/80">
-              <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-emerald-400" />
+            <li key={it} className="flex items-start gap-3 text-sm text-muted-foreground">
+              <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-success" />
               <span>{it}</span>
             </li>
           ))}
@@ -1902,19 +1902,19 @@ function KeyTakeaways({ items }: { items: string[] }) {
 function Timeline({ items }: { items: { year: string; title: string; desc: string }[] }) {
   return (
     <div className="relative">
-      <div className="absolute left-[7px] top-1 bottom-1 w-px bg-gradient-to-b from-cyan-400/60 via-fuchsia-500/40 to-transparent sm:left-[11px]" />
+      <div className="absolute left-[7px] top-1 bottom-1 w-px bg-gradient-to-b from-info/60 via-fuchsia-500/40 to-transparent sm:left-[11px]" />
       <ol className="space-y-4 sm:space-y-5">
         {items.map((it) => (
           <li key={it.year + it.title} className="relative pl-7 sm:pl-10">
             <span className="absolute left-0 top-1.5 grid h-[15px] w-[15px] place-items-center rounded-full bg-brand-gradient shadow-neon sm:h-[23px] sm:w-[23px]">
-              <History className="h-2.5 w-2.5 text-white sm:h-3 sm:w-3" />
+              <History className="h-2.5 w-2.5 text-foreground sm:h-3 sm:w-3" />
             </span>
-            <div className="rounded-xl border border-white/10 bg-white/5 p-3 backdrop-blur-xl sm:p-4">
+            <div className="rounded-xl border border-border bg-muted/30 p-3 backdrop-blur-xl sm:p-4">
               <div className="flex flex-wrap items-baseline gap-x-3">
                 <span className="font-mono text-xs font-semibold text-neon-cyan">{it.year}</span>
-                <h3 className="text-sm font-semibold text-white">{it.title}</h3>
+                <h3 className="text-sm font-semibold text-foreground">{it.title}</h3>
               </div>
-              <p className="mt-1.5 text-sm text-white/65">{it.desc}</p>
+              <p className="mt-1.5 text-sm text-muted-foreground">{it.desc}</p>
             </div>
           </li>
         ))}
@@ -1929,15 +1929,15 @@ function NumberedSteps({ items }: { items: { title: string; desc: string }[] }) 
       {items.map((it, idx) => (
         <li
           key={it.title}
-          className="rounded-2xl border border-white/10 bg-white/5 p-4 backdrop-blur-xl transition-shadow hover:shadow-glow sm:p-5"
+          className="rounded-2xl border border-border bg-muted/30 p-4 backdrop-blur-xl transition-shadow hover:shadow-glow sm:p-5"
         >
           <div className="flex items-start gap-3">
-            <span className="grid h-8 w-8 shrink-0 place-items-center rounded-lg bg-brand-gradient text-sm font-bold text-white shadow-neon">
+            <span className="grid h-8 w-8 shrink-0 place-items-center rounded-lg bg-brand-gradient text-sm font-bold text-foreground shadow-neon">
               {idx + 1}
             </span>
             <div>
-              <h3 className="text-sm font-semibold text-white">{it.title}</h3>
-              <p className="mt-1 text-sm text-white/65">{it.desc}</p>
+              <h3 className="text-sm font-semibold text-foreground">{it.title}</h3>
+              <p className="mt-1 text-sm text-muted-foreground">{it.desc}</p>
             </div>
           </div>
         </li>
@@ -1948,11 +1948,11 @@ function NumberedSteps({ items }: { items: { title: string; desc: string }[] }) 
 
 function Table({ headers, rows }: { headers: string[]; rows: string[][] }) {
   return (
-    <div className="overflow-hidden rounded-2xl border border-white/10 bg-white/5 backdrop-blur-xl">
+    <div className="overflow-hidden rounded-2xl border border-border bg-muted/30 backdrop-blur-xl">
       <div className="overflow-x-auto">
         <table className="w-full text-left text-sm">
           <thead>
-            <tr className="border-b border-white/10 bg-white/[0.03]">
+            <tr className="border-b border-border bg-card/[0.03]">
               {headers.map((h) => (
                 <th key={h} className="px-4 py-3 text-xs font-semibold uppercase tracking-wider text-neon-cyan">
                   {h}
@@ -1962,9 +1962,9 @@ function Table({ headers, rows }: { headers: string[]; rows: string[][] }) {
           </thead>
           <tbody>
             {rows.map((row, i) => (
-              <tr key={i} className="border-b border-white/5 last:border-0 hover:bg-white/[0.03]">
+              <tr key={i} className="border-b border-border last:border-0 hover:bg-card/[0.03]">
                 {row.map((c, j) => (
-                  <td key={j} className="px-4 py-3 align-top text-white/75">
+                  <td key={j} className="px-4 py-3 align-top text-muted-foreground">
                     {c}
                   </td>
                 ))}
@@ -1979,19 +1979,19 @@ function Table({ headers, rows }: { headers: string[]; rows: string[][] }) {
 
 function Code({ language, code }: { language: string; code: string }) {
   return (
-    <div className="overflow-hidden rounded-2xl border border-white/10 bg-[#0a0d1a]/80 backdrop-blur-xl">
-      <div className="flex items-center justify-between border-b border-white/10 px-4 py-2">
+    <div className="overflow-hidden rounded-2xl border border-border bg-[#0a0d1a]/80 backdrop-blur-xl">
+      <div className="flex items-center justify-between border-b border-border px-4 py-2">
         <div className="flex items-center gap-2">
           <Code2 className="h-3.5 w-3.5 text-neon-cyan" />
-          <span className="font-mono text-xs uppercase tracking-wider text-white/60">{language}</span>
+          <span className="font-mono text-xs uppercase tracking-wider text-muted-foreground">{language}</span>
         </div>
         <div className="flex gap-1.5">
-          <span className="h-2.5 w-2.5 rounded-full bg-red-500/60" />
-          <span className="h-2.5 w-2.5 rounded-full bg-yellow-500/60" />
-          <span className="h-2.5 w-2.5 rounded-full bg-emerald-500/60" />
+          <span className="h-2.5 w-2.5 rounded-full bg-danger/60" />
+          <span className="h-2.5 w-2.5 rounded-full bg-warning/60" />
+          <span className="h-2.5 w-2.5 rounded-full bg-success-soft" />
         </div>
       </div>
-      <pre className="overflow-x-auto p-4 text-[13px] leading-relaxed text-white/85">
+      <pre className="overflow-x-auto p-4 text-[13px] leading-relaxed text-muted-foreground">
         <code className="font-mono">{code}</code>
       </pre>
     </div>
@@ -2000,7 +2000,7 @@ function Code({ language, code }: { language: string; code: string }) {
 
 function Diagram({ children }: { children: React.ReactNode }) {
   return (
-    <div className="rounded-2xl border border-white/10 bg-gradient-to-br from-white/[0.06] to-white/[0.02] p-6 backdrop-blur-xl">
+    <div className="rounded-2xl border border-border bg-gradient-to-br from-white/[0.06] to-white/[0.02] p-6 backdrop-blur-xl">
       {children}
     </div>
   );
@@ -2018,7 +2018,7 @@ function StackDiagram({ layers }: { layers: { label: string; tint: string }[] })
           whileInView={{ opacity: 1, x: 0 }}
           viewport={{ once: true }}
           transition={{ delay: i * 0.05 }}
-          className={`relative rounded-xl border border-white/10 bg-gradient-to-r ${l.tint} px-5 py-3 text-sm font-medium text-white shadow-glow`}
+          className={`relative rounded-xl border border-border bg-gradient-to-r ${l.tint} px-5 py-3 text-sm font-medium text-foreground shadow-glow`}
           style={{ marginLeft: `${i * 14}px`, marginRight: `${i * 14}px` }}
         >
           {l.label}
@@ -2040,14 +2040,14 @@ function AgentLoopDiagram() {
     <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-3">
       {steps.map((s, i) => (
         <div key={s.label} className="flex items-center gap-2">
-          <div className="flex items-center gap-2 rounded-full border border-white/10 bg-white/10 px-4 py-2 text-sm font-medium text-white backdrop-blur">
+          <div className="flex items-center gap-2 rounded-full border border-border bg-muted/40 px-4 py-2 text-sm font-medium text-foreground backdrop-blur">
             <span className="text-neon-cyan">{s.icon}</span>
             {s.label}
           </div>
           {i < steps.length - 1 ? (
-            <span className="text-white/40">→</span>
+            <span className="text-muted-foreground">→</span>
           ) : (
-            <span className="text-white/40">↻</span>
+            <span className="text-muted-foreground">↻</span>
           )}
         </div>
       ))}
@@ -2065,8 +2065,8 @@ function ServiceModelDiagram() {
   return (
     <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
       {cols.map((c) => (
-        <div key={c.name} className="rounded-xl border border-white/10 bg-white/5 p-3 text-center backdrop-blur">
-          <div className="mb-2 font-display text-sm font-bold text-white">{c.name}</div>
+        <div key={c.name} className="rounded-xl border border-border bg-muted/30 p-3 text-center backdrop-blur">
+          <div className="mb-2 font-display text-sm font-bold text-foreground">{c.name}</div>
           <div className="space-y-1">
             {[...(c.you || []).map((l) => ({ l, kind: "you" as const })), ...(c.them || []).map((l) => ({ l, kind: "them" as const }))].map(
               ({ l, kind }) => (
@@ -2075,7 +2075,7 @@ function ServiceModelDiagram() {
                   className={`rounded-md px-2 py-1 text-[11px] font-medium ${
                     kind === "you"
                       ? "bg-fuchsia-500/20 text-fuchsia-100"
-                      : "bg-cyan-500/15 text-cyan-100"
+                      : "bg-info-soft text-foreground"
                   }`}
                 >
                   {l}
@@ -2085,12 +2085,12 @@ function ServiceModelDiagram() {
           </div>
         </div>
       ))}
-      <div className="col-span-2 mt-2 flex justify-center gap-4 text-xs text-white/60 sm:col-span-4">
+      <div className="col-span-2 mt-2 flex justify-center gap-4 text-xs text-muted-foreground sm:col-span-4">
         <span className="flex items-center gap-1.5">
           <span className="h-2.5 w-2.5 rounded-sm bg-fuchsia-500/50" /> You manage
         </span>
         <span className="flex items-center gap-1.5">
-          <span className="h-2.5 w-2.5 rounded-sm bg-cyan-500/40" /> Provider manages
+          <span className="h-2.5 w-2.5 rounded-sm bg-info-soft" /> Provider manages
         </span>
       </div>
     </div>
@@ -2100,19 +2100,19 @@ function ServiceModelDiagram() {
 function CloudArchitectureDiagram() {
   return (
     <div className="space-y-3">
-      <DiagramRow label="Users / Apps" tint="bg-emerald-500/15 border-emerald-400/30 text-emerald-50" />
+      <DiagramRow label="Users / Apps" tint="bg-success-soft border-success-border text-foreground" />
       <DiagramArrow />
-      <DiagramRow label="IAM · RBAC · Policies" tint="bg-amber-500/15 border-amber-400/30 text-amber-50" />
+      <DiagramRow label="IAM · RBAC · Policies" tint="bg-warning-soft border-warning-border text-foreground" />
       <DiagramArrow />
-      <div className="rounded-xl border border-white/10 bg-white/5 p-4">
+      <div className="rounded-xl border border-border bg-muted/30 p-4">
         <div className="mb-2 text-center text-xs font-semibold uppercase tracking-widest text-neon-cyan">Region</div>
         <div className="grid gap-2 sm:grid-cols-3">
-          <DiagramRow label="Zone A" tint="bg-cyan-500/15 border-cyan-400/30 text-cyan-50" />
-          <DiagramRow label="Zone B" tint="bg-cyan-500/15 border-cyan-400/30 text-cyan-50" />
-          <DiagramRow label="Zone C" tint="bg-cyan-500/15 border-cyan-400/30 text-cyan-50" />
+          <DiagramRow label="Zone A" tint="bg-info-soft border-info-border text-foreground" />
+          <DiagramRow label="Zone B" tint="bg-info-soft border-info-border text-foreground" />
+          <DiagramRow label="Zone C" tint="bg-info-soft border-info-border text-foreground" />
         </div>
-        <div className="mt-3 rounded-lg border border-white/10 bg-white/[0.04] p-3">
-          <div className="mb-2 text-center text-xs font-semibold uppercase tracking-widest text-white/60">Virtual Network</div>
+        <div className="mt-3 rounded-lg border border-border bg-card/[0.04] p-3">
+          <div className="mb-2 text-center text-xs font-semibold uppercase tracking-widest text-muted-foreground">Virtual Network</div>
           <div className="grid gap-2 sm:grid-cols-3">
             <DiagramRow label="VMs" tint="bg-fuchsia-500/15 border-fuchsia-400/30 text-fuchsia-50" />
             <DiagramRow label="Containers / K8s" tint="bg-fuchsia-500/15 border-fuchsia-400/30 text-fuchsia-50" />
@@ -2121,7 +2121,7 @@ function CloudArchitectureDiagram() {
         </div>
       </div>
       <DiagramArrow />
-      <DiagramRow label="Storage · Databases · Managed Services" tint="bg-indigo-500/15 border-indigo-400/30 text-indigo-50" />
+      <DiagramRow label="Storage · Databases · Managed Services" tint="bg-special-soft border-special-border text-foreground" />
     </div>
   );
 }
@@ -2134,28 +2134,28 @@ function TenancyDiagram() {
         { name: "Pool", tenants: ["T1", "T2", "T3", "T4"], stacks: 1, hint: "One shared stack, tenant_id everywhere" },
         { name: "Bridge / Stamps", tenants: ["T1", "T2", "T3"], stacks: 2, hint: "Pooled + dedicated stamps" },
       ].map((m) => (
-        <div key={m.name} className="rounded-xl border border-white/10 bg-white/5 p-4 backdrop-blur">
-          <div className="mb-3 text-center font-display text-sm font-bold text-white">{m.name}</div>
+        <div key={m.name} className="rounded-xl border border-border bg-muted/30 p-4 backdrop-blur">
+          <div className="mb-3 text-center font-display text-sm font-bold text-foreground">{m.name}</div>
           <div className="space-y-2">
             <div className="flex flex-wrap justify-center gap-1.5">
               {m.tenants.map((t) => (
-                <span key={t} className="rounded-md bg-emerald-500/20 px-2 py-0.5 text-[11px] font-medium text-emerald-100">
+                <span key={t} className="rounded-md bg-success-soft px-2 py-0.5 text-[11px] font-medium text-foreground">
                   {t}
                 </span>
               ))}
             </div>
             <div className="flex justify-center">
-              <span className="text-white/40">↓</span>
+              <span className="text-muted-foreground">↓</span>
             </div>
             <div className={`grid gap-2 ${m.stacks === 2 ? "grid-cols-2" : "grid-cols-1"}`}>
               {Array.from({ length: m.stacks }).map((_, i) => (
-                <div key={i} className="rounded-md border border-cyan-400/30 bg-cyan-500/15 px-2 py-2 text-center text-[11px] text-cyan-50">
+                <div key={i} className="rounded-md border border-info-border bg-info-soft px-2 py-2 text-center text-[11px] text-foreground">
                   App + DB
                 </div>
               ))}
             </div>
           </div>
-          <p className="mt-3 text-center text-xs text-white/55">{m.hint}</p>
+          <p className="mt-3 text-center text-xs text-muted-foreground">{m.hint}</p>
         </div>
       ))}
     </div>
@@ -2165,28 +2165,28 @@ function TenancyDiagram() {
 function SaaSArchitectureDiagram() {
   return (
     <div className="space-y-3">
-      <DiagramRow label="Customer Tenants (subdomains, mobile, API clients)" tint="bg-emerald-500/15 border-emerald-400/30 text-emerald-50" />
+      <DiagramRow label="Customer Tenants (subdomains, mobile, API clients)" tint="bg-success-soft border-success-border text-foreground" />
       <DiagramArrow />
       <div className="grid gap-2 sm:grid-cols-3">
-        <DiagramRow label="CDN / WAF" tint="bg-amber-500/15 border-amber-400/30 text-amber-50" />
-        <DiagramRow label="OIDC IdP" tint="bg-amber-500/15 border-amber-400/30 text-amber-50" />
-        <DiagramRow label="API Gateway" tint="bg-amber-500/15 border-amber-400/30 text-amber-50" />
+        <DiagramRow label="CDN / WAF" tint="bg-warning-soft border-warning-border text-foreground" />
+        <DiagramRow label="OIDC IdP" tint="bg-warning-soft border-warning-border text-foreground" />
+        <DiagramRow label="API Gateway" tint="bg-warning-soft border-warning-border text-foreground" />
       </div>
       <DiagramArrow />
       <DiagramRow label="Tenant Resolver Middleware (subdomain / JWT / header)" tint="bg-fuchsia-500/15 border-fuchsia-400/30 text-fuchsia-50" />
       <DiagramArrow />
       <div className="grid gap-2 sm:grid-cols-3">
-        <DiagramRow label="App Services (pooled)" tint="bg-cyan-500/15 border-cyan-400/30 text-cyan-50" />
-        <DiagramRow label="Background Jobs" tint="bg-cyan-500/15 border-cyan-400/30 text-cyan-50" />
-        <DiagramRow label="Per-Tenant Cache" tint="bg-cyan-500/15 border-cyan-400/30 text-cyan-50" />
+        <DiagramRow label="App Services (pooled)" tint="bg-info-soft border-info-border text-foreground" />
+        <DiagramRow label="Background Jobs" tint="bg-info-soft border-info-border text-foreground" />
+        <DiagramRow label="Per-Tenant Cache" tint="bg-info-soft border-info-border text-foreground" />
       </div>
       <DiagramArrow />
       <div className="grid gap-2 sm:grid-cols-2">
-        <DiagramRow label="Pooled Postgres + Row-Level Security" tint="bg-indigo-500/15 border-indigo-400/30 text-indigo-50" />
-        <DiagramRow label="Premium Stamps (dedicated DB/region)" tint="bg-indigo-500/15 border-indigo-400/30 text-indigo-50" />
+        <DiagramRow label="Pooled Postgres + Row-Level Security" tint="bg-special-soft border-special-border text-foreground" />
+        <DiagramRow label="Premium Stamps (dedicated DB/region)" tint="bg-special-soft border-special-border text-foreground" />
       </div>
       <DiagramArrow />
-      <DiagramRow label="Observability · Billing · Audit · Backups" tint="bg-rose-500/15 border-rose-400/30 text-rose-50" />
+      <DiagramRow label="Observability · Billing · Audit · Backups" tint="bg-danger-soft border-danger-border text-foreground" />
     </div>
   );
 }
@@ -2200,7 +2200,7 @@ function DiagramRow({ label, tint }: { label: string; tint: string }) {
 function DiagramArrow() {
   return (
     <div className="flex justify-center">
-      <span className="text-white/40">↓</span>
+      <span className="text-muted-foreground">↓</span>
     </div>
   );
 }
@@ -2257,10 +2257,10 @@ function LessonVideo() {
 
 function ChartCard({ title, subtitle, children }: { title: string; subtitle: string; children: React.ReactNode }) {
   return (
-    <div className="rounded-2xl border border-white/10 bg-gradient-to-br from-white/[0.06] to-white/[0.02] p-4 backdrop-blur-xl sm:p-6">
+    <div className="rounded-2xl border border-border bg-gradient-to-br from-white/[0.06] to-white/[0.02] p-4 backdrop-blur-xl sm:p-6">
       <div className="mb-4">
-        <div className="font-display text-base font-bold text-white">{title}</div>
-        <p className="text-sm text-white/60">{subtitle}</p>
+        <div className="font-display text-base font-bold text-foreground">{title}</div>
+        <p className="text-sm text-muted-foreground">{subtitle}</p>
       </div>
       <div className="h-[320px] w-full">{children}</div>
     </div>
@@ -2271,11 +2271,11 @@ function MASLayerDiagram() {
   return (
     <StackDiagram
       layers={[
-        { label: "Environment / market / plant — sensors, actuators, external APIs", tint: "border-white/10 bg-white/5 text-white/80" },
-        { label: "Agent layer — reactive · deliberative / BDI · learning agents", tint: "border-blue-400/30 bg-blue-400/10 text-white" },
-        { label: "Coordination & semantics — directory, negotiation, planning, ontologies", tint: "border-cyan-400/30 bg-cyan-400/10 text-white" },
-        { label: "Communication substrate — DDS · MQTT · gRPC · REST · message schemas", tint: "border-fuchsia-400/30 bg-fuchsia-400/10 text-white" },
-        { label: "Operations & trust — security policy, telemetry, tracing, CI/CD", tint: "border-emerald-400/30 bg-emerald-400/10 text-white" },
+        { label: "Environment / market / plant — sensors, actuators, external APIs", tint: "border-border bg-muted/30 text-muted-foreground" },
+        { label: "Agent layer — reactive · deliberative / BDI · learning agents", tint: "border-border bg-primary/10 text-foreground" },
+        { label: "Coordination & semantics — directory, negotiation, planning, ontologies", tint: "border-info-border bg-info-soft text-foreground" },
+        { label: "Communication substrate — DDS · MQTT · gRPC · REST · message schemas", tint: "border-fuchsia-400/30 bg-fuchsia-400/10 text-foreground" },
+        { label: "Operations & trust — security policy, telemetry, tracing, CI/CD", tint: "border-success-border bg-success-soft text-foreground" },
       ]}
     />
   );
@@ -2294,11 +2294,11 @@ function ContractNetDiagram() {
     <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-3">
       {steps.map((s, i) => (
         <div key={s.label} className="flex items-center gap-2">
-          <div className="flex items-center gap-2 rounded-full border border-white/10 bg-white/10 px-4 py-2 text-sm font-medium text-white backdrop-blur">
+          <div className="flex items-center gap-2 rounded-full border border-border bg-muted/40 px-4 py-2 text-sm font-medium text-foreground backdrop-blur">
             <span className="text-neon-cyan">{s.icon}</span>
             {s.label}
           </div>
-          {i < steps.length - 1 && <span className="text-white/40">→</span>}
+          {i < steps.length - 1 && <span className="text-muted-foreground">→</span>}
         </div>
       ))}
     </div>
@@ -2309,18 +2309,18 @@ function SwarmDiagram() {
   return (
     <div className="grid gap-3 sm:grid-cols-2">
       {["Robot i", "Robot j"].map((robot) => (
-        <div key={robot} className="rounded-2xl border border-white/10 bg-white/5 p-4">
-          <div className="mb-3 flex items-center gap-2 text-sm font-semibold text-white">
+        <div key={robot} className="rounded-2xl border border-border bg-muted/30 p-4">
+          <div className="mb-3 flex items-center gap-2 text-sm font-semibold text-foreground">
             <Bot className="h-4 w-4 text-neon-cyan" /> {robot}
           </div>
           <div className="space-y-2">
             {["Local sensing", "Reactive safety loop", "Local planner / policy", "Neighbour coordination"].map((l) => (
-              <DiagramRow key={l} label={l} tint="border-white/10 bg-white/5 text-white/80" />
+              <DiagramRow key={l} label={l} tint="border-border bg-muted/30 text-muted-foreground" />
             ))}
           </div>
         </div>
       ))}
-      <p className="sm:col-span-2 text-center text-xs text-white/50">
+      <p className="sm:col-span-2 text-center text-xs text-muted-foreground">
         No remote planner sits in the safety loop. Neighbour messages carry compact intent, never full world models.
       </p>
     </div>
@@ -2426,7 +2426,7 @@ function IntroMAS() {
               ]}
             />
           </div>
-          <p className="mt-4 text-sm text-white/60">
+          <p className="mt-4 text-sm text-muted-foreground">
             Default guidance: hierarchical-centralized when a visible control plane matters (throughput, compliance,
             human supervision); decentralized-hybrid when locality, intermittent connectivity, or safety loops dominate.
           </p>
@@ -2481,7 +2481,7 @@ function IntroMAS() {
               ["Unity ML-Agents", "C# + Python", "High", "Medium-High", "3D embodied simulation, perception-rich MARL", "Unity-centred; plan runtime portability explicitly"],
             ]}
           />
-          <p className="mt-4 text-sm text-white/60">
+          <p className="mt-4 text-sm text-muted-foreground">
             Caveat worth repeating: OpenAI Gym has been unmaintained since 2022. For new multi-agent work use
             Gymnasium + PettingZoo, with compatibility wrappers only where legacy Gym is unavoidable.
           </p>
@@ -2545,7 +2545,7 @@ async def allocate(task, agents, bus, deadline=2.0):
 
       <Reveal>
         <SubSection eyebrow="Watch it work" title="Lesson Video — Multi-Agent Systems">
-          <p className="mb-5 text-sm text-white/60">
+          <p className="mb-5 text-sm text-muted-foreground">
             An original, self-hosted animated walkthrough in six chapters: foundations, topology, the Contract Net
             protocol, the metrics that matter, the reference design, and how to apply it. Pick a chapter to jump
             straight to it.
@@ -2605,16 +2605,16 @@ async def allocate(task, agents, bus, deadline=2.0):
                 { label: "Event log & replay", icon: <History className="h-4 w-4" /> },
               ].map((s, i, arr) => (
                 <div key={s.label} className="flex items-center gap-2">
-                  <div className="flex items-center gap-2 rounded-full border border-white/10 bg-white/10 px-4 py-2 text-sm font-medium text-white backdrop-blur">
+                  <div className="flex items-center gap-2 rounded-full border border-border bg-muted/40 px-4 py-2 text-sm font-medium text-foreground backdrop-blur">
                     <span className="text-neon-cyan">{s.icon}</span>
                     {s.label}
                   </div>
-                  {i < arr.length - 1 && <span className="text-white/40">→</span>}
+                  {i < arr.length - 1 && <span className="text-muted-foreground">→</span>}
                 </div>
               ))}
             </div>
           </Diagram>
-          <p className="mt-4 text-sm text-white/60">
+          <p className="mt-4 text-sm text-muted-foreground">
             Use gRPC/Protobuf for strategy → risk → execution flows, keep the exchange simulation event-driven
             (ABIDES / ABIDES-Gym with configurable pairwise latencies), and centralise admissibility and limit
             enforcement in the policy agent. Metrics: execution delay, fill ratio, inventory path, portfolio
@@ -2715,13 +2715,13 @@ function VectorPipelineDiagram() {
   return (
     <Diagram>
       <div className="flex flex-col gap-2">
-        <DiagramRow label="User query — “I cannot log in after forgetting my credentials”" tint="from-cyan-500/20 to-cyan-500/5" />
+        <DiagramRow label="User query — “I cannot log in after forgetting my credentials”" tint="from-info/20 to-info/5" />
         <DiagramArrow />
-        <DiagramRow label="Preprocess + embed with the SAME model / revision / dimension" tint="from-blue-500/20 to-blue-500/5" />
+        <DiagramRow label="Preprocess + embed with the SAME model / revision / dimension" tint="from-primary/20 to-primary/5" />
         <DiagramArrow />
-        <DiagramRow label="ANN search (HNSW / IVF) + lexical BM25 — retrieve a larger pool" tint="from-indigo-500/20 to-indigo-500/5" />
+        <DiagramRow label="ANN search (HNSW / IVF) + lexical BM25 — retrieve a larger pool" tint="from-special/20 to-special/5" />
         <DiagramArrow />
-        <DiagramRow label="Filter by tenant / ACL BEFORE ranking, then fuse candidates" tint="from-violet-500/20 to-violet-500/5" />
+        <DiagramRow label="Filter by tenant / ACL BEFORE ranking, then fuse candidates" tint="from-special/20 to-special/5" />
         <DiagramArrow />
         <DiagramRow label="Cross-encoder rerank → top-k with citations and source revision" tint="from-fuchsia-500/20 to-fuchsia-500/5" />
       </div>
@@ -2942,7 +2942,7 @@ print("recall@k:", recall_at_k(exact_ids, ann_ids, k))`}
               ["Vespa", "Search, ranking and serving platform", "Complex ranking, structured filters and recommendations together", "Steeper learning curve; a platform, not a component"],
             ]}
           />
-          <p className="mt-4 text-sm leading-relaxed text-white/70">
+          <p className="mt-4 text-sm leading-relaxed text-muted-foreground">
             A library is often enough when one process owns the index and metadata lives elsewhere. A database earns its keep once
             you need durable concurrent writes, filtering, backups, multi-tenancy, replication, access control and operational APIs.
             Never choose from a generic latency claim — benchmark with your own vectors, dimensions, metric, top-k, filter

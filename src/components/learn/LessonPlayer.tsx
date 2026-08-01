@@ -53,7 +53,7 @@ export function LessonPlayer({
 
   return (
     <div className="grid gap-5 lg:grid-cols-[1.5fr_1fr]">
-      <div className="relative self-start overflow-hidden rounded-2xl border border-white/10 bg-slate-900">
+      <div className="relative self-start overflow-hidden rounded-2xl border border-border bg-foreground">
         <AccessibleVideo
           src={src}
           poster={poster}
@@ -65,16 +65,16 @@ export function LessonPlayer({
           onPlay={() => toggleVideo(videoId, true)}
         />
         {watched && (
-          <span className="absolute right-2 top-2 z-10 inline-flex items-center gap-1 rounded-full bg-emerald-600/90 px-2 py-0.5 text-[10px] font-semibold text-white">
+          <span className="absolute right-2 top-2 z-10 inline-flex items-center gap-1 rounded-full bg-success-soft px-2 py-0.5 text-[10px] font-semibold text-foreground">
             <CheckCircle2 className="h-3 w-3" aria-hidden /> Watched
           </span>
         )}
-        <div className="flex flex-wrap items-center justify-between gap-3 border-t border-white/10 p-4">
+        <div className="flex flex-wrap items-center justify-between gap-3 border-t border-border p-4">
           <div>
             <div className="text-[11px] font-semibold uppercase tracking-widest text-neon-cyan">
               Original lesson · self-hosted
             </div>
-            <h4 className="mt-1 font-display text-sm font-bold text-white sm:text-base">{title}</h4>
+            <h4 className="mt-1 font-display text-sm font-bold text-foreground sm:text-base">{title}</h4>
           </div>
           <button
             type="button"
@@ -96,15 +96,15 @@ export function LessonPlayer({
               className={cn(
                 "w-full rounded-xl border p-3 text-left transition",
                 activeId === c.id
-                  ? "border-neon-cyan/60 bg-white/10"
-                  : "border-white/10 bg-white/[0.04] hover:border-neon-cyan/40 hover:bg-white/[0.07]",
+                  ? "border-neon-cyan/60 bg-muted/40"
+                  : "border-border bg-card/[0.04] hover:border-neon-cyan/40 hover:bg-card/[0.07]",
               )}
             >
               <div className="flex items-center gap-2 text-[11px] font-semibold uppercase tracking-widest text-neon-cyan">
                 <span>{String(i + 1).padStart(2, "0")}</span>
                 <span>{c.title}</span>
               </div>
-              <p className="mt-1 text-xs leading-relaxed text-white/70">{c.note}</p>
+              <p className="mt-1 text-xs leading-relaxed text-muted-foreground">{c.note}</p>
             </button>
           </li>
         ))}

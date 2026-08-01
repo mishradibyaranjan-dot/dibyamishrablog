@@ -166,7 +166,7 @@ export function FloatingChat() {
         className={cn(
           "group fixed bottom-5 right-5 z-[60] flex h-14 w-14 items-center justify-center rounded-full",
           "border border-border bg-card text-primary shadow-[0_12px_30px_-10px_rgba(59,130,246,0.55)] transition-all",
-          "hover:scale-105 hover:border-blue-300 hover:text-blue-700 active:scale-95",
+          "hover:scale-105 hover:border-border hover:text-primary active:scale-95",
         )}
       >
         {open ? (
@@ -179,7 +179,7 @@ export function FloatingChat() {
             className="relative inline-flex"
           >
             <img src={mascot} alt="" width={44} height={44} className="h-11 w-11 drop-shadow-[0_6px_10px_rgba(59,130,246,0.35)]" />
-            <span className="absolute -bottom-1 left-1/2 h-1.5 w-6 -translate-x-1/2 rounded-full bg-blue-400/60 blur-md" />
+            <span className="absolute -bottom-1 left-1/2 h-1.5 w-6 -translate-x-1/2 rounded-full bg-primary/60 blur-md" />
           </motion.span>
         )}
       </button>
@@ -194,7 +194,7 @@ export function FloatingChat() {
             "h-[min(560px,calc(100vh-8rem))] rounded-2xl border border-border bg-card shadow-2xl text-foreground",
           )}
         >
-          <header className="flex items-center justify-between border-b border-blue-100 bg-gradient-to-r from-primary/10 via-card to-secondary/10 px-4 py-3">
+          <header className="flex items-center justify-between border-b border-border bg-gradient-to-r from-primary/10 via-card to-secondary/10 px-4 py-3">
             <div className="flex items-center gap-2">
               <motion.span
                 aria-hidden
@@ -206,7 +206,7 @@ export function FloatingChat() {
               </motion.span>
               <div className="flex flex-col leading-tight">
                 <p className="text-sm font-semibold text-foreground">Learning Assistant</p>
-                <span className="text-[10px] font-medium uppercase tracking-wider text-blue-600">Online</span>
+                <span className="text-[10px] font-medium uppercase tracking-wider text-primary">Online</span>
               </div>
             </div>
             <div className="flex items-center gap-1">
@@ -216,7 +216,7 @@ export function FloatingChat() {
                   size="icon"
                   aria-label="Clear conversation"
                   onClick={handleClear}
-                  className="text-muted-foreground hover:bg-blue-50 hover:text-foreground"
+                  className="text-muted-foreground hover:bg-muted/40 hover:text-foreground"
                 >
                   <Trash2 className="h-4 w-4" />
                 </Button>

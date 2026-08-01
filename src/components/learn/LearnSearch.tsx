@@ -27,10 +27,10 @@ export function LearnSearch({
   const active = query.trim().length > 0 || topic !== "all";
 
   return (
-    <div className="rounded-3xl border border-blue-200/70 bg-white/90 p-5 shadow-[0_20px_60px_-45px_rgba(37,99,235,0.5)]">
+    <div className="rounded-3xl border border-border bg-card/90 p-5 shadow-[0_20px_60px_-45px_rgba(37,99,235,0.5)]">
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
         <div className="relative flex-1">
-          <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
+          <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
           <Input
             value={query}
             onChange={(e) => setQuery(e.target.value)}
@@ -43,7 +43,7 @@ export function LearnSearch({
               type="button"
               aria-label="Clear search"
               onClick={() => setQuery("")}
-              className="absolute right-2 top-1/2 -translate-y-1/2 rounded-full p-1 text-slate-400 hover:text-slate-700"
+              className="absolute right-2 top-1/2 -translate-y-1/2 rounded-full p-1 text-muted-foreground hover:text-muted-foreground"
             >
               <X className="h-4 w-4" />
             </button>
@@ -59,8 +59,8 @@ export function LearnSearch({
             onClick={() => setTopic(t)}
             className={`rounded-full border px-3 py-1 text-xs font-medium transition ${
               topic === t
-                ? "border-blue-500 bg-blue-600 text-white"
-                : "border-slate-200 bg-white text-slate-600 hover:border-blue-300"
+                ? "border-border bg-primary text-foreground"
+                : "border-border bg-card text-muted-foreground hover:border-border"
             }`}
           >
             {t === "all" ? "All topics" : t}
@@ -70,11 +70,11 @@ export function LearnSearch({
 
       {active && (
         <div className="mt-4 space-y-2">
-          <p className="text-xs uppercase tracking-widest text-slate-500">
+          <p className="text-xs uppercase tracking-widest text-muted-foreground">
             {hits.length} result{hits.length === 1 ? "" : "s"}
           </p>
           {hits.length === 0 && (
-            <p className="rounded-xl bg-slate-50 p-4 text-sm text-slate-600">
+            <p className="rounded-xl bg-muted/40 p-4 text-sm text-muted-foreground">
               No matches. Try a broader term or a different topic.
             </p>
           )}
@@ -85,25 +85,25 @@ export function LearnSearch({
                   <button
                     type="button"
                     onClick={() => onOpenModule(hit.key)}
-                    className="flex h-full w-full flex-col items-start rounded-2xl border border-slate-200 bg-white p-4 text-left transition hover:border-blue-400 hover:shadow-sm"
+                    className="flex h-full w-full flex-col items-start rounded-2xl border border-border bg-card p-4 text-left transition hover:border-border hover:shadow-sm"
                   >
                     <ResultHead
                       icon={<BookOpen className="h-3.5 w-3.5" />}
                       badge={hit.badge}
                       done={!!completedModules[hit.key]}
                     />
-                    <span className="mt-2 font-semibold text-slate-900">{hit.title}</span>
-                    <span className="mt-1 text-sm text-slate-600">{hit.snippet}</span>
+                    <span className="mt-2 font-semibold text-foreground">{hit.title}</span>
+                    <span className="mt-1 text-sm text-muted-foreground">{hit.snippet}</span>
                   </button>
                 ) : (
                   <Link
                     to="/repository"
-                    className="flex h-full w-full flex-col items-start rounded-2xl border border-slate-200 bg-white p-4 text-left transition hover:border-blue-400 hover:shadow-sm"
+                    className="flex h-full w-full flex-col items-start rounded-2xl border border-border bg-card p-4 text-left transition hover:border-border hover:shadow-sm"
                   >
                     <ResultHead icon={<FileText className="h-3.5 w-3.5" />} badge={hit.badge} done={false} />
-                    <span className="mt-2 font-semibold text-slate-900">{hit.title}</span>
-                    <span className="mt-1 text-sm text-slate-600">{hit.snippet}</span>
-                    <span className="mt-2 text-xs font-medium text-blue-600">Open in Repository →</span>
+                    <span className="mt-2 font-semibold text-foreground">{hit.title}</span>
+                    <span className="mt-1 text-sm text-muted-foreground">{hit.snippet}</span>
+                    <span className="mt-2 text-xs font-medium text-primary">Open in Repository →</span>
                   </Link>
                 )}
               </li>
@@ -130,11 +130,11 @@ export function LearnSearch({
 function ResultHead({ icon, badge, done }: { icon: React.ReactNode; badge: string; done: boolean }) {
   return (
     <span className="flex w-full items-center justify-between gap-2">
-      <span className="inline-flex items-center gap-1.5 rounded-full border border-slate-200 bg-slate-50 px-2 py-0.5 text-[11px] font-medium uppercase tracking-wide text-slate-600">
+      <span className="inline-flex items-center gap-1.5 rounded-full border border-border bg-muted/40 px-2 py-0.5 text-[11px] font-medium uppercase tracking-wide text-muted-foreground">
         {icon}
         {badge}
       </span>
-      {done && <CheckCircle2 className="h-4 w-4 text-emerald-600" aria-label="Completed" />}
+      {done && <CheckCircle2 className="h-4 w-4 text-success" aria-label="Completed" />}
     </span>
   );
 }
