@@ -84,6 +84,8 @@ import { useLearnProgress } from "@/lib/learn-progress";
 import { LearnSearch } from "@/components/learn/LearnSearch";
 import { ModulePdf } from "@/components/learn/ModulePdf";
 import { LessonPlayer } from "@/components/learn/LessonPlayer";
+import { MULTI_AGENT_CUES, VECTOR_SEARCH_CUES } from "@/lib/video-captions";
+
 
 function TabHeroImage({ src, alt, caption }: { src: string; alt: string; caption: string }) {
   return (
