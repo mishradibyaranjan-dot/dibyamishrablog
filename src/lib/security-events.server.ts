@@ -193,7 +193,7 @@ export async function evaluateFailedLogin(params: {
 
 // ---------- Critical email alert ----------
 
-const OWNER_EMAIL = "mishra.dibyaranjan@gmail.com";
+const OWNER_EMAILS = ["mishra.dibyaranjan@gmail.com", "contactme@dibyamishra.co.in"];
 const SITE_NAME = "dibyamishrablog";
 const SENDER_DOMAIN = "notify.dibyamishra.co.in";
 const FROM_DOMAIN = "notify.dibyamishra.co.in";
@@ -242,9 +242,10 @@ export async function sendCriticalAlert(payload: AlertPayload): Promise<void> {
     const text = await render(el, { plainText: true });
     const subject = `[Security] ${payload.type} from ${payload.ip ?? "unknown IP"}`;
     const messageId = crypto.randomUUID();
+    for (const recipient of OWNER_EMAILS) {
     await sendLovableEmail(
       {
-        to: OWNER_EMAIL,
+        to: recipient,
         from: `${SITE_NAME} <security@${FROM_DOMAIN}>`,
         sender_domain: SENDER_DOMAIN,
         subject,
@@ -252,11 +253,12 @@ export async function sendCriticalAlert(payload: AlertPayload): Promise<void> {
         text,
         purpose: "transactional",
         label: "security-alert",
-        idempotency_key: `security-alert-${key}-${Math.floor(now / ALERT_DEDUPE_MS)}`,
+        idempotency_key: `security-alert-${key}-${Math.floor(now / ALERT_DEDUPE_MS)}-${recipient}`,
         message_id: messageId,
       },
       { apiKey, sendUrl: process.env.LOVABLE_SEND_URL },
     );
+    }
   } catch (err) {
     console.error("sendCriticalAlert failed", err);
   }
