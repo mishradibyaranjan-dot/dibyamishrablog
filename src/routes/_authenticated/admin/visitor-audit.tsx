@@ -1,10 +1,23 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
-import { Loader2, ShieldAlert, ChevronLeft, ChevronRight, RefreshCw } from "lucide-react";
+import { useEffect, useMemo, useState } from "react";
+import {
+  Loader2, ShieldAlert, ChevronLeft, ChevronRight, RefreshCw, Trash2, BellRing, Search, Gauge,
+} from "lucide-react";
+import {
+  Area, AreaChart, Bar, BarChart, CartesianGrid, Cell, Legend, ResponsiveContainer, Tooltip, XAxis, YAxis,
+} from "recharts";
 import { Section, SectionHeader } from "@/components/layout/Section";
 import { Button } from "@/components/ui/button";
-import { supabase } from "@/integrations/supabase/client";
+import { Input } from "@/components/ui/input";
 import { useAuth } from "@/lib/auth";
+import { useServerFn } from "@tanstack/react-start";
+import {
+  listVisitorAudit,
+  getVisitorAuditAnalytics,
+  updateVisitorAuditSettings,
+  purgeVisitorAudit,
+  runVisitorAuditSpikeCheck,
+} from "@/lib/visitor-audit.functions";
 
 export const Route = createFileRoute("/_authenticated/admin/visitor-audit")({
   head: () => ({
@@ -30,11 +43,11 @@ type Row = {
   user_agent: string | null;
   duration_ms: number | null;
   error_message: string | null;
-  metadata: Record<string, unknown> | null;
   created_at: string;
 };
 
-const PAGE_SIZE = 25;
+type Analytics = Awaited<ReturnType<typeof getVisitorAuditAnalytics>>["analytics"];
+type Settings = Awaited<ReturnType<typeof getVisitorAuditAnalytics>>["settings"];
 
 const OUTCOMES: Record<string, { label: string; className: string }> = {
   accepted: { label: "Accepted", className: "bg-emerald-50 text-emerald-700 border-emerald-200" },
@@ -42,42 +55,152 @@ const OUTCOMES: Record<string, { label: string; className: string }> = {
   error: { label: "Error", className: "bg-red-50 text-red-700 border-red-200" },
 };
 
+const BAR_COLORS = ["#2563eb", "#0ea5e9", "#6366f1", "#14b8a6", "#f59e0b", "#ef4444", "#8b5cf6", "#10b981", "#f97316", "#64748b"];
+
+const emptyFilters = {
+  outcome: "all" as "all" | "accepted" | "rejected" | "error",
+  identified: "all" as "all" | "yes" | "no",
+  from: "",
+  to: "",
+  path: "",
+  visitorId: "",
+  userId: "",
+  country: "",
+  ipHash: "",
+  search: "",
+};
+
+function Card({ label, value, tone = "slate" }: { label: string; value: string | number; tone?: string }) {
+  return (
+    <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
+      <p className="text-xs uppercase tracking-wider text-slate-500">{label}</p>
+      <p className={`mt-1 text-2xl font-semibold text-${tone}-900`}>{value}</p>
+    </div>
+  );
+}
+
+function TopList({ title, items }: { title: string; items: { label: string; count: number }[] }) {
+  return (
+    <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
+      <h3 className="text-sm font-semibold text-slate-900">{title}</h3>
+      {items.length === 0 ? (
+        <p className="mt-3 text-xs text-slate-500">No data in this window.</p>
+      ) : (
+        <div className="mt-3 h-[220px]">
+          <ResponsiveContainer width="100%" height="100%">
+            <BarChart data={items} layout="vertical" margin={{ left: 8, right: 16 }}>
+              <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" horizontal={false} />
+              <XAxis type="number" tick={{ fontSize: 11 }} />
+              <YAxis type="category" dataKey="label" width={140} tick={{ fontSize: 11 }} />
+              <Tooltip />
+              <Bar dataKey="count" radius={[0, 4, 4, 0]}>
+                {items.map((_, i) => (
+                  <Cell key={i} fill={BAR_COLORS[i % BAR_COLORS.length]} />
+                ))}
+              </Bar>
+            </BarChart>
+          </ResponsiveContainer>
+        </div>
+      )}
+    </div>
+  );
+}
+
 function VisitorAuditPage() {
   const { isAdmin, loading } = useAuth();
-  const [rows, setRows] = useState<Row[]>([]);
-  const [total, setTotal] = useState(0);
-  const [page, setPage] = useState(0);
-  const [filter, setFilter] = useState("");
-  const [busy, setBusy] = useState(false);
+  const [tab, setTab] = useState<"overview" | "events">("overview");
+
+  const fetchAnalytics = useServerFn(getVisitorAuditAnalytics);
+  const fetchRows = useServerFn(listVisitorAudit);
+  const saveSettings = useServerFn(updateVisitorAuditSettings);
+  const runPurge = useServerFn(purgeVisitorAudit);
+  const runSpike = useServerFn(runVisitorAuditSpikeCheck);
+
+  // ---- analytics ----
+  const [days, setDays] = useState(14);
+  const [analytics, setAnalytics] = useState<Analytics | null>(null);
+  const [settings, setSettings] = useState<Settings | null>(null);
+  const [aBusy, setABusy] = useState(false);
+  const [notice, setNotice] = useState<string | null>(null);
   const [err, setErr] = useState<string | null>(null);
 
-  const totalPages = Math.max(1, Math.ceil(total / PAGE_SIZE));
-
-  const load = async () => {
+  const loadAnalytics = async () => {
     if (!isAdmin) return;
-    setBusy(true);
+    setABusy(true);
     setErr(null);
-    const from = page * PAGE_SIZE;
-    let query = supabase
-      .from("visitor_tracking_audit")
-      .select("*", { count: "exact" })
-      .order("created_at", { ascending: false })
-      .range(from, from + PAGE_SIZE - 1);
-    if (filter) query = query.eq("outcome", filter);
-    const { data, error, count } = await query;
-    setBusy(false);
-    if (error) {
-      setErr(error.message);
-      return;
+    try {
+      const res = await fetchAnalytics({ data: { days } });
+      setAnalytics(res.analytics);
+      setSettings(res.settings);
+    } catch (e) {
+      setErr(e instanceof Error ? e.message : "Failed to load analytics");
+    } finally {
+      setABusy(false);
     }
-    setRows((data ?? []) as Row[]);
-    setTotal(count ?? 0);
+  };
+
+  // ---- events ----
+  const [filters, setFilters] = useState(emptyFilters);
+  const [applied, setApplied] = useState(emptyFilters);
+  const [page, setPage] = useState(0);
+  const [pageSize, setPageSize] = useState(25);
+  const [rows, setRows] = useState<Row[]>([]);
+  const [total, setTotal] = useState(0);
+  const [rBusy, setRBusy] = useState(false);
+  const totalPages = Math.max(1, Math.ceil(total / pageSize));
+
+  const loadRows = async () => {
+    if (!isAdmin) return;
+    setRBusy(true);
+    setErr(null);
+    try {
+      const res = await fetchRows({
+        data: {
+          page,
+          pageSize,
+          outcome: applied.outcome,
+          identified: applied.identified,
+          from: applied.from || undefined,
+          to: applied.to || undefined,
+          path: applied.path || undefined,
+          visitorId: applied.visitorId || undefined,
+          userId: applied.userId || undefined,
+          country: applied.country || undefined,
+          ipHash: applied.ipHash || undefined,
+          search: applied.search || undefined,
+        },
+      });
+      setRows(res.rows as Row[]);
+      setTotal(res.count);
+    } catch (e) {
+      setErr(e instanceof Error ? e.message : "Failed to load audit events");
+    } finally {
+      setRBusy(false);
+    }
   };
 
   useEffect(() => {
-    void load();
+    void loadAnalytics();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isAdmin, page, filter]);
+  }, [isAdmin, days]);
+
+  useEffect(() => {
+    if (tab === "events") void loadRows();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isAdmin, tab, page, pageSize, applied]);
+
+  const latencyRows = useMemo(() => {
+    const l = analytics?.latency;
+    if (!l) return [];
+    return [
+      { label: "p50", ms: l.p50 ?? 0 },
+      { label: "p75", ms: l.p75 ?? 0 },
+      { label: "p90", ms: l.p90 ?? 0 },
+      { label: "p95", ms: l.p95 ?? 0 },
+      { label: "p99", ms: l.p99 ?? 0 },
+      { label: "max", ms: l.max ?? 0 },
+    ];
+  }, [analytics]);
 
   if (loading) {
     return (
@@ -107,92 +230,370 @@ function VisitorAuditPage() {
         as="h1"
         eyebrow="Admin"
         title="Visitor tracking audit"
-        description="Every server-side visitor tracking write attempt — accepted, rejected, or failed — with hashed IP, path, identity and latency."
+        description="Analytics, alerting, retention and a searchable log of every server-side visitor tracking write attempt."
       />
 
       <div className="mt-6 flex flex-wrap items-center gap-2">
-        <select
-          value={filter}
-          onChange={(e) => { setFilter(e.target.value); setPage(0); }}
-          className="rounded-md border border-slate-300 bg-white px-3 py-2 text-sm"
-        >
-          <option value="">All outcomes</option>
-          <option value="accepted">Accepted</option>
-          <option value="rejected">Rejected</option>
-          <option value="error">Errors</option>
-        </select>
-        <Button size="sm" variant="outline" onClick={() => void load()} className="border-slate-300">
-          <RefreshCw className="mr-1 h-3.5 w-3.5" /> Refresh
-        </Button>
-        <p className="ml-auto text-xs text-slate-500">{total} entries</p>
+        {(["overview", "events"] as const).map((t) => (
+          <button
+            key={t}
+            onClick={() => setTab(t)}
+            className={`rounded-full border px-4 py-1.5 text-sm font-medium transition ${
+              tab === t ? "border-blue-600 bg-blue-600 text-white" : "border-slate-300 bg-white text-slate-700 hover:bg-slate-50"
+            }`}
+          >
+            {t === "overview" ? "Analytics & policy" : "Audit events"}
+          </button>
+        ))}
       </div>
 
       {err && <p className="mt-3 text-xs text-red-600">{err}</p>}
+      {notice && <p className="mt-3 text-xs text-emerald-700">{notice}</p>}
 
-      <div className="mt-4 overflow-x-auto rounded-2xl border border-slate-200 bg-white shadow-sm">
-        <table className="w-full text-sm">
-          <thead className="bg-slate-50">
-            <tr className="text-left text-xs uppercase tracking-wider text-slate-500">
-              <th className="px-4 py-2">When</th>
-              <th className="px-4 py-2">Outcome</th>
-              <th className="px-4 py-2">Reason</th>
-              <th className="px-4 py-2">Path</th>
-              <th className="px-4 py-2">Visitor</th>
-              <th className="px-4 py-2">Identified</th>
-              <th className="px-4 py-2">Country</th>
-              <th className="px-4 py-2">IP hash</th>
-              <th className="px-4 py-2">ms</th>
-              <th className="px-4 py-2">Error</th>
-            </tr>
-          </thead>
-          <tbody>
-            {rows.length === 0 && !busy && (
-              <tr>
-                <td colSpan={10} className="py-8 text-center text-sm text-slate-500">
-                  No tracking audit entries yet.
-                </td>
-              </tr>
-            )}
-            {rows.map((r) => {
-              const o = OUTCOMES[r.outcome] ?? { label: r.outcome, className: "bg-slate-100 text-slate-700 border-slate-200" };
-              return (
-                <tr key={r.id} className="border-t border-slate-100 align-top">
-                  <td className="whitespace-nowrap px-4 py-2 text-xs text-slate-500">
-                    {new Date(r.created_at).toLocaleString()}
-                  </td>
-                  <td className="px-4 py-2">
-                    <span className={`inline-flex items-center rounded-full border px-2 py-0.5 text-[11px] font-medium ${o.className}`}>
-                      {o.label}
-                    </span>
-                  </td>
-                  <td className="px-4 py-2 text-slate-600">{r.reason ?? "—"}</td>
-                  <td className="max-w-[220px] truncate px-4 py-2 text-slate-700">{r.path ?? "—"}</td>
-                  <td className="px-4 py-2 font-mono text-[11px] text-slate-500">
-                    {r.visitor_id ? r.visitor_id.slice(0, 10) + "…" : "—"}
-                  </td>
-                  <td className="px-4 py-2 text-slate-600">{r.identified ? "Yes" : "No"}</td>
-                  <td className="px-4 py-2 text-slate-600">{r.country ?? "—"}</td>
-                  <td className="px-4 py-2 font-mono text-[11px] text-slate-500">
-                    {r.ip_hash ? r.ip_hash.slice(0, 8) + "…" : "—"}
-                  </td>
-                  <td className="px-4 py-2 text-slate-600">{r.duration_ms ?? "—"}</td>
-                  <td className="max-w-[240px] px-4 py-2 text-xs text-red-600">{r.error_message ?? "—"}</td>
+      {tab === "overview" && (
+        <div className="mt-6 space-y-6">
+          <div className="flex flex-wrap items-center gap-2">
+            <select
+              value={days}
+              onChange={(e) => setDays(Number(e.target.value))}
+              className="rounded-md border border-slate-300 bg-white px-3 py-2 text-sm"
+            >
+              {[1, 7, 14, 30, 60, 90].map((d) => (
+                <option key={d} value={d}>Last {d} day{d > 1 ? "s" : ""}</option>
+              ))}
+            </select>
+            <Button size="sm" variant="outline" className="border-slate-300" disabled={aBusy} onClick={() => void loadAnalytics()}>
+              <RefreshCw className="mr-1 h-3.5 w-3.5" /> Refresh
+            </Button>
+            <Button
+              size="sm"
+              variant="outline"
+              className="border-slate-300"
+              disabled={aBusy}
+              onClick={async () => {
+                setNotice(null);
+                try {
+                  const res = await runSpike({});
+                  setNotice(res.alerted ? "Spike detected — owner alert sent." : `No alert sent (${res.reason ?? "healthy"}).`);
+                  await loadAnalytics();
+                } catch (e) {
+                  setErr(e instanceof Error ? e.message : "Spike check failed");
+                }
+              }}
+            >
+              <BellRing className="mr-1 h-3.5 w-3.5" /> Run alert check now
+            </Button>
+            {aBusy && <Loader2 className="h-4 w-4 animate-spin text-slate-500" />}
+          </div>
+
+          {analytics && (
+            <>
+              <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
+                <Card label="Total attempts" value={analytics.total} />
+                <Card label="Accepted" value={analytics.totals.accepted} />
+                <Card label="Rejected" value={analytics.totals.rejected} />
+                <Card label="Errors" value={analytics.totals.error} />
+                <Card label="Failure rate" value={`${analytics.failureRate}%`} />
+              </div>
+
+              <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
+                <h3 className="text-sm font-semibold text-slate-900">Accepted vs rejected vs errors over time</h3>
+                <div className="mt-3 h-[280px]">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <AreaChart data={analytics.series}>
+                      <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
+                      <XAxis dataKey="day" tick={{ fontSize: 11 }} />
+                      <YAxis tick={{ fontSize: 11 }} allowDecimals={false} />
+                      <Tooltip />
+                      <Legend />
+                      <Area type="monotone" dataKey="accepted" stackId="1" stroke="#10b981" fill="#a7f3d0" />
+                      <Area type="monotone" dataKey="rejected" stackId="1" stroke="#f59e0b" fill="#fde68a" />
+                      <Area type="monotone" dataKey="error" stackId="1" stroke="#ef4444" fill="#fecaca" />
+                    </AreaChart>
+                  </ResponsiveContainer>
+                </div>
+              </div>
+
+              <div className="grid gap-4 lg:grid-cols-2">
+                <TopList title="Top paths" items={analytics.topPaths} />
+                <TopList title="Top countries" items={analytics.topCountries} />
+                <TopList title="Top rejection / error reasons" items={analytics.topReasons} />
+                <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
+                  <h3 className="flex items-center gap-2 text-sm font-semibold text-slate-900">
+                    <Gauge className="h-4 w-4 text-blue-600" /> Write latency percentiles (ms)
+                  </h3>
+                  <div className="mt-3 h-[220px]">
+                    <ResponsiveContainer width="100%" height="100%">
+                      <BarChart data={latencyRows}>
+                        <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
+                        <XAxis dataKey="label" tick={{ fontSize: 11 }} />
+                        <YAxis tick={{ fontSize: 11 }} />
+                        <Tooltip />
+                        <Bar dataKey="ms" fill="#2563eb" radius={[4, 4, 0, 0]} />
+                      </BarChart>
+                    </ResponsiveContainer>
+                  </div>
+                  <p className="mt-2 text-xs text-slate-500">
+                    Based on {analytics.latency.count} timed writes · {analytics.identified} attempts from signed-in visitors.
+                  </p>
+                </div>
+              </div>
+            </>
+          )}
+
+          {settings && (
+            <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+              <h3 className="text-sm font-semibold text-slate-900">Retention & alert policy</h3>
+              <p className="mt-1 text-xs text-slate-500">
+                Records older than the retention window are deleted automatically every 6 hours. Alerts email the owner when the
+                rejected/error share crosses the threshold in the alert window, or when one IP hash floods the endpoint.
+              </p>
+              <div className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
+                <label className="text-xs text-slate-600">
+                  Retention (days)
+                  <Input
+                    type="number" min={1} max={365} value={settings.retention_days}
+                    onChange={(e) => setSettings({ ...settings, retention_days: Number(e.target.value) })}
+                    className="mt-1"
+                  />
+                </label>
+                <label className="text-xs text-slate-600">
+                  Alert window (minutes)
+                  <Input
+                    type="number" min={5} max={1440} value={settings.alert_window_minutes}
+                    onChange={(e) => setSettings({ ...settings, alert_window_minutes: Number(e.target.value) })}
+                    className="mt-1"
+                  />
+                </label>
+                <label className="text-xs text-slate-600">
+                  Min events to alert
+                  <Input
+                    type="number" min={1} max={10000} value={settings.alert_min_events}
+                    onChange={(e) => setSettings({ ...settings, alert_min_events: Number(e.target.value) })}
+                    className="mt-1"
+                  />
+                </label>
+                <label className="text-xs text-slate-600">
+                  Failure threshold (%)
+                  <Input
+                    type="number" min={1} max={100} value={settings.alert_failure_pct}
+                    onChange={(e) => setSettings({ ...settings, alert_failure_pct: Number(e.target.value) })}
+                    className="mt-1"
+                  />
+                </label>
+                <label className="flex items-center gap-2 pt-5 text-xs text-slate-600">
+                  <input
+                    type="checkbox" checked={settings.alerts_enabled}
+                    onChange={(e) => setSettings({ ...settings, alerts_enabled: e.target.checked })}
+                  />
+                  Alerts enabled
+                </label>
+              </div>
+              <p className="mt-2 text-xs text-slate-500">
+                Last alert: {settings.last_alert_at ? new Date(settings.last_alert_at).toLocaleString() : "never"}
+              </p>
+
+              <div className="mt-4 flex flex-wrap gap-2">
+                <Button
+                  size="sm"
+                  onClick={async () => {
+                    setNotice(null);
+                    try {
+                      await saveSettings({
+                        data: {
+                          retention_days: settings.retention_days,
+                          alerts_enabled: settings.alerts_enabled,
+                          alert_window_minutes: settings.alert_window_minutes,
+                          alert_min_events: settings.alert_min_events,
+                          alert_failure_pct: settings.alert_failure_pct,
+                        },
+                      });
+                      setNotice("Policy saved.");
+                    } catch (e) {
+                      setErr(e instanceof Error ? e.message : "Failed to save policy");
+                    }
+                  }}
+                >
+                  Save policy
+                </Button>
+                <Button
+                  size="sm" variant="outline" className="border-slate-300"
+                  onClick={async () => {
+                    setNotice(null);
+                    try {
+                      const res = await runPurge({ data: {} });
+                      setNotice(`Cleanup complete — ${res.deleted} record(s) removed using the retention policy.`);
+                      await loadAnalytics();
+                    } catch (e) {
+                      setErr(e instanceof Error ? e.message : "Cleanup failed");
+                    }
+                  }}
+                >
+                  <Trash2 className="mr-1 h-3.5 w-3.5" /> Clean up now (policy)
+                </Button>
+                <Button
+                  size="sm" variant="outline" className="border-red-300 text-red-700 hover:bg-red-50"
+                  onClick={async () => {
+                    setNotice(null);
+                    try {
+                      const res = await runPurge({ data: { olderThanDays: 7 } });
+                      setNotice(`Cleanup complete — ${res.deleted} record(s) older than 7 days removed.`);
+                      await loadAnalytics();
+                    } catch (e) {
+                      setErr(e instanceof Error ? e.message : "Cleanup failed");
+                    }
+                  }}
+                >
+                  <Trash2 className="mr-1 h-3.5 w-3.5" /> Delete older than 7 days
+                </Button>
+              </div>
+            </div>
+          )}
+        </div>
+      )}
+
+      {tab === "events" && (
+        <div className="mt-6">
+          <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
+            <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+              <label className="text-xs text-slate-600">
+                Outcome
+                <select
+                  value={filters.outcome}
+                  onChange={(e) => setFilters({ ...filters, outcome: e.target.value as typeof filters.outcome })}
+                  className="mt-1 w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm"
+                >
+                  <option value="all">All outcomes</option>
+                  <option value="accepted">Accepted</option>
+                  <option value="rejected">Rejected</option>
+                  <option value="error">Error</option>
+                </select>
+              </label>
+              <label className="text-xs text-slate-600">
+                Identified visitor
+                <select
+                  value={filters.identified}
+                  onChange={(e) => setFilters({ ...filters, identified: e.target.value as typeof filters.identified })}
+                  className="mt-1 w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm"
+                >
+                  <option value="all">Any</option>
+                  <option value="yes">Signed in</option>
+                  <option value="no">Anonymous</option>
+                </select>
+              </label>
+              <label className="text-xs text-slate-600">
+                From
+                <Input type="datetime-local" value={filters.from} onChange={(e) => setFilters({ ...filters, from: e.target.value })} className="mt-1" />
+              </label>
+              <label className="text-xs text-slate-600">
+                To
+                <Input type="datetime-local" value={filters.to} onChange={(e) => setFilters({ ...filters, to: e.target.value })} className="mt-1" />
+              </label>
+              <label className="text-xs text-slate-600">
+                Path contains
+                <Input value={filters.path} onChange={(e) => setFilters({ ...filters, path: e.target.value })} placeholder="/learn" className="mt-1" />
+              </label>
+              <label className="text-xs text-slate-600">
+                User ID
+                <Input value={filters.userId} onChange={(e) => setFilters({ ...filters, userId: e.target.value })} placeholder="uuid" className="mt-1" />
+              </label>
+              <label className="text-xs text-slate-600">
+                Country
+                <Input value={filters.country} onChange={(e) => setFilters({ ...filters, country: e.target.value })} placeholder="IN" className="mt-1" />
+              </label>
+              <label className="text-xs text-slate-600">
+                IP hash starts with
+                <Input value={filters.ipHash} onChange={(e) => setFilters({ ...filters, ipHash: e.target.value })} placeholder="a1b2c3" className="mt-1" />
+              </label>
+              <label className="text-xs text-slate-600">
+                Visitor ID
+                <Input value={filters.visitorId} onChange={(e) => setFilters({ ...filters, visitorId: e.target.value })} className="mt-1" />
+              </label>
+              <label className="text-xs text-slate-600 lg:col-span-2">
+                Search (path, reason, visitor, IP hash, error)
+                <Input value={filters.search} onChange={(e) => setFilters({ ...filters, search: e.target.value })} className="mt-1" />
+              </label>
+              <label className="text-xs text-slate-600">
+                Page size
+                <select
+                  value={pageSize}
+                  onChange={(e) => { setPageSize(Number(e.target.value)); setPage(0); }}
+                  className="mt-1 w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm"
+                >
+                  {[25, 50, 100, 200].map((n) => <option key={n} value={n}>{n} / page</option>)}
+                </select>
+              </label>
+            </div>
+            <div className="mt-4 flex flex-wrap items-center gap-2">
+              <Button size="sm" onClick={() => { setPage(0); setApplied(filters); }}>
+                <Search className="mr-1 h-3.5 w-3.5" /> Apply filters
+              </Button>
+              <Button size="sm" variant="outline" className="border-slate-300" onClick={() => { setFilters(emptyFilters); setApplied(emptyFilters); setPage(0); }}>
+                Reset
+              </Button>
+              <Button size="sm" variant="outline" className="border-slate-300" disabled={rBusy} onClick={() => void loadRows()}>
+                <RefreshCw className="mr-1 h-3.5 w-3.5" /> Refresh
+              </Button>
+              <p className="ml-auto text-xs text-slate-500">{total} matching entries</p>
+            </div>
+          </div>
+
+          <div className="mt-4 overflow-x-auto rounded-2xl border border-slate-200 bg-white shadow-sm">
+            <table className="w-full text-sm">
+              <thead className="bg-slate-50">
+                <tr className="text-left text-xs uppercase tracking-wider text-slate-500">
+                  <th className="px-4 py-2">When</th>
+                  <th className="px-4 py-2">Outcome</th>
+                  <th className="px-4 py-2">Reason</th>
+                  <th className="px-4 py-2">Path</th>
+                  <th className="px-4 py-2">Visitor</th>
+                  <th className="px-4 py-2">User</th>
+                  <th className="px-4 py-2">Country</th>
+                  <th className="px-4 py-2">IP hash</th>
+                  <th className="px-4 py-2">ms</th>
+                  <th className="px-4 py-2">Error</th>
                 </tr>
-              );
-            })}
-          </tbody>
-        </table>
-      </div>
+              </thead>
+              <tbody>
+                {rows.length === 0 && !rBusy && (
+                  <tr>
+                    <td colSpan={10} className="py-8 text-center text-sm text-slate-500">No audit entries match these filters.</td>
+                  </tr>
+                )}
+                {rows.map((r) => {
+                  const o = OUTCOMES[r.outcome] ?? { label: r.outcome, className: "bg-slate-100 text-slate-700 border-slate-200" };
+                  return (
+                    <tr key={r.id} className="border-t border-slate-100 align-top">
+                      <td className="whitespace-nowrap px-4 py-2 text-xs text-slate-500">{new Date(r.created_at).toLocaleString()}</td>
+                      <td className="px-4 py-2">
+                        <span className={`inline-flex items-center rounded-full border px-2 py-0.5 text-[11px] font-medium ${o.className}`}>{o.label}</span>
+                      </td>
+                      <td className="px-4 py-2 text-slate-600">{r.reason ?? "—"}</td>
+                      <td className="max-w-[220px] truncate px-4 py-2 text-slate-700">{r.path ?? "—"}</td>
+                      <td className="px-4 py-2 font-mono text-[11px] text-slate-500">{r.visitor_id ? r.visitor_id.slice(0, 10) + "…" : "—"}</td>
+                      <td className="px-4 py-2 font-mono text-[11px] text-slate-500">{r.user_id ? r.user_id.slice(0, 8) + "…" : r.identified ? "yes" : "—"}</td>
+                      <td className="px-4 py-2 text-slate-600">{r.country ?? "—"}</td>
+                      <td className="px-4 py-2 font-mono text-[11px] text-slate-500">{r.ip_hash ? r.ip_hash.slice(0, 8) + "…" : "—"}</td>
+                      <td className="px-4 py-2 text-slate-600">{r.duration_ms ?? "—"}</td>
+                      <td className="max-w-[240px] px-4 py-2 text-xs text-red-600">{r.error_message ?? "—"}</td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
 
-      <div className="mt-4 flex items-center justify-end gap-1">
-        <Button size="sm" variant="outline" disabled={page === 0 || busy} onClick={() => setPage((p) => Math.max(0, p - 1))} className="border-slate-300">
-          <ChevronLeft className="h-4 w-4" /> Prev
-        </Button>
-        <span className="px-2 text-xs text-slate-600">Page {page + 1} / {totalPages}</span>
-        <Button size="sm" variant="outline" disabled={page + 1 >= totalPages || busy} onClick={() => setPage((p) => p + 1)} className="border-slate-300">
-          Next <ChevronRight className="h-4 w-4" />
-        </Button>
-      </div>
+          <div className="mt-4 flex items-center justify-end gap-1">
+            <Button size="sm" variant="outline" disabled={page === 0 || rBusy} onClick={() => setPage((p) => Math.max(0, p - 1))} className="border-slate-300">
+              <ChevronLeft className="h-4 w-4" /> Prev
+            </Button>
+            <span className="px-2 text-xs text-slate-600">Page {page + 1} / {totalPages}</span>
+            <Button size="sm" variant="outline" disabled={page + 1 >= totalPages || rBusy} onClick={() => setPage((p) => p + 1)} className="border-slate-300">
+              Next <ChevronRight className="h-4 w-4" />
+            </Button>
+          </div>
+        </div>
+      )}
     </Section>
   );
 }
