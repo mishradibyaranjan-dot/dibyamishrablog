@@ -47,7 +47,8 @@ export const Route = createFileRoute("/guide")({
 
 type Chapter = {
   id: string;
-  videoId: string;
+  /** start time in the self-hosted tour video, seconds */
+  start: number;
   label: string;
   title: string;
   blurb: string;
@@ -59,7 +60,7 @@ type Chapter = {
 const CHAPTERS: Chapter[] = [
   {
     id: "start",
-    videoId: "kopoLzvh5jY",
+    start: 0,
     label: "01 · Start here",
     title: "What this site is",
     blurb:
@@ -70,7 +71,7 @@ const CHAPTERS: Chapter[] = [
   },
   {
     id: "learn",
-    videoId: "qgb0gyrpiGk",
+    start: 5,
     label: "02 · Learn",
     title: "Structured learning modules",
     blurb:
@@ -81,7 +82,7 @@ const CHAPTERS: Chapter[] = [
   },
   {
     id: "research",
-    videoId: "QzHaNSgWdlI",
+    start: 10,
     label: "03 · Research",
     title: "Essays, notes and white papers",
     blurb:
@@ -92,7 +93,7 @@ const CHAPTERS: Chapter[] = [
   },
   {
     id: "work",
-    videoId: "cc8Sd2vVG9M",
+    start: 15,
     label: "04 · Work",
     title: "Projects and case studies",
     blurb:
@@ -103,7 +104,7 @@ const CHAPTERS: Chapter[] = [
   },
   {
     id: "repository",
-    videoId: "6dCbe4ItxPY",
+    start: 20,
     label: "05 · Repository",
     title: "Documents and downloads",
     blurb:
@@ -114,7 +115,7 @@ const CHAPTERS: Chapter[] = [
   },
   {
     id: "assistant",
-    videoId: "tBEOf6xzEeo",
+    start: 25,
     label: "06 · Assistant",
     title: "Ask the Learning Assistant",
     blurb:
@@ -134,38 +135,43 @@ const QUICK_LINKS = [
   { to: "/newsletter", label: "Newsletter", note: "Monthly research notes", icon: Mail },
 ] as const;
 
-function VideoStage({ chapter }: { chapter: Chapter }) {
-  const [playing, setPlaying] = useState(false);
+function VideoStage({
+  chapter,
+  videoRef,
+  onPlayChapter,
+}: {
+  chapter: Chapter;
+  videoRef: React.RefObject<HTMLVideoElement | null>;
+  onPlayChapter: () => void;
+}) {
+  const [started, setStarted] = useState(false);
+
+  const play = () => {
+    setStarted(true);
+    onPlayChapter();
+  };
 
   return (
     <div className="relative self-start overflow-hidden rounded-3xl border border-blue-200 bg-slate-900 shadow-[0_30px_80px_-40px_rgba(15,23,42,0.55)]">
       <div className="relative aspect-video w-full">
-        {playing ? (
-          <iframe
-            key={chapter.videoId}
-            className="absolute inset-0 h-full w-full"
-            src={`https://www.youtube-nocookie.com/embed/${chapter.videoId}?autoplay=1&rel=0`}
-            title={chapter.title}
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowFullScreen
-            loading="lazy"
-          />
-        ) : (
+        <video
+          ref={videoRef}
+          className="absolute inset-0 h-full w-full bg-white object-cover"
+          src={tourVideo.url}
+          poster={tourPoster.url}
+          preload="metadata"
+          playsInline
+          controls={started}
+          onPlay={() => setStarted(true)}
+        />
+        {!started && (
           <button
             type="button"
-            onClick={() => setPlaying(true)}
-            aria-label={`Play: ${chapter.title}`}
+            onClick={play}
+            aria-label={`Play the site tour: ${chapter.title}`}
             className="group absolute inset-0 h-full w-full"
           >
-            <img
-              src={`https://i.ytimg.com/vi/${chapter.videoId}/hqdefault.jpg`}
-              alt={chapter.title}
-              width={480}
-              height={360}
-              loading="lazy"
-              className="h-full w-full object-cover opacity-90 transition duration-500 group-hover:scale-[1.03] group-hover:opacity-100"
-            />
-            <span className="absolute inset-0 grid place-items-center bg-slate-950/40 transition group-hover:bg-slate-950/20">
+            <span className="absolute inset-0 grid place-items-center bg-slate-950/35 transition group-hover:bg-slate-950/20">
               <motion.span
                 animate={{ scale: [1, 1.08, 1] }}
                 transition={{ duration: 2.2, repeat: Infinity, ease: "easeInOut" }}
@@ -183,6 +189,9 @@ function VideoStage({ chapter }: { chapter: Chapter }) {
             {chapter.label}
           </p>
           <p className="text-sm font-semibold text-white">{chapter.title}</p>
+          <p className="mt-0.5 text-[11px] text-white/60">
+            Self-hosted walkthrough — no third-party video embeds.
+          </p>
         </div>
         <Link
           to={chapter.to}
