@@ -1,17 +1,28 @@
 import { createContext, useCallback, useContext, useEffect, useState, type ReactNode } from "react";
 
 export const THEMES = [
-  { id: "cinematic", label: "Cinematic", swatches: ["#5b8cff", "#a96cff", "#6fe0ff"] },
-  { id: "midnight", label: "Midnight", swatches: ["#3d5cd1", "#6d59d1", "#76a6c8"] },
-  { id: "aurora", label: "Aurora", swatches: ["#27d6c4", "#3ad389", "#6ee7d6"] },
-  { id: "sunset", label: "Sunset", swatches: ["#ff7a2d", "#ff3d77", "#ffc46b"] },
-  { id: "light", label: "Daylight", swatches: ["#3b6cff", "#9b4cff", "#36b0d0"] },
+  { id: "cinematic", label: "Cinematic", mode: "dark", swatches: ["#5b8cff", "#a96cff", "#6fe0ff"] },
+  { id: "midnight", label: "Midnight", mode: "dark", swatches: ["#3d5cd1", "#6d59d1", "#76a6c8"] },
+  { id: "aurora", label: "Aurora", mode: "dark", swatches: ["#27d6c4", "#3ad389", "#6ee7d6"] },
+  { id: "sunset", label: "Sunset", mode: "dark", swatches: ["#ff7a2d", "#ff3d77", "#ffc46b"] },
+  { id: "noir", label: "Noir & Gold", mode: "dark", swatches: ["#1a1a1a", "#c9a84c", "#f0d78c"] },
+  { id: "emerald", label: "Emerald", mode: "dark", swatches: ["#0d7a5f", "#31c39a", "#d8b45c"] },
+  { id: "light", label: "Daylight", mode: "light", swatches: ["#1e3a8a", "#0f8a8a", "#f0a72e"] },
+  { id: "paper", label: "Paper & Ink", mode: "light", swatches: ["#2d2d2d", "#8a5a44", "#c98b52"] },
+  { id: "sand", label: "Warm Sand", mode: "light", swatches: ["#8b7355", "#c17c4a", "#87a878"] },
+  { id: "arctic", label: "Arctic Frost", mode: "light", swatches: ["#2e6b8a", "#4a9cc0", "#8fd3e8"] },
 ] as const;
 
 export type ThemeId = (typeof THEMES)[number]["id"];
+export type ThemeMode = (typeof THEMES)[number]["mode"];
 
 const STORAGE_KEY = "drm-theme";
 const DEFAULT_THEME: ThemeId = "midnight";
+
+export function themeMode(theme: ThemeId): ThemeMode {
+  return THEMES.find((t) => t.id === theme)?.mode ?? "dark";
+}
+
 
 type Ctx = { theme: ThemeId; setTheme: (t: ThemeId) => void };
 const ThemeContext = createContext<Ctx>({ theme: DEFAULT_THEME, setTheme: () => {} });
@@ -53,9 +64,11 @@ function applyTheme(theme: ThemeId, enableTransition: boolean) {
     root.classList.add("theme-transition");
   }
 
+  const mode = themeMode(theme);
   root.dataset.theme = theme;
-  root.classList.toggle("dark", theme !== "light");
-  root.style.colorScheme = theme === "light" ? "light" : "dark";
+  root.classList.toggle("dark", mode === "dark");
+  root.style.colorScheme = mode;
+
 
   if (enableTransition && !prefersReducedMotion) {
     window.setTimeout(() => root.classList.remove("theme-transition"), 350);
