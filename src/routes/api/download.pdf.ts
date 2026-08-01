@@ -11,6 +11,7 @@ import introCloud from "@/assets/repo/intro_cloud.pdf.asset.json" with { type: "
 import saasTutorial from "@/assets/repo/saas_tutorial.pdf.asset.json" with { type: "json" };
 import enterpriseBrief from "@/assets/repo/enterprise_brief.pdf.asset.json" with { type: "json" };
 import multiAgent from "@/assets/repo/multi_agent_systems.pdf.asset.json" with { type: "json" };
+import vectorSearch from "@/assets/repo/vector_search.pdf.asset.json" with { type: "json" };
 
 // Server-side allow-list mapping stable doc keys → internal asset URLs.
 // The upstream asset URLs are never exposed to the client.
@@ -25,6 +26,7 @@ const REPO: Record<string, { url: string; filename: string }> = {
   "itil": { url: (itil as { url: string }).url, filename: "ITIL-with-Kanban.pdf" },
   "executive-summary": { url: (execsum as { url: string }).url, filename: "Executive-Summary.pdf" },
   "multi-agent-systems": { url: (multiAgent as { url: string }).url, filename: "Building-Multi-Agent-Systems.pdf" },
+  "vector-search": { url: (vectorSearch as { url: string }).url, filename: "Vector-Search-Beginner-to-Production.pdf" },
 
 };
 

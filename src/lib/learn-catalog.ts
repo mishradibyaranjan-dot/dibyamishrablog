@@ -152,6 +152,22 @@ export const LEARN_MODULES: LearnModule[] = [
       "negotiation", "coordination", "warehouse robots", "marketplace",
     ],
   },
+  {
+    key: "vector",
+    label: "Vector Search",
+    title: "Vector Search — Beginner to Production",
+    summary:
+      "Embeddings, similarity metrics, ANN indexes (Flat/IVF/HNSW/PQ), FAISS and Milvus, hybrid retrieval, reranking, evaluation and cost control.",
+    topics: ["AI", "Architecture"],
+    docKey: "vector-search",
+    keywords: [
+      "vector search", "embedding", "cosine similarity", "dot product", "euclidean",
+      "approximate nearest neighbor", "ann", "faiss", "annoy", "hnswlib", "hnsw", "ivf",
+      "product quantization", "pq", "milvus", "weaviate", "pinecone", "vespa",
+      "recall@k", "ndcg", "mrr", "hybrid search", "bm25", "reranking", "cross encoder",
+      "sentence transformers", "semantic search", "index freshness", "normalization",
+    ],
+  },
 ];
 
 export type RepoDoc = {
@@ -172,6 +188,7 @@ export const REPO_DOCS: RepoDoc[] = [
   { key: "retail", title: "Generative AI in Retail Supply Chains", description: "White paper on applying GenAI across demand forecasting, merchandising, logistics, and store operations.", category: "Retail / Supply Chain", topics: ["Retail"] },
   { key: "itil", title: "Implementing ITIL with Kanban", description: "Incident, Change, Problem, and Service Request Management using Kanban — flow, WIP limits, SLAs, and governance.", category: "IT Service Management", topics: ["ITSM"] },
   { key: "executive-summary", title: "Executive Summary — The Intelligent Enterprise", description: "Executive brief on AI agents, cloud platforms, and industry-specific AI adoption across BFSI, retail, and telecom.", category: "Executive Brief", topics: ["Executive"] },
+  { key: "vector-search", title: "Vector Search — A Beginner-to-Production Learning Report", description: "Embeddings, similarity metrics, ANN indexes (Flat/IVF/HNSW/PQ), FAISS, Annoy, HNSWlib, Milvus, hybrid retrieval, reranking, evaluation, cost and production operations.", category: "AI / Retrieval", topics: ["AI", "Architecture"] },
   { key: "multi-agent-systems", title: "Building Multi-Agent Systems", description: "Engineering report on MAS architecture — coordination topologies, FIPA ACL, ROS 2/DDS, MQTT, gRPC, frameworks, simulation, security, benchmarks, and reference designs.", category: "AI / Multi-Agent Systems", topics: ["AI", "Architecture"] },
 ];
 

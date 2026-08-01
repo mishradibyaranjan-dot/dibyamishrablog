@@ -27,6 +27,7 @@ const DOCS: Doc[] = [
   { key: "retail", title: "Generative AI in Retail Supply Chains", description: "White paper on applying GenAI across demand forecasting, merchandising, logistics, and store operations.", category: "Retail / Supply Chain", filename: "GenAI-Retail-Supply-Chains.pdf" },
   { key: "itil", title: "Implementing ITIL with Kanban", description: "Incident, Change, Problem, and Service Request Management using Kanban — flow, WIP limits, SLAs, and governance.", category: "IT Service Management", filename: "ITIL-with-Kanban.pdf" },
   { key: "executive-summary", title: "Executive Summary — The Intelligent Enterprise", description: "Executive brief on AI agents, cloud platforms, and industry-specific AI adoption across BFSI, retail, and telecom.", category: "Executive Brief", filename: "Executive-Summary.pdf" },
+  { key: "vector-search", title: "Vector Search — A Beginner-to-Production Learning Report", description: "Embeddings, similarity metrics, ANN indexes (Flat/IVF/HNSW/PQ), FAISS, Annoy, HNSWlib, Milvus, hybrid retrieval, reranking, evaluation, cost and production operations.", category: "AI / Retrieval", filename: "Vector-Search-Beginner-to-Production.pdf" },
   { key: "multi-agent-systems", title: "Building Multi-Agent Systems", description: "Engineering report on MAS architecture — coordination topologies, FIPA ACL, ROS 2/DDS, MQTT, gRPC, frameworks, simulation, security, benchmarks, and reference designs.", category: "AI / Multi-Agent Systems", filename: "Building-Multi-Agent-Systems.pdf" },
 ];
 
