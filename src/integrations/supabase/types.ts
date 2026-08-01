@@ -813,6 +813,39 @@ export type Database = {
         }
         Relationships: []
       }
+      visitor_audit_settings: {
+        Row: {
+          alert_failure_pct: number
+          alert_min_events: number
+          alert_window_minutes: number
+          alerts_enabled: boolean
+          id: number
+          last_alert_at: string | null
+          retention_days: number
+          updated_at: string
+        }
+        Insert: {
+          alert_failure_pct?: number
+          alert_min_events?: number
+          alert_window_minutes?: number
+          alerts_enabled?: boolean
+          id?: number
+          last_alert_at?: string | null
+          retention_days?: number
+          updated_at?: string
+        }
+        Update: {
+          alert_failure_pct?: number
+          alert_min_events?: number
+          alert_window_minutes?: number
+          alerts_enabled?: boolean
+          id?: number
+          last_alert_at?: string | null
+          retention_days?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
       visitor_logs: {
         Row: {
           browser: string | null
@@ -1054,6 +1087,7 @@ export type Database = {
         Returns: number
       }
       purge_expired_ip_blocks: { Args: never; Returns: number }
+      purge_visitor_tracking_audit: { Args: never; Returns: number }
       read_email_batch: {
         Args: { batch_size: number; queue_name: string; vt: number }
         Returns: {
