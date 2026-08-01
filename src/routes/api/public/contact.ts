@@ -91,82 +91,88 @@ export const Route = createFileRoute("/api/public/contact")({
 
           const supabase = createClient(supabaseUrl, supabaseServiceKey);
           const messageId = crypto.randomUUID();
-          const normalizedEmail = OWNER_EMAIL.toLowerCase();
 
-          // Ensure unsubscribe token exists
-          let unsubscribeToken: string | null = null;
-          const { data: existing, error: lookupError } = await supabase
-            .from("email_unsubscribe_tokens")
-            .select("token")
-            .eq("email", normalizedEmail)
-            .maybeSingle();
-          if (lookupError) console.error("contact: token lookup error", lookupError);
-          if (existing?.token) {
-            unsubscribeToken = existing.token;
-          } else {
+          async function tokenFor(email: string): Promise<string | null> {
+            const normalized = email.toLowerCase();
+            const { data: existing, error: lookupError } = await supabase
+              .from("email_unsubscribe_tokens")
+              .select("token")
+              .eq("email", normalized)
+              .maybeSingle();
+            if (lookupError) console.error("contact: token lookup error", lookupError);
+            if (existing?.token) return existing.token;
             const newToken = generateToken();
             const { error: insErr } = await supabase
               .from("email_unsubscribe_tokens")
-              .upsert({ token: newToken, email: normalizedEmail }, { onConflict: "email", ignoreDuplicates: true });
+              .upsert({ token: newToken, email: normalized }, { onConflict: "email", ignoreDuplicates: true });
             if (insErr) console.error("contact: token upsert error", insErr);
             const { data: stored } = await supabase
               .from("email_unsubscribe_tokens")
               .select("token")
-              .eq("email", normalizedEmail)
+              .eq("email", normalized)
               .maybeSingle();
-            unsubscribeToken = stored?.token ?? newToken;
+            return stored?.token ?? newToken;
           }
 
-          if (!unsubscribeToken) {
-            console.error("contact: could not obtain unsubscribe token");
-            return Response.json({ error: "Send failed" }, { status: 500, headers: cors });
-          }
+          let anySent = false;
+          for (const recipient of OWNER_EMAILS) {
+            const unsubscribeToken = await tokenFor(recipient);
+            if (!unsubscribeToken) {
+              console.error("contact: could not obtain unsubscribe token for", recipient);
+              continue;
+            }
 
-          await supabase.from("email_send_log").insert({
-            message_id: messageId,
-            template_name: "contact-notification",
-            recipient_email: OWNER_EMAIL,
-            status: "pending",
-          });
+            await supabase.from("email_send_log").insert({
+              message_id: messageId,
+              template_name: "contact-notification",
+              recipient_email: recipient,
+              status: "pending",
+            });
 
-          // Send synchronously via SDK — bypass queue to avoid staleness/misroutes
-          try {
-            await sendLovableEmail(
-              {
-                to: OWNER_EMAIL,
-                from: `${SITE_NAME} <noreply@${FROM_DOMAIN}>`,
-                sender_domain: SENDER_DOMAIN,
-                subject,
-                html,
-                text,
-                purpose: "transactional",
-                label: "contact-notification",
-                idempotency_key: `contact-notification-${messageId}`,
-                unsubscribe_token: unsubscribeToken,
+            // Send synchronously via SDK — bypass queue to avoid staleness/misroutes
+            try {
+              await sendLovableEmail(
+                {
+                  to: recipient,
+                  from: `${SITE_NAME} <noreply@${FROM_DOMAIN}>`,
+                  sender_domain: SENDER_DOMAIN,
+                  subject,
+                  html,
+                  text,
+                  purpose: "transactional",
+                  label: "contact-notification",
+                  idempotency_key: `contact-notification-${messageId}-${recipient}`,
+                  unsubscribe_token: unsubscribeToken,
+                  message_id: messageId,
+                },
+                { apiKey, sendUrl: process.env.LOVABLE_SEND_URL },
+              );
+              anySent = true;
+              await supabase.from("email_send_log").insert({
                 message_id: messageId,
-              },
-              { apiKey, sendUrl: process.env.LOVABLE_SEND_URL },
-            );
-            await supabase.from("email_send_log").insert({
-              message_id: messageId,
-              template_name: "contact-notification",
-              recipient_email: OWNER_EMAIL,
-              status: "sent",
-            });
-          } catch (sendErr) {
-            const msg = sendErr instanceof Error ? sendErr.message : String(sendErr);
-            console.error("contact: sendLovableEmail failed", msg);
-            await supabase.from("email_send_log").insert({
-              message_id: messageId,
-              template_name: "contact-notification",
-              recipient_email: OWNER_EMAIL,
-              status: "failed",
-              error_message: msg.slice(0, 1000),
-            });
+                template_name: "contact-notification",
+                recipient_email: recipient,
+                status: "sent",
+              });
+            } catch (sendErr) {
+              const msg = sendErr instanceof Error ? sendErr.message : String(sendErr);
+              console.error("contact: sendLovableEmail failed", recipient, msg);
+              await supabase.from("email_send_log").insert({
+                message_id: messageId,
+                template_name: "contact-notification",
+                recipient_email: recipient,
+                status: "failed",
+                error_message: msg.slice(0, 1000),
+              });
+            }
+          }
+
+          if (!anySent) {
             return Response.json({ error: "Send failed" }, { status: 500, headers: cors });
           }
 
           return Response.json({ ok: true, messageId }, { headers: cors });
+
         } catch (err) {
           console.error("contact send failed", err);
           return Response.json({ error: "Send failed" }, { status: 500, headers: cors });
