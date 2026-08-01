@@ -10,6 +10,10 @@ export function useActivityTracker() {
   const sessionIdRef = useRef<string | null>(null);
   const sessionStartRef = useRef<number>(0);
   const lastPathRef = useRef<{ path: string; at: number } | null>(null);
+  // Access token kept fresh so the unload flush can authenticate as the user.
+  // The publishable key alone authenticates as `anon`, which RLS rejects.
+  const tokenRef = useRef<string | null>(null);
+
 
   // Open + close login session
   useEffect(() => {
