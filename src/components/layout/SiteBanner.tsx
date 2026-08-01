@@ -3,6 +3,9 @@ import { Link } from "@tanstack/react-router";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, PlayCircle, Sparkles, ArrowRight } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { BannerVideo } from "@/components/layout/BannerVideo";
+import { BannerInfoLinks } from "@/components/layout/BannerInfoLinks";
+
 
 const DISMISS_KEY = "drm-site-banner:v1";
 
