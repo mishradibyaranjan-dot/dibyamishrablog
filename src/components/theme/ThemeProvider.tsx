@@ -64,9 +64,11 @@ function applyTheme(theme: ThemeId, enableTransition: boolean) {
     root.classList.add("theme-transition");
   }
 
+  const mode = themeMode(theme);
   root.dataset.theme = theme;
-  root.classList.toggle("dark", theme !== "light");
-  root.style.colorScheme = theme === "light" ? "light" : "dark";
+  root.classList.toggle("dark", mode === "dark");
+  root.style.colorScheme = mode;
+
 
   if (enableTransition && !prefersReducedMotion) {
     window.setTimeout(() => root.classList.remove("theme-transition"), 350);
