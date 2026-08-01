@@ -229,7 +229,7 @@ function Learn() {
 
       <div className="mt-6 space-y-4">
         <LearnSearch onOpenModule={(k) => setTab(k as TabKey)} completedModules={progress.modules} />
-        <div className="flex flex-wrap items-center gap-3 rounded-2xl border border-blue-200/70 bg-blue-50/60 px-4 py-3 text-sm text-slate-700">
+        <div className="flex flex-wrap items-center gap-3 rounded-2xl border border-border bg-accent/40 px-4 py-3 text-sm text-foreground">
           <CheckCircle2 className="h-4 w-4 text-emerald-600" />
           <span>
             <strong>{completedCount}</strong> of {LEARN_MODULES.length} modules completed
