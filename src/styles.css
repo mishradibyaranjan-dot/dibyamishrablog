@@ -507,9 +507,19 @@ a:hover { color: var(--color-brand-2); }
 .text-white\/60 { color: var(--color-muted-foreground) !important; }
 .text-white\/65 { color: var(--color-muted-foreground) !important; }
 .text-white\/70 { color: var(--color-muted-foreground) !important; }
-.text-white\/75 { color: var(--color-secondary-foreground) !important; }
+.text-white\/75 { color: var(--color-muted-foreground) !important; }
 .text-white\/80 { color: var(--color-foreground) !important; }
 .placeholder\:text-white\/40::placeholder { color: var(--color-muted-foreground) !important; }
+
+/* …but keep light text legible on solid brand / dark surfaces, where the
+   neutralising rules above would otherwise put dark ink on a blue button.
+   WCAG AA: white on --brand (deep blue) is >7:1. */
+.bg-blue-500, .bg-blue-600, .bg-blue-700, .bg-primary, .bg-secondary,
+.bg-destructive, .bg-foreground, .bg-brand-gradient,
+.bg-blue-500 *, .bg-blue-600 *, .bg-blue-700 *, .bg-primary *, .bg-secondary *,
+.bg-destructive *, .bg-foreground *, .bg-brand-gradient * {
+  color: var(--color-primary-foreground) !important;
+}
 .bg-white\/5   { background-color: var(--color-card) !important; }
 .bg-white\/10  { background-color: var(--color-background) !important; }
 .hover\:bg-white\/10:hover { background-color: var(--color-secondary) !important; }
