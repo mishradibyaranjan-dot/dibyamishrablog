@@ -212,10 +212,38 @@ function GuidePage() {
   const [seen, setSeen] = useState<Record<string, boolean>>({ [CHAPTERS[0]!.id]: true });
   const active = CHAPTERS.find((c) => c.id === activeId) ?? CHAPTERS[0]!;
   const progress = Math.round((Object.keys(seen).length / CHAPTERS.length) * 100);
+  const videoRef = useRef<HTMLVideoElement | null>(null);
+
+  /** Follow playback: highlight + tick off the chapter currently on screen. */
+  useEffect(() => {
+    const el = videoRef.current;
+    if (!el) return;
+    const onTime = () => {
+      const current = [...CHAPTERS].reverse().find((c) => el.currentTime + 0.25 >= c.start);
+      if (!current) return;
+      setActiveId((id) => (id === current.id ? id : current.id));
+      setSeen((s) => (s[current.id] ? s : { ...s, [current.id]: true }));
+    };
+    el.addEventListener("timeupdate", onTime);
+    return () => el.removeEventListener("timeupdate", onTime);
+  }, []);
+
+  const seek = (c: Chapter) => {
+    const el = videoRef.current;
+    if (!el) return;
+    try {
+      el.currentTime = c.start;
+      void el.play();
+    } catch {
+      // ignore — metadata may not be ready yet
+    }
+  };
 
   const select = (id: string) => {
     setActiveId(id);
     setSeen((s) => ({ ...s, [id]: true }));
+    const c = CHAPTERS.find((x) => x.id === id);
+    if (c) seek(c);
   };
 
   return (
@@ -244,7 +272,12 @@ function GuidePage() {
         </div>
 
         <div className="grid items-start gap-8 lg:grid-cols-[1.4fr_1fr]">
-          <VideoStage chapter={active} />
+          <VideoStage
+            chapter={active}
+            videoRef={videoRef}
+            onPlayChapter={() => seek(active)}
+          />
+
 
           <ol className="flex flex-col gap-3">
             {CHAPTERS.map((c) => {
