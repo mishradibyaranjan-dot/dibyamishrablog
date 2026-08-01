@@ -2623,18 +2623,16 @@ async def allocate(task, agents, bus, deadline=2.0):
       </Reveal>
 
       <Reveal>
-        <SubSection eyebrow="Watch it work" title="Live Video Examples">
+        <SubSection eyebrow="Watch it work" title="Lesson Video — Multi-Agent Systems">
           <p className="mb-5 text-sm text-white/60">
-            Six short walkthroughs covering emergent multi-agent behaviour, MARL fundamentals, ROS 2 fleet plumbing,
-            contract-net negotiation, and real-hardware swarms. Click a thumbnail to play inline.
+            An original, self-hosted animated walkthrough in six chapters: foundations, topology, the Contract Net
+            protocol, the metrics that matter, the reference design, and how to apply it. Pick a chapter to jump
+            straight to it.
           </p>
-          <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
-            {MAS_VIDEOS.map((v) => (
-              <VideoCard key={v.id} {...v} />
-            ))}
-          </div>
+          <LessonVideo />
         </SubSection>
       </Reveal>
+
 
       <Reveal>
         <SubSection eyebrow="Reference design 1" title="Robotic Swarm — Decentralized Hybrid">
