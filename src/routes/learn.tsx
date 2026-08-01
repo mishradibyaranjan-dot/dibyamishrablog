@@ -82,7 +82,6 @@ import { breadcrumbScript } from "@/lib/breadcrumbs";
 import { LEARN_MODULES } from "@/lib/learn-catalog";
 import { useLearnProgress } from "@/lib/learn-progress";
 import { LearnSearch } from "@/components/learn/LearnSearch";
-import { ModulePdf } from "@/components/learn/ModulePdf";
 import { LessonPlayer } from "@/components/learn/LessonPlayer";
 import { MULTI_AGENT_CUES, VECTOR_SEARCH_CUES } from "@/lib/video-captions";
 
@@ -262,11 +261,6 @@ function Learn() {
           return (
             <TabsContent key={m.key} value={m.key} className="mt-8 space-y-12">
               <Content />
-              {m.docKey && (
-                <Reveal>
-                  <ModulePdf docKey={m.docKey} title={m.title} />
-                </Reveal>
-              )}
               <ModuleCompletion
                 done={!!progress.modules[m.key]}
                 title={m.label}
