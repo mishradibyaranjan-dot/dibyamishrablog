@@ -31,16 +31,23 @@ import { useAuth } from "@/lib/auth";
 import { NewsletterAdminPanel } from "@/components/admin/NewsletterAdminPanel";
 import { getReports, type ReportsPayload } from "@/lib/reports.functions";
 import { useServerFn } from "@tanstack/react-start";
+import { RequireAdmin } from "@/components/auth/RequireAdmin";
+
 
 export const Route = createFileRoute("/_authenticated/reports")({
   head: () => ({
     meta: [
       { title: "Admin Reports" },
-      { name: "robots", content: "noindex" },
+      { name: "robots", content: "noindex, nofollow" },
     ],
   }),
-  component: Reports,
+  component: () => (
+    <RequireAdmin>
+      <Reports />
+    </RequireAdmin>
+  ),
 });
+
 
 type Counts = {
   totalUsers: number;
