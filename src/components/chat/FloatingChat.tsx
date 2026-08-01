@@ -191,10 +191,10 @@ export function FloatingChat() {
           aria-label="AI assistant"
           className={cn(
             "floating-chat-panel fixed bottom-24 right-5 z-[60] flex w-[min(380px,calc(100vw-2.5rem))] flex-col overflow-hidden",
-            "h-[min(560px,calc(100vh-8rem))] rounded-2xl border border-blue-200 bg-white shadow-2xl text-black",
+            "h-[min(560px,calc(100vh-8rem))] rounded-2xl border border-blue-200 bg-white shadow-2xl text-foreground",
           )}
         >
-          <header className="flex items-center justify-between border-b border-blue-100 bg-gradient-to-r from-blue-50 via-white to-cyan-50 px-4 py-3">
+          <header className="flex items-center justify-between border-b border-blue-100 bg-gradient-to-r from-primary/10 via-card to-secondary/10 px-4 py-3">
             <div className="flex items-center gap-2">
               <motion.span
                 aria-hidden
@@ -205,7 +205,7 @@ export function FloatingChat() {
                 <img src={mascot} alt="" width={32} height={32} className="h-8 w-8" />
               </motion.span>
               <div className="flex flex-col leading-tight">
-                <p className="text-sm font-semibold text-black">Learning Assistant</p>
+                <p className="text-sm font-semibold text-foreground">Learning Assistant</p>
                 <span className="text-[10px] font-medium uppercase tracking-wider text-blue-600">Online</span>
               </div>
             </div>
@@ -216,7 +216,7 @@ export function FloatingChat() {
                   size="icon"
                   aria-label="Clear conversation"
                   onClick={handleClear}
-                  className="text-slate-600 hover:bg-blue-50 hover:text-black"
+                  className="text-muted-foreground hover:bg-blue-50 hover:text-foreground"
                 >
                   <Trash2 className="h-4 w-4" />
                 </Button>
@@ -238,12 +238,12 @@ export function FloatingChat() {
                     .map((p) => (p.type === "text" ? p.text : ""))
                     .join("");
                   return (
-                    <Message key={m.id} from={m.role} className="text-black">
-                      <MessageContent className="text-black">
+                    <Message key={m.id} from={m.role} className="text-foreground">
+                      <MessageContent className="text-foreground">
                         {m.role === "assistant" ? (
-                          <MessageResponse className="text-black">{text}</MessageResponse>
+                          <MessageResponse className="text-foreground">{text}</MessageResponse>
                         ) : (
-                          <span className="whitespace-pre-wrap text-black">{text}</span>
+                          <span className="whitespace-pre-wrap text-foreground">{text}</span>
                         )}
                       </MessageContent>
                     </Message>
@@ -251,7 +251,7 @@ export function FloatingChat() {
                 })
               )}
               {status === "submitted" && (
-                <div className="px-3 py-2 text-sm text-black">
+                <div className="px-3 py-2 text-sm text-foreground">
                   <Shimmer>Thinking...</Shimmer>
                 </div>
               )}
