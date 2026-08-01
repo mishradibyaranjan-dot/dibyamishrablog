@@ -49,3 +49,24 @@ jobs:
 
       - name: Guard visitor_logs / visitors security posture
         run: bun run security:visitor-tracking
+
+  theme-tokens:
+    name: Theme token lint (blocks on hardcoded colors)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+
+      - name: Verify Learn/chat/theme UI uses semantic theme tokens
+        run: bun run theme:lint
+
+      - name: Theme token unit tests
+        run: bunx vitest run src/components/theme
