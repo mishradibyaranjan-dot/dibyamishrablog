@@ -34,3 +34,18 @@ jobs:
 
       - name: Run security scan
         run: bun run security:scan
+
+  visitor-tracking:
+    name: Visitor tracking RLS guard (blocks on regressions)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: Guard visitor_logs / visitors security posture
+        run: bun run security:visitor-tracking
