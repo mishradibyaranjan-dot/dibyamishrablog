@@ -52,7 +52,15 @@ export const Route = createFileRoute("/")({
           "https://storage.googleapis.com/gpt-engineer-file-uploads/attachments/og-images/62feb90f-3c19-4765-9fa6-9b7f7701a7c6",
       },
     ],
-    links: [{ rel: "canonical", href: "https://www.dibyamishra.co.in/" }],
+    links: [
+      { rel: "canonical", href: "https://www.dibyamishra.co.in/" },
+      {
+        rel: "preload",
+        as: "image",
+        href: cardLearn,
+        fetchpriority: "high",
+      },
+    ],
     scripts: [
       {
         type: "application/ld+json",
