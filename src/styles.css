@@ -753,11 +753,11 @@ table th, table td { border-color: var(--color-border); }
    Theme-aware: the panel uses card/foreground tokens so the assistant stays
    legible in every theme (light and dark) instead of forcing pure black. */
 .floating-chat-panel {
-  background-color: var(--color-card) !important;
-  color: var(--color-card-foreground) !important;
+  background-color: var(--color-popover) !important;
+  color: var(--color-popover-foreground) !important;
 }
 .floating-chat-panel *:not(svg):not(path) {
-  color: var(--color-card-foreground) !important;
+  color: var(--color-popover-foreground) !important;
 }
 .floating-chat-panel ::placeholder { color: var(--color-muted-foreground) !important; }
 .floating-chat-panel .text-muted-foreground,
