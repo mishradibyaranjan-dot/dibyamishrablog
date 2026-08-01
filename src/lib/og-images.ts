@@ -34,5 +34,7 @@ export const pageOgImages = {
   blog: abs(researchOg.url),
   learn: abs(learnOg),
   newsletter: abs(newsletterOg),
+  trust: abs(trustOg),
+  whitePaperAgenticAi: abs(whitePaperAgenticOg),
 };
 
