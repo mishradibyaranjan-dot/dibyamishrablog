@@ -894,6 +894,60 @@ export type Database = {
         }
         Relationships: []
       }
+      visitor_tracking_audit: {
+        Row: {
+          country: string | null
+          created_at: string
+          duration_ms: number | null
+          error_message: string | null
+          id: string
+          identified: boolean
+          ip_hash: string | null
+          metadata: Json
+          outcome: string
+          path: string | null
+          reason: string | null
+          session_id: string | null
+          user_agent: string | null
+          user_id: string | null
+          visitor_id: string | null
+        }
+        Insert: {
+          country?: string | null
+          created_at?: string
+          duration_ms?: number | null
+          error_message?: string | null
+          id?: string
+          identified?: boolean
+          ip_hash?: string | null
+          metadata?: Json
+          outcome: string
+          path?: string | null
+          reason?: string | null
+          session_id?: string | null
+          user_agent?: string | null
+          user_id?: string | null
+          visitor_id?: string | null
+        }
+        Update: {
+          country?: string | null
+          created_at?: string
+          duration_ms?: number | null
+          error_message?: string | null
+          id?: string
+          identified?: boolean
+          ip_hash?: string | null
+          metadata?: Json
+          outcome?: string
+          path?: string | null
+          reason?: string | null
+          session_id?: string | null
+          user_agent?: string | null
+          user_id?: string | null
+          visitor_id?: string | null
+        }
+        Relationships: []
+      }
       visitors: {
         Row: {
           browser: string | null
