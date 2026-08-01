@@ -28,6 +28,7 @@ await renderMedia({
   puppeteerInstance: browser,
   muted: true,
   concurrency: 2,
+  frameRange: process.env.FRAMES ? process.env.FRAMES.split("-").map(Number) : undefined,
 });
 
 await browser.close({ silent: false });
