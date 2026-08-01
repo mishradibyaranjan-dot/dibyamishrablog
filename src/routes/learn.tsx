@@ -353,8 +353,8 @@ function IntroAI() {
           <Diagram>
             <StackDiagram
               layers={[
-                { label: "AI Agents & Generative Apps", tint: "from-fuchsia-500/40 to-info/40" },
-                { label: "Foundation Models (LLMs, Diffusion, Multimodal)", tint: "from-special/35 to-fuchsia-500/35" },
+                { label: "AI Agents & Generative Apps", tint: "from-special/40 to-info/40" },
+                { label: "Foundation Models (LLMs, Diffusion, Multimodal)", tint: "from-special/35 to-special/35" },
                 { label: "Deep Learning (CNN, RNN, Transformer)", tint: "from-primary/30 to-special/30" },
                 { label: "Machine Learning (Supervised, Unsupervised, RL)", tint: "from-info/25 to-primary/25" },
                 { label: "Artificial Intelligence (the broad discipline)", tint: "from-success/20 to-info/20" },
@@ -1173,7 +1173,7 @@ function ITILFlowDiagram() {
       <DiagramRow label="Service Desk · Intake · Classify" tint="bg-warning-soft border-warning-border text-foreground" />
       <DiagramArrow />
       <div className="grid gap-2 sm:grid-cols-2">
-        <DiagramRow label="Incident Management (Kanban)" tint="bg-fuchsia-500/15 border-fuchsia-400/30 text-fuchsia-50" />
+        <DiagramRow label="Incident Management (Kanban)" tint="bg-special-soft border-special-border text-foreground" />
         <DiagramRow label="Service Request (Catalog)" tint="bg-info-soft border-info-border text-foreground" />
       </div>
       <DiagramArrow />
@@ -1235,9 +1235,9 @@ function LLMArchitectureDiagram() {
       </div>
       <DiagramArrow />
       <div className="grid gap-2 sm:grid-cols-3">
-        <DiagramRow label="vLLM / Triton Pods (GPU)" tint="bg-fuchsia-500/15 border-fuchsia-400/30 text-fuchsia-50" />
-        <DiagramRow label="KV-Cache + Redis" tint="bg-fuchsia-500/15 border-fuchsia-400/30 text-fuchsia-50" />
-        <DiagramRow label="RAG · Vector DB" tint="bg-fuchsia-500/15 border-fuchsia-400/30 text-fuchsia-50" />
+        <DiagramRow label="vLLM / Triton Pods (GPU)" tint="bg-special-soft border-special-border text-foreground" />
+        <DiagramRow label="KV-Cache + Redis" tint="bg-special-soft border-special-border text-foreground" />
+        <DiagramRow label="RAG · Vector DB" tint="bg-special-soft border-special-border text-foreground" />
       </div>
       <DiagramArrow />
       <div className="grid gap-2 sm:grid-cols-2">
@@ -1678,7 +1678,7 @@ function SupplyChainDiagram() {
         ))}
       </div>
       <div className="flex justify-center text-muted-foreground">↓</div>
-      <div className="rounded-xl border border-fuchsia-400/30 bg-fuchsia-500/15 px-4 py-3 text-center text-sm font-semibold text-fuchsia-50 backdrop-blur">
+      <div className="rounded-xl border border-special-border bg-special-soft px-4 py-3 text-center text-sm font-semibold text-foreground backdrop-blur">
         GenAI Agents · Copilots · Forecast + Scenario Reasoning
       </div>
       <div className="flex justify-center text-muted-foreground">↓</div>
@@ -1703,9 +1703,9 @@ function MultiTenantArchDiagram() {
       </div>
       <DiagramArrow />
       <div className="grid gap-2 sm:grid-cols-3">
-        <DiagramRow label="FastAPI Inference (GPU)" tint="bg-fuchsia-500/15 border-fuchsia-400/30 text-fuchsia-50" />
-        <DiagramRow label="App Services" tint="bg-fuchsia-500/15 border-fuchsia-400/30 text-fuchsia-50" />
-        <DiagramRow label="Workers" tint="bg-fuchsia-500/15 border-fuchsia-400/30 text-fuchsia-50" />
+        <DiagramRow label="FastAPI Inference (GPU)" tint="bg-special-soft border-special-border text-foreground" />
+        <DiagramRow label="App Services" tint="bg-special-soft border-special-border text-foreground" />
+        <DiagramRow label="Workers" tint="bg-special-soft border-special-border text-foreground" />
       </div>
       <DiagramArrow />
       <div className="grid gap-2 sm:grid-cols-2">
@@ -1902,7 +1902,7 @@ function KeyTakeaways({ items }: { items: string[] }) {
 function Timeline({ items }: { items: { year: string; title: string; desc: string }[] }) {
   return (
     <div className="relative">
-      <div className="absolute left-[7px] top-1 bottom-1 w-px bg-gradient-to-b from-info/60 via-fuchsia-500/40 to-transparent sm:left-[11px]" />
+      <div className="absolute left-[7px] top-1 bottom-1 w-px bg-gradient-to-b from-info/60 via-special/40 to-transparent sm:left-[11px]" />
       <ol className="space-y-4 sm:space-y-5">
         {items.map((it) => (
           <li key={it.year + it.title} className="relative pl-7 sm:pl-10">
@@ -2074,7 +2074,7 @@ function ServiceModelDiagram() {
                   key={l}
                   className={`rounded-md px-2 py-1 text-[11px] font-medium ${
                     kind === "you"
-                      ? "bg-fuchsia-500/20 text-fuchsia-100"
+                      ? "bg-special-soft text-foreground"
                       : "bg-info-soft text-foreground"
                   }`}
                 >
@@ -2087,7 +2087,7 @@ function ServiceModelDiagram() {
       ))}
       <div className="col-span-2 mt-2 flex justify-center gap-4 text-xs text-muted-foreground sm:col-span-4">
         <span className="flex items-center gap-1.5">
-          <span className="h-2.5 w-2.5 rounded-sm bg-fuchsia-500/50" /> You manage
+          <span className="h-2.5 w-2.5 rounded-sm bg-special-soft" /> You manage
         </span>
         <span className="flex items-center gap-1.5">
           <span className="h-2.5 w-2.5 rounded-sm bg-info-soft" /> Provider manages
@@ -2114,9 +2114,9 @@ function CloudArchitectureDiagram() {
         <div className="mt-3 rounded-lg border border-border bg-card/[0.04] p-3">
           <div className="mb-2 text-center text-xs font-semibold uppercase tracking-widest text-muted-foreground">Virtual Network</div>
           <div className="grid gap-2 sm:grid-cols-3">
-            <DiagramRow label="VMs" tint="bg-fuchsia-500/15 border-fuchsia-400/30 text-fuchsia-50" />
-            <DiagramRow label="Containers / K8s" tint="bg-fuchsia-500/15 border-fuchsia-400/30 text-fuchsia-50" />
-            <DiagramRow label="Serverless" tint="bg-fuchsia-500/15 border-fuchsia-400/30 text-fuchsia-50" />
+            <DiagramRow label="VMs" tint="bg-special-soft border-special-border text-foreground" />
+            <DiagramRow label="Containers / K8s" tint="bg-special-soft border-special-border text-foreground" />
+            <DiagramRow label="Serverless" tint="bg-special-soft border-special-border text-foreground" />
           </div>
         </div>
       </div>
@@ -2173,7 +2173,7 @@ function SaaSArchitectureDiagram() {
         <DiagramRow label="API Gateway" tint="bg-warning-soft border-warning-border text-foreground" />
       </div>
       <DiagramArrow />
-      <DiagramRow label="Tenant Resolver Middleware (subdomain / JWT / header)" tint="bg-fuchsia-500/15 border-fuchsia-400/30 text-fuchsia-50" />
+      <DiagramRow label="Tenant Resolver Middleware (subdomain / JWT / header)" tint="bg-special-soft border-special-border text-foreground" />
       <DiagramArrow />
       <div className="grid gap-2 sm:grid-cols-3">
         <DiagramRow label="App Services (pooled)" tint="bg-info-soft border-info-border text-foreground" />
@@ -2274,7 +2274,7 @@ function MASLayerDiagram() {
         { label: "Environment / market / plant — sensors, actuators, external APIs", tint: "border-border bg-muted/30 text-muted-foreground" },
         { label: "Agent layer — reactive · deliberative / BDI · learning agents", tint: "border-border bg-primary/10 text-foreground" },
         { label: "Coordination & semantics — directory, negotiation, planning, ontologies", tint: "border-info-border bg-info-soft text-foreground" },
-        { label: "Communication substrate — DDS · MQTT · gRPC · REST · message schemas", tint: "border-fuchsia-400/30 bg-fuchsia-400/10 text-foreground" },
+        { label: "Communication substrate — DDS · MQTT · gRPC · REST · message schemas", tint: "border-special-border bg-special-soft text-foreground" },
         { label: "Operations & trust — security policy, telemetry, tracing, CI/CD", tint: "border-success-border bg-success-soft text-foreground" },
       ]}
     />
@@ -2723,7 +2723,7 @@ function VectorPipelineDiagram() {
         <DiagramArrow />
         <DiagramRow label="Filter by tenant / ACL BEFORE ranking, then fuse candidates" tint="from-special/20 to-special/5" />
         <DiagramArrow />
-        <DiagramRow label="Cross-encoder rerank → top-k with citations and source revision" tint="from-fuchsia-500/20 to-fuchsia-500/5" />
+        <DiagramRow label="Cross-encoder rerank → top-k with citations and source revision" tint="from-special/20 to-special/5" />
       </div>
     </Diagram>
   );
