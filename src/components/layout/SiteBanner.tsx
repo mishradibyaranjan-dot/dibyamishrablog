@@ -67,18 +67,22 @@ function BannerGraphic({ className }: { className?: string }) {
 }
 
 export function SiteBanner() {
-  const [visible, setVisible] = useState(false);
+  // Rendered on the server so the banner's height is part of the first paint.
+  // Mounting it only after hydration pushed the hero heading down mid-load,
+  // which reset Largest Contentful Paint and caused a layout shift.
+  const [visible, setVisible] = useState(true);
   const [index, setIndex] = useState(0);
   /** Clip while the open/close height animation runs, then let popovers escape. */
-  const [settled, setSettled] = useState(false);
+  const [settled, setSettled] = useState(true);
 
   useEffect(() => {
     try {
-      if (window.sessionStorage.getItem(DISMISS_KEY) !== "1") setVisible(true);
+      if (window.sessionStorage.getItem(DISMISS_KEY) === "1") setVisible(false);
     } catch {
-      setVisible(true);
+      // keep the banner visible when storage is unavailable
     }
   }, []);
+
 
   useEffect(() => {
     if (!visible) return;

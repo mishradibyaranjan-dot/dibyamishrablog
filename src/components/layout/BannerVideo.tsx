@@ -20,11 +20,45 @@ export function BannerVideo({ className }: { className?: string }) {
     // Respect reduced-motion: keep the poster frame instead of looping video.
     const reduce = window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
     if (reduce) return;
-    el.muted = true;
-    void el.play().catch(() => {
-      /* autoplay blocked — poster stays visible */
-    });
+
+    // Defer the MP4 fetch until after first paint so this 76px preview never
+    // competes for bandwidth with the hero heading (Largest Contentful Paint).
+    let cancelled = false;
+    const start = () => {
+      if (cancelled || !ref.current) return;
+      ref.current.muted = true;
+      ref.current.preload = "metadata";
+      ref.current.load();
+      void ref.current.play().catch(() => {
+        /* autoplay blocked — poster stays visible */
+      });
+    };
+    const idle = (cb: () => void) => {
+      const w = window as unknown as {
+        requestIdleCallback?: (c: () => void, o?: { timeout: number }) => number;
+      };
+      if (typeof w.requestIdleCallback === "function") {
+        w.requestIdleCallback(cb, { timeout: 3000 });
+        return;
+      }
+      window.setTimeout(cb, 2000);
+    };
+
+
+    if (document.readyState === "complete") {
+      idle(start);
+      return () => {
+        cancelled = true;
+      };
+    }
+    const onLoad = () => idle(start);
+    window.addEventListener("load", onLoad, { once: true });
+    return () => {
+      cancelled = true;
+      window.removeEventListener("load", onLoad);
+    };
   }, []);
+
 
   return (
     <Link
@@ -43,7 +77,7 @@ export function BannerVideo({ className }: { className?: string }) {
         muted
         loop
         playsInline
-        preload="metadata"
+        preload="none"
         tabIndex={-1}
         aria-hidden
         onCanPlay={() => setReady(true)}
