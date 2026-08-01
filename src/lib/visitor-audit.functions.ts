@@ -84,6 +84,8 @@ const settingsSchema = z.object({
   alert_window_minutes: z.number().int().min(5).max(1440),
   alert_min_events: z.number().int().min(1).max(10000),
   alert_failure_pct: z.number().int().min(1).max(100),
+  alert_email_enabled: z.boolean().default(true),
+  alert_slack_enabled: z.boolean().default(false),
 });
 
 export const updateVisitorAuditSettings = createServerFn({ method: "POST" })
@@ -139,4 +141,63 @@ export const runVisitorAuditSpikeCheck = createServerFn({ method: "POST" })
       reason: res.reason ?? null,
       stats: res.stats ? JSON.stringify(res.stats) : null,
     };
+  });
+
+// ---------- Admin: drill-down on a time window / path / country ----------
+const drilldownSchema = z.object({
+  from: z.string().max(40).optional(),
+  to: z.string().max(40).optional(),
+  path: z.string().max(300).optional(),
+  country: z.string().max(10).optional(),
+  reason: z.string().max(120).optional(),
+  outcome: z.enum(["all", "accepted", "rejected", "error"]).default("all"),
+  sampleLimit: z.number().int().min(5).max(50).default(20),
+});
+
+export const getVisitorAuditDrilldown = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((input: unknown) => drilldownSchema.parse(input))
+  .handler(async ({ data, context }) => {
+    await assertAdmin(context.supabase, context.userId);
+    const { buildDrilldown } = await import("@/lib/visitor-audit.server");
+    return buildDrilldown(data);
+  });
+
+// ---------- Admin: send a test alert through the configured channels ----------
+export const sendVisitorAuditTestAlert = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }) => {
+    await assertAdmin(context.supabase, context.userId);
+    const { loadSettings, sendSlackAlert } = await import("@/lib/visitor-audit.server");
+    const s = await loadSettings();
+    const result: { email: boolean; slack: boolean; slackReason: string | null } = {
+      email: false,
+      slack: false,
+      slackReason: null,
+    };
+    if (s.alert_email_enabled) {
+      const { sendCriticalAlert } = await import("@/lib/security-events.server");
+      await sendCriticalAlert({
+        type: "visitor_tracking_audit_test_alert",
+        target: "/admin/visitor-audit",
+        actionTaken: "No action needed - test alert",
+        metadata: {
+          window_minutes: s.alert_window_minutes,
+          alert_min_events: s.alert_min_events,
+          alert_failure_pct: s.alert_failure_pct,
+        },
+      });
+      result.email = true;
+    }
+    if (s.alert_slack_enabled) {
+      const res = await sendSlackAlert({
+        title: "Test alert from visitor audit",
+        summary: `Delivery check using the dashboard thresholds (window ${s.alert_window_minutes} min, min ${s.alert_min_events} events, ${s.alert_failure_pct}% failure rate).`,
+        fields: [{ label: "Status", value: "Channel is wired correctly" }],
+        link: "https://www.dibyamishra.co.in/admin/visitor-audit",
+      });
+      result.slack = res.delivered;
+      result.slackReason = res.reason ?? null;
+    }
+    return result;
   });
