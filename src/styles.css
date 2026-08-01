@@ -663,7 +663,8 @@ table th, table td { border-color: var(--color-border); }
 .group:hover .group-hover\:bg-accent,
 .group:hover .group-hover\:bg-accent\/50 {
   background-color: color-mix(in oklch, var(--color-primary) 12%, transparent) !important;
-  color: var(--color-brand-2) !important;
+  /* foreground (not brand-2) so small pill text clears WCAG AA on the tint */
+  color: var(--color-foreground) !important;
 }
 
 /* Map common hardcoded Tailwind slate colours to theme variables so they
