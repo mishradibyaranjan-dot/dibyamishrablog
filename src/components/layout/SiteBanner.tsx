@@ -112,17 +112,18 @@ export function SiteBanner() {
             settled ? "overflow-visible" : "overflow-hidden",
           )}
         >
-
-          {/* animated graphics layer */}
-          <div className="absolute inset-0 opacity-70">
-            <BannerGraphic />
+          {/* animated graphics layer (clipped independently of popovers) */}
+          <div aria-hidden className="pointer-events-none absolute inset-0 overflow-hidden">
+            <div className="absolute inset-0 opacity-70">
+              <BannerGraphic />
+            </div>
+            <motion.div
+              className="absolute inset-y-0 -left-1/3 w-1/3 bg-gradient-to-r from-transparent via-white/70 to-transparent"
+              animate={{ x: ["0%", "400%"] }}
+              transition={{ duration: 6, repeat: Infinity, ease: "linear" }}
+            />
           </div>
-          <motion.div
-            aria-hidden
-            className="absolute inset-y-0 -left-1/3 w-1/3 bg-gradient-to-r from-transparent via-white/70 to-transparent"
-            animate={{ x: ["0%", "400%"] }}
-            transition={{ duration: 6, repeat: Infinity, ease: "linear" }}
-          />
+
 
           <div className="relative mx-auto flex max-w-7xl flex-wrap items-center gap-3 px-4 py-2.5 sm:px-6">
             <span className="inline-flex items-center gap-1.5 rounded-full border border-blue-300 bg-white px-2.5 py-1 text-[11px] font-semibold uppercase tracking-wide text-blue-700">
