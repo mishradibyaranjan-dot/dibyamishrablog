@@ -181,10 +181,16 @@ export function AccessibleVideo({
                 "max-w-[92%] rounded-lg px-3 py-1.5 text-center font-medium",
                 CAPTION_SIZE_CLASS[prefs.size],
                 prefs.highContrast
-                  ? "border-2 border-white bg-black text-white [text-shadow:none]"
-                  : "bg-slate-950/75 text-white backdrop-blur-sm",
+                  ? "border-2 border-white"
+                  : "border border-white/10 backdrop-blur-sm",
               )}
+              style={
+                prefs.highContrast
+                  ? { backgroundColor: "#000000", color: "#ffffff", textShadow: "none" }
+                  : { backgroundColor: "rgba(2,6,23,0.78)", color: "#ffffff" }
+              }
             >
+
               {cue.text}
             </p>
           )}
