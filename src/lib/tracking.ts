@@ -34,6 +34,8 @@ export function useActivityTracker() {
 
     let cancelled = false;
     (async () => {
+      const { data: sessionData } = await supabase.auth.getSession();
+      if (!cancelled) tokenRef.current = sessionData.session?.access_token ?? null;
       const ua = typeof navigator !== "undefined" ? navigator.userAgent : null;
       const { data, error } = await supabase
         .from("login_sessions")
@@ -46,7 +48,12 @@ export function useActivityTracker() {
       }
     })();
 
+    const { data: authSub } = supabase.auth.onAuthStateChange((_e, session) => {
+      tokenRef.current = session?.access_token ?? null;
+    });
+
     const close = () => {
+
       if (!sessionIdRef.current) return;
       const id = sessionIdRef.current;
       const startedAt = sessionStartRef.current;
