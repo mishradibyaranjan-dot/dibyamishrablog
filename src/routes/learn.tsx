@@ -2805,7 +2805,7 @@ function IntroVector() {
                   <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" />
                   <XAxis dataKey="index" stroke="var(--muted-foreground)" fontSize={12} />
                   <YAxis stroke="var(--muted-foreground)" fontSize={12} />
-                  <RTooltip contentStyle={{ background: "#0b1220", border: "1px solid rgba(255,255,255,0.12)", borderRadius: 12, color: "#fff" }} />
+                  <RTooltip contentStyle={{ background: "var(--popover)", border: "1px solid var(--border)", borderRadius: 12, color: "var(--popover-foreground)" }} />
                   <Legend wrapperStyle={{ fontSize: 12 }} />
                   <Bar dataKey="recall" name="Recall" fill="var(--info)" radius={[6, 6, 0, 0]} />
                   <Bar dataKey="speed" name="Queries/sec" fill="var(--primary)" radius={[6, 6, 0, 0]} />
