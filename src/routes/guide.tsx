@@ -18,8 +18,11 @@ import { Section, SectionHeader } from "@/components/layout/Section";
 import { SITE_ORIGIN } from "@/lib/og-images";
 import { breadcrumbScript } from "@/lib/breadcrumbs";
 import { cn } from "@/lib/utils";
+import { AccessibleVideo } from "@/components/video/AccessibleVideo";
+import { TOUR_CUES } from "@/lib/video-captions";
 import tourVideo from "@/assets/video/site-tour.mp4.asset.json";
 import tourPoster from "@/assets/video/site-tour-poster.jpg.asset.json";
+
 
 const DESC =
   "A guided video walkthrough of this site — where to find research, the Learn modules, projects, case studies, the document repository, and the AI Learning Assistant.";
