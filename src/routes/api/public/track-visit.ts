@@ -129,9 +129,7 @@ export const Route = createFileRoute("/api/public/track-visit")({
           }
           audit.user_id = verifiedUserId;
           audit.identified = Boolean(verifiedUserId);
-          if (body.userId && body.userId !== verifiedUserId) {
-            audit.metadata = { ...(audit.metadata ?? {}), client_user_id_ignored: true };
-          }
+
 
           const row = {
             visitor_id: visitorId,
