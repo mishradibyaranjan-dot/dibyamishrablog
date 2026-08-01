@@ -165,7 +165,7 @@ export function FloatingChat() {
         aria-label={open ? "Close chat" : "Open chat"}
         className={cn(
           "group fixed bottom-5 right-5 z-[60] flex h-14 w-14 items-center justify-center rounded-full",
-          "border border-blue-200 bg-white text-blue-600 shadow-[0_12px_30px_-10px_rgba(59,130,246,0.55)] transition-all",
+          "border border-border bg-card text-primary shadow-[0_12px_30px_-10px_rgba(59,130,246,0.55)] transition-all",
           "hover:scale-105 hover:border-blue-300 hover:text-blue-700 active:scale-95",
         )}
       >
