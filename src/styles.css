@@ -108,7 +108,7 @@
                    radial-gradient(ellipse 60% 50% at 90% 100%, oklch(0.5 0.2 280 / 0.3), transparent 70%),
                    linear-gradient(135deg, oklch(0.06 0.03 260), oklch(0.04 0.04 270));
   --gradient-brand: linear-gradient(135deg, oklch(0.55 0.2 260), oklch(0.6 0.22 280) 55%, oklch(0.78 0.12 220));
-  --gradient-text: linear-gradient(120deg, oklch(0.95 0.04 250), oklch(0.72 0.18 260) 50%, oklch(0.75 0.2 280));
+  --gradient-text: linear-gradient(120deg, oklch(0.95 0.04 250), oklch(0.85 0.14 260) 50%, oklch(0.86 0.15 280));
   --gradient-aurora: conic-gradient(from 180deg at 50% 50%, oklch(0.55 0.2 260 / 0.55), oklch(0.6 0.22 280 / 0.5), oklch(0.78 0.12 220 / 0.45), oklch(0.55 0.2 260 / 0.55));
   --shadow-glow: 0 25px 80px -20px oklch(0.55 0.22 260 / 0.55), 0 0 0 1px oklch(0.55 0.22 260 / 0.15);
   --shadow-neon: 0 0 28px oklch(0.55 0.22 260 / 0.55), 0 0 60px oklch(0.6 0.22 280 / 0.4);
