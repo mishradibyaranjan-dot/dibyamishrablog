@@ -36,6 +36,7 @@ import { Route as AuthenticatedRepositoryRouteImport } from './routes/_authentic
 import { Route as AuthenticatedReportsRouteImport } from './routes/_authenticated/reports'
 import { Route as Char91DotwellKnownChar93OauthProtectedResourceRouteImport } from './routes/[.well-known]/oauth-protected-resource'
 import { Route as Char91DotmcpChar93ListToolsRouteImport } from './routes/[.mcp]/list-tools'
+import { Route as AuthenticatedAdminRouteRouteImport } from './routes/_authenticated/admin/route'
 import { Route as LovableEmailSuppressionRouteImport } from './routes/lovable/email/suppression'
 import { Route as ApiPublicTtsRouteImport } from './routes/api/public/tts'
 import { Route as ApiPublicTrackVisitRouteImport } from './routes/api/public/track-visit'
@@ -195,6 +196,11 @@ const Char91DotmcpChar93ListToolsRoute =
     path: '/.mcp/list-tools',
     getParentRoute: () => rootRouteImport,
   } as any)
+const AuthenticatedAdminRouteRoute = AuthenticatedAdminRouteRouteImport.update({
+  id: '/admin',
+  path: '/admin',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const LovableEmailSuppressionRoute = LovableEmailSuppressionRouteImport.update({
   id: '/lovable/email/suppression',
   path: '/lovable/email/suppression',
@@ -232,27 +238,27 @@ const ApiDownloadPdfRoute = ApiDownloadPdfRouteImport.update({
 } as any)
 const AuthenticatedAdminVisitorAuditRoute =
   AuthenticatedAdminVisitorAuditRouteImport.update({
-    id: '/admin/visitor-audit',
-    path: '/admin/visitor-audit',
-    getParentRoute: () => AuthenticatedRouteRoute,
+    id: '/visitor-audit',
+    path: '/visitor-audit',
+    getParentRoute: () => AuthenticatedAdminRouteRoute,
   } as any)
 const AuthenticatedAdminSpamAuditRoute =
   AuthenticatedAdminSpamAuditRouteImport.update({
-    id: '/admin/spam-audit',
-    path: '/admin/spam-audit',
-    getParentRoute: () => AuthenticatedRouteRoute,
+    id: '/spam-audit',
+    path: '/spam-audit',
+    getParentRoute: () => AuthenticatedAdminRouteRoute,
   } as any)
 const AuthenticatedAdminSecurityEventsRoute =
   AuthenticatedAdminSecurityEventsRouteImport.update({
-    id: '/admin/security-events',
-    path: '/admin/security-events',
-    getParentRoute: () => AuthenticatedRouteRoute,
+    id: '/security-events',
+    path: '/security-events',
+    getParentRoute: () => AuthenticatedAdminRouteRoute,
   } as any)
 const AuthenticatedAdminBlockedDomainsRoute =
   AuthenticatedAdminBlockedDomainsRouteImport.update({
-    id: '/admin/blocked-domains',
-    path: '/admin/blocked-domains',
-    getParentRoute: () => AuthenticatedRouteRoute,
+    id: '/blocked-domains',
+    path: '/blocked-domains',
+    getParentRoute: () => AuthenticatedAdminRouteRoute,
   } as any)
 const Char91DotmcpChar93InvokeToolToolRoute =
   Char91DotmcpChar93InvokeToolToolRouteImport.update({
@@ -330,6 +336,7 @@ export interface FileRoutesByFullPath {
   '/rss.xml': typeof RssDotxmlRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/trust': typeof TrustRoute
+  '/admin': typeof AuthenticatedAdminRouteRouteWithChildren
   '/.mcp/list-tools': typeof Char91DotmcpChar93ListToolsRoute
   '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   '/reports': typeof AuthenticatedReportsRoute
@@ -379,6 +386,7 @@ export interface FileRoutesByTo {
   '/rss.xml': typeof RssDotxmlRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/trust': typeof TrustRoute
+  '/admin': typeof AuthenticatedAdminRouteRouteWithChildren
   '/.mcp/list-tools': typeof Char91DotmcpChar93ListToolsRoute
   '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   '/reports': typeof AuthenticatedReportsRoute
@@ -430,6 +438,7 @@ export interface FileRoutesById {
   '/rss.xml': typeof RssDotxmlRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/trust': typeof TrustRoute
+  '/_authenticated/admin': typeof AuthenticatedAdminRouteRouteWithChildren
   '/.mcp/list-tools': typeof Char91DotmcpChar93ListToolsRoute
   '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   '/_authenticated/reports': typeof AuthenticatedReportsRoute
@@ -481,6 +490,7 @@ export interface FileRouteTypes {
     | '/rss.xml'
     | '/sitemap.xml'
     | '/trust'
+    | '/admin'
     | '/.mcp/list-tools'
     | '/.well-known/oauth-protected-resource'
     | '/reports'
@@ -530,6 +540,7 @@ export interface FileRouteTypes {
     | '/rss.xml'
     | '/sitemap.xml'
     | '/trust'
+    | '/admin'
     | '/.mcp/list-tools'
     | '/.well-known/oauth-protected-resource'
     | '/reports'
@@ -580,6 +591,7 @@ export interface FileRouteTypes {
     | '/rss.xml'
     | '/sitemap.xml'
     | '/trust'
+    | '/_authenticated/admin'
     | '/.mcp/list-tools'
     | '/.well-known/oauth-protected-resource'
     | '/_authenticated/reports'
@@ -847,6 +859,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof Char91DotmcpChar93ListToolsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated/admin': {
+      id: '/_authenticated/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AuthenticatedAdminRouteRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/lovable/email/suppression': {
       id: '/lovable/email/suppression'
       path: '/lovable/email/suppression'
@@ -898,31 +917,31 @@ declare module '@tanstack/react-router' {
     }
     '/_authenticated/admin/visitor-audit': {
       id: '/_authenticated/admin/visitor-audit'
-      path: '/admin/visitor-audit'
+      path: '/visitor-audit'
       fullPath: '/admin/visitor-audit'
       preLoaderRoute: typeof AuthenticatedAdminVisitorAuditRouteImport
-      parentRoute: typeof AuthenticatedRouteRoute
+      parentRoute: typeof AuthenticatedAdminRouteRoute
     }
     '/_authenticated/admin/spam-audit': {
       id: '/_authenticated/admin/spam-audit'
-      path: '/admin/spam-audit'
+      path: '/spam-audit'
       fullPath: '/admin/spam-audit'
       preLoaderRoute: typeof AuthenticatedAdminSpamAuditRouteImport
-      parentRoute: typeof AuthenticatedRouteRoute
+      parentRoute: typeof AuthenticatedAdminRouteRoute
     }
     '/_authenticated/admin/security-events': {
       id: '/_authenticated/admin/security-events'
-      path: '/admin/security-events'
+      path: '/security-events'
       fullPath: '/admin/security-events'
       preLoaderRoute: typeof AuthenticatedAdminSecurityEventsRouteImport
-      parentRoute: typeof AuthenticatedRouteRoute
+      parentRoute: typeof AuthenticatedAdminRouteRoute
     }
     '/_authenticated/admin/blocked-domains': {
       id: '/_authenticated/admin/blocked-domains'
-      path: '/admin/blocked-domains'
+      path: '/blocked-domains'
       fullPath: '/admin/blocked-domains'
       preLoaderRoute: typeof AuthenticatedAdminBlockedDomainsRouteImport
-      parentRoute: typeof AuthenticatedRouteRoute
+      parentRoute: typeof AuthenticatedAdminRouteRoute
     }
     '/.mcp/invoke-tool/$tool': {
       id: '/.mcp/invoke-tool/$tool'
@@ -997,22 +1016,38 @@ declare module '@tanstack/react-router' {
   }
 }
 
-interface AuthenticatedRouteRouteChildren {
-  AuthenticatedReportsRoute: typeof AuthenticatedReportsRoute
-  AuthenticatedRepositoryRoute: typeof AuthenticatedRepositoryRoute
+interface AuthenticatedAdminRouteRouteChildren {
   AuthenticatedAdminBlockedDomainsRoute: typeof AuthenticatedAdminBlockedDomainsRoute
   AuthenticatedAdminSecurityEventsRoute: typeof AuthenticatedAdminSecurityEventsRoute
   AuthenticatedAdminSpamAuditRoute: typeof AuthenticatedAdminSpamAuditRoute
   AuthenticatedAdminVisitorAuditRoute: typeof AuthenticatedAdminVisitorAuditRoute
 }
 
+const AuthenticatedAdminRouteRouteChildren: AuthenticatedAdminRouteRouteChildren =
+  {
+    AuthenticatedAdminBlockedDomainsRoute:
+      AuthenticatedAdminBlockedDomainsRoute,
+    AuthenticatedAdminSecurityEventsRoute:
+      AuthenticatedAdminSecurityEventsRoute,
+    AuthenticatedAdminSpamAuditRoute: AuthenticatedAdminSpamAuditRoute,
+    AuthenticatedAdminVisitorAuditRoute: AuthenticatedAdminVisitorAuditRoute,
+  }
+
+const AuthenticatedAdminRouteRouteWithChildren =
+  AuthenticatedAdminRouteRoute._addFileChildren(
+    AuthenticatedAdminRouteRouteChildren,
+  )
+
+interface AuthenticatedRouteRouteChildren {
+  AuthenticatedAdminRouteRoute: typeof AuthenticatedAdminRouteRouteWithChildren
+  AuthenticatedReportsRoute: typeof AuthenticatedReportsRoute
+  AuthenticatedRepositoryRoute: typeof AuthenticatedRepositoryRoute
+}
+
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
+  AuthenticatedAdminRouteRoute: AuthenticatedAdminRouteRouteWithChildren,
   AuthenticatedReportsRoute: AuthenticatedReportsRoute,
   AuthenticatedRepositoryRoute: AuthenticatedRepositoryRoute,
-  AuthenticatedAdminBlockedDomainsRoute: AuthenticatedAdminBlockedDomainsRoute,
-  AuthenticatedAdminSecurityEventsRoute: AuthenticatedAdminSecurityEventsRoute,
-  AuthenticatedAdminSpamAuditRoute: AuthenticatedAdminSpamAuditRoute,
-  AuthenticatedAdminVisitorAuditRoute: AuthenticatedAdminVisitorAuditRoute,
 }
 
 const AuthenticatedRouteRouteWithChildren =
