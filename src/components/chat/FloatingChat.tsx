@@ -191,7 +191,7 @@ export function FloatingChat() {
           aria-label="AI assistant"
           className={cn(
             "floating-chat-panel fixed bottom-24 right-5 z-[60] flex w-[min(380px,calc(100vw-2.5rem))] flex-col overflow-hidden",
-            "h-[min(560px,calc(100vh-8rem))] rounded-2xl border border-blue-200 bg-white shadow-2xl text-foreground",
+            "h-[min(560px,calc(100vh-8rem))] rounded-2xl border border-border bg-card shadow-2xl text-foreground",
           )}
         >
           <header className="flex items-center justify-between border-b border-blue-100 bg-gradient-to-r from-primary/10 via-card to-secondary/10 px-4 py-3">
