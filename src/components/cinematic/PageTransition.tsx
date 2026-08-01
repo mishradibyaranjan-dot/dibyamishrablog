@@ -52,7 +52,8 @@ export function PageTransition() {
       </motion.div>
 
 
-      {/* Cinematic sweep overlay — fires on every route change */}
+      {/* Cinematic sweep overlay — fires on route changes, never on first paint */}
+      {!isFirstPaint && (
       <motion.div
         key={`sweep-${pathname}`}
         aria-hidden
@@ -61,6 +62,7 @@ export function PageTransition() {
         animate={{ opacity: 0, transition: { duration: 0.1, delay: 0.85 } }}
         exit={{ opacity: 0 }}
       >
+
         <motion.div
           initial={{ x: "-110%" }}
           animate={{
