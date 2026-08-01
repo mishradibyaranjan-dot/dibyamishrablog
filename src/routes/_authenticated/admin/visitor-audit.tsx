@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
 import {
-  Loader2, ShieldAlert, ChevronLeft, ChevronRight, RefreshCw, Trash2, BellRing, Search, Gauge,
+  Loader2, ShieldAlert, ChevronLeft, ChevronRight, RefreshCw, Trash2, BellRing, Search, Gauge, Layers, X, Send,
 } from "lucide-react";
 import {
   Area, AreaChart, Bar, BarChart, CartesianGrid, Cell, Legend, ResponsiveContainer, Tooltip, XAxis, YAxis,
@@ -17,6 +17,8 @@ import {
   updateVisitorAuditSettings,
   purgeVisitorAudit,
   runVisitorAuditSpikeCheck,
+  getVisitorAuditDrilldown,
+  sendVisitorAuditTestAlert,
 } from "@/lib/visitor-audit.functions";
 
 export const Route = createFileRoute("/_authenticated/admin/visitor-audit")({
@@ -48,6 +50,15 @@ type Row = {
 
 type Analytics = Awaited<ReturnType<typeof getVisitorAuditAnalytics>>["analytics"];
 type Settings = Awaited<ReturnType<typeof getVisitorAuditAnalytics>>["settings"];
+type Drilldown = Awaited<ReturnType<typeof getVisitorAuditDrilldown>>;
+type DrilldownInput = {
+  from?: string;
+  to?: string;
+  path?: string;
+  country?: string;
+  reason?: string;
+  label: string;
+};
 
 const OUTCOMES: Record<string, { label: string; className: string }> = {
   accepted: { label: "Accepted", className: "bg-emerald-50 text-emerald-700 border-emerald-200" },
@@ -80,10 +91,21 @@ function Card({ label, value }: { label: string; value: string | number }) {
 }
 
 
-function TopList({ title, items }: { title: string; items: { label: string; count: number }[] }) {
+function TopList({
+  title,
+  items,
+  onSelect,
+  hint,
+}: {
+  title: string;
+  items: { label: string; count: number }[];
+  onSelect?: (label: string) => void;
+  hint?: string;
+}) {
   return (
     <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
       <h3 className="text-sm font-semibold text-slate-900">{title}</h3>
+      {hint && <p className="mt-0.5 text-xs text-slate-500">{hint}</p>}
       {items.length === 0 ? (
         <p className="mt-3 text-xs text-slate-500">No data in this window.</p>
       ) : (
@@ -94,7 +116,15 @@ function TopList({ title, items }: { title: string; items: { label: string; coun
               <XAxis type="number" tick={{ fontSize: 11 }} />
               <YAxis type="category" dataKey="label" width={140} tick={{ fontSize: 11 }} />
               <Tooltip />
-              <Bar dataKey="count" radius={[0, 4, 4, 0]}>
+              <Bar
+                dataKey="count"
+                radius={[0, 4, 4, 0]}
+                cursor={onSelect ? "pointer" : undefined}
+                onClick={(d: unknown) => {
+                  const label = (d as { payload?: { label?: string } })?.payload?.label;
+                  if (onSelect && label) onSelect(label);
+                }}
+              >
                 {items.map((_, i) => (
                   <Cell key={i} fill={BAR_COLORS[i % BAR_COLORS.length]} />
                 ))}
@@ -102,6 +132,121 @@ function TopList({ title, items }: { title: string; items: { label: string; coun
             </BarChart>
           </ResponsiveContainer>
         </div>
+      )}
+    </div>
+  );
+}
+
+function DrilldownPanel({
+  label,
+  data,
+  busy,
+  onClose,
+  onRefine,
+}: {
+  label: string;
+  data: Drilldown | null;
+  busy: boolean;
+  onClose: () => void;
+  onRefine: (patch: Partial<DrilldownInput>) => void;
+}) {
+  return (
+    <div className="rounded-2xl border border-blue-200 bg-blue-50/40 p-5 shadow-sm">
+      <div className="flex flex-wrap items-start justify-between gap-3">
+        <div>
+          <h3 className="flex items-center gap-2 text-sm font-semibold text-slate-900">
+            <Layers className="h-4 w-4 text-blue-600" /> Drill-down — {label}
+          </h3>
+          {data && (
+            <p className="mt-1 text-xs text-slate-600">
+              {new Date(data.filter.from).toLocaleString()} → {new Date(data.filter.to).toLocaleString()}
+              {data.filter.path ? ` · path ${data.filter.path}` : ""}
+              {data.filter.country ? ` · country ${data.filter.country}` : ""}
+              {data.filter.reason ? ` · reason ${data.filter.reason}` : ""}
+            </p>
+          )}
+        </div>
+        <div className="flex items-center gap-2">
+          {busy && <Loader2 className="h-4 w-4 animate-spin text-slate-500" />}
+          <Button size="sm" variant="outline" className="border-slate-300" onClick={onClose}>
+            <X className="mr-1 h-3.5 w-3.5" /> Close
+          </Button>
+        </div>
+      </div>
+
+      {data && (
+        <>
+          <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
+            <Card label="Attempts" value={data.total} />
+            <Card label="Accepted" value={data.totals.accepted} />
+            <Card label="Rejected" value={data.totals.rejected} />
+            <Card label="Errors" value={data.totals.error} />
+            <Card label="Failure rate" value={`${data.failureRate}%`} />
+          </div>
+
+          <div className="mt-4 grid gap-4 lg:grid-cols-3">
+            <TopList
+              title="Top reasons"
+              items={data.topReasons}
+              hint="Click a bar to narrow to that reason"
+              onSelect={(reason) => onRefine({ reason })}
+            />
+            <TopList title="Top paths" items={data.topPaths} onSelect={(path) => onRefine({ path })} />
+            <TopList title="Top countries" items={data.topCountries} onSelect={(country) => onRefine({ country })} />
+          </div>
+
+          <p className="mt-3 text-xs text-slate-600">
+            Latency p50 {data.latency.p50 ?? "—"}ms · p90 {data.latency.p90 ?? "—"}ms · p99 {data.latency.p99 ?? "—"}ms ·{" "}
+            {data.identified} signed-in · top IP hashes:{" "}
+            {data.topIpHashes.length ? data.topIpHashes.map((i) => `${i.label.slice(0, 10)} (${i.count})`).join(", ") : "n/a"}
+          </p>
+
+          <div className="mt-4 overflow-hidden rounded-xl border border-slate-200 bg-white">
+            <div className="border-b border-slate-200 px-4 py-2 text-xs font-semibold text-slate-700">
+              Sample events ({data.samples.length})
+            </div>
+            <div className="max-h-[380px] overflow-auto">
+              <table className="w-full text-left text-xs">
+                <thead className="bg-slate-50 text-slate-600">
+                  <tr>
+                    <th className="px-3 py-2">Time</th>
+                    <th className="px-3 py-2">Outcome</th>
+                    <th className="px-3 py-2">Reason</th>
+                    <th className="px-3 py-2">Path</th>
+                    <th className="px-3 py-2">Country</th>
+                    <th className="px-3 py-2">Visitor</th>
+                    <th className="px-3 py-2">ms</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {data.samples.length === 0 && (
+                    <tr>
+                      <td colSpan={7} className="px-3 py-6 text-center text-slate-500">No events in this slice.</td>
+                    </tr>
+                  )}
+                  {data.samples.map((r) => {
+                    const o = OUTCOMES[r.outcome] ?? OUTCOMES.error!;
+                    return (
+                      <tr key={r.id} className="border-t border-slate-100">
+                        <td className="whitespace-nowrap px-3 py-2 text-slate-600">{new Date(r.created_at).toLocaleString()}</td>
+                        <td className="px-3 py-2">
+                          <span className={`rounded-full border px-2 py-0.5 text-[11px] ${o.className}`}>{o.label}</span>
+                        </td>
+                        <td className="px-3 py-2 text-slate-700">{r.reason ?? r.error_message ?? "—"}</td>
+                        <td className="max-w-[220px] truncate px-3 py-2 text-slate-700">{r.path ?? "—"}</td>
+                        <td className="px-3 py-2 text-slate-700">{r.country ?? "—"}</td>
+                        <td className="max-w-[160px] truncate px-3 py-2 text-slate-500">
+                          {r.identified ? (r.user_id ?? "signed-in") : (r.visitor_id ?? "anon")}
+                        </td>
+                        <td className="px-3 py-2 text-slate-600">{r.duration_ms ?? "—"}</td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </>
       )}
     </div>
   );
@@ -116,6 +261,13 @@ function VisitorAuditPage() {
   const saveSettings = useServerFn(updateVisitorAuditSettings);
   const runPurge = useServerFn(purgeVisitorAudit);
   const runSpike = useServerFn(runVisitorAuditSpikeCheck);
+  const fetchDrilldown = useServerFn(getVisitorAuditDrilldown);
+  const sendTestAlert = useServerFn(sendVisitorAuditTestAlert);
+
+  // ---- drill-down ----
+  const [drill, setDrill] = useState<DrilldownInput | null>(null);
+  const [drillData, setDrillData] = useState<Drilldown | null>(null);
+  const [drillBusy, setDrillBusy] = useState(false);
 
   // ---- analytics ----
   const [days, setDays] = useState(14);
@@ -189,6 +341,55 @@ function VisitorAuditPage() {
     if (tab === "events") void loadRows();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isAdmin, tab, page, pageSize, applied]);
+
+  useEffect(() => {
+    if (!drill || !isAdmin) return;
+    let cancelled = false;
+    setDrillBusy(true);
+    void (async () => {
+      try {
+        const res = await fetchDrilldown({
+          data: {
+            from: drill.from,
+            to: drill.to,
+            path: drill.path,
+            country: drill.country,
+            reason: drill.reason,
+            outcome: "all",
+            sampleLimit: 25,
+          },
+        });
+        if (!cancelled) setDrillData(res);
+      } catch (e) {
+        if (!cancelled) setErr(e instanceof Error ? e.message : "Drill-down failed");
+      } finally {
+        if (!cancelled) setDrillBusy(false);
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isAdmin, drill]);
+
+  const windowRange = () => ({
+    from: new Date(Date.now() - days * 86_400_000).toISOString(),
+    to: new Date().toISOString(),
+  });
+
+  const openDrill = (patch: Partial<DrilldownInput> & { label: string }) => {
+    setDrillData(null);
+    setDrill({ ...windowRange(), ...patch });
+  };
+
+  const refineDrill = (patch: Partial<DrilldownInput>) => {
+    setDrill((prev) => {
+      if (!prev) return prev;
+      const next = { ...prev, ...patch };
+      const bits = [next.path, next.country, next.reason].filter(Boolean);
+      return { ...next, label: bits.length ? bits.join(" · ") : prev.label };
+    });
+  };
 
   const latencyRows = useMemo(() => {
     const l = analytics?.latency;
@@ -299,9 +500,21 @@ function VisitorAuditPage() {
 
               <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
                 <h3 className="text-sm font-semibold text-slate-900">Accepted vs rejected vs errors over time</h3>
+                <p className="mt-0.5 text-xs text-slate-500">Click any day to drill into that time window.</p>
                 <div className="mt-3 h-[280px]">
                   <ResponsiveContainer width="100%" height="100%">
-                    <AreaChart data={analytics.series}>
+                    <AreaChart
+                      data={analytics.series}
+                      onClick={(st: unknown) => {
+                        const day = (st as { activeLabel?: string })?.activeLabel;
+                        if (!day) return;
+                        openDrill({
+                          from: `${day}T00:00:00.000Z`,
+                          to: `${day}T23:59:59.999Z`,
+                          label: `Day ${day}`,
+                        });
+                      }}
+                    >
                       <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
                       <XAxis dataKey="day" tick={{ fontSize: 11 }} />
                       <YAxis tick={{ fontSize: 11 }} allowDecimals={false} />
@@ -316,9 +529,24 @@ function VisitorAuditPage() {
               </div>
 
               <div className="grid gap-4 lg:grid-cols-2">
-                <TopList title="Top paths" items={analytics.topPaths} />
-                <TopList title="Top countries" items={analytics.topCountries} />
-                <TopList title="Top rejection / error reasons" items={analytics.topReasons} />
+                <TopList
+                  title="Top paths"
+                  items={analytics.topPaths}
+                  hint="Click a bar to drill into that path"
+                  onSelect={(path) => openDrill({ path, label: `Path ${path}` })}
+                />
+                <TopList
+                  title="Top countries"
+                  items={analytics.topCountries}
+                  hint="Click a bar to drill into that country"
+                  onSelect={(country) => openDrill({ country, label: `Country ${country}` })}
+                />
+                <TopList
+                  title="Top rejection / error reasons"
+                  items={analytics.topReasons}
+                  hint="Click a bar to drill into that reason"
+                  onSelect={(reason) => openDrill({ reason, label: `Reason ${reason}` })}
+                />
                 <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
                   <h3 className="flex items-center gap-2 text-sm font-semibold text-slate-900">
                     <Gauge className="h-4 w-4 text-blue-600" /> Write latency percentiles (ms)
@@ -340,6 +568,19 @@ function VisitorAuditPage() {
                 </div>
               </div>
             </>
+          )}
+
+          {drill && (
+            <DrilldownPanel
+              label={drill.label}
+              data={drillData}
+              busy={drillBusy}
+              onClose={() => {
+                setDrill(null);
+                setDrillData(null);
+              }}
+              onRefine={refineDrill}
+            />
           )}
 
           {settings && (
@@ -389,7 +630,25 @@ function VisitorAuditPage() {
                   />
                   Alerts enabled
                 </label>
+                <label className="flex items-center gap-2 pt-5 text-xs text-slate-600">
+                  <input
+                    type="checkbox" checked={settings.alert_email_enabled}
+                    onChange={(e) => setSettings({ ...settings, alert_email_enabled: e.target.checked })}
+                  />
+                  Email alerts
+                </label>
+                <label className="flex items-center gap-2 pt-5 text-xs text-slate-600">
+                  <input
+                    type="checkbox" checked={settings.alert_slack_enabled}
+                    onChange={(e) => setSettings({ ...settings, alert_slack_enabled: e.target.checked })}
+                  />
+                  Slack webhook alerts
+                </label>
               </div>
+              <p className="mt-2 text-xs text-slate-500">
+                Slack delivery posts to the incoming webhook stored in the <code>SECURITY_ALERT_SLACK_WEBHOOK_URL</code> secret and
+                uses exactly the thresholds above.
+              </p>
               <p className="mt-2 text-xs text-slate-500">
                 Last alert: {settings.last_alert_at ? new Date(settings.last_alert_at).toLocaleString() : "never"}
               </p>
@@ -407,6 +666,8 @@ function VisitorAuditPage() {
                           alert_window_minutes: settings.alert_window_minutes,
                           alert_min_events: settings.alert_min_events,
                           alert_failure_pct: settings.alert_failure_pct,
+                          alert_email_enabled: settings.alert_email_enabled,
+                          alert_slack_enabled: settings.alert_slack_enabled,
                         },
                       });
                       setNotice("Policy saved.");
@@ -446,6 +707,24 @@ function VisitorAuditPage() {
                   }}
                 >
                   <Trash2 className="mr-1 h-3.5 w-3.5" /> Delete older than 7 days
+                </Button>
+                <Button
+                  size="sm" variant="outline" className="border-slate-300"
+                  onClick={async () => {
+                    setNotice(null);
+                    try {
+                      const res = await sendTestAlert({});
+                      setNotice(
+                        `Test alert — email: ${res.email ? "sent" : "off"}, Slack: ${
+                          res.slack ? "sent" : `not sent (${res.slackReason ?? "off"})`
+                        }.`,
+                      );
+                    } catch (e) {
+                      setErr(e instanceof Error ? e.message : "Test alert failed");
+                    }
+                  }}
+                >
+                  <Send className="mr-1 h-3.5 w-3.5" /> Send test alert
                 </Button>
               </div>
             </div>

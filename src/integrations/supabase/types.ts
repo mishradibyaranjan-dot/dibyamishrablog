@@ -815,8 +815,10 @@ export type Database = {
       }
       visitor_audit_settings: {
         Row: {
+          alert_email_enabled: boolean
           alert_failure_pct: number
           alert_min_events: number
+          alert_slack_enabled: boolean
           alert_window_minutes: number
           alerts_enabled: boolean
           id: number
@@ -825,8 +827,10 @@ export type Database = {
           updated_at: string
         }
         Insert: {
+          alert_email_enabled?: boolean
           alert_failure_pct?: number
           alert_min_events?: number
+          alert_slack_enabled?: boolean
           alert_window_minutes?: number
           alerts_enabled?: boolean
           id?: number
@@ -835,8 +839,10 @@ export type Database = {
           updated_at?: string
         }
         Update: {
+          alert_email_enabled?: boolean
           alert_failure_pct?: number
           alert_min_events?: number
+          alert_slack_enabled?: boolean
           alert_window_minutes?: number
           alerts_enabled?: boolean
           id?: number
