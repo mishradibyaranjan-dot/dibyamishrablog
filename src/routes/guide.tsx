@@ -325,9 +325,6 @@ function GuidePage() {
                         <p className="mt-1 text-xs leading-relaxed text-muted-foreground">{c.blurb}</p>
                       </div>
                     </div>
-
-                      </div>
-                    </div>
                   </button>
                 </li>
               );
