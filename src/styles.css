@@ -803,3 +803,15 @@ table th, table td { border-color: var(--color-border); }
 
 
 
+
+/* ============== Solid brand gradient surfaces always carry light ink ==============
+   The gradient is mid-to-dark saturated blue in every theme, so the paired
+   foreground token (dark in the dark themes) would sink into it. */
+.bg-brand-gradient,
+.bg-brand-gradient *,
+[data-state="active"].bg-brand-gradient,
+[data-state="active"].bg-brand-gradient *,
+.data-\[state\=active\]\:bg-brand-gradient[data-state="active"],
+.data-\[state\=active\]\:bg-brand-gradient[data-state="active"] * {
+  color: #ffffff !important;
+}
