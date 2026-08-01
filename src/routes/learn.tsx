@@ -1,5 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { cn } from "@/lib/utils";
+import lessonVideo from "@/assets/video/learn-multi-agent.mp4.asset.json";
+import lessonPoster from "@/assets/video/learn-multi-agent-poster.jpg.asset.json";
 import { motion } from "framer-motion";
 import {
   Brain,
@@ -2212,106 +2215,127 @@ const MAS_TRANSPORT_RADAR = [
   { axis: "QoS control", "ROS 2 / DDS": 10, "MQTT v5": 7, gRPC: 5, REST: 3 },
 ];
 
-const MAS_VIDEOS = [
-  {
-    id: "kopoLzvh5jY",
-    title: "Multi-Agent Hide and Seek",
-    author: "OpenAI",
-    note: "Emergent tool use and counter-strategies from self-play — the classic demonstration of learning agents.",
-  },
-  {
-    id: "qgb0gyrpiGk",
-    title: "Introduction to Multi-Agent Reinforcement Learning",
-    author: "MATLAB",
-    note: "Centralised vs decentralised training, non-stationarity, and reward shaping for MARL.",
-  },
-  {
-    id: "QzHaNSgWdlI",
-    title: "ROS 2 Multi-Robot Simulation: Autonomous Fleet Control",
-    author: "Felipe Alves",
-    note: "Fleet coordination over ROS 2 / DDS — namespacing, topics, and shared world state in simulation.",
-  },
-  {
-    id: "6dCbe4ItxPY",
-    title: "ROS 2 multi-robot: namespacing, teleop, SLAM Toolbox & Nav2",
-    author: "Alysson Ribeiro da Silva",
-    note: "Hands-on walkthrough of the runtime plumbing behind a multi-robot stack.",
-  },
-  {
-    id: "cc8Sd2vVG9M",
-    title: "Multi-Agent Negotiation — Contract Net Protocol explained",
-    author: "Padhai Nest",
-    note: "CFP → propose → accept/reject: the allocation protocol used in the warehouse reference design.",
-  },
-  {
-    id: "tBEOf6xzEeo",
-    title: "3D Swarm in the Real World: Robot Swarms Guided by a UAV",
-    author: "More-Than-One Robotics Laboratory",
-    note: "Local rules, no central planner — swarm behaviour on real hardware.",
-  },
+/** Chapters of the self-hosted Multi-Agent Systems lesson video (seconds). */
+const MAS_LESSON_CHAPTERS = [
+  { id: "mas-foundations", start: 0, title: "Foundations", note: "What an agent is, and what makes a system multi-agent." },
+  { id: "mas-topology", start: 4, title: "Topology", note: "Orchestrator vs peer network — the trade-offs." },
+  { id: "mas-protocol", start: 8, title: "Coordination", note: "Contract Net: CFP → bid → award → execute." },
+  { id: "mas-metrics", start: 12, title: "Metrics", note: "Completion rate, retries, cost per resolved task." },
+  { id: "mas-reference", start: 16, title: "Reference design", note: "The white paper and warehouse case study." },
+  { id: "mas-practice", start: 20, title: "Practice", note: "Apply the pattern to a system you already run." },
 ];
 
-function VideoCard({ id, title, author, note }: { id: string; title: string; author: string; note: string }) {
-  const [playing, setPlaying] = useState(false);
+const MAS_LESSON_ID = "mas-lesson-video";
+
+/** Self-hosted lesson player with chapter seeking. No third-party embeds. */
+function LessonVideo() {
+  const ref = useRef<HTMLVideoElement | null>(null);
+  const [started, setStarted] = useState(false);
+  const [activeId, setActiveId] = useState(MAS_LESSON_CHAPTERS[0]!.id);
   const { progress, toggleVideo } = useLearnProgress();
-  const watched = !!progress.videos[id];
-  const start = () => {
-    setPlaying(true);
-    toggleVideo(id, true);
+  const watched = !!progress.videos[MAS_LESSON_ID];
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const onTime = () => {
+      const c = [...MAS_LESSON_CHAPTERS].reverse().find((x) => el.currentTime + 0.25 >= x.start);
+      if (c) setActiveId((id) => (id === c.id ? id : c.id));
+    };
+    el.addEventListener("timeupdate", onTime);
+    return () => el.removeEventListener("timeupdate", onTime);
+  }, []);
+
+  const seek = (start: number) => {
+    const el = ref.current;
+    if (!el) return;
+    el.currentTime = start;
+    void el.play();
+    setStarted(true);
+    toggleVideo(MAS_LESSON_ID, true);
   };
+
   return (
-    <div className="group overflow-hidden rounded-2xl border border-white/10 bg-white/5 backdrop-blur-xl transition hover:border-neon-cyan/50">
-      <div className="relative aspect-video w-full bg-black/40">
-        {playing ? (
-          <iframe
-            className="absolute inset-0 h-full w-full"
-            src={`https://www.youtube-nocookie.com/embed/${id}?autoplay=1&rel=0`}
-            title={title}
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowFullScreen
-            loading="lazy"
+    <div className="grid gap-5 lg:grid-cols-[1.5fr_1fr]">
+      <div className="group relative overflow-hidden rounded-2xl border border-white/10 bg-black/40 backdrop-blur-xl">
+        <div className="relative aspect-video w-full">
+          <video
+            ref={ref}
+            className="absolute inset-0 h-full w-full bg-white object-cover"
+            src={lessonVideo.url}
+            poster={lessonPoster.url}
+            preload="metadata"
+            playsInline
+            controls={started}
+            onPlay={() => {
+              setStarted(true);
+              toggleVideo(MAS_LESSON_ID, true);
+            }}
           />
-        ) : (
+          {!started && (
+            <button
+              type="button"
+              onClick={() => seek(0)}
+              aria-label="Play the Multi-Agent Systems lesson video"
+              className="absolute inset-0 h-full w-full"
+            >
+              <span className="absolute inset-0 grid place-items-center bg-black/25 transition group-hover:bg-black/10">
+                <PlayCircle className="h-14 w-14 text-white drop-shadow-lg" />
+              </span>
+            </button>
+          )}
+          {watched && (
+            <span className="absolute right-2 top-2 z-10 inline-flex items-center gap-1 rounded-full bg-emerald-600/90 px-2 py-0.5 text-[10px] font-semibold text-white">
+              <CheckCircle2 className="h-3 w-3" /> Watched
+            </span>
+          )}
+        </div>
+        <div className="flex flex-wrap items-center justify-between gap-3 p-4">
+          <div>
+            <div className="text-[11px] font-semibold uppercase tracking-widest text-neon-cyan">
+              Original lesson · self-hosted
+            </div>
+            <h4 className="mt-1 font-display text-sm font-bold text-white sm:text-base">
+              Multi-Agent Systems — animated walkthrough
+            </h4>
+          </div>
           <button
             type="button"
-            onClick={start}
-            aria-label={`Play video: ${title}`}
-            className="absolute inset-0 h-full w-full"
+            onClick={() => toggleVideo(MAS_LESSON_ID)}
+            className="text-xs font-semibold text-neon-cyan underline-offset-2 hover:underline"
           >
-            <img
-              src={`https://i.ytimg.com/vi/${id}/hqdefault.jpg`}
-              alt={title}
-              width={480}
-              height={360}
-              loading="lazy"
-              className="h-full w-full object-cover transition duration-500 group-hover:scale-[1.03]"
-            />
-            <span className="absolute inset-0 grid place-items-center bg-black/25 transition group-hover:bg-black/10">
-              <PlayCircle className="h-14 w-14 text-white drop-shadow-lg" />
-            </span>
+            {watched ? "Mark as unwatched" : "Mark as watched"}
           </button>
-        )}
-        {watched && (
-          <span className="absolute right-2 top-2 z-10 inline-flex items-center gap-1 rounded-full bg-emerald-600/90 px-2 py-0.5 text-[10px] font-semibold text-white">
-            <CheckCircle2 className="h-3 w-3" /> Watched
-          </span>
-        )}
+        </div>
       </div>
-      <div className="p-4">
-        <div className="text-[11px] font-semibold uppercase tracking-widest text-neon-cyan">{author}</div>
-        <h4 className="mt-1 font-display text-sm font-bold text-white sm:text-base">{title}</h4>
-        <p className="mt-1.5 text-sm text-white/70">{note}</p>
-        <button
-          type="button"
-          onClick={() => toggleVideo(id)}
-          className="mt-3 text-xs font-semibold text-neon-cyan underline-offset-2 hover:underline"
-        >
-          {watched ? "Mark as unwatched" : "Mark as watched"}
-        </button>
-      </div>
+
+      <ol className="flex flex-col gap-2">
+        {MAS_LESSON_CHAPTERS.map((c, i) => (
+          <li key={c.id}>
+            <button
+              type="button"
+              onClick={() => seek(c.start)}
+              aria-current={activeId === c.id}
+              className={cn(
+                "w-full rounded-xl border p-3 text-left transition",
+                activeId === c.id
+                  ? "border-neon-cyan/60 bg-white/10"
+                  : "border-white/10 bg-white/[0.04] hover:border-neon-cyan/40 hover:bg-white/[0.07]",
+              )}
+            >
+              <div className="flex items-center gap-2 text-[11px] font-semibold uppercase tracking-widest text-neon-cyan">
+                <span>{String(i + 1).padStart(2, "0")}</span>
+                <span>{c.title}</span>
+              </div>
+              <p className="mt-1 text-xs leading-relaxed text-white/70">{c.note}</p>
+            </button>
+          </li>
+        ))}
+      </ol>
     </div>
   );
 }
+
 
 function ChartCard({ title, subtitle, children }: { title: string; subtitle: string; children: React.ReactNode }) {
   return (
@@ -2602,18 +2626,16 @@ async def allocate(task, agents, bus, deadline=2.0):
       </Reveal>
 
       <Reveal>
-        <SubSection eyebrow="Watch it work" title="Live Video Examples">
+        <SubSection eyebrow="Watch it work" title="Lesson Video — Multi-Agent Systems">
           <p className="mb-5 text-sm text-white/60">
-            Six short walkthroughs covering emergent multi-agent behaviour, MARL fundamentals, ROS 2 fleet plumbing,
-            contract-net negotiation, and real-hardware swarms. Click a thumbnail to play inline.
+            An original, self-hosted animated walkthrough in six chapters: foundations, topology, the Contract Net
+            protocol, the metrics that matter, the reference design, and how to apply it. Pick a chapter to jump
+            straight to it.
           </p>
-          <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
-            {MAS_VIDEOS.map((v) => (
-              <VideoCard key={v.id} {...v} />
-            ))}
-          </div>
+          <LessonVideo />
         </SubSection>
       </Reveal>
+
 
       <Reveal>
         <SubSection eyebrow="Reference design 1" title="Robotic Swarm — Decentralized Hybrid">

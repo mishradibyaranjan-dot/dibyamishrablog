@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import {
   PlayCircle,
@@ -18,6 +18,8 @@ import { Section, SectionHeader } from "@/components/layout/Section";
 import { SITE_ORIGIN } from "@/lib/og-images";
 import { breadcrumbScript } from "@/lib/breadcrumbs";
 import { cn } from "@/lib/utils";
+import tourVideo from "@/assets/video/site-tour.mp4.asset.json";
+import tourPoster from "@/assets/video/site-tour-poster.jpg.asset.json";
 
 const DESC =
   "A guided video walkthrough of this site — where to find research, the Learn modules, projects, case studies, the document repository, and the AI Learning Assistant.";
@@ -47,7 +49,8 @@ export const Route = createFileRoute("/guide")({
 
 type Chapter = {
   id: string;
-  videoId: string;
+  /** start time in the self-hosted tour video, seconds */
+  start: number;
   label: string;
   title: string;
   blurb: string;
@@ -59,7 +62,7 @@ type Chapter = {
 const CHAPTERS: Chapter[] = [
   {
     id: "start",
-    videoId: "kopoLzvh5jY",
+    start: 0,
     label: "01 · Start here",
     title: "What this site is",
     blurb:
@@ -70,7 +73,7 @@ const CHAPTERS: Chapter[] = [
   },
   {
     id: "learn",
-    videoId: "qgb0gyrpiGk",
+    start: 5,
     label: "02 · Learn",
     title: "Structured learning modules",
     blurb:
@@ -81,7 +84,7 @@ const CHAPTERS: Chapter[] = [
   },
   {
     id: "research",
-    videoId: "QzHaNSgWdlI",
+    start: 10,
     label: "03 · Research",
     title: "Essays, notes and white papers",
     blurb:
@@ -92,7 +95,7 @@ const CHAPTERS: Chapter[] = [
   },
   {
     id: "work",
-    videoId: "cc8Sd2vVG9M",
+    start: 15,
     label: "04 · Work",
     title: "Projects and case studies",
     blurb:
@@ -103,7 +106,7 @@ const CHAPTERS: Chapter[] = [
   },
   {
     id: "repository",
-    videoId: "6dCbe4ItxPY",
+    start: 20,
     label: "05 · Repository",
     title: "Documents and downloads",
     blurb:
@@ -114,7 +117,7 @@ const CHAPTERS: Chapter[] = [
   },
   {
     id: "assistant",
-    videoId: "tBEOf6xzEeo",
+    start: 25,
     label: "06 · Assistant",
     title: "Ask the Learning Assistant",
     blurb:
@@ -134,38 +137,43 @@ const QUICK_LINKS = [
   { to: "/newsletter", label: "Newsletter", note: "Monthly research notes", icon: Mail },
 ] as const;
 
-function VideoStage({ chapter }: { chapter: Chapter }) {
-  const [playing, setPlaying] = useState(false);
+function VideoStage({
+  chapter,
+  videoRef,
+  onPlayChapter,
+}: {
+  chapter: Chapter;
+  videoRef: React.RefObject<HTMLVideoElement | null>;
+  onPlayChapter: () => void;
+}) {
+  const [started, setStarted] = useState(false);
+
+  const play = () => {
+    setStarted(true);
+    onPlayChapter();
+  };
 
   return (
     <div className="relative self-start overflow-hidden rounded-3xl border border-blue-200 bg-slate-900 shadow-[0_30px_80px_-40px_rgba(15,23,42,0.55)]">
       <div className="relative aspect-video w-full">
-        {playing ? (
-          <iframe
-            key={chapter.videoId}
-            className="absolute inset-0 h-full w-full"
-            src={`https://www.youtube-nocookie.com/embed/${chapter.videoId}?autoplay=1&rel=0`}
-            title={chapter.title}
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowFullScreen
-            loading="lazy"
-          />
-        ) : (
+        <video
+          ref={videoRef}
+          className="absolute inset-0 h-full w-full bg-white object-cover"
+          src={tourVideo.url}
+          poster={tourPoster.url}
+          preload="metadata"
+          playsInline
+          controls={started}
+          onPlay={() => setStarted(true)}
+        />
+        {!started && (
           <button
             type="button"
-            onClick={() => setPlaying(true)}
-            aria-label={`Play: ${chapter.title}`}
+            onClick={play}
+            aria-label={`Play the site tour: ${chapter.title}`}
             className="group absolute inset-0 h-full w-full"
           >
-            <img
-              src={`https://i.ytimg.com/vi/${chapter.videoId}/hqdefault.jpg`}
-              alt={chapter.title}
-              width={480}
-              height={360}
-              loading="lazy"
-              className="h-full w-full object-cover opacity-90 transition duration-500 group-hover:scale-[1.03] group-hover:opacity-100"
-            />
-            <span className="absolute inset-0 grid place-items-center bg-slate-950/40 transition group-hover:bg-slate-950/20">
+            <span className="absolute inset-0 grid place-items-center bg-slate-950/35 transition group-hover:bg-slate-950/20">
               <motion.span
                 animate={{ scale: [1, 1.08, 1] }}
                 transition={{ duration: 2.2, repeat: Infinity, ease: "easeInOut" }}
@@ -183,6 +191,9 @@ function VideoStage({ chapter }: { chapter: Chapter }) {
             {chapter.label}
           </p>
           <p className="text-sm font-semibold text-white">{chapter.title}</p>
+          <p className="mt-0.5 text-[11px] text-white/60">
+            Self-hosted walkthrough — no third-party video embeds.
+          </p>
         </div>
         <Link
           to={chapter.to}
@@ -201,10 +212,38 @@ function GuidePage() {
   const [seen, setSeen] = useState<Record<string, boolean>>({ [CHAPTERS[0]!.id]: true });
   const active = CHAPTERS.find((c) => c.id === activeId) ?? CHAPTERS[0]!;
   const progress = Math.round((Object.keys(seen).length / CHAPTERS.length) * 100);
+  const videoRef = useRef<HTMLVideoElement | null>(null);
+
+  /** Follow playback: highlight + tick off the chapter currently on screen. */
+  useEffect(() => {
+    const el = videoRef.current;
+    if (!el) return;
+    const onTime = () => {
+      const current = [...CHAPTERS].reverse().find((c) => el.currentTime + 0.25 >= c.start);
+      if (!current) return;
+      setActiveId((id) => (id === current.id ? id : current.id));
+      setSeen((s) => (s[current.id] ? s : { ...s, [current.id]: true }));
+    };
+    el.addEventListener("timeupdate", onTime);
+    return () => el.removeEventListener("timeupdate", onTime);
+  }, []);
+
+  const seek = (c: Chapter) => {
+    const el = videoRef.current;
+    if (!el) return;
+    try {
+      el.currentTime = c.start;
+      void el.play();
+    } catch {
+      // ignore — metadata may not be ready yet
+    }
+  };
 
   const select = (id: string) => {
     setActiveId(id);
     setSeen((s) => ({ ...s, [id]: true }));
+    const c = CHAPTERS.find((x) => x.id === id);
+    if (c) seek(c);
   };
 
   return (
@@ -233,7 +272,12 @@ function GuidePage() {
         </div>
 
         <div className="grid items-start gap-8 lg:grid-cols-[1.4fr_1fr]">
-          <VideoStage chapter={active} />
+          <VideoStage
+            chapter={active}
+            videoRef={videoRef}
+            onPlayChapter={() => seek(active)}
+          />
+
 
           <ol className="flex flex-col gap-3">
             {CHAPTERS.map((c) => {
