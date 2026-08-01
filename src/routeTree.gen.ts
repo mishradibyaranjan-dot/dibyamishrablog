@@ -42,6 +42,7 @@ import { Route as ApiPublicNewsletterRouteImport } from './routes/api/public/new
 import { Route as ApiPublicContactRouteImport } from './routes/api/public/contact'
 import { Route as ApiPublicChatRouteImport } from './routes/api/public/chat'
 import { Route as ApiDownloadPdfRouteImport } from './routes/api/download.pdf'
+import { Route as AuthenticatedAdminVisitorAuditRouteImport } from './routes/_authenticated/admin/visitor-audit'
 import { Route as AuthenticatedAdminSpamAuditRouteImport } from './routes/_authenticated/admin/spam-audit'
 import { Route as AuthenticatedAdminSecurityEventsRouteImport } from './routes/_authenticated/admin/security-events'
 import { Route as AuthenticatedAdminBlockedDomainsRouteImport } from './routes/_authenticated/admin/blocked-domains'
@@ -222,6 +223,12 @@ const ApiDownloadPdfRoute = ApiDownloadPdfRouteImport.update({
   path: '/api/download/pdf',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedAdminVisitorAuditRoute =
+  AuthenticatedAdminVisitorAuditRouteImport.update({
+    id: '/admin/visitor-audit',
+    path: '/admin/visitor-audit',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedAdminSpamAuditRoute =
   AuthenticatedAdminSpamAuditRouteImport.update({
     id: '/admin/spam-audit',
@@ -323,6 +330,7 @@ export interface FileRoutesByFullPath {
   '/admin/blocked-domains': typeof AuthenticatedAdminBlockedDomainsRoute
   '/admin/security-events': typeof AuthenticatedAdminSecurityEventsRoute
   '/admin/spam-audit': typeof AuthenticatedAdminSpamAuditRoute
+  '/admin/visitor-audit': typeof AuthenticatedAdminVisitorAuditRoute
   '/api/download/pdf': typeof ApiDownloadPdfRoute
   '/api/public/chat': typeof ApiPublicChatRoute
   '/api/public/contact': typeof ApiPublicContactRoute
@@ -369,6 +377,7 @@ export interface FileRoutesByTo {
   '/admin/blocked-domains': typeof AuthenticatedAdminBlockedDomainsRoute
   '/admin/security-events': typeof AuthenticatedAdminSecurityEventsRoute
   '/admin/spam-audit': typeof AuthenticatedAdminSpamAuditRoute
+  '/admin/visitor-audit': typeof AuthenticatedAdminVisitorAuditRoute
   '/api/download/pdf': typeof ApiDownloadPdfRoute
   '/api/public/chat': typeof ApiPublicChatRoute
   '/api/public/contact': typeof ApiPublicContactRoute
@@ -417,6 +426,7 @@ export interface FileRoutesById {
   '/_authenticated/admin/blocked-domains': typeof AuthenticatedAdminBlockedDomainsRoute
   '/_authenticated/admin/security-events': typeof AuthenticatedAdminSecurityEventsRoute
   '/_authenticated/admin/spam-audit': typeof AuthenticatedAdminSpamAuditRoute
+  '/_authenticated/admin/visitor-audit': typeof AuthenticatedAdminVisitorAuditRoute
   '/api/download/pdf': typeof ApiDownloadPdfRoute
   '/api/public/chat': typeof ApiPublicChatRoute
   '/api/public/contact': typeof ApiPublicContactRoute
@@ -465,6 +475,7 @@ export interface FileRouteTypes {
     | '/admin/blocked-domains'
     | '/admin/security-events'
     | '/admin/spam-audit'
+    | '/admin/visitor-audit'
     | '/api/download/pdf'
     | '/api/public/chat'
     | '/api/public/contact'
@@ -511,6 +522,7 @@ export interface FileRouteTypes {
     | '/admin/blocked-domains'
     | '/admin/security-events'
     | '/admin/spam-audit'
+    | '/admin/visitor-audit'
     | '/api/download/pdf'
     | '/api/public/chat'
     | '/api/public/contact'
@@ -558,6 +570,7 @@ export interface FileRouteTypes {
     | '/_authenticated/admin/blocked-domains'
     | '/_authenticated/admin/security-events'
     | '/_authenticated/admin/spam-audit'
+    | '/_authenticated/admin/visitor-audit'
     | '/api/download/pdf'
     | '/api/public/chat'
     | '/api/public/contact'
@@ -849,6 +862,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiDownloadPdfRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated/admin/visitor-audit': {
+      id: '/_authenticated/admin/visitor-audit'
+      path: '/admin/visitor-audit'
+      fullPath: '/admin/visitor-audit'
+      preLoaderRoute: typeof AuthenticatedAdminVisitorAuditRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/admin/spam-audit': {
       id: '/_authenticated/admin/spam-audit'
       path: '/admin/spam-audit'
@@ -942,6 +962,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedAdminBlockedDomainsRoute: typeof AuthenticatedAdminBlockedDomainsRoute
   AuthenticatedAdminSecurityEventsRoute: typeof AuthenticatedAdminSecurityEventsRoute
   AuthenticatedAdminSpamAuditRoute: typeof AuthenticatedAdminSpamAuditRoute
+  AuthenticatedAdminVisitorAuditRoute: typeof AuthenticatedAdminVisitorAuditRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
@@ -950,6 +971,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedAdminBlockedDomainsRoute: AuthenticatedAdminBlockedDomainsRoute,
   AuthenticatedAdminSecurityEventsRoute: AuthenticatedAdminSecurityEventsRoute,
   AuthenticatedAdminSpamAuditRoute: AuthenticatedAdminSpamAuditRoute,
+  AuthenticatedAdminVisitorAuditRoute: AuthenticatedAdminVisitorAuditRoute,
 }
 
 const AuthenticatedRouteRouteWithChildren =

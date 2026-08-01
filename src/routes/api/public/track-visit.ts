@@ -34,11 +34,54 @@ const CORS = {
   "Access-Control-Allow-Methods": "POST, OPTIONS",
 };
 
+type AuditRow = {
+  outcome: "accepted" | "rejected" | "error";
+  reason?: string | null;
+  visitor_id?: string | null;
+  session_id?: string | null;
+  user_id?: string | null;
+  identified?: boolean;
+  path?: string | null;
+  ip_hash?: string | null;
+  country?: string | null;
+  user_agent?: string | null;
+  duration_ms?: number | null;
+  error_message?: string | null;
+  metadata?: Record<string, unknown>;
+};
+
+// Audit logging must never break tracking: failures are swallowed and logged.
+async function writeAudit(row: AuditRow) {
+  try {
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const { error } = await supabaseAdmin.from("visitor_tracking_audit").insert({
+      outcome: row.outcome,
+      reason: row.reason ?? null,
+      visitor_id: row.visitor_id ?? null,
+      session_id: row.session_id ?? null,
+      user_id: row.user_id ?? null,
+      identified: row.identified ?? false,
+      path: row.path ?? null,
+      ip_hash: row.ip_hash ?? null,
+      country: row.country ?? null,
+      user_agent: (row.user_agent ?? "").slice(0, 500) || null,
+      duration_ms: row.duration_ms ?? null,
+      error_message: row.error_message ? String(row.error_message).slice(0, 1000) : null,
+      metadata: (row.metadata ?? {}) as never,
+    });
+    if (error) console.error("[track-visit:audit]", error.message);
+  } catch (e) {
+    console.error("[track-visit:audit]", e);
+  }
+}
+
 export const Route = createFileRoute("/api/public/track-visit")({
   server: {
     handlers: {
       OPTIONS: async () => new Response(null, { status: 204, headers: CORS }),
       POST: async ({ request }) => {
+        const startedAt = Date.now();
+        const audit: AuditRow = { outcome: "error" };
         try {
           const body = (await request.json().catch(() => ({}))) as Record<string, unknown>;
           const h = request.headers;
@@ -53,9 +96,18 @@ export const Route = createFileRoute("/api/public/track-visit")({
           const ua = (body.userAgent as string) || h.get("user-agent") || "";
           const parsed = parseUA(ua);
           const ipHash = ip ? await sha256Hex(ip + "|v1") : null;
+          audit.ip_hash = ipHash;
+          audit.country = country;
+          audit.user_agent = ua;
+          audit.path = (body.path as string) ?? null;
+          audit.session_id = (body.sessionId as string) ?? null;
 
           const visitorId = String(body.visitorId || "").slice(0, 128);
-          if (!visitorId) return new Response(JSON.stringify({ ok: false, error: "missing visitorId" }), { status: 400, headers: { "Content-Type": "application/json", ...CORS } });
+          audit.visitor_id = visitorId || null;
+          if (!visitorId) {
+            await writeAudit({ ...audit, outcome: "rejected", reason: "missing_visitor_id", duration_ms: Date.now() - startedAt });
+            return new Response(JSON.stringify({ ok: false, error: "missing visitorId" }), { status: 400, headers: { "Content-Type": "application/json", ...CORS } });
+          }
 
           const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
 
@@ -71,7 +123,14 @@ export const Route = createFileRoute("/api/public/track-visit")({
             const { data: userData, error: userErr } = await supabaseAdmin.auth.getUser(bearer);
             if (!userErr && userData?.user?.id) {
               verifiedUserId = userData.user.id;
+            } else if (userErr) {
+              audit.metadata = { ...(audit.metadata ?? {}), bearer_rejected: true };
             }
+          }
+          audit.user_id = verifiedUserId;
+          audit.identified = Boolean(verifiedUserId);
+          if (body.userId && body.userId !== verifiedUserId) {
+            audit.metadata = { ...(audit.metadata ?? {}), client_user_id_ignored: true };
           }
 
           const row = {
@@ -99,7 +158,20 @@ export const Route = createFileRoute("/api/public/track-visit")({
             utm_content: (body.utm_content as string) ?? null,
           };
 
-          await supabaseAdmin.from("visitor_logs").insert(row);
+          const { error: logErr } = await supabaseAdmin.from("visitor_logs").insert(row);
+          if (logErr) {
+            await writeAudit({
+              ...audit,
+              outcome: "error",
+              reason: "visitor_logs_insert_failed",
+              error_message: logErr.message,
+              duration_ms: Date.now() - startedAt,
+            });
+            return new Response(JSON.stringify({ ok: false }), {
+              status: 200,
+              headers: { "Content-Type": "application/json", ...CORS },
+            });
+          }
 
           // Upsert aggregated visitor
           const { data: existing } = await supabaseAdmin
@@ -168,12 +240,26 @@ export const Route = createFileRoute("/api/public/track-visit")({
               .eq("visitor_id", visitorId);
           }
 
+          await writeAudit({
+            ...audit,
+            outcome: "accepted",
+            reason: existing ? "visitor_updated" : "visitor_created",
+            duration_ms: Date.now() - startedAt,
+          });
+
           return new Response(JSON.stringify({ ok: true }), {
             status: 200,
             headers: { "Content-Type": "application/json", ...CORS },
           });
         } catch (err) {
           console.error("[track-visit]", err);
+          await writeAudit({
+            ...audit,
+            outcome: "error",
+            reason: "unhandled_exception",
+            error_message: err instanceof Error ? err.message : String(err),
+            duration_ms: Date.now() - startedAt,
+          });
           return new Response(JSON.stringify({ ok: false }), {
             status: 200,
             headers: { "Content-Type": "application/json", ...CORS },

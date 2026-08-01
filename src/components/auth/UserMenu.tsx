@@ -61,6 +61,11 @@ export function UserMenu() {
             <Link to="/admin/security-events"><ShieldAlert className="mr-2 h-4 w-4" /> Security events</Link>
           </DropdownMenuItem>
         )}
+        {isAdmin && (
+          <DropdownMenuItem asChild>
+            <Link to="/admin/visitor-audit"><ScrollText className="mr-2 h-4 w-4" /> Visitor tracking audit</Link>
+          </DropdownMenuItem>
+        )}
         <DropdownMenuSeparator />
         <DropdownMenuItem
           onClick={async () => {
