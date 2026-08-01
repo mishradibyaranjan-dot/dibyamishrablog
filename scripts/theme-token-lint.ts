@@ -7,7 +7,7 @@
  * tokens documented in docs/theme-tokens.md. Hardcoded colors ignore the active
  * theme and are the usual cause of invisible text on light palettes.
  *
- * Usage: node scripts/theme-token-lint.mjs [--all]
+ * Usage: bun scripts/theme-token-lint.ts [--all]
  *   (default) lint GUARDED paths only — used by CI and pre-publish
  *   --all     report legacy colors across src/ (informational, never fails)
  */

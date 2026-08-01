@@ -12,6 +12,8 @@
     "test": "vitest run",
     "format": "prettier --write .",
     "security:scan": "node scripts/security-scan.mjs",
+    "theme:lint": "bun scripts/theme-token-lint.ts",
+    "theme:lint:report": "bun scripts/theme-token-lint.ts --all",
     "security:visitor-tracking": "node scripts/visitor-tracking-guard.mjs"
   },
   "dependencies": {
