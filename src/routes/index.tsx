@@ -374,8 +374,8 @@ function NewsletterTile({ latest }: { latest: LatestIssue | null }) {
           <img
             src={cardNewsletter}
             alt="A human hand and a robot hand collaborating on a newsletter document"
-            loading="eager"
-            fetchPriority="high"
+            loading="lazy"
+
             decoding="async"
             width={1280}
             height={960}
