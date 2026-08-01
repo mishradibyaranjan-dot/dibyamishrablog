@@ -2775,3 +2775,334 @@ async def allocate(task, agents, bus, deadline=2.0):
     </div>
   );
 }
+
+/* ------------------------------------------------------------------ *
+ * Vector Search — Beginner to Production
+ * ------------------------------------------------------------------ */
+
+/** Illustrative recall / latency profile of the main ANN index families. */
+const VECTOR_INDEX_SCORES = [
+  { index: "Flat", recall: 100, speed: 18, memory: 40 },
+  { index: "IVF", recall: 94, speed: 72, memory: 45 },
+  { index: "HNSW", recall: 97, speed: 90, memory: 88 },
+  { index: "PQ", recall: 82, speed: 80, memory: 14 },
+  { index: "IVF-PQ", recall: 86, speed: 93, memory: 18 },
+];
+
+const VECTOR_TRADEOFF_RADAR = [
+  { axis: "Recall", HNSW: 96, "IVF-PQ": 85, Flat: 100 },
+  { axis: "QPS", HNSW: 90, "IVF-PQ": 93, Flat: 20 },
+  { axis: "Memory thrift", HNSW: 35, "IVF-PQ": 92, Flat: 55 },
+  { axis: "Build speed", HNSW: 45, "IVF-PQ": 60, Flat: 100 },
+  { axis: "Update friendliness", HNSW: 75, "IVF-PQ": 50, Flat: 95 },
+];
+
+const VECTOR_LESSON_ID = "vector-lesson-video";
+
+const VECTOR_LESSON_CHAPTERS = [
+  { id: "vec-foundations", start: 0, title: "Foundations", note: "Embeddings, and why nearby vectors mean related meaning." },
+  { id: "vec-metrics", start: 4, title: "Similarity", note: "Cosine, dot product, L2 — and why normalisation matters." },
+  { id: "vec-indexes", start: 8, title: "ANN indexes", note: "Flat, IVF, HNSW and product quantisation." },
+  { id: "vec-eval", start: 12, title: "Evaluation", note: "recall@k against an exact baseline, plus p95 latency." },
+  { id: "vec-production", start: 16, title: "Production", note: "Hybrid retrieval, filter-aware search and reranking." },
+  { id: "vec-practice", start: 20, title: "Practice", note: "Build the smallest working version, then measure it." },
+];
+
+/** Query → embedding → candidate retrieval → rerank pipeline. */
+function VectorPipelineDiagram() {
+  return (
+    <Diagram>
+      <div className="flex flex-col gap-2">
+        <DiagramRow label="User query — “I cannot log in after forgetting my credentials”" tint="from-cyan-500/20 to-cyan-500/5" />
+        <DiagramArrow />
+        <DiagramRow label="Preprocess + embed with the SAME model / revision / dimension" tint="from-blue-500/20 to-blue-500/5" />
+        <DiagramArrow />
+        <DiagramRow label="ANN search (HNSW / IVF) + lexical BM25 — retrieve a larger pool" tint="from-indigo-500/20 to-indigo-500/5" />
+        <DiagramArrow />
+        <DiagramRow label="Filter by tenant / ACL BEFORE ranking, then fuse candidates" tint="from-violet-500/20 to-violet-500/5" />
+        <DiagramArrow />
+        <DiagramRow label="Cross-encoder rerank → top-k with citations and source revision" tint="from-fuchsia-500/20 to-fuchsia-500/5" />
+      </div>
+    </Diagram>
+  );
+}
+
+function IntroVector() {
+  return (
+    <div className="space-y-12">
+      <TabHeroImage
+        src={heroVector}
+        alt="Engineer and robot inspecting a holographic embedding space of clustered vectors"
+        caption="Vector search — retrieval by meaning, engineered for recall, latency and cost."
+      />
+
+      <Reveal>
+        <QuickSummary
+          items={[
+            "An embedding maps text, images or events to a fixed-length vector; similarity ranks by cosine, dot product or Euclidean distance — meaning, not lexical overlap.",
+            "Query and index vectors must share one model, revision, dimensionality and preprocessing. Vectors from different models cannot be compared.",
+            "Normalise to unit length and inner-product search ranks identically to cosine: ‖x − y‖² = 2 − 2(x·y).",
+            "Always keep an exact Flat baseline. ANN (IVF, HNSW, PQ, IVF-PQ) buys speed and memory by trading recall — you can only see the trade if you measure against exact.",
+            "Recall@k is not relevance. Track nDCG@k / MRR, p50/p95/p99 latency, throughput, freshness, index bytes and cost per successful query.",
+            "Production retrieval is hybrid: dense + BM25 for identifiers and error codes, ACL-aware filtering before ranking, then cross-encoder reranking.",
+            "A library (FAISS, Annoy, HNSWlib) is enough when one process owns the index; move to Milvus / Weaviate / Pinecone / Vespa for durability, filtering, tenancy and replication.",
+          ]}
+        />
+      </Reveal>
+
+      <Reveal>
+        <HeroCard
+          icon={<Search className="h-6 w-6" />}
+          title="Vector Search — A Beginner-to-Production Learning Report"
+          tag="Embeddings · ANN · Hybrid retrieval · Evaluation"
+          body="Vector search retrieves items whose learned numerical representations are close in meaning rather than items that repeat the same words. This module walks the full engineering path — embedding fundamentals and similarity metrics, exact versus approximate indexes, the FAISS / Annoy / HNSWlib / Milvus progression, hybrid retrieval and reranking, evaluation harnesses, capacity and cost maths, security and monitoring — and closes with the common pitfalls that quietly destroy retrieval quality."
+        />
+      </Reveal>
+
+      <Reveal>
+        <SubSection eyebrow="Foundations" title="What an Embedding Actually Is">
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            <ConceptCard icon={<Boxes />} title="A vector in Rᵈ" desc="x = [0.12, −0.48, 0.31, …, 0.07]. Individual coordinates carry no human-readable meaning; meaning is distributed across the whole vector." />
+            <ConceptCard icon={<Share2 />} title="Relational, not absolute" desc="The useful property is relative position: inputs the model judges similar land near one another, so retrieval becomes a geometry problem." />
+            <ConceptCard icon={<Layers />} title="One shared space" desc="Stored and query vectors must come from the same model, revision, dimensionality and preprocessing — including any task prefixes the model requires." />
+            <ConceptCard icon={<Gauge />} title="Dimensionality is a dial" desc="text-embedding-3-small and -large default to 1,536 and 3,072 dims; output width can be shortened via the API's dimensions parameter to cut cost." />
+            <ConceptCard icon={<Search />} title="Top-k retrieval" desc="TopK(q) = argmax similarity(q, xᵢ) — or argmin distance(q, xᵢ) when the metric is a distance rather than a similarity." />
+            <ConceptCard icon={<AlertTriangle />} title="Not a keyword killer" desc="Lexical search still wins on identifiers, error codes, rare names and quoted phrases. Production systems combine both." />
+          </div>
+
+          <div className="mt-6">
+            <Table
+              headers={["Measure", "Interpretation", "Practical notes"]}
+              rows={[
+                ["Cosine similarity", "Angle / orientation between vectors", "Default for semantic text search; magnitude-insensitive"],
+                ["Dot product", "Alignment plus magnitude", "Ranks identically to cosine once vectors are unit-normalised"],
+                ["Euclidean (L2) distance", "Straight-line distance", "Smaller is better; for unit vectors ‖x−y‖² = 2 − 2(x·y)"],
+              ]}
+            />
+          </div>
+        </SubSection>
+      </Reveal>
+
+      <Reveal>
+        <SubSection eyebrow="Indexes" title="Exact, Clustered, Graph, Compressed">
+          <Table
+            headers={["Technique", "Core idea", "Main advantage", "Main cost"]}
+            rows={[
+              ["Flat / brute force", "Compare the query with every stored vector", "Exact ground truth; simplest to reason about", "Latency grows linearly with collection size"],
+              ["IVF", "Search a subset of learned vector clusters", "Controllable speed–recall trade-off via nprobe", "Requires training and tuning"],
+              ["HNSW", "Navigate a multilayer proximity graph", "Strong low-latency recall in memory", "Graph memory and build cost"],
+              ["PQ", "Store compact quantised vector codes", "Large memory reduction", "Quantisation error reduces recall"],
+              ["IVF-PQ", "Select clusters, then search compressed codes", "Works at very large scale", "More tuning; potentially larger quality loss"],
+            ]}
+          />
+
+          <div className="mt-6 grid gap-6 lg:grid-cols-2">
+            <ChartCard title="Recall, speed and memory by index family" subtitle="Illustrative profile — always re-measure on your own corpus.">
+              <ResponsiveContainer width="100%" height="100%">
+                <BarChart data={VECTOR_INDEX_SCORES} margin={{ top: 8, right: 8, left: -16, bottom: 8 }}>
+                  <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.08)" />
+                  <XAxis dataKey="index" stroke="rgba(255,255,255,0.5)" fontSize={12} />
+                  <YAxis stroke="rgba(255,255,255,0.5)" fontSize={12} />
+                  <RTooltip contentStyle={{ background: "#0b1220", border: "1px solid rgba(255,255,255,0.12)", borderRadius: 12, color: "#fff" }} />
+                  <Legend wrapperStyle={{ fontSize: 12 }} />
+                  <Bar dataKey="recall" name="Recall" fill="#22d3ee" radius={[6, 6, 0, 0]} />
+                  <Bar dataKey="speed" name="Queries/sec" fill="#2563eb" radius={[6, 6, 0, 0]} />
+                  <Bar dataKey="memory" name="Memory use" fill="#a855f7" radius={[6, 6, 0, 0]} />
+                </BarChart>
+              </ResponsiveContainer>
+            </ChartCard>
+
+            <ChartCard title="Where each index gives ground" subtitle="Nothing dominates — the shape of the compromise is the decision.">
+              <ResponsiveContainer width="100%" height="100%">
+                <RadarChart data={VECTOR_TRADEOFF_RADAR} outerRadius="72%">
+                  <PolarGrid stroke="rgba(255,255,255,0.12)" />
+                  <PolarAngleAxis dataKey="axis" stroke="rgba(255,255,255,0.6)" fontSize={11} />
+                  <PolarRadiusAxis stroke="rgba(255,255,255,0.25)" fontSize={10} />
+                  <Radar name="HNSW" dataKey="HNSW" stroke="#22d3ee" fill="#22d3ee" fillOpacity={0.28} />
+                  <Radar name="IVF-PQ" dataKey="IVF-PQ" stroke="#a855f7" fill="#a855f7" fillOpacity={0.22} />
+                  <Radar name="Flat" dataKey="Flat" stroke="#2563eb" fill="#2563eb" fillOpacity={0.16} />
+                  <Legend wrapperStyle={{ fontSize: 12 }} />
+                </RadarChart>
+              </ResponsiveContainer>
+            </ChartCard>
+          </div>
+        </SubSection>
+      </Reveal>
+
+      <Reveal>
+        <SubSection eyebrow="Watch it work" title="Lesson Video — Vector Search">
+          <LessonPlayer
+            videoId={VECTOR_LESSON_ID}
+            src={vectorVideo.url}
+            poster={vectorPoster.url}
+            title="Vector Search — animated walkthrough with narration"
+            chapters={VECTOR_LESSON_CHAPTERS}
+          />
+        </SubSection>
+      </Reveal>
+
+      <Reveal>
+        <SubSection eyebrow="Pipeline" title="A Production Retrieval Path">
+          <VectorPipelineDiagram />
+          <div className="mt-6 grid gap-4 sm:grid-cols-2">
+            <FeatureCard icon={<Network className="h-5 w-5" />} title="Hybrid retrieval" body="Fuse dense ANN results with BM25 so hostnames, stack traces, policy numbers and product codes stay findable." />
+            <FeatureCard icon={<ShieldCheck className="h-5 w-5" />} title="Filter-aware search" body="Apply tenant and ACL constraints inside retrieval, not in the UI — and never after a tiny top-k, or authorised matches never enter the pool." />
+            <FeatureCard icon={<Activity className="h-5 w-5" />} title="Reranking" body="A cross-encoder over 50–200 candidates lifts precision where many pages are broadly related but only one answers the question." />
+            <FeatureCard icon={<Timer className="h-5 w-5" />} title="Freshness" body="Measure the time between a source change and search visibility; rebuild beside the live index, validate, then switch reads atomically." />
+          </div>
+        </SubSection>
+      </Reveal>
+
+      <Reveal>
+        <SubSection eyebrow="Progression" title="The Beginner Path That Actually Works">
+          <Timeline
+            items={[
+              { year: "01", title: "Vector fundamentals", desc: "Normalisation, cosine, dot product, Euclidean distance — hand-rank five vectors in NumPy until the maths is boring." },
+              { year: "02", title: "Embeddings", desc: "Encode a small corpus with a local Sentence Transformers model. Inspect dimensions, batching and model compatibility." },
+              { year: "03", title: "Exact retrieval", desc: "Build a FAISS IndexFlatIP baseline over normalised vectors. This is your ground truth forever." },
+              { year: "04", title: "ANN indexes", desc: "Swap in HNSW and IVF, tune ef / nprobe, and run a recall-versus-latency experiment against the exact index." },
+              { year: "05", title: "Compression", desc: "Add PQ and IVF-PQ; plot memory against recall to find the cheapest acceptable configuration." },
+              { year: "06", title: "Retrieval quality", desc: "Build a judged evaluation set. Track recall@k, MRR and nDCG@k in a reproducible harness (BEIR/MTEB style)." },
+              { year: "07", title: "Advanced retrieval", desc: "Layer hybrid lexical retrieval and cross-encoder reranking, and measure reranker lift." },
+              { year: "08", title: "Production systems", desc: "Only now adopt a vector database: persistence, concurrent updates, filtering, tenancy, replication, SLOs and backups." },
+            ]}
+          />
+        </SubSection>
+      </Reveal>
+
+      <Reveal>
+        <SubSection eyebrow="Code" title="Exact Baseline, Then HNSW">
+          <div className="grid gap-4">
+            <Code
+              language="python"
+              code={`from sentence_transformers import SentenceTransformer
+import numpy as np, faiss
+
+model = SentenceTransformer("all-MiniLM-L6-v2")   # 384 dims
+texts = ["Reset a password", "Configure the VPN", "Recover MFA access"]
+
+vectors = model.encode(
+    texts,
+    convert_to_numpy=True,
+    normalize_embeddings=True,     # unit length -> inner product == cosine
+).astype("float32")
+
+dimension = vectors.shape[1]
+
+# 1) Exact baseline: ground truth for every later experiment
+exact = faiss.IndexFlatIP(dimension)
+exact.add(vectors)
+
+query = model.encode(
+    ["I forgot my password and cannot sign in"],
+    convert_to_numpy=True, normalize_embeddings=True,
+).astype("float32")
+
+scores, ids = exact.search(query, 3)
+print(scores, ids)`}
+            />
+            <Code
+              language="python"
+              code={`# 2) Approximate: HNSW graph index, then measure what you gave up
+hnsw = faiss.IndexHNSWFlat(dimension, 32)     # M = 32 neighbours per node
+hnsw.hnsw.efConstruction = 200
+hnsw.add(vectors)
+hnsw.hnsw.efSearch = 64                       # the recall/latency dial
+
+_, exact_ids = exact.search(query, k := 3)
+_, ann_ids = hnsw.search(query, k)
+
+def recall_at_k(truth, predicted, k):
+    return float(np.mean([
+        len(set(t[:k]) & set(p[:k])) / k
+        for t, p in zip(truth, predicted)
+    ]))
+
+print("recall@k:", recall_at_k(exact_ids, ann_ids, k))`}
+            />
+          </div>
+        </SubSection>
+      </Reveal>
+
+      <Reveal>
+        <SubSection eyebrow="Selection" title="Library or Database?">
+          <Table
+            headers={["System", "What it is", "Best fit", "Watch out for"]}
+            rows={[
+              ["FAISS", "Library with exact, IVF, HNSW, PQ, CPU and GPU indexes", "Research, batch pipelines, one process owning the index", "Not a database — no persistence layer, API, auth or filtering"],
+              ["Annoy", "Memory-mapped tree index", "Static, read-heavy indexes shared across processes", "Rebuild to update; no incremental writes"],
+              ["HNSWlib", "Compact mutable HNSW implementation", "Low-latency in-memory search with incremental adds", "Manual capacity, persistence and ef tuning"],
+              ["Milvus", "Open-source vector database (Milvus Lite locally)", "Persistence + metadata filtering with a path to a cluster", "Operational surface grows with distributed mode"],
+              ["Weaviate", "Vector database with modules and hybrid search", "Hybrid retrieval, schema and multi-tenancy out of the box", "HNSW memory and compression become capacity planning"],
+              ["Pinecone", "Managed vector service", "Teams that want no index operations at all", "Metered reads/writes/storage/egress; less low-level control"],
+              ["Vespa", "Search, ranking and serving platform", "Complex ranking, structured filters and recommendations together", "Steeper learning curve; a platform, not a component"],
+            ]}
+          />
+          <p className="mt-4 text-sm leading-relaxed text-white/70">
+            A library is often enough when one process owns the index and metadata lives elsewhere. A database earns its keep once
+            you need durable concurrent writes, filtering, backups, multi-tenancy, replication, access control and operational APIs.
+            Never choose from a generic latency claim — benchmark with your own vectors, dimensions, metric, top-k, filter
+            selectivity, concurrency, insert rate, cache state and total monthly cost.
+          </p>
+        </SubSection>
+      </Reveal>
+
+      <Reveal>
+        <SubSection eyebrow="Operate" title="Capacity, Monitoring, Security & Cost">
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            <ConceptCard icon={<Database />} title="Capacity maths" desc="bytes ≈ N × d × b. One million 768-dim float32 vectors ≈ 3.07 GB before graph links, centroids, PQ tables, metadata, replicas, WAL and rebuild headroom." />
+            <ConceptCard icon={<LineChart />} title="Latency as a distribution" desc="p50 is the median experience; p95/p99 expose cache misses, shard fan-out, filtering and contention. Quote throughput at a stated concurrency." />
+            <ConceptCard icon={<Lock />} title="Authorise in retrieval" desc="Store tenant and ACL fields as filterable metadata and test that no alternate query path bypasses them. Treat vectors as sensitive as their sources." />
+            <ConceptCard icon={<ServerCog />} title="Ingestion" desc="Keep embedding asynchronous, batch aggressively, apply backpressure through a queue, and alarm on queue age and insertion lag." />
+            <ConceptCard icon={<DollarSign />} title="Cost drivers" desc="Embedding generation, dimensionality, vector count, index overhead, replication, reranking and idle provisioned capacity — plus cost per successful query." />
+            <ConceptCard icon={<GitBranch />} title="Model migrations" desc="Changing model or dimensions means a full rebuild. Build beside the old index, validate offline relevance, then switch reads atomically." />
+          </div>
+
+          <div className="mt-6">
+            <Table
+              headers={["Dashboard area", "Signals worth alerting on"]}
+              rows={[
+                ["User-facing performance", "p50 / p95 / p99 end-to-end latency, timeout and error rate"],
+                ["Vector search", "Search latency, candidate count, filtered-candidate count, shard fan-out"],
+                ["Capacity", "Vector count, dimensions, index bytes, memory, disk, cache hit behaviour"],
+                ["Ingestion", "Queue age, embedding throughput, insertion lag, rejected writes"],
+                ["Quality", "recall@k, nDCG@k, MRR, zero-result rate, reranker lift"],
+                ["Availability", "Replica and shard health, backup age, restore-test status"],
+                ["Cost", "Embedding cost, service usage, egress, cost per successful query"],
+              ]}
+            />
+          </div>
+        </SubSection>
+      </Reveal>
+
+      <Reveal>
+        <SubSection eyebrow="Pitfalls" title="Eight Ways Retrieval Quietly Breaks">
+          <Table
+            headers={["Pitfall", "Why it fails", "Better practice"]}
+            rows={[
+              ["Mixing embedding models", "Coordinates belong to incompatible spaces", "Store model name, revision, dimensions and preprocessing with the index"],
+              ["Wrong metric or no normalisation", "Dot product, cosine and L2 stop ranking as intended", "Normalise explicitly and verify against a hand-calculated test"],
+              ["Treating ANN recall as relevance", "ANN can reproduce a poor exact ranking perfectly", "Evaluate with human or behavioural relevance judgements"],
+              ["Fixed-size character chunks", "Breaks procedures, tables, code and semantic units", "Structure-aware segmentation with modest overlap"],
+              ["Oversized chunks", "Several topics collapse into one ambiguous vector", "Index smaller coherent sections and keep document hierarchy"],
+              ["Too-small chunks", "The context needed to answer is lost", "Include titles, section paths and neighbouring context"],
+              ["No exact baseline", "Approximation error cannot be separated from model error", "Keep a Flat index over an evaluation sample"],
+              ["Filtering after a tiny ANN search", "Authorised relevant candidates never enter the pool", "Use filter-aware search or retrieve a much larger pool"],
+            ]}
+          />
+        </SubSection>
+      </Reveal>
+
+      <Reveal>
+        <SubSection eyebrow="Go deeper" title="Where to Read Next">
+          <div className="grid gap-4 sm:grid-cols-2">
+            <FeatureCard icon={<BookOpen className="h-5 w-5" />} title="Start here" body="OpenAI embeddings guide plus the Sentence Transformers semantic-search docs — hosted and local embeddings, similarity functions, bi-encoders and rerankers." />
+            <FeatureCard icon={<Wrench className="h-5 w-5" />} title="Core implementation" body="FAISS README, wiki and index-selection guidance; Annoy and HNSWlib repositories for the tree-versus-graph design trade-off." />
+            <FeatureCard icon={<Rocket className="h-5 w-5" />} title="Database progression" body="Milvus Lite quickstart first — the same API later points at a server — then contrast Pinecone, Weaviate and Vespa." />
+            <FeatureCard icon={<Gauge className="h-5 w-5" />} title="Benchmarks & papers" body="ANN-Benchmarks for recall-versus-QPS, BEIR and MTEB for retrieval quality; PQ, HNSW and billion-scale GPU search for the foundations." />
+          </div>
+        </SubSection>
+      </Reveal>
+    </div>
+  );
+}
