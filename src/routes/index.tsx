@@ -52,7 +52,15 @@ export const Route = createFileRoute("/")({
           "https://storage.googleapis.com/gpt-engineer-file-uploads/attachments/og-images/62feb90f-3c19-4765-9fa6-9b7f7701a7c6",
       },
     ],
-    links: [{ rel: "canonical", href: "https://www.dibyamishra.co.in/" }],
+    links: [
+      { rel: "canonical", href: "https://www.dibyamishra.co.in/" },
+      {
+        rel: "preload",
+        as: "image",
+        href: cardLearn,
+        fetchpriority: "high",
+      },
+    ],
     scripts: [
       {
         type: "application/ld+json",
@@ -232,7 +240,7 @@ function QuickCards() {
             <img
               src={img}
               alt={alt}
-              loading={index === 0 ? "eager" : "lazy"}
+              loading={index < 3 ? "eager" : "lazy"}
               fetchPriority={index === 0 ? "high" : "auto"}
               decoding="async"
               width={480}
@@ -366,8 +374,8 @@ function NewsletterTile({ latest }: { latest: LatestIssue | null }) {
           <img
             src={cardNewsletter}
             alt="A human hand and a robot hand collaborating on a newsletter document"
-            loading="eager"
-            fetchPriority="high"
+            loading="lazy"
+
             decoding="async"
             width={1280}
             height={960}
