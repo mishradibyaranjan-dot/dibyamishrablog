@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { FloatingChat } from "@/components/chat/FloatingChat";
+import { SiteBanner } from "@/components/layout/SiteBanner";
 import { AuroraBackground } from "@/components/cinematic/AuroraBackground";
 import { PageTransition } from "@/components/cinematic/PageTransition";
 import { ThemeProvider } from "@/components/theme/ThemeProvider";
@@ -100,6 +101,7 @@ const NAV = [
   { to: "/", label: "Home" },
   { to: "/about", label: "About" },
   { to: "/learn", label: "Learn" },
+  { to: "/guide", label: "Guide" },
   { to: "/repository", label: "Repository" },
   { to: "/research", label: "Research" },
   { to: "/projects", label: "Projects" },
@@ -301,6 +303,7 @@ export function SiteLayout() {
           <TrackerMount />
           <div className="relative flex min-h-screen flex-col">
             <AuroraBackground />
+            <SiteBanner />
             <Header />
 
             <main className="relative flex-1">
