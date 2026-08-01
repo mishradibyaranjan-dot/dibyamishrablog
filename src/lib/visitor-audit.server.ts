@@ -8,6 +8,8 @@ export interface AuditSettings {
   alert_window_minutes: number;
   alert_min_events: number;
   alert_failure_pct: number;
+  alert_email_enabled: boolean;
+  alert_slack_enabled: boolean;
   last_alert_at: string | null;
 }
 
@@ -17,17 +19,22 @@ const DEFAULTS: AuditSettings = {
   alert_window_minutes: 60,
   alert_min_events: 20,
   alert_failure_pct: 30,
+  alert_email_enabled: true,
+  alert_slack_enabled: false,
   last_alert_at: null,
 };
 
 export async function loadSettings(): Promise<AuditSettings> {
   const { data } = await supabaseAdmin
     .from("visitor_audit_settings")
-    .select("retention_days, alerts_enabled, alert_window_minutes, alert_min_events, alert_failure_pct, last_alert_at")
+    .select(
+      "retention_days, alerts_enabled, alert_window_minutes, alert_min_events, alert_failure_pct, alert_email_enabled, alert_slack_enabled, last_alert_at",
+    )
     .eq("id", 1)
     .maybeSingle();
   return { ...DEFAULTS, ...(data ?? {}) } as AuditSettings;
 }
+
 
 export function percentile(sorted: number[], p: number): number | null {
   if (sorted.length === 0) return null;
