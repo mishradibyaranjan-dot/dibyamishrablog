@@ -200,19 +200,44 @@ export async function evaluateAuditSpike(): Promise<SpikeResult> {
     actionTaken: "owner_alerted",
     metadata,
   });
-  await sendCriticalAlert({
-    type: "visitor_tracking_audit_spike",
-    target: "/api/public/track-visit",
-    actionTaken: "Review /admin/visitor-audit",
-    metadata,
-  });
+
+  const delivery: { email: boolean; slack: boolean; slackReason?: string } = { email: false, slack: false };
+  if (s.alert_email_enabled) {
+    await sendCriticalAlert({
+      type: "visitor_tracking_audit_spike",
+      target: "/api/public/track-visit",
+      actionTaken: "Review /admin/visitor-audit",
+      metadata,
+    });
+    delivery.email = true;
+  }
+  if (s.alert_slack_enabled) {
+    const topReasons = [...reasonCounts.entries()].sort((a, b) => b[1] - a[1]).slice(0, 3);
+    const res = await sendSlackAlert({
+      title: "Visitor tracking spike detected",
+      summary: `${problems.join(", ")} in the last ${s.alert_window_minutes} min (thresholds: ≥${s.alert_min_events} events, ≥${s.alert_failure_pct}% failures).`,
+      fields: [
+        { label: "Events", value: String(total) },
+        { label: "Failures", value: `${failures} (${failurePct}%)` },
+        { label: "Top IP share", value: `${floodShare}% (${topIpCount} events)` },
+        {
+          label: "Top reasons",
+          value: topReasons.length ? topReasons.map(([r, c]) => `${r} (${c})`).join(", ") : "n/a",
+        },
+      ],
+      link: "https://www.dibyamishra.co.in/admin/visitor-audit",
+    });
+    delivery.slack = res.delivered;
+    if (!res.delivered) delivery.slackReason = res.reason;
+  }
 
   await supabaseAdmin
     .from("visitor_audit_settings")
     .update({ last_alert_at: new Date().toISOString(), updated_at: new Date().toISOString() })
     .eq("id", 1);
 
-  return { checked: true, alerted: true, stats: metadata };
+  return { checked: true, alerted: true, stats: { ...metadata, delivery } };
+
 }
 
 // ---------- Drill-down: focused slice of the audit log ----------
