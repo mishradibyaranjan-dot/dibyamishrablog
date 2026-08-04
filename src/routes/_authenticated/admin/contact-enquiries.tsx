@@ -1,3 +1,4 @@
+import { Fragment } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
 import {
@@ -238,8 +239,8 @@ function ContactEnquiriesPage() {
               </tr>
             )}
             {rows.map((r) => (
-              <>
-                <tr key={r.id} className="border-t border-border align-top">
+              <Fragment key={r.id}>
+                <tr className="border-t border-border align-top">
                   <td className="whitespace-nowrap px-4 py-2 text-xs text-muted-foreground">
                     {new Date(r.created_at).toLocaleString()}
                   </td>
@@ -278,7 +279,7 @@ function ContactEnquiriesPage() {
                   </td>
                 </tr>
                 {expanded === r.id && (
-                  <tr key={`${r.id}-detail`} className="border-t border-border bg-muted/40">
+                  <tr className="border-t border-border bg-muted/40">
                     <td colSpan={7} className="px-4 py-4">
                       <p className="whitespace-pre-wrap text-sm text-foreground">{r.message}</p>
                       {r.error_message && (
@@ -299,7 +300,7 @@ function ContactEnquiriesPage() {
                     </td>
                   </tr>
                 )}
-              </>
+              </Fragment>
             ))}
           </tbody>
         </table>
