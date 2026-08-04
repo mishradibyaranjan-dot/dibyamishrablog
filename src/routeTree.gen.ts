@@ -47,6 +47,7 @@ import { Route as ApiDownloadPdfRouteImport } from './routes/api/download.pdf'
 import { Route as AuthenticatedAdminVisitorAuditRouteImport } from './routes/_authenticated/admin/visitor-audit'
 import { Route as AuthenticatedAdminSpamAuditRouteImport } from './routes/_authenticated/admin/spam-audit'
 import { Route as AuthenticatedAdminSecurityEventsRouteImport } from './routes/_authenticated/admin/security-events'
+import { Route as AuthenticatedAdminContactEnquiriesRouteImport } from './routes/_authenticated/admin/contact-enquiries'
 import { Route as AuthenticatedAdminBlockedDomainsRouteImport } from './routes/_authenticated/admin/blocked-domains'
 import { Route as Char91DotmcpChar93InvokeToolToolRouteImport } from './routes/[.mcp]/invoke-tool/$tool'
 import { Route as DotlovableOauthConsentRouteImport } from './routes/[.]lovable.oauth.consent'
@@ -254,6 +255,12 @@ const AuthenticatedAdminSecurityEventsRoute =
     path: '/security-events',
     getParentRoute: () => AuthenticatedAdminRouteRoute,
   } as any)
+const AuthenticatedAdminContactEnquiriesRoute =
+  AuthenticatedAdminContactEnquiriesRouteImport.update({
+    id: '/contact-enquiries',
+    path: '/contact-enquiries',
+    getParentRoute: () => AuthenticatedAdminRouteRoute,
+  } as any)
 const AuthenticatedAdminBlockedDomainsRoute =
   AuthenticatedAdminBlockedDomainsRouteImport.update({
     id: '/blocked-domains',
@@ -349,6 +356,7 @@ export interface FileRoutesByFullPath {
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
   '/admin/blocked-domains': typeof AuthenticatedAdminBlockedDomainsRoute
+  '/admin/contact-enquiries': typeof AuthenticatedAdminContactEnquiriesRoute
   '/admin/security-events': typeof AuthenticatedAdminSecurityEventsRoute
   '/admin/spam-audit': typeof AuthenticatedAdminSpamAuditRoute
   '/admin/visitor-audit': typeof AuthenticatedAdminVisitorAuditRoute
@@ -399,6 +407,7 @@ export interface FileRoutesByTo {
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
   '/admin/blocked-domains': typeof AuthenticatedAdminBlockedDomainsRoute
+  '/admin/contact-enquiries': typeof AuthenticatedAdminContactEnquiriesRoute
   '/admin/security-events': typeof AuthenticatedAdminSecurityEventsRoute
   '/admin/spam-audit': typeof AuthenticatedAdminSpamAuditRoute
   '/admin/visitor-audit': typeof AuthenticatedAdminVisitorAuditRoute
@@ -451,6 +460,7 @@ export interface FileRoutesById {
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
   '/_authenticated/admin/blocked-domains': typeof AuthenticatedAdminBlockedDomainsRoute
+  '/_authenticated/admin/contact-enquiries': typeof AuthenticatedAdminContactEnquiriesRoute
   '/_authenticated/admin/security-events': typeof AuthenticatedAdminSecurityEventsRoute
   '/_authenticated/admin/spam-audit': typeof AuthenticatedAdminSpamAuditRoute
   '/_authenticated/admin/visitor-audit': typeof AuthenticatedAdminVisitorAuditRoute
@@ -503,6 +513,7 @@ export interface FileRouteTypes {
     | '/.lovable/oauth/consent'
     | '/.mcp/invoke-tool/$tool'
     | '/admin/blocked-domains'
+    | '/admin/contact-enquiries'
     | '/admin/security-events'
     | '/admin/spam-audit'
     | '/admin/visitor-audit'
@@ -553,6 +564,7 @@ export interface FileRouteTypes {
     | '/.lovable/oauth/consent'
     | '/.mcp/invoke-tool/$tool'
     | '/admin/blocked-domains'
+    | '/admin/contact-enquiries'
     | '/admin/security-events'
     | '/admin/spam-audit'
     | '/admin/visitor-audit'
@@ -604,6 +616,7 @@ export interface FileRouteTypes {
     | '/.lovable/oauth/consent'
     | '/.mcp/invoke-tool/$tool'
     | '/_authenticated/admin/blocked-domains'
+    | '/_authenticated/admin/contact-enquiries'
     | '/_authenticated/admin/security-events'
     | '/_authenticated/admin/spam-audit'
     | '/_authenticated/admin/visitor-audit'
@@ -936,6 +949,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminSecurityEventsRouteImport
       parentRoute: typeof AuthenticatedAdminRouteRoute
     }
+    '/_authenticated/admin/contact-enquiries': {
+      id: '/_authenticated/admin/contact-enquiries'
+      path: '/contact-enquiries'
+      fullPath: '/admin/contact-enquiries'
+      preLoaderRoute: typeof AuthenticatedAdminContactEnquiriesRouteImport
+      parentRoute: typeof AuthenticatedAdminRouteRoute
+    }
     '/_authenticated/admin/blocked-domains': {
       id: '/_authenticated/admin/blocked-domains'
       path: '/blocked-domains'
@@ -1018,6 +1038,7 @@ declare module '@tanstack/react-router' {
 
 interface AuthenticatedAdminRouteRouteChildren {
   AuthenticatedAdminBlockedDomainsRoute: typeof AuthenticatedAdminBlockedDomainsRoute
+  AuthenticatedAdminContactEnquiriesRoute: typeof AuthenticatedAdminContactEnquiriesRoute
   AuthenticatedAdminSecurityEventsRoute: typeof AuthenticatedAdminSecurityEventsRoute
   AuthenticatedAdminSpamAuditRoute: typeof AuthenticatedAdminSpamAuditRoute
   AuthenticatedAdminVisitorAuditRoute: typeof AuthenticatedAdminVisitorAuditRoute
@@ -1027,6 +1048,8 @@ const AuthenticatedAdminRouteRouteChildren: AuthenticatedAdminRouteRouteChildren
   {
     AuthenticatedAdminBlockedDomainsRoute:
       AuthenticatedAdminBlockedDomainsRoute,
+    AuthenticatedAdminContactEnquiriesRoute:
+      AuthenticatedAdminContactEnquiriesRoute,
     AuthenticatedAdminSecurityEventsRoute:
       AuthenticatedAdminSecurityEventsRoute,
     AuthenticatedAdminSpamAuditRoute: AuthenticatedAdminSpamAuditRoute,
