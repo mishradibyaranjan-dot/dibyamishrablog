@@ -109,8 +109,14 @@ function Contact() {
                   <Field label="Name" name="name" placeholder="Your name" required />
                   <Field label="Email" name="email" type="email" placeholder="you@company.com" required />
                 </div>
+                {/* Honeypot — hidden from humans, bots tend to fill it. */}
+                <div aria-hidden="true" className="absolute h-0 w-0 overflow-hidden opacity-0">
+                  <label htmlFor="website">Website</label>
+                  <input id="website" name="website" type="text" tabIndex={-1} autoComplete="off" />
+                </div>
                 <Field label="Subject" name="subject" placeholder="What's this about?" required />
                 <div>
+
                   <label className="text-sm font-medium" htmlFor="message">Message</label>
                   <textarea
                     id="message"
