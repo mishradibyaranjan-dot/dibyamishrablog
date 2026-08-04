@@ -68,6 +68,57 @@ export type Database = {
         }
         Relationships: []
       }
+      contact_enquiries: {
+        Row: {
+          confirmation_status: string
+          created_at: string
+          email: string
+          error_message: string | null
+          id: string
+          ip_hash: string | null
+          message: string
+          message_id: string | null
+          name: string
+          notification_status: string
+          status: string
+          subject: string
+          updated_at: string
+          user_agent: string | null
+        }
+        Insert: {
+          confirmation_status?: string
+          created_at?: string
+          email: string
+          error_message?: string | null
+          id?: string
+          ip_hash?: string | null
+          message: string
+          message_id?: string | null
+          name: string
+          notification_status?: string
+          status?: string
+          subject: string
+          updated_at?: string
+          user_agent?: string | null
+        }
+        Update: {
+          confirmation_status?: string
+          created_at?: string
+          email?: string
+          error_message?: string | null
+          id?: string
+          ip_hash?: string | null
+          message?: string
+          message_id?: string | null
+          name?: string
+          notification_status?: string
+          status?: string
+          subject?: string
+          updated_at?: string
+          user_agent?: string | null
+        }
+        Relationships: []
+      }
       disposable_email_domains: {
         Row: {
           created_at: string
@@ -1067,6 +1118,10 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      count_recent_contact_submissions: {
+        Args: { _ip_hash: string; _minutes?: number }
+        Returns: number
+      }
       count_recent_failed_logins: {
         Args: { _ip: string; _minutes?: number }
         Returns: number
