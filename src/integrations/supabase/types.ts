@@ -68,6 +68,53 @@ export type Database = {
         }
         Relationships: []
       }
+      contact_email_attempts: {
+        Row: {
+          actor_id: string | null
+          attempt_no: number
+          created_at: string
+          enquiry_id: string
+          error_message: string | null
+          id: string
+          kind: string
+          recipient_email: string
+          status: string
+          trigger_source: string
+        }
+        Insert: {
+          actor_id?: string | null
+          attempt_no?: number
+          created_at?: string
+          enquiry_id: string
+          error_message?: string | null
+          id?: string
+          kind: string
+          recipient_email: string
+          status: string
+          trigger_source?: string
+        }
+        Update: {
+          actor_id?: string | null
+          attempt_no?: number
+          created_at?: string
+          enquiry_id?: string
+          error_message?: string | null
+          id?: string
+          kind?: string
+          recipient_email?: string
+          status?: string
+          trigger_source?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "contact_email_attempts_enquiry_id_fkey"
+            columns: ["enquiry_id"]
+            isOneToOne: false
+            referencedRelation: "contact_enquiries"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       contact_enquiries: {
         Row: {
           confirmation_status: string
@@ -76,10 +123,14 @@ export type Database = {
           error_message: string | null
           id: string
           ip_hash: string | null
+          last_attempt_at: string | null
           message: string
           message_id: string | null
           name: string
+          next_retry_at: string | null
           notification_status: string
+          replied_at: string | null
+          retry_count: number
           status: string
           subject: string
           updated_at: string
@@ -92,10 +143,14 @@ export type Database = {
           error_message?: string | null
           id?: string
           ip_hash?: string | null
+          last_attempt_at?: string | null
           message: string
           message_id?: string | null
           name: string
+          next_retry_at?: string | null
           notification_status?: string
+          replied_at?: string | null
+          retry_count?: number
           status?: string
           subject: string
           updated_at?: string
@@ -108,10 +163,14 @@ export type Database = {
           error_message?: string | null
           id?: string
           ip_hash?: string | null
+          last_attempt_at?: string | null
           message?: string
           message_id?: string | null
           name?: string
+          next_retry_at?: string | null
           notification_status?: string
+          replied_at?: string | null
+          retry_count?: number
           status?: string
           subject?: string
           updated_at?: string
@@ -1118,6 +1177,20 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      contact_enquiries_due_for_retry: {
+        Args: { _limit?: number; _max_retries?: number }
+        Returns: {
+          confirmation_status: string
+          email: string
+          id: string
+          message: string
+          message_id: string
+          name: string
+          notification_status: string
+          retry_count: number
+          subject: string
+        }[]
+      }
       count_recent_contact_submissions: {
         Args: { _ip_hash: string; _minutes?: number }
         Returns: number
