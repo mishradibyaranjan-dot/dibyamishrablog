@@ -39,8 +39,19 @@ export const Route = createFileRoute("/api/download/pdf")({
         const reqId = crypto.randomUUID().slice(0, 8);
         const log = (msg: string, extra?: Record<string, unknown>) =>
           console.log(`[download.pdf ${reqId}] ${msg}`, extra ?? "");
-        const errJson = (status: number, code: string, message: string, extra?: Record<string, unknown>) => {
-          console.error(`[download.pdf ${reqId}] ${code}: ${message}`, extra ?? "");
+        // `extra` is echoed to the client — never put internal URLs, upstream bodies
+        // or credentials in it. `serverOnly` is logged server-side and never returned.
+        const errJson = (
+          status: number,
+          code: string,
+          message: string,
+          extra?: Record<string, unknown>,
+          serverOnly?: Record<string, unknown>,
+        ) => {
+          console.error(`[download.pdf ${reqId}] ${code}: ${message}`, {
+            ...(extra ?? {}),
+            ...(serverOnly ?? {}),
+          });
           return new Response(
             JSON.stringify({ error: code, message, requestId: reqId, ...(extra ?? {}) }),
             { status, headers: { "Content-Type": "application/json" } },
@@ -101,20 +112,28 @@ export const Route = createFileRoute("/api/download/pdf")({
         try {
           upstream = await fetch(assetUrl);
         } catch (e) {
-          return errJson(502, "upstream_unreachable", "The file storage is temporarily unreachable. Please try again in a moment.", {
-            detail: (e as Error).message,
-            assetUrl,
-          });
+          return errJson(
+            502,
+            "upstream_unreachable",
+            "The file storage is temporarily unreachable. Please try again in a moment.",
+            undefined,
+            { detail: (e as Error).message, assetUrl },
+          );
         }
 
         if (!upstream.ok || !upstream.body) {
           const bodyPreview = await upstream.text().catch(() => "");
-          return errJson(502, "upstream_error", `File storage returned ${upstream.status} for "${doc.filename}".`, {
-            upstreamStatus: upstream.status,
-            upstreamStatusText: upstream.statusText,
-            assetUrl,
-            preview: bodyPreview.slice(0, 200),
-          });
+          return errJson(
+            502,
+            "upstream_error",
+            `File storage returned ${upstream.status} for "${doc.filename}".`,
+            { upstreamStatus: upstream.status },
+            {
+              upstreamStatusText: upstream.statusText,
+              assetUrl,
+              preview: bodyPreview.slice(0, 200),
+            },
+          );
         }
 
         log("streaming response", { status: upstream.status });
