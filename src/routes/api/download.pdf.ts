@@ -39,8 +39,19 @@ export const Route = createFileRoute("/api/download/pdf")({
         const reqId = crypto.randomUUID().slice(0, 8);
         const log = (msg: string, extra?: Record<string, unknown>) =>
           console.log(`[download.pdf ${reqId}] ${msg}`, extra ?? "");
-        const errJson = (status: number, code: string, message: string, extra?: Record<string, unknown>) => {
-          console.error(`[download.pdf ${reqId}] ${code}: ${message}`, extra ?? "");
+        // `extra` is echoed to the client — never put internal URLs, upstream bodies
+        // or credentials in it. `serverOnly` is logged server-side and never returned.
+        const errJson = (
+          status: number,
+          code: string,
+          message: string,
+          extra?: Record<string, unknown>,
+          serverOnly?: Record<string, unknown>,
+        ) => {
+          console.error(`[download.pdf ${reqId}] ${code}: ${message}`, {
+            ...(extra ?? {}),
+            ...(serverOnly ?? {}),
+          });
           return new Response(
             JSON.stringify({ error: code, message, requestId: reqId, ...(extra ?? {}) }),
             { status, headers: { "Content-Type": "application/json" } },
