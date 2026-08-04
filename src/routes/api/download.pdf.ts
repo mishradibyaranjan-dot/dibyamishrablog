@@ -112,20 +112,28 @@ export const Route = createFileRoute("/api/download/pdf")({
         try {
           upstream = await fetch(assetUrl);
         } catch (e) {
-          return errJson(502, "upstream_unreachable", "The file storage is temporarily unreachable. Please try again in a moment.", {
-            detail: (e as Error).message,
-            assetUrl,
-          });
+          return errJson(
+            502,
+            "upstream_unreachable",
+            "The file storage is temporarily unreachable. Please try again in a moment.",
+            undefined,
+            { detail: (e as Error).message, assetUrl },
+          );
         }
 
         if (!upstream.ok || !upstream.body) {
           const bodyPreview = await upstream.text().catch(() => "");
-          return errJson(502, "upstream_error", `File storage returned ${upstream.status} for "${doc.filename}".`, {
-            upstreamStatus: upstream.status,
-            upstreamStatusText: upstream.statusText,
-            assetUrl,
-            preview: bodyPreview.slice(0, 200),
-          });
+          return errJson(
+            502,
+            "upstream_error",
+            `File storage returned ${upstream.status} for "${doc.filename}".`,
+            { upstreamStatus: upstream.status },
+            {
+              upstreamStatusText: upstream.statusText,
+              assetUrl,
+              preview: bodyPreview.slice(0, 200),
+            },
+          );
         }
 
         log("streaming response", { status: upstream.status });
