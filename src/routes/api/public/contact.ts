@@ -230,7 +230,7 @@ export const Route = createFileRoute("/api/public/contact")({
                   unsubscribe_token: unsubscribeToken,
                   message_id: messageId,
                 } as Parameters<typeof sendLovableEmail>[0],
-                { apiKey, sendUrl: process.env.LOVABLE_SEND_URL },
+                { apiKey, sendUrl: process.env.LOVABLE_SEND_URL ?? undefined } as Parameters<typeof sendLovableEmail>[1],
               );
               await supabase.from("email_send_log").insert({
                 message_id: messageId,
