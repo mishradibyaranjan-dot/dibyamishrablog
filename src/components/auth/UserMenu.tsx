@@ -48,6 +48,12 @@ export function UserMenu() {
         )}
         {isAdmin && (
           <DropdownMenuItem asChild>
+            <Link to="/admin/contact-enquiries"><Mail className="mr-2 h-4 w-4" /> Contact enquiries</Link>
+          </DropdownMenuItem>
+        )}
+
+        {isAdmin && (
+          <DropdownMenuItem asChild>
             <Link to="/admin/blocked-domains"><ShieldBan className="mr-2 h-4 w-4" /> Blocked domains</Link>
           </DropdownMenuItem>
         )}
