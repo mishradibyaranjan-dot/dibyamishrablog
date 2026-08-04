@@ -1,5 +1,5 @@
 import { Link, useNavigate } from "@tanstack/react-router";
-import { LogOut, LayoutDashboard, User as UserIcon, ShieldBan, ScrollText, ShieldAlert } from "lucide-react";
+import { LogOut, LayoutDashboard, Mail, User as UserIcon, ShieldBan, ScrollText, ShieldAlert } from "lucide-react";
 import { useAuth } from "@/lib/auth";
 import {
   DropdownMenu,
