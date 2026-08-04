@@ -19,12 +19,6 @@ const ContactSchema = z.object({
 const RATE_LIMIT_MAX = 3;
 const RATE_LIMIT_WINDOW_MINUTES = 10;
 
-function generateToken(): string {
-  const bytes = new Uint8Array(32);
-  crypto.getRandomValues(bytes);
-  return Array.from(bytes).map((b) => b.toString(16).padStart(2, "0")).join("");
-}
-
 function clientIp(request: Request): string {
   const h = request.headers;
   const fwd = h.get("cf-connecting-ip") ?? h.get("x-real-ip") ?? h.get("x-forwarded-for") ?? "";
