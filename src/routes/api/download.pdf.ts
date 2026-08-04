@@ -72,9 +72,13 @@ export const Route = createFileRoute("/api/download/pdf")({
         const supabase = createClient(supabaseUrl, serviceKey);
         const { data: { user }, error: authErr } = await supabase.auth.getUser(token);
         if (authErr || !user) {
-          return errJson(401, "invalid_session", "Your session has expired. Please sign in again and retry.", {
-            detail: authErr?.message,
-          });
+          return errJson(
+            401,
+            "invalid_session",
+            "Your session has expired. Please sign in again and retry.",
+            undefined,
+            { detail: authErr?.message },
+          );
         }
         log("authenticated", { userId: user.id });
 
@@ -82,10 +86,15 @@ export const Route = createFileRoute("/api/download/pdf")({
         const key = url.searchParams.get("key") ?? "";
         const doc = REPO[key];
         if (!doc) {
-          return errJson(404, "unknown_document", `No document is registered for key "${key}".`, {
-            availableKeys: Object.keys(REPO),
-          });
+          return errJson(
+            404,
+            "unknown_document",
+            "That document is not available for download.",
+            undefined,
+            { requestedKey: key, availableKeys: Object.keys(REPO) },
+          );
         }
+
         log("resolved doc", { key, filename: doc.filename, assetUrl: doc.url });
 
         try {
