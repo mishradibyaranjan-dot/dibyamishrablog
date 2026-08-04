@@ -13,10 +13,7 @@ const ContactSchema = z.object({
   website: z.string().max(200).optional(),
 });
 
-const SITE_NAME = "dibyamishrablog";
-const SENDER_DOMAIN = "notify.dibyamishra.co.in";
-const FROM_DOMAIN = "notify.dibyamishra.co.in";
-const OWNER_EMAILS = ["mishra.dibyaranjan@gmail.com", "contactme@dibyamishra.co.in"];
+/** Sender identity, owner inboxes and reply-to addresses live in contact-email.server. */
 
 /** Ad-hoc throttle: max submissions per hashed IP inside the window. */
 const RATE_LIMIT_MAX = 3;
