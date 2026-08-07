@@ -726,7 +726,46 @@ function Testimonials() {
   );
 }
 
+/* ----------------------------- PLAYBOOK ---------------------------- */
+
+function PlaybookSection() {
+  return (
+    <section aria-labelledby="playbook-heading" className="flex flex-col gap-6">
+      <h2 id="playbook-heading" className="sr-only">
+        Enterprise AI Adoption Playbook
+      </h2>
+      <LeadMagnet
+        source="home-playbook"
+        eyebrow="Executive playbook"
+        title="The Enterprise AI Adoption Playbook"
+        description="The five-stage operating model I use to take enterprise GenAI from pilot to funded production — with governance gates and the outcome metrics steering groups actually ask for."
+        includes={[
+          "Five stages, in the order that keeps programmes from stalling",
+          "Readiness checklist for platform, governance and delivery",
+          "Outcome metrics for board-level reporting",
+        ]}
+        downloadHref="/api/download/pdf?doc=enterprise-brief"
+      />
+      <Link
+        to="/playbook"
+        className="group inline-flex items-center gap-3 rounded-2xl border border-border bg-card p-5 transition-all hover:-translate-y-0.5 hover:shadow-glow"
+      >
+        <span className="min-w-0">
+          <span className="block text-xs font-semibold uppercase tracking-[0.16em] text-muted-foreground">
+            Read it online
+          </span>
+          <span className="block text-sm font-semibold text-foreground">
+            Browse the full playbook, stage by stage
+          </span>
+        </span>
+        <ArrowRight className="ml-auto h-4 w-4 shrink-0 text-brand-1 transition-transform group-hover:translate-x-0.5" />
+      </Link>
+    </section>
+  );
+}
+
 /* ---------------------------- NEWSLETTER --------------------------- */
+
 
 function NewsletterSection({ latest }: { latest: LatestIssue | null }) {
   return (
