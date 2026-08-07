@@ -101,6 +101,7 @@ function NewsletterForm() {
 const NAV = [
   { to: "/", label: "Home" },
   { to: "/about", label: "About" },
+  { to: "/expertise", label: "Expertise" },
   { to: "/case-studies", label: "Case Studies" },
   { to: "/projects", label: "Projects" },
   { to: "/research", label: "Research" },
