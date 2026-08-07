@@ -22,6 +22,7 @@ import { caseStudies, posts, projects, testimonials } from "@/lib/content";
 import { Reveal } from "@/components/cinematic/Reveal";
 import { MetricStat } from "@/components/marketing/MetricStat";
 import { NewsletterCta } from "@/components/marketing/NewsletterCta";
+import { LeadMagnet } from "@/components/marketing/LeadMagnet";
 import cardNewsletter from "@/assets/card-newsletter.jpg";
 import cardLearn from "@/assets/card-learn.jpg";
 import cardCaseStudy from "@/assets/card-case-study.jpg";
@@ -135,6 +136,7 @@ function Home() {
         <LatestResearch />
         <QuickCards />
         <Testimonials />
+        <PlaybookSection />
         <NewsletterSection latest={latest} />
         <FinalCta />
       </div>
