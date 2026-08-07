@@ -175,20 +175,6 @@ function Contact() {
               </div>
             </a>
             <a
-              href="https://github.com/mishradibyaranjan-dot/"
-              target="_blank"
-              rel="noreferrer"
-              className="card-flashy flex items-start gap-4 rounded-2xl glass-strong p-5 transition-all hover:-translate-y-0.5 hover:shadow-glow"
-            >
-              <div className="grid h-10 w-10 shrink-0 place-items-center rounded-lg bg-brand-gradient text-white">
-                <ExternalLink className="h-5 w-5" />
-              </div>
-              <div className="min-w-0">
-                <div className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">GitHub</div>
-                <div className="truncate text-sm font-medium">mishradibyaranjan-dot</div>
-              </div>
-            </a>
-            <a
               href="https://www.linkedin.com/in/dibya-mishra-55b94654"
               target="_blank"
               rel="noreferrer"
