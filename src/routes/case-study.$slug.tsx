@@ -1,7 +1,7 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { ArrowRight, ArrowUpRight, CheckCircle2 } from "lucide-react";
 import { Section } from "@/components/layout/Section";
-import { caseStudies, posts } from "@/lib/content";
+import { caseStudies, posts, type Post } from "@/lib/content";
 import { SITE_ORIGIN } from "@/lib/og-images";
 import { breadcrumbScript } from "@/lib/breadcrumbs";
 
@@ -71,10 +71,12 @@ function CaseStudyMissing() {
 }
 
 function CaseStudyDetail() {
-  const { study } = Route.useLoaderData();
+  const { slug } = Route.useParams();
+  const study = caseStudies.find((c) => c.slug === slug);
+  if (!study) return <CaseStudyMissing />;
   const related = study.relatedPosts
-    .map((slug) => posts.find((p) => p.slug === slug))
-    .filter((p): p is NonNullable<typeof p> => Boolean(p));
+    .map((s) => posts.find((p) => p.slug === s))
+    .filter((p): p is Post => Boolean(p));
 
   return (
     <>
