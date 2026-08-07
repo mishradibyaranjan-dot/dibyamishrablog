@@ -4,6 +4,7 @@ import { Section } from "@/components/layout/Section";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { posts } from "@/lib/content";
+import { LeadMagnet } from "@/components/marketing/LeadMagnet";
 import { postOgImages, pageOgImages, SITE_ORIGIN } from "@/lib/og-images";
 import { breadcrumbScript } from "@/lib/breadcrumbs";
 
@@ -94,6 +95,7 @@ function BlogPost() {
   const sections = [
     { id: "intro", title: "Introduction" },
     { id: "key-takeaways", title: "Key takeaways" },
+    { id: "playbook", title: "Playbook" },
     { id: "related", title: "Related reading" },
   ];
 
@@ -138,6 +140,31 @@ function BlogPost() {
             </ul>
           </div>
 
+
+          <LeadMagnet
+            source={`blog-${post.slug}`}
+            eyebrow="Executive playbook"
+            title="Take the Enterprise AI Adoption Playbook with you"
+            description="The five-stage operating model behind these notes — value framing, platform foundations, governance, delivery and scale."
+            includes={[
+              "Stage-by-stage adoption model",
+              "Readiness checklist",
+              "Outcome metrics for steering groups",
+            ]}
+            downloadHref="/api/download/pdf?doc=enterprise-brief"
+          />
+
+          <div className="flex flex-wrap gap-3 text-sm">
+            <Button asChild variant="outline" size="sm">
+              <Link to="/playbook">Read the playbook</Link>
+            </Button>
+            <Button asChild variant="outline" size="sm">
+              <Link to="/case-studies">See the case studies</Link>
+            </Button>
+            <Button asChild variant="outline" size="sm">
+              <Link to="/advisory">Advisory engagements</Link>
+            </Button>
+          </div>
 
           {related.length > 0 && (
             <div id="related">
