@@ -11,6 +11,8 @@ import { AuroraBackground } from "@/components/cinematic/AuroraBackground";
 import { PageTransition } from "@/components/cinematic/PageTransition";
 import { ThemeProvider } from "@/components/theme/ThemeProvider";
 import { ThemeToggle } from "@/components/theme/ThemeToggle";
+import { GlobalSearch } from "@/components/search/GlobalSearch";
+
 
 import { ReadAloudButton } from "@/components/voice/ReadAloudButton";
 import { AuthProvider, useAuth } from "@/lib/auth";
@@ -183,6 +185,7 @@ function Header() {
         </nav>
 
         <div className="flex items-center gap-1 sm:gap-2">
+          <GlobalSearch />
           <Link
             to="/contact"
             className="hidden min-h-11 shrink-0 items-center gap-2 whitespace-nowrap rounded-full bg-brand-gradient px-4 py-2 text-sm font-semibold text-white transition-transform hover:-translate-y-0.5 xl:inline-flex"
@@ -190,6 +193,7 @@ function Header() {
             Let&apos;s Connect
           </Link>
           <ReadAloudButton />
+
           <ThemeToggle />
           <UserMenu />
           <Button
