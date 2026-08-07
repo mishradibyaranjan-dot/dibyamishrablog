@@ -296,17 +296,22 @@ function About() {
           <div>
             <Badge variant="secondary" className="mb-4">About me</Badge>
             <h1 className="font-display text-4xl font-bold tracking-tight sm:text-5xl">
-              Dibya Ranjan Mishra — Engineering Leader
+              About Dibya Mishra
             </h1>
             <p className="mt-3 text-lg font-medium text-gradient">
               Vice President & Country Head — Crystal Tech Ventures
             </p>
             <p className="mt-5 text-lg text-muted-foreground">
+              I build and scale technology organizations, enterprise platforms and AI-enabled
+              products that turn complex challenges into measurable business outcomes.
+            </p>
+            <p className="mt-4 text-muted-foreground">
               Technology executive with 20+ years leading engineering, product & delivery orgs across
               Shipping, BFSI, Insurance, Retail/FinTech, and Enterprise SaaS. Currently VP & Country
               Head driving a Global Capability Centre (GCC) setup in India and retail supply-chain
               digital transformation for an international client — from org design through delivery.
             </p>
+
             <p className="mt-4 text-muted-foreground">
               Scaled portfolio revenue $1M → $20M in 24 months, managed $28M+ combined budgets, and
               led 500+ engineers across 5 time zones. Deep expertise in cloud-native architecture
