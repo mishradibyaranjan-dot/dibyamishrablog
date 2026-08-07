@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import type {} from "@tanstack/react-start";
-import { posts } from "@/lib/content";
+import { posts, caseStudies } from "@/lib/content";
 
 const BASE_URL = "https://www.dibyamishra.co.in";
 
@@ -53,6 +53,11 @@ export const Route = createFileRoute("/sitemap.xml")({
             changefreq: "monthly",
             priority: post.featured ? "0.8" : "0.6",
           });
+        });
+
+        // Case study detail pages
+        caseStudies.forEach((cs) => {
+          entries.push({ path: `/case-study/${cs.slug}`, changefreq: "monthly", priority: "0.8" });
         });
 
         // Published newsletter issues
