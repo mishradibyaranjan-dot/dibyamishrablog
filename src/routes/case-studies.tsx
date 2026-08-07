@@ -57,13 +57,13 @@ function CaseStudies() {
   const filtered = active === "All" ? caseStudies : caseStudies.filter((c) => c.area === active);
 
   return (
-    <div className="bg-[#fafbfc]" style={{ fontFamily: "'DM Sans', sans-serif" }}>
+    <div className="bg-background text-foreground">
       <Section className="pb-6 pt-16 lg:pt-24">
         <SectionHeader
           as="h1"
           eyebrow="Case Studies"
-          title="Programs that moved the needle"
-          description="Selected case studies with the architecture choices, execution strategy, and business outcomes that defined them."
+          title="From Strategy to Measurable Outcomes"
+          description="Enterprise programs with the business challenge, the transformation, the architecture behind it, and the outcomes it produced."
         />
 
         <img
@@ -74,10 +74,10 @@ function CaseStudies() {
           loading="eager"
           fetchPriority="high"
           decoding="async"
-          className="mb-8 aspect-[16/9] w-full rounded-3xl border border-slate-200 object-cover"
+          className="mb-8 aspect-[16/9] w-full rounded-3xl border border-border object-cover"
         />
 
-        <figure className="mb-8 overflow-hidden rounded-3xl border border-blue-100 bg-gradient-to-br from-blue-50 via-white to-emerald-50 shadow-[0_10px_30px_-16px_rgba(59,130,246,0.3)]">
+        <figure className="mb-8 overflow-hidden rounded-3xl border border-border bg-card">
           <img
             src={collabCaseStudies}
             alt="Business leader and friendly robot reviewing rising enterprise KPI charts together"
@@ -87,8 +87,8 @@ function CaseStudies() {
             decoding="async"
             className="aspect-[16/7] w-full object-cover"
           />
-          <figcaption className="flex items-center gap-2 border-t border-blue-100 bg-white/70 px-5 py-3 text-sm text-slate-700">
-            <span className="inline-block h-2 w-2 rounded-full bg-blue-500" />
+          <figcaption className="flex items-center gap-2 border-t border-border bg-card px-5 py-3 text-sm text-muted-foreground">
+            <span className="inline-block h-2 w-2 rounded-full bg-brand-gradient" />
             Outcomes shaped by humans and AI, working side by side.
           </figcaption>
         </figure>
@@ -99,10 +99,10 @@ function CaseStudies() {
               key={c}
               onClick={() => setActive(c)}
               className={cn(
-                "rounded-full border px-3 py-1.5 text-xs font-medium transition-colors",
+                "min-h-11 rounded-full border px-3 py-1.5 text-xs font-medium transition-colors",
                 active === c
-                  ? "border-transparent bg-blue-600 text-white"
-                  : "border-slate-200 bg-white text-slate-700 hover:bg-slate-100",
+                  ? "border-transparent bg-brand-gradient text-white"
+                  : "border-border bg-card text-foreground hover:bg-accent",
               )}
             >
               {c}
@@ -111,64 +111,77 @@ function CaseStudies() {
         </div>
       </Section>
 
-      <Section className="space-y-10 pt-0">
-        {filtered.map((c) => (
-          <article
-            key={c.slug}
-            className="overflow-hidden rounded-3xl border border-t-[3px] border-slate-200 bg-white shadow-[0_1px_2px_rgba(15,23,42,0.03),0_8px_24px_-16px_rgba(15,23,42,0.08)] transition-all hover:-translate-y-0.5"
-            style={{ borderTopColor: "#3b82f6" }}
-          >
-            <div className="border-b border-slate-200 bg-[#fafbfc] p-8 sm:p-10">
-              <Badge className="bg-blue-50 text-blue-700 hover:bg-blue-100 border border-blue-200">{c.area}</Badge>
-              <h2
-                className="mt-3 text-2xl font-bold text-slate-900 sm:text-3xl"
-                style={{ fontFamily: "'Space Grotesk', sans-serif", letterSpacing: "-0.02em" }}
-              >
+      <Section className="space-y-6 pt-0">
+        <div className="grid gap-5 lg:grid-cols-2">
+          {filtered.map((c) => (
+            <article
+              key={c.slug}
+              className="card-flashy flex h-full flex-col gap-4 rounded-3xl border border-border bg-card p-7 transition-all hover:-translate-y-0.5 hover:shadow-glow"
+            >
+              <div className="flex flex-wrap gap-2">
+                <Badge className="border border-chip-border bg-chip text-chip-foreground hover:bg-chip">
+                  {c.industry}
+                </Badge>
+                <Badge className="border border-chip-border bg-chip text-chip-foreground hover:bg-chip">
+                  {c.area}
+                </Badge>
+              </div>
+
+              <h2 className="font-display text-xl font-semibold tracking-tight text-foreground sm:text-2xl">
                 {c.title}
               </h2>
-              <p className="mt-3 max-w-3xl text-slate-600">{c.challenge}</p>
-            </div>
-            <div className="grid gap-8 p-8 sm:p-10 lg:grid-cols-2">
-              <Block title="Architecture Approach" body={c.architecture} />
-              <Block title="Execution Strategy" body={c.execution} />
+
               <div>
-                <div className="text-xs font-semibold uppercase tracking-[0.18em] text-blue-600">Technology Stack</div>
+                <Label>Business challenge</Label>
+                <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">{c.challenge}</p>
+              </div>
+
+              <div>
+                <Label>Transformation</Label>
+                <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">{c.strategy}</p>
+              </div>
+
+              <div>
+                <Label>Technology / architecture</Label>
                 <div className="mt-2 flex flex-wrap gap-1.5">
-                  {c.stack.map((s) => (
-                    <span key={s} className="rounded-full border border-slate-200 bg-[#fafbfc] px-2.5 py-1 text-xs text-slate-700">{s}</span>
+                  {c.stack.slice(0, 6).map((s) => (
+                    <span
+                      key={s}
+                      className="rounded-full border border-chip-border bg-chip px-2.5 py-1 text-xs text-chip-foreground"
+                    >
+                      {s}
+                    </span>
                   ))}
                 </div>
               </div>
+
               <div>
-                <div className="text-xs font-semibold uppercase tracking-[0.18em] text-blue-600">AI / Cloud / Data Components</div>
-                <ul className="mt-2 space-y-1.5 text-sm text-slate-700">
-                  {c.components.map((cmp) => (
-                    <li key={cmp} className="flex items-start gap-2">
-                      <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-blue-600" />
-                      <span>{cmp}</span>
+                <Label>Business outcomes</Label>
+                <ul className="mt-2 space-y-1.5 text-sm text-foreground">
+                  {c.outcomeMetrics.slice(0, 3).map((m) => (
+                    <li key={m} className="flex items-start gap-2">
+                      <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-brand-1" />
+                      <span>{m}</span>
                     </li>
                   ))}
                 </ul>
               </div>
-              <div className="lg:col-span-2 rounded-2xl border border-blue-100 bg-blue-50/40 p-5">
-                <div className="text-xs font-semibold uppercase tracking-[0.18em] text-blue-600">Outcome & Business Impact</div>
-                <p className="mt-2 text-sm text-slate-700">{c.outcome}</p>
-              </div>
-              <div className="lg:col-span-2">
-                <div className="text-xs font-semibold uppercase tracking-[0.18em] text-blue-600">Lessons Learned</div>
-                <ul className="mt-2 grid gap-2 text-sm sm:grid-cols-3">
-                  {c.lessons.map((l) => (
-                    <li key={l} className="rounded-xl border border-slate-200 bg-[#fafbfc] p-3 text-slate-700">{l}</li>
-                  ))}
-                </ul>
-              </div>
-            </div>
-          </article>
-        ))}
+
+              <Link
+                to="/case-study/$slug"
+                params={{ slug: c.slug }}
+                className="mt-auto inline-flex min-h-11 w-fit items-center gap-2 rounded-xl bg-brand-gradient px-5 py-3 text-sm font-semibold text-white transition-transform hover:-translate-y-0.5"
+              >
+                View Case Study
+                <ArrowRight className="h-4 w-4" />
+              </Link>
+            </article>
+          ))}
+        </div>
 
         <div className="text-center">
-          <Button asChild className="bg-blue-600 text-white hover:bg-blue-700">
-            <Link to="/contact">Discuss a similar program</Link>
+          <Button asChild className="bg-brand-gradient text-white">
+            <Link to="/contact">Discuss a Similar Transformation</Link>
           </Button>
         </div>
       </Section>
@@ -176,12 +189,10 @@ function CaseStudies() {
   );
 }
 
-function Block({ title, body }: { title: string; body: string }) {
+function Label({ children }: { children: React.ReactNode }) {
   return (
-    <div>
-      <div className="text-xs font-semibold uppercase tracking-[0.18em] text-blue-600">{title}</div>
-      <p className="mt-2 text-sm text-slate-600">{body}</p>
-    </div>
+    <div className="text-xs font-semibold uppercase tracking-[0.18em] text-brand-1">{children}</div>
   );
 }
+
 
