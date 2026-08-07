@@ -3,23 +3,30 @@ import { useEffect, useState } from "react";
 import {
   ArrowRight,
   ArrowUpRight,
+  Bot,
   BookOpen,
-  Briefcase,
+  Building2,
+  Cloud,
   Cpu,
-  FileText,
   FlaskConical,
+  Gauge,
   Layers,
+  LineChart,
   Mail,
   ShieldCheck,
   Sparkles,
+  Users,
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
+import { caseStudies, posts, projects } from "@/lib/content";
+import { Reveal } from "@/components/cinematic/Reveal";
+import { MetricStat } from "@/components/marketing/MetricStat";
+import { NewsletterCta } from "@/components/marketing/NewsletterCta";
 import cardNewsletter from "@/assets/card-newsletter.jpg";
 import cardLearn from "@/assets/card-learn.jpg";
 import cardCaseStudy from "@/assets/card-case-study.jpg";
 import cardResearch from "@/assets/collab-research.jpg";
 import cardProjects from "@/assets/collab-projects.jpg";
-import cardRepository from "@/assets/card-repository.jpg";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -52,13 +59,7 @@ export const Route = createFileRoute("/")({
           "https://storage.googleapis.com/gpt-engineer-file-uploads/attachments/og-images/62feb90f-3c19-4765-9fa6-9b7f7701a7c6",
       },
     ],
-    links: [
-      { rel: "canonical", href: "https://www.dibyamishra.co.in/" },
-      // No high-priority image preload here: the LCP element is the hero <h1>
-      // (text), so preloading a card image only competes for bandwidth with
-      // the render-critical CSS/font requests.
-
-    ],
+    links: [{ rel: "canonical", href: "https://www.dibyamishra.co.in/" }],
     scripts: [
       {
         type: "application/ld+json",
@@ -69,6 +70,14 @@ export const Route = createFileRoute("/")({
           jobTitle: "Vice President & Country Head",
           worksFor: { "@type": "Organization", name: "Crystal Tech Ventures" },
           url: "https://www.dibyamishra.co.in/",
+          knowsAbout: [
+            "Agentic AI",
+            "Generative AI",
+            "Retrieval Augmented Generation",
+            "Cloud Architecture",
+            "Multi-tenant SaaS",
+            "Engineering Leadership",
+          ],
           sameAs: [
             "https://www.linkedin.com/in/dibya-mishra-55b94654",
             "https://github.com/mishradibyaranjan-dot/",
@@ -79,18 +88,6 @@ export const Route = createFileRoute("/")({
   }),
   component: Home,
 });
-
-// ---------- Design tokens (theme-aware, respects dark/light toggle) ----------
-const INK = "var(--color-foreground)";
-const MUTED = "var(--color-muted-foreground)";
-const ACCENT = "var(--color-brand-1)";
-const CANVAS = "var(--color-background)";
-const SURFACE = "var(--color-card)";
-const LINE = "var(--color-border)";
-
-const HEADING: React.CSSProperties = { fontFamily: "'Space Grotesk', sans-serif" };
-const BODY: React.CSSProperties = { fontFamily: "'DM Sans', sans-serif" };
-const MONO: React.CSSProperties = { fontFamily: "'JetBrains Mono', monospace" };
 
 type LatestIssue = {
   slug: string;
@@ -125,86 +122,486 @@ function Home() {
   const latest = useLatestIssue();
 
   return (
-    <div
-      style={{ ...BODY, backgroundColor: CANVAS, color: INK }}
-      className="w-full"
-    >
-      <div className="mx-auto flex w-full max-w-7xl flex-col gap-14 px-6 py-16 sm:py-20 lg:py-24">
+    <div className="w-full bg-background text-foreground">
+      <div className="mx-auto flex w-full max-w-7xl flex-col gap-16 px-4 py-14 sm:px-6 sm:py-20 lg:gap-24 lg:py-24">
         <Hero />
+        <MetricsBar />
+        <Capabilities />
+        <Outcomes />
+        <FeaturedCaseStudies />
         <QuickCards />
-        <BentoGrid latest={latest} />
-        <ProofStrip />
+        <FeaturedProjects />
+        <LatestResearch />
+        <NewsletterSection latest={latest} />
+        <FinalCta />
       </div>
     </div>
   );
 }
 
-// ---------- HERO ----------
+/* ------------------------------- HERO ------------------------------- */
+
 function Hero() {
   return (
-    <section className="flex max-w-5xl flex-col gap-6 animate-fade-in">
-      <div
-        className="text-sm font-semibold uppercase tracking-[0.2em]"
-        style={{ ...MONO, color: MUTED }}
-      >
-        Dibya Ranjan Mishra
-      </div>
-      <div
-        className="inline-flex w-fit items-center gap-3 rounded-full border px-3 py-1"
-        style={{
-          backgroundColor: "rgba(59,130,246,0.06)",
-          borderColor: "rgba(59,130,246,0.15)",
-        }}
-      >
-        <span
-          className="h-2 w-2 animate-pulse rounded-full"
-          style={{ backgroundColor: ACCENT }}
-        />
-        <span
-          className="text-[11px] font-semibold uppercase tracking-[0.18em]"
-          style={{ color: ACCENT }}
-        >
+    <section className="flex max-w-5xl flex-col gap-6">
+      <div className="inline-flex w-fit items-center gap-3 rounded-full border border-chip-border bg-chip px-3 py-1">
+        <span className="h-2 w-2 animate-pulse rounded-full bg-brand-gradient" />
+        <span className="text-[11px] font-semibold uppercase tracking-[0.18em] text-chip-foreground">
           VP &amp; Country Head · Crystal Tech Ventures
         </span>
       </div>
 
-      <h1
-        style={{
-          ...HEADING,
-          fontSize: "clamp(44px, 8vw, 88px)",
-          lineHeight: 0.92,
-          letterSpacing: "-0.04em",
-          fontWeight: 700,
-          color: INK,
-        }}
-      >
-        Shipping <span style={{ color: ACCENT }}>Agentic AI</span> and
-        <br className="hidden sm:block" /> Multi-Tenant Cloud Systems.
+      <h1 className="font-display text-[clamp(40px,7.5vw,80px)] font-bold leading-[0.95] tracking-[-0.035em] text-foreground">
+        AI, Cloud &amp; Engineering Leadership that ships{" "}
+        <span className="text-brand-1">measurable outcomes</span>.
       </h1>
 
-      <p
-        className="max-w-3xl text-lg leading-relaxed sm:text-2xl"
-        style={{ color: MUTED }}
-      >
-        Leading engineering teams to deploy RAG-driven GenAI in retail supply
-        chains and architect the future of enterprise SaaS.
+      <p className="max-w-3xl text-lg leading-relaxed text-muted-foreground sm:text-xl">
+        I help enterprises move Agentic AI and GenAI from pilot to production,
+        modernize onto cloud-native multi-tenant platforms, and build engineering
+        organizations that deliver predictably at global scale.
       </p>
 
       <div className="mt-2 flex flex-wrap items-center gap-3">
         <Link
-          to="/newsletter"
-          className="inline-flex items-center gap-2 rounded-xl px-6 py-3.5 text-sm font-semibold transition-colors hover:brightness-110"
-          style={{ backgroundColor: ACCENT, color: "var(--color-primary-foreground)" }}
+          to="/contact"
+          className="inline-flex min-h-11 items-center gap-2 rounded-xl bg-brand-gradient px-6 py-3.5 text-sm font-semibold text-white transition-transform hover:-translate-y-0.5"
         >
-          Read the newsletter
+          Start a conversation
           <ArrowRight className="h-4 w-4" />
         </Link>
         <Link
-          to="/learn"
-          className="inline-flex items-center gap-2 rounded-xl border px-6 py-3.5 text-sm font-semibold transition-colors hover:bg-white"
-          style={{ borderColor: LINE, color: INK, backgroundColor: SURFACE }}
+          to="/case-studies"
+          className="inline-flex min-h-11 items-center gap-2 rounded-xl border border-border bg-card px-6 py-3.5 text-sm font-semibold text-foreground transition-colors hover:bg-accent"
         >
-          Explore Learn
+          See the outcomes
+          <ArrowUpRight className="h-4 w-4" />
+        </Link>
+      </div>
+
+      <div className="mt-2 flex flex-wrap items-center gap-x-6 gap-y-3 text-sm text-muted-foreground">
+        {[
+          { icon: Bot, label: "Agentic AI · RAG · MCP" },
+          { icon: Cloud, label: "Cloud-native & DevSecOps" },
+          { icon: Users, label: "500+ engineers led" },
+        ].map((t) => (
+          <span key={t.label} className="inline-flex items-center gap-2 font-medium">
+            <t.icon className="h-4 w-4 text-brand-1" />
+            {t.label}
+          </span>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+/* ----------------------------- METRICS ------------------------------ */
+
+function MetricsBar() {
+  return (
+    <section aria-labelledby="metrics-heading" className="rounded-3xl border border-border bg-card p-4 sm:p-6">
+      <h2 id="metrics-heading" className="sr-only">
+        Leadership track record in numbers
+      </h2>
+      <div className="grid grid-cols-2 divide-border sm:grid-cols-3 lg:grid-cols-6">
+        <MetricStat to={20} suffix="+" label="Years experience" />
+        <MetricStat to={500} suffix="+" label="Engineers led" />
+        <MetricStat to={5} label="Time zones" />
+        <MetricStat to={28} prefix="$" suffix="M+" label="Budgets owned" />
+        <MetricStat value="$1M → $20M" label="Portfolio growth" />
+        <MetricStat to={72} suffix="%" label="Faster delivery cycles" />
+      </div>
+    </section>
+  );
+}
+
+/* --------------------------- CAPABILITIES --------------------------- */
+
+const CAPABILITIES = [
+  {
+    icon: Bot,
+    title: "Agentic AI & GenAI in production",
+    body: "Planner-executor agents, hybrid RAG, evaluation harnesses, and guardrails that pass audit — not demos.",
+    to: "/research" as const,
+  },
+  {
+    icon: Cloud,
+    title: "Cloud-native modernization",
+    body: "Strangler-fig decomposition, cell-based deployment, IaC and DevSecOps pipelines across AWS, Azure and GCP.",
+    to: "/case-studies" as const,
+  },
+  {
+    icon: Layers,
+    title: "Multi-tenant SaaS architecture",
+    body: "Tenant isolation, region-aware data planes, progressive delivery, and FinOps guardrails built in from day one.",
+    to: "/projects" as const,
+  },
+  {
+    icon: LineChart,
+    title: "Data platforms & BI at scale",
+    body: "Streaming and batch pipelines, warehouse modeling, and decision-grade analytics leaders actually use.",
+    to: "/research" as const,
+  },
+  {
+    icon: Users,
+    title: "Engineering leadership & delivery",
+    body: "Global org design, SAFe and Lean operating models, and predictable delivery with measurable throughput gains.",
+    to: "/about" as const,
+  },
+] as const;
+
+function Capabilities() {
+  return (
+    <section aria-labelledby="capabilities-heading" className="flex flex-col gap-8">
+      <div className="max-w-3xl">
+        <SectionEyebrow icon={Sparkles}>Capabilities</SectionEyebrow>
+        <h2
+          id="capabilities-heading"
+          className="mt-4 font-display text-3xl font-bold tracking-tight text-foreground sm:text-4xl"
+        >
+          What I help organizations achieve
+        </h2>
+        <p className="mt-3 text-base text-muted-foreground sm:text-lg">
+          Five areas where I take accountability end to end — from architecture
+          decisions through to the delivery org that sustains them.
+        </p>
+      </div>
+
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        {CAPABILITIES.map((c, i) => (
+          <Reveal key={c.title} delay={i * 0.05}>
+            <Link
+              to={c.to}
+              className="card-flashy group flex h-full flex-col gap-3 rounded-2xl border border-border bg-card p-6 transition-all hover:-translate-y-0.5 hover:shadow-glow"
+            >
+              <span className="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-brand-gradient text-white">
+                <c.icon className="h-5 w-5" />
+              </span>
+              <h3 className="font-display text-lg font-semibold text-foreground">{c.title}</h3>
+              <p className="text-sm leading-relaxed text-muted-foreground">{c.body}</p>
+              <span className="mt-auto inline-flex items-center gap-1.5 pt-2 text-sm font-semibold text-brand-1">
+                Explore
+                <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
+              </span>
+            </Link>
+          </Reveal>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+/* ----------------------------- OUTCOMES ----------------------------- */
+
+const OUTCOMES = [
+  { icon: Gauge, stat: "72%", label: "faster delivery cycles", detail: "Agentic automation of 40+ back-office workflows under audit constraints." },
+  { icon: ShieldCheck, stat: "76%", label: "fewer recurring incidents", detail: "Platform hardening and progressive delivery on a cloud-native vessel platform." },
+  { icon: Cpu, stat: "96%", label: "less time to answer", detail: "Hybrid-retrieval RAG assistant unifying 14 knowledge systems for 9,000+ users." },
+  { icon: Building2, stat: "38%", label: "lower infra cost", detail: "Region-aware SaaS modernization with FinOps guardrails and 99.99% availability." },
+] as const;
+
+function Outcomes() {
+  return (
+    <section aria-labelledby="outcomes-heading" className="flex flex-col gap-8">
+      <div className="max-w-3xl">
+        <SectionEyebrow icon={LineChart}>Business outcomes</SectionEyebrow>
+        <h2
+          id="outcomes-heading"
+          className="mt-4 font-display text-3xl font-bold tracking-tight text-foreground sm:text-4xl"
+        >
+          Results, not roadmaps
+        </h2>
+      </div>
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        {OUTCOMES.map((o, i) => (
+          <Reveal key={o.label} delay={i * 0.05}>
+            <div className="flex h-full flex-col gap-2 rounded-2xl border border-border bg-card p-6">
+              <o.icon className="h-5 w-5 text-brand-1" />
+              <div className="font-display text-4xl font-bold tracking-tight text-foreground">
+                {o.stat}
+              </div>
+              <div className="text-sm font-semibold text-foreground">{o.label}</div>
+              <p className="text-sm leading-relaxed text-muted-foreground">{o.detail}</p>
+            </div>
+          </Reveal>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+/* ------------------------- FEATURED CASE STUDIES -------------------- */
+
+function FeaturedCaseStudies() {
+  const featured = caseStudies.slice(0, 3);
+  return (
+    <section aria-labelledby="case-studies-heading" className="flex flex-col gap-8">
+      <SectionHead
+        id="case-studies-heading"
+        eyebrow="Case studies"
+        icon={Briefcase()}
+        title="Programs delivered end to end"
+        description="Challenge, architecture, execution and outcome — written the way an executive review would read."
+        linkTo="/case-studies"
+        linkLabel="All case studies"
+      />
+      <div className="grid gap-4 lg:grid-cols-3">
+        {featured.map((cs, i) => (
+          <Reveal key={cs.slug} delay={i * 0.05}>
+            <Link
+              to="/case-studies"
+              className="card-flashy group flex h-full flex-col gap-3 rounded-2xl border border-border bg-card p-6 transition-all hover:-translate-y-0.5 hover:shadow-glow"
+            >
+              <span className="inline-flex w-fit items-center rounded-full border border-chip-border bg-chip px-2.5 py-0.5 text-[11px] font-semibold uppercase tracking-[0.14em] text-chip-foreground">
+                {cs.area}
+              </span>
+              <h3 className="font-display text-lg font-semibold text-foreground">{cs.title}</h3>
+              <p className="text-sm leading-relaxed text-muted-foreground">{cs.challenge}</p>
+              <p className="mt-auto pt-3 text-sm font-medium text-foreground">{cs.outcome}</p>
+              <span className="inline-flex items-center gap-1.5 text-sm font-semibold text-brand-1">
+                Read the breakdown
+                <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
+              </span>
+            </Link>
+          </Reveal>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+/* ----------------------------- QUICK CARDS -------------------------- */
+
+function QuickCards() {
+  const items = [
+    {
+      to: "/learn",
+      label: "Learn",
+      body: "Guided modules on Agentic AI, RAG and vector search with narrated video lessons.",
+      img: cardLearn,
+      alt: "Illustration of a guided learning module with charts and lesson video",
+    },
+    {
+      to: "/research",
+      label: "Research",
+      body: "Long-form notes on enterprise AI architecture, platforms and delivery.",
+      img: cardResearch,
+      alt: "Illustration of collaborative research work on enterprise AI architecture",
+    },
+    {
+      to: "/projects",
+      label: "Projects",
+      body: "Platforms and products shipped, with the problem, stack and measured impact.",
+      img: cardProjects,
+      alt: "Illustration of engineers collaborating on delivered software projects",
+    },
+    {
+      to: "/case-studies",
+      label: "Case Studies",
+      body: "Deep dives into transformation programs and the architecture behind them.",
+      img: cardCaseStudy,
+      alt: "Illustration of a warehouse worker and robot collaborating in a retail supply chain",
+    },
+    {
+      to: "/newsletter",
+      label: "Newsletter",
+      body: "Monthly executive briefing on AI, cloud and engineering leadership.",
+      img: cardNewsletter,
+      alt: "Illustration of a monthly newsletter issue about AI and cloud leadership",
+    },
+  ] as const;
+
+  return (
+    <section aria-labelledby="explore-heading" className="flex flex-col gap-8">
+      <SectionHead
+        id="explore-heading"
+        eyebrow="Explore"
+        title="Where to go next"
+        description="Everything on this site is organized around one question: does it help you ship?"
+      />
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        {items.map((it, i) => (
+          <Reveal key={it.to} delay={i * 0.05}>
+            <Link
+              to={it.to}
+              className="card-flashy group flex h-full flex-col overflow-hidden rounded-2xl border border-border bg-card transition-all hover:-translate-y-0.5 hover:shadow-glow"
+            >
+              <div className="aspect-[16/9] overflow-hidden border-b border-border">
+                <img
+                  src={it.img}
+                  alt={it.alt}
+                  width={1280}
+                  height={720}
+                  loading="lazy"
+                  decoding="async"
+                  className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]"
+                />
+              </div>
+              <div className="flex flex-1 flex-col gap-2 p-6">
+                <h3 className="font-display text-lg font-semibold text-foreground">{it.label}</h3>
+                <p className="text-sm leading-relaxed text-muted-foreground">{it.body}</p>
+                <span className="mt-auto inline-flex items-center gap-1.5 pt-3 text-sm font-semibold text-brand-1">
+                  Open
+                  <ArrowUpRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
+                </span>
+              </div>
+            </Link>
+          </Reveal>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+/* --------------------------- FEATURED PROJECTS ---------------------- */
+
+function FeaturedProjects() {
+  const featured = projects.slice(0, 3);
+  return (
+    <section aria-labelledby="projects-heading" className="flex flex-col gap-8">
+      <SectionHead
+        id="projects-heading"
+        eyebrow="Projects"
+        title="Platforms shipped at enterprise scale"
+        linkTo="/projects"
+        linkLabel="All projects"
+      />
+      <div className="grid gap-4 lg:grid-cols-3">
+        {featured.map((p, i) => (
+          <Reveal key={p.slug} delay={i * 0.05}>
+            <Link
+              to="/projects"
+              className="card-flashy group flex h-full flex-col gap-3 rounded-2xl border border-border bg-card p-6 transition-all hover:-translate-y-0.5 hover:shadow-glow"
+            >
+              <h3 className="font-display text-lg font-semibold text-foreground">{p.name}</h3>
+              <p className="text-sm leading-relaxed text-muted-foreground">{p.problem}</p>
+              <ul className="mt-auto flex flex-wrap gap-2 pt-3">
+                {p.metrics.map((m) => (
+                  <li
+                    key={m}
+                    className="rounded-full border border-chip-border bg-chip px-2.5 py-0.5 text-[11px] font-semibold text-chip-foreground"
+                  >
+                    {m}
+                  </li>
+                ))}
+              </ul>
+              <span className="inline-flex items-center gap-1.5 pt-1 text-sm font-semibold text-brand-1">
+                View project
+                <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
+              </span>
+            </Link>
+          </Reveal>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+/* ---------------------------- LATEST RESEARCH ---------------------- */
+
+function LatestResearch() {
+  const featured = posts.filter((p) => p.featured).slice(0, 3);
+  return (
+    <section aria-labelledby="research-heading" className="flex flex-col gap-8">
+      <SectionHead
+        id="research-heading"
+        eyebrow="Research & writing"
+        title="Ideas worth an executive's time"
+        linkTo="/research"
+        linkLabel="All research"
+      />
+      <div className="grid gap-4 lg:grid-cols-3">
+        {featured.map((p, i) => (
+          <Reveal key={p.slug} delay={i * 0.05}>
+            <Link
+              to="/blog/$slug"
+              params={{ slug: p.slug }}
+              className="card-flashy group flex h-full flex-col gap-3 rounded-2xl border border-border bg-card p-6 transition-all hover:-translate-y-0.5 hover:shadow-glow"
+            >
+              <span className="inline-flex w-fit items-center rounded-full border border-chip-border bg-chip px-2.5 py-0.5 text-[11px] font-semibold uppercase tracking-[0.14em] text-chip-foreground">
+                {p.category}
+              </span>
+              <h3 className="font-display text-lg font-semibold text-foreground">{p.title}</h3>
+              <p className="text-sm leading-relaxed text-muted-foreground">{p.summary}</p>
+              <span className="mt-auto inline-flex items-center gap-1.5 pt-3 text-sm font-semibold text-brand-1">
+                Read · {p.readingTime}
+                <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
+              </span>
+            </Link>
+          </Reveal>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+/* ---------------------------- NEWSLETTER --------------------------- */
+
+function NewsletterSection({ latest }: { latest: LatestIssue | null }) {
+  return (
+    <section aria-labelledby="newsletter-heading" className="flex flex-col gap-6">
+      <h2 id="newsletter-heading" className="sr-only">
+        Newsletter
+      </h2>
+      <NewsletterCta />
+      {latest && (
+        <Link
+          to="/newsletter/$slug"
+          params={{ slug: latest.slug }}
+          className="group inline-flex items-center gap-3 rounded-2xl border border-border bg-card p-5 transition-all hover:-translate-y-0.5 hover:shadow-glow"
+        >
+          <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-brand-gradient text-white">
+            <Mail className="h-5 w-5" />
+          </span>
+          <span className="min-w-0">
+            <span className="block text-xs font-semibold uppercase tracking-[0.16em] text-muted-foreground">
+              Latest issue
+            </span>
+            <span className="block truncate text-sm font-semibold text-foreground">
+              {latest.hero_emoji ? `${latest.hero_emoji} ` : ""}
+              {latest.title}
+            </span>
+          </span>
+          <ArrowRight className="ml-auto h-4 w-4 shrink-0 text-brand-1 transition-transform group-hover:translate-x-0.5" />
+        </Link>
+      )}
+    </section>
+  );
+}
+
+/* ----------------------------- FINAL CTA --------------------------- */
+
+function FinalCta() {
+  return (
+    <section
+      aria-labelledby="final-cta-heading"
+      className="card-flashy flex flex-col items-start gap-5 rounded-3xl glass-strong p-8 sm:p-12"
+    >
+      <SectionEyebrow icon={Sparkles}>Let&apos;s work together</SectionEyebrow>
+      <h2
+        id="final-cta-heading"
+        className="font-display text-3xl font-bold tracking-tight text-foreground sm:text-4xl"
+      >
+        Planning an AI, cloud or platform program?
+      </h2>
+      <p className="max-w-2xl text-base text-muted-foreground sm:text-lg">
+        Advisory engagements, architecture reviews, delivery turnarounds, and
+        engineering leadership conversations — start with a short note about the
+        outcome you need.
+      </p>
+      <div className="flex flex-wrap gap-3">
+        <Link
+          to="/contact"
+          className="inline-flex min-h-11 items-center gap-2 rounded-xl bg-brand-gradient px-6 py-3.5 text-sm font-semibold text-white transition-transform hover:-translate-y-0.5"
+        >
+          Contact me
+          <ArrowRight className="h-4 w-4" />
+        </Link>
+        <Link
+          to="/about"
+          className="inline-flex min-h-11 items-center gap-2 rounded-xl border border-border bg-card px-6 py-3.5 text-sm font-semibold text-foreground transition-colors hover:bg-accent"
+        >
+          About my background
           <ArrowUpRight className="h-4 w-4" />
         </Link>
       </div>
@@ -212,395 +609,68 @@ function Hero() {
   );
 }
 
-// ---------- QUICK CARDS ----------
-function QuickCards() {
-  const items = [
-    { to: "/learn", label: "Learn", desc: "GenAI, RAG & SaaS deep dives", Icon: BookOpen, img: cardLearn, alt: "Learner and robot collaborating over books" },
-    { to: "/research", label: "Research", desc: "Notes on AI & cloud systems", Icon: FlaskConical, img: cardResearch, alt: "Researcher and AI reviewing data on screens" },
-    { to: "/projects", label: "Projects", desc: "Shipped products & platforms", Icon: Layers, img: cardProjects, alt: "Engineer and robot building products together" },
-    { to: "/case-studies", label: "Case Studies", desc: "Enterprise transformations", Icon: Briefcase, img: cardCaseStudy, alt: "Consultant and robot analyzing enterprise case study" },
-    { to: "/newsletter", label: "Newsletter", desc: "Monthly intelligence brief", Icon: Mail, img: cardNewsletter, alt: "Human and robot hands collaborating on a newsletter" },
-  ] as const;
-  return (
-    <section aria-labelledby="explore-heading">
-      <h2 id="explore-heading" className="sr-only">
-        Explore the site
-      </h2>
-      <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
-      {items.map(({ to, label, desc, Icon, img, alt }, index) => (
-        <Link
-          key={to}
-          to={to}
-          className="group flex flex-col overflow-hidden rounded-2xl border transition-all hover:-translate-y-0.5 hover:shadow-md"
-          style={{ backgroundColor: SURFACE, borderColor: LINE, color: INK }}
-        >
-          <div className="relative aspect-[16/10] overflow-hidden" style={{ backgroundColor: LINE }}>
-            <img
-              src={img}
-              alt={alt}
-              loading={index === 0 ? "eager" : "lazy"}
-              fetchPriority="low"
+/* ------------------------------ SHARED ----------------------------- */
 
-              decoding="async"
-              width={480}
-              height={300}
-              sizes="(min-width: 1024px) 20vw, (min-width: 640px) 33vw, 50vw"
-              className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-            />
-            <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-black/40 to-transparent" />
-            <Icon
-              className="absolute left-3 top-3 h-5 w-5 rounded-md bg-white/90 p-0.5 shadow-sm"
-              style={{ color: ACCENT }}
-            />
-            <ArrowUpRight
-              className="absolute right-3 top-3 h-5 w-5 rounded-md bg-white/90 p-0.5 opacity-80 shadow-sm transition-all group-hover:translate-x-0.5 group-hover:opacity-100"
-              style={{ color: ACCENT }}
-            />
-          </div>
-          <div className="flex flex-col gap-1 p-4">
-            <div className="text-base font-bold" style={{ ...HEADING, color: INK }}>
-              {label}
-            </div>
-            <div className="text-xs leading-relaxed" style={{ color: MUTED }}>
-              {desc}
-            </div>
-          </div>
-        </Link>
-      ))}
-      </div>
-    </section>
-  );
+// Small indirection so the eyebrow icon type stays uniform.
+function Briefcase() {
+  return FlaskConical;
 }
 
-
-
-// ---------- BENTO ----------
-function BentoGrid({ latest }: { latest: LatestIssue | null }) {
-  return (
-    <section aria-labelledby="highlights-heading">
-      <h2 id="highlights-heading" className="sr-only">
-        Highlights
-      </h2>
-      <div className="grid grid-cols-1 gap-6 md:grid-cols-12">
-        <NewsletterTile latest={latest} />
-        <LearnTile />
-        <RepositoryTile />
-        <CaseStudyTile />
-      </div>
-    </section>
-  );
-}
-
-function TileEyebrow({ children }: { children: React.ReactNode }) {
-  return (
-    <div
-      className="text-[11px] font-semibold uppercase tracking-[0.18em]"
-      style={{ color: ACCENT }}
-    >
-      {children}
-    </div>
-  );
-}
-
-function LightTile({
+function SectionEyebrow({
+  icon: Icon,
   children,
-  className = "",
-  span = "md:col-span-4",
 }: {
+  icon: typeof Sparkles;
   children: React.ReactNode;
-  className?: string;
-  span?: string;
 }) {
   return (
-    <div
-      className={`${span} group flex flex-col rounded-[2rem] border p-5 transition-all duration-500 sm:p-6 md:p-8 ${className}`}
-      style={{
-        backgroundColor: SURFACE,
-        borderColor: LINE,
-        boxShadow: "0 1px 2px rgba(15,23,42,0.03), 0 8px 24px -16px rgba(15,23,42,0.08)",
-      }}
-    >
+    <span className="inline-flex items-center gap-2 rounded-full border border-chip-border bg-chip px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.16em] text-chip-foreground">
+      <Icon className="h-3.5 w-3.5" />
       {children}
-    </div>
+    </span>
   );
 }
 
-function NewsletterTile({ latest }: { latest: LatestIssue | null }) {
+function SectionHead({
+  id,
+  eyebrow,
+  title,
+  description,
+  linkTo,
+  linkLabel,
+  icon,
+}: {
+  id: string;
+  eyebrow: string;
+  title: string;
+  description?: string;
+  linkTo?: "/case-studies" | "/projects" | "/research";
+  linkLabel?: string;
+  icon?: typeof Sparkles;
+}) {
   return (
-    <LightTile
-      span="md:col-span-8"
-      className="justify-between gap-10 hover:-translate-y-0.5 overflow-hidden !p-0"
-    >
-      <div className="grid grid-cols-1 md:grid-cols-5">
-        <div className="md:col-span-3 flex flex-col gap-6 p-6 sm:p-8 md:p-10">
-          <div className="flex flex-col gap-4">
-            <TileEyebrow>Monthly Newsletter</TileEyebrow>
-            <h2
-              style={{ ...HEADING, color: INK, letterSpacing: "-0.02em" }}
-              className="text-3xl font-bold tracking-tight sm:text-4xl md:text-5xl"
-            >
-              {latest?.title ?? "Human-in-the-Loop"}
-            </h2>
-            <p className="max-w-xl text-base leading-relaxed sm:text-lg" style={{ color: MUTED }}>
-              {latest?.summary ??
-                "Deep dives into AI approval workflows and automated LinkedIn distribution — signed off by me before anything ships."}
-            </p>
-          </div>
-
-          <div className="flex flex-col gap-4 sm:flex-row">
-            <Link
-              to={latest ? "/newsletter/$slug" : "/newsletter"}
-              params={latest ? { slug: latest.slug } : undefined}
-              className="inline-flex flex-1 items-center justify-between rounded-xl border px-6 py-4 text-sm font-medium transition-colors"
-              style={{ backgroundColor: CANVAS, borderColor: LINE, color: INK }}
-            >
-              <span className="truncate">
-                {latest ? "Read the latest issue" : "Browse the archive"}
-              </span>
-              <ArrowUpRight className="ml-4 h-4 w-4 shrink-0 transition-transform group-hover:translate-x-0.5" />
-            </Link>
-            <Link
-              to="/newsletter"
-              className="inline-flex items-center justify-center gap-2 rounded-xl px-8 py-4 text-sm font-semibold transition-colors hover:brightness-110"
-              style={{ backgroundColor: ACCENT, color: "var(--color-primary-foreground)" }}
-            >
-              <Mail className="h-4 w-4" />
-              Subscribe
-            </Link>
-          </div>
-        </div>
-        <div className="md:col-span-2 relative min-h-[200px] border-t md:border-t-0 md:border-l" style={{ backgroundColor: CANVAS, borderColor: LINE }}>
-          <img
-            src={cardNewsletter}
-            alt="A human hand and a robot hand collaborating on a newsletter document"
-            loading="lazy"
-
-            decoding="async"
-            width={1280}
-            height={960}
-            className="h-full w-full object-cover"
-          />
-
-        </div>
-      </div>
-    </LightTile>
-  );
-}
-
-function LearnTile() {
-  const modules: { label: string; num: string }[] = [
-    { label: "Agentic RAG", num: "01" },
-    { label: "Multi-tenant SaaS", num: "02" },
-    { label: "Cloud Architecture", num: "03" },
-  ];
-  return (
-    <LightTile span="md:col-span-4" className="hover:-translate-y-0.5">
-      <div className="mb-auto">
-        <div
-          className="mb-4 overflow-hidden rounded-2xl border"
-          style={{ borderColor: LINE, backgroundColor: CANVAS }}
+    <div className="grid grid-cols-[minmax(0,1fr)_auto] items-end gap-4 sm:flex sm:flex-wrap sm:justify-between">
+      <div className="min-w-0 max-w-3xl">
+        <SectionEyebrow icon={icon ?? BookOpen}>{eyebrow}</SectionEyebrow>
+        <h2
+          id={id}
+          className="mt-4 font-display text-3xl font-bold tracking-tight text-foreground sm:text-4xl"
         >
-          <img
-            src={cardLearn}
-            alt="A human learner and a robot studying together with books"
-            loading="lazy"
-            width={1280}
-            height={960}
-            className="h-32 w-full object-cover"
-          />
-        </div>
-        <h3
-          style={{ ...HEADING, color: INK, letterSpacing: "-0.02em" }}
-          className="text-2xl font-bold"
-        >
-          Learn Module
-        </h3>
-        <p className="mt-3 text-base" style={{ color: MUTED }}>
-          Deep dives into Cloud &amp; SaaS infrastructure for the modern era.
-        </p>
+          {title}
+        </h2>
+        {description && (
+          <p className="mt-3 text-base text-muted-foreground sm:text-lg">{description}</p>
+        )}
       </div>
-      <div className="mt-8 flex flex-col">
-        {modules.map((m, i) => (
-          <div
-            key={m.label}
-            className="flex items-center justify-between py-3"
-            style={{
-              borderBottom: i < modules.length - 1 ? `1px solid ${LINE}` : "none",
-            }}
-          >
-            <span className="text-sm font-medium" style={{ color: INK }}>
-              {m.label}
-            </span>
-            <span style={{ ...MONO, color: ACCENT, fontSize: 12 }}>{m.num}</span>
-          </div>
-        ))}
-      </div>
-      <Link
-        to="/learn"
-        className="mt-6 inline-flex items-center gap-1 text-sm font-semibold transition-colors"
-        style={{ color: INK }}
-      >
-        Open Learn
-        <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
-      </Link>
-    </LightTile>
-  );
-}
-
-function RepositoryTile() {
-  return (
-    <div
-      className="group flex flex-col rounded-[2rem] border border-t-[3px] p-5 shadow-lg transition-transform duration-500 hover:-translate-y-1 sm:p-6 md:p-8 md:col-span-4"
-      style={{
-        backgroundColor: SURFACE,
-        borderColor: LINE,
-        borderTopColor: ACCENT,
-        color: INK,
-      }}
-    >
-      <div
-        className="mb-4 overflow-hidden rounded-2xl border"
-        style={{ borderColor: LINE, backgroundColor: CANVAS }}
-      >
-        <img
-          src={cardRepository}
-          alt="A human and a robot organizing a vault of PDF documents"
-          loading="lazy"
-          width={1280}
-          height={960}
-          className="h-32 w-full object-cover"
-        />
-      </div>
-      <div
-        className="text-[11px] font-semibold uppercase tracking-[0.18em]"
-        style={{ color: ACCENT }}
-      >
-        Resource Vault
-      </div>
-      <h3
-        style={{ ...HEADING, color: INK, letterSpacing: "-0.02em" }}
-        className="mt-4 text-2xl font-bold sm:text-3xl"
-      >
-        The Repository
-      </h3>
-      <p className="mt-3 text-sm sm:text-base" style={{ color: MUTED }}>
-        Exclusive PDFs, architecture diagrams, and whitepapers on GenAI, RAG,
-        cloud & multi-tenant SaaS.
-      </p>
-
-      <div
-        className="mt-auto pt-6 text-xs sm:pt-8"
-        style={{ color: MUTED }}
-      >
-        <div className="mb-4 flex flex-wrap items-center gap-2">
-          <span
-            className="inline-flex items-center gap-1 rounded border px-2 py-0.5"
-            style={{ backgroundColor: "rgba(59,130,246,0.08)", borderColor: "rgba(59,130,246,0.18)", color: ACCENT }}
-          >
-            <ShieldCheck className="h-3 w-3" /> Auth gated
-          </span>
-          <span>9 downloads available</span>
-        </div>
+      {linkTo && linkLabel && (
         <Link
-          to="/repository"
-          className="flex w-full items-center justify-center gap-2 rounded-xl py-3.5 text-sm font-bold transition-all hover:brightness-110 sm:py-4"
-          style={{ backgroundColor: ACCENT, color: "var(--color-primary-foreground)" }}
+          to={linkTo}
+          className="inline-flex shrink-0 items-center gap-1.5 text-sm font-semibold text-brand-1"
         >
-          <FileText className="h-4 w-4" />
-          Enter Vault
+          {linkLabel}
+          <ArrowUpRight className="h-4 w-4" />
         </Link>
-      </div>
+      )}
     </div>
   );
 }
-
-function CaseStudyTile() {
-  return (
-    <LightTile span="md:col-span-8" className="!p-0 overflow-hidden">
-      <div className="grid h-full grid-cols-1 md:grid-cols-2">
-        <div className="flex flex-col justify-center p-5 sm:p-8 md:p-12">
-          <TileEyebrow>Featured Case Study</TileEyebrow>
-          <h3
-            style={{ ...HEADING, color: INK, letterSpacing: "-0.02em" }}
-            className="mt-4 text-2xl font-bold sm:text-3xl"
-          >
-            Retail Supply Chain Transformation
-          </h3>
-          <p className="mt-3 max-w-md text-sm sm:text-base md:text-lg" style={{ color: MUTED }}>
-            Implementing multi-tenant SaaS for real-time inventory optimization
-            using GenAI and agentic workflows.
-          </p>
-          <Link
-            to="/case-studies"
-            className="mt-6 inline-flex items-center gap-2 text-sm font-bold transition-colors"
-            style={{ color: INK }}
-          >
-            Read the technical doc
-            <ArrowRight className="h-4 w-4" />
-          </Link>
-        </div>
-        <div
-          className="relative min-h-[200px] overflow-hidden border-t md:border-t-0 md:border-l"
-          style={{ backgroundColor: CANVAS, borderColor: LINE }}
-        >
-          <img
-            src={cardCaseStudy}
-            alt="A human warehouse worker and a robot collaborating in a retail supply chain"
-            loading="lazy"
-            width={1280}
-            height={960}
-            className="h-full w-full object-cover"
-          />
-        </div>
-      </div>
-    </LightTile>
-  );
-}
-
-// ---------- PROOF / FOOTER STRIP ----------
-function ProofStrip() {
-  const stack = [
-    { icon: Cpu, label: "Agentic AI · RAG · MCP" },
-    { icon: Sparkles, label: "GenAI in Retail Supply Chain" },
-    { icon: ShieldCheck, label: "Multi-tenant SaaS & Cloud" },
-  ];
-  return (
-    <section
-      aria-labelledby="focus-areas-heading"
-      className="mt-6 flex flex-col gap-8 border-t pt-12 md:flex-row md:items-center md:justify-between"
-      style={{ borderColor: LINE }}
-    >
-      <h2 id="focus-areas-heading" className="sr-only">
-        Focus areas and contact
-      </h2>
-      <div
-        className="text-2xl font-bold"
-        style={{ ...HEADING, color: INK, letterSpacing: "-0.02em" }}
-      >
-        Dibya R. Mishra
-      </div>
-      <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-3">
-        {stack.map((s) => (
-          <div
-            key={s.label}
-            className="inline-flex items-center gap-2 text-sm font-medium"
-            style={{ color: MUTED }}
-          >
-            <s.icon className="h-4 w-4" style={{ color: ACCENT }} />
-            {s.label}
-          </div>
-        ))}
-      </div>
-      <Link
-        to="/contact"
-        className="inline-flex items-center gap-2 rounded-full border px-6 py-3 text-sm font-bold transition-all hover:bg-white hover:shadow-md"
-        style={{ borderColor: LINE, color: INK, backgroundColor: CANVAS }}
-      >
-        <Mail className="h-4 w-4" />
-        Contact
-      </Link>
-    </section>
-  );
-}
-
-
