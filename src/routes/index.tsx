@@ -126,18 +126,21 @@ function Home() {
       <div className="mx-auto flex w-full max-w-7xl flex-col gap-16 px-4 py-14 sm:px-6 sm:py-20 lg:gap-24 lg:py-24">
         <Hero />
         <MetricsBar />
-        <Capabilities />
+        <Problems />
         <Outcomes />
+        <WaysToWork />
         <FeaturedCaseStudies />
-        <QuickCards />
+        <Capabilities />
         <FeaturedProjects />
         <LatestResearch />
+        <QuickCards />
         <NewsletterSection latest={latest} />
         <FinalCta />
       </div>
     </div>
   );
 }
+
 
 /* ------------------------------- HERO ------------------------------- */
 
@@ -147,19 +150,24 @@ function Hero() {
       <div className="inline-flex w-fit items-center gap-3 rounded-full border border-chip-border bg-chip px-3 py-1">
         <span className="h-2 w-2 animate-pulse rounded-full bg-brand-gradient" />
         <span className="text-[11px] font-semibold uppercase tracking-[0.18em] text-chip-foreground">
-          VP &amp; Country Head · Crystal Tech Ventures
+          AI · Cloud · Engineering · GCC · Enterprise Transformation
         </span>
       </div>
 
       <h1 className="font-display text-[clamp(40px,7.5vw,80px)] font-bold leading-[0.95] tracking-[-0.035em] text-foreground">
-        AI, Cloud &amp; Engineering Leadership that ships{" "}
-        <span className="text-brand-1">measurable outcomes</span>.
+        Turning AI, Cloud &amp; Engineering Strategy into{" "}
+        <span className="text-brand-1">Enterprise Outcomes</span>
       </h1>
 
       <p className="max-w-3xl text-lg leading-relaxed text-muted-foreground sm:text-xl">
-        I help enterprises move Agentic AI and GenAI from pilot to production,
-        modernize onto cloud-native multi-tenant platforms, and build engineering
-        organizations that deliver predictably at global scale.
+        I help enterprises adopt Agentic AI, modernize cloud platforms, scale
+        engineering organizations and build high-performing GCC capabilities —
+        from strategy through execution.
+      </p>
+
+      <p className="max-w-3xl text-base text-muted-foreground">
+        20+ years of technology leadership across enterprise platforms, AI, cloud,
+        SaaS and global engineering organizations.
       </p>
 
       <div className="mt-2 flex flex-wrap items-center gap-3">
@@ -167,15 +175,23 @@ function Hero() {
           to="/contact"
           className="inline-flex min-h-11 items-center gap-2 rounded-xl bg-brand-gradient px-6 py-3.5 text-sm font-semibold text-white transition-transform hover:-translate-y-0.5"
         >
-          Start a conversation
+          Discuss a Transformation
           <ArrowRight className="h-4 w-4" />
         </Link>
         <Link
           to="/case-studies"
           className="inline-flex min-h-11 items-center gap-2 rounded-xl border border-border bg-card px-6 py-3.5 text-sm font-semibold text-foreground transition-colors hover:bg-accent"
         >
-          See the outcomes
+          Explore Case Studies
           <ArrowUpRight className="h-4 w-4" />
+        </Link>
+        <Link
+          to="/research"
+          search={{ q: "", category: "All", tag: "", page: 1 }}
+          className="inline-flex min-h-11 items-center gap-1.5 px-1 text-sm font-semibold text-brand-1"
+        >
+          Read My Research
+          <ArrowRight className="h-4 w-4" />
         </Link>
       </div>
 
@@ -194,6 +210,7 @@ function Hero() {
     </section>
   );
 }
+
 
 /* ----------------------------- METRICS ------------------------------ */
 
@@ -336,6 +353,137 @@ function Outcomes() {
     </section>
   );
 }
+
+/* ---------------------- PROBLEMS I HELP SOLVE ---------------------- */
+
+const PROBLEMS = [
+  {
+    icon: Bot,
+    title: "Enterprise AI Transformation",
+    body: "Move AI beyond experimentation into scalable enterprise solutions using Agentic AI, LLMs, RAG, AI agents, automation and AI governance.",
+    cta: "Explore AI Transformation",
+    to: "/advisory" as const,
+  },
+  {
+    icon: Cloud,
+    title: "Cloud & Platform Modernization",
+    body: "Modernize legacy platforms into secure, scalable and cloud-native architectures without stalling the business.",
+    cta: "Explore Platform Modernization",
+    to: "/advisory" as const,
+  },
+  {
+    icon: Layers,
+    title: "Engineering Transformation",
+    body: "Improve engineering delivery, platform practices, architecture governance and global engineering effectiveness.",
+    cta: "Explore Engineering Transformation",
+    to: "/advisory" as const,
+  },
+  {
+    icon: Building2,
+    title: "GCC Strategy & Scale",
+    body: "Establish and scale Global Capability Centres: technology strategy, organization design, capability development, delivery governance and AI adoption.",
+    cta: "Explore GCC Strategy",
+    to: "/advisory" as const,
+  },
+  {
+    icon: LineChart,
+    title: "Supply Chain & Enterprise Technology",
+    body: "Use AI, SaaS, data and digital platforms to solve complex supply-chain and enterprise technology challenges.",
+    cta: "Explore Industry Solutions",
+    to: "/expertise" as const,
+  },
+] as const;
+
+function Problems() {
+  return (
+    <section aria-labelledby="problems-heading" className="flex flex-col gap-8">
+      <div className="max-w-3xl">
+        <SectionEyebrow icon={Sparkles}>Problems I help solve</SectionEyebrow>
+        <h2
+          id="problems-heading"
+          className="mt-4 font-display text-3xl font-bold tracking-tight text-foreground sm:text-4xl"
+        >
+          Technology transformation should produce business outcomes
+        </h2>
+      </div>
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        {PROBLEMS.map((p, i) => (
+          <Reveal key={p.title} delay={i * 0.05}>
+            <Link
+              to={p.to}
+              className="card-flashy group flex h-full flex-col gap-3 rounded-2xl border border-border bg-card p-6 transition-all hover:-translate-y-0.5 hover:shadow-glow"
+            >
+              <span className="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-brand-gradient text-white">
+                <p.icon className="h-5 w-5" />
+              </span>
+              <h3 className="font-display text-lg font-semibold text-foreground">{p.title}</h3>
+              <p className="text-sm leading-relaxed text-muted-foreground">{p.body}</p>
+              <span className="mt-auto inline-flex items-center gap-1.5 pt-2 text-sm font-semibold text-brand-1">
+                {p.cta}
+                <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
+              </span>
+            </Link>
+          </Reveal>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+/* ------------------------- WAYS TO WORK WITH ME -------------------- */
+
+const WAYS = [
+  {
+    title: "Enterprise AI Strategy",
+    body: "AI opportunity assessment, Agentic AI roadmap, enterprise RAG architecture, AI governance and production readiness.",
+  },
+  {
+    title: "Architecture & Platform Review",
+    body: "Cloud architecture assessment, modernization strategy, multi-tenant SaaS design, scalability and security review.",
+  },
+  {
+    title: "GCC & Engineering Transformation",
+    body: "GCC technology strategy, organization design, operating model, delivery governance and capability development.",
+  },
+  {
+    title: "Executive Technology Advisory",
+    body: "Technology strategy, architecture decisions, AI strategy and transformation planning for leadership teams.",
+  },
+] as const;
+
+function WaysToWork() {
+  return (
+    <section aria-labelledby="ways-heading" className="flex flex-col gap-8">
+      <SectionHead
+        id="ways-heading"
+        eyebrow="Advisory"
+        icon={Users}
+        title="Ways to work with me"
+        description="Four focused engagement areas for executives leading AI, cloud, platform and engineering change."
+        linkTo="/advisory"
+        linkLabel="See advisory details"
+      />
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        {WAYS.map((w, i) => (
+          <Reveal key={w.title} delay={i * 0.05}>
+            <Link
+              to="/advisory"
+              className="card-flashy group flex h-full flex-col gap-3 rounded-2xl border border-border bg-card p-6 transition-all hover:-translate-y-0.5 hover:shadow-glow"
+            >
+              <h3 className="font-display text-base font-semibold text-foreground">{w.title}</h3>
+              <p className="text-sm leading-relaxed text-muted-foreground">{w.body}</p>
+              <span className="mt-auto inline-flex items-center gap-1.5 pt-2 text-sm font-semibold text-brand-1">
+                Learn more
+                <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
+              </span>
+            </Link>
+          </Reveal>
+        ))}
+      </div>
+    </section>
+  );
+}
+
 
 /* ------------------------- FEATURED CASE STUDIES -------------------- */
 
@@ -589,29 +737,29 @@ function FinalCta() {
         id="final-cta-heading"
         className="font-display text-3xl font-bold tracking-tight text-foreground sm:text-4xl"
       >
-        Planning an AI, cloud or platform program?
+        Complex Technology. Clear Direction. Measurable Outcomes.
       </h2>
       <p className="max-w-2xl text-base text-muted-foreground sm:text-lg">
-        Advisory engagements, architecture reviews, delivery turnarounds, and
-        engineering leadership conversations — start with a short note about the
-        outcome you need.
+        AI, cloud and engineering transformation require more than technology. They
+        require strategy, architecture, leadership and disciplined execution.
       </p>
       <div className="flex flex-wrap gap-3">
         <Link
           to="/contact"
           className="inline-flex min-h-11 items-center gap-2 rounded-xl bg-brand-gradient px-6 py-3.5 text-sm font-semibold text-white transition-transform hover:-translate-y-0.5"
         >
-          Contact me
+          Start a Conversation
           <ArrowRight className="h-4 w-4" />
         </Link>
         <Link
-          to="/about"
+          to="/case-studies"
           className="inline-flex min-h-11 items-center gap-2 rounded-xl border border-border bg-card px-6 py-3.5 text-sm font-semibold text-foreground transition-colors hover:bg-accent"
         >
-          About my background
+          Explore Case Studies
           <ArrowUpRight className="h-4 w-4" />
         </Link>
       </div>
+
     </section>
   );
 }
@@ -646,7 +794,7 @@ function SectionHead({
   eyebrow: string;
   title: string;
   description?: string;
-  linkTo?: "/case-studies" | "/projects" | "/research";
+  linkTo?: "/case-studies" | "/projects" | "/research" | "/advisory";
   linkLabel?: string;
   icon?: typeof Sparkles;
 }) {
