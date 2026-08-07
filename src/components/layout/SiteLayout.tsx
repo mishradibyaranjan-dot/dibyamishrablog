@@ -100,15 +100,20 @@ function NewsletterForm() {
 const NAV = [
   { to: "/", label: "Home" },
   { to: "/about", label: "About" },
-  { to: "/learn", label: "Learn" },
-  { to: "/guide", label: "Guide" },
-  { to: "/repository", label: "Repository" },
-  { to: "/research", label: "Research" },
-  { to: "/projects", label: "Projects" },
   { to: "/case-studies", label: "Case Studies" },
+  { to: "/projects", label: "Projects" },
+  { to: "/research", label: "Research" },
+  { to: "/learn", label: "Learn" },
   { to: "/newsletter", label: "Newsletter" },
   { to: "/contact", label: "Contact" },
 ] as const;
+
+const MORE_NAV = [
+  { to: "/guide", label: "Guided Tour" },
+  { to: "/repository", label: "Repository" },
+  { to: "/trust", label: "Trust & Privacy" },
+] as const;
+
 
 function Header() {
   const [open, setOpen] = useState(false);
