@@ -101,6 +101,7 @@ function NewsletterForm() {
 const NAV = [
   { to: "/", label: "Home" },
   { to: "/about", label: "About" },
+  { to: "/expertise", label: "Expertise" },
   { to: "/case-studies", label: "Case Studies" },
   { to: "/projects", label: "Projects" },
   { to: "/research", label: "Research" },
@@ -163,7 +164,7 @@ function Header() {
                 key={item.to}
                 to={item.to}
                 className={cn(
-                  "relative rounded-md px-3 py-2 text-sm font-medium transition-colors",
+                  "relative whitespace-nowrap rounded-md px-2.5 py-2 text-sm font-medium transition-colors",
                   active ? "text-blue-600" : "text-slate-600 hover:text-slate-900",
                 )}
                 activeOptions={{ exact: item.to === "/" }}
@@ -184,7 +185,7 @@ function Header() {
         <div className="flex items-center gap-1 sm:gap-2">
           <Link
             to="/contact"
-            className="hidden min-h-11 items-center gap-2 rounded-full bg-brand-gradient px-4 py-2 text-sm font-semibold text-white transition-transform hover:-translate-y-0.5 lg:inline-flex"
+            className="hidden min-h-11 shrink-0 items-center gap-2 whitespace-nowrap rounded-full bg-brand-gradient px-4 py-2 text-sm font-semibold text-white transition-transform hover:-translate-y-0.5 xl:inline-flex"
           >
             Let&apos;s Connect
           </Link>
