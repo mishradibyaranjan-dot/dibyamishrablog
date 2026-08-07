@@ -141,6 +141,7 @@ function BlogPost() {
           </div>
 
 
+          <div id="playbook">
           <LeadMagnet
             source={`blog-${post.slug}`}
             eyebrow="Executive playbook"
@@ -153,6 +154,7 @@ function BlogPost() {
             ]}
             downloadHref="/api/download/pdf?doc=enterprise-brief"
           />
+          </div>
 
           <div className="flex flex-wrap gap-3 text-sm">
             <Button asChild variant="outline" size="sm">
