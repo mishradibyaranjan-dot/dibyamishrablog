@@ -18,7 +18,7 @@ import {
   Users,
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
-import { caseStudies, posts, projects } from "@/lib/content";
+import { caseStudies, posts, projects, testimonials } from "@/lib/content";
 import { Reveal } from "@/components/cinematic/Reveal";
 import { MetricStat } from "@/components/marketing/MetricStat";
 import { NewsletterCta } from "@/components/marketing/NewsletterCta";
@@ -134,6 +134,7 @@ function Home() {
         <FeaturedProjects />
         <LatestResearch />
         <QuickCards />
+        <Testimonials />
         <NewsletterSection latest={latest} />
         <FinalCta />
       </div>
@@ -691,6 +692,34 @@ function LatestResearch() {
               </span>
             </Link>
           </Reveal>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+/* --------------------------- TESTIMONIALS -------------------------- */
+
+/** Renders only when verified, attributable testimonials exist. */
+function Testimonials() {
+  if (testimonials.length === 0) return null;
+  return (
+    <section aria-labelledby="testimonials-heading" className="flex flex-col gap-8">
+      <SectionHead
+        id="testimonials-heading"
+        eyebrow="Testimonials"
+        icon={Users}
+        title="What leaders say"
+      />
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        {testimonials.map((t) => (
+          <figure key={t.name} className="flex h-full flex-col gap-3 rounded-2xl border border-border bg-card p-6">
+            <blockquote className="text-sm leading-relaxed text-muted-foreground">{t.quote}</blockquote>
+            <figcaption className="mt-auto text-sm font-semibold text-foreground">
+              {t.name}
+              <span className="block text-xs font-medium text-muted-foreground">{t.role}</span>
+            </figcaption>
+          </figure>
         ))}
       </div>
     </section>
