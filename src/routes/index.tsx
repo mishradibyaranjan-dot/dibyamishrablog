@@ -222,31 +222,31 @@ const CAPABILITIES = [
     icon: Bot,
     title: "Agentic AI & GenAI in production",
     body: "Planner-executor agents, hybrid RAG, evaluation harnesses, and guardrails that pass audit — not demos.",
-    to: "/research" as const,
+    to: "/expertise" as const,
   },
   {
     icon: Cloud,
     title: "Cloud-native modernization",
     body: "Strangler-fig decomposition, cell-based deployment, IaC and DevSecOps pipelines across AWS, Azure and GCP.",
-    to: "/case-studies" as const,
+    to: "/expertise" as const,
   },
   {
     icon: Layers,
     title: "Multi-tenant SaaS architecture",
     body: "Tenant isolation, region-aware data planes, progressive delivery, and FinOps guardrails built in from day one.",
-    to: "/projects" as const,
+    to: "/expertise" as const,
   },
   {
     icon: LineChart,
     title: "Data platforms & BI at scale",
     body: "Streaming and batch pipelines, warehouse modeling, and decision-grade analytics leaders actually use.",
-    to: "/research" as const,
+    to: "/expertise" as const,
   },
   {
     icon: Users,
     title: "Engineering leadership & delivery",
     body: "Global org design, SAFe and Lean operating models, and predictable delivery with measurable throughput gains.",
-    to: "/about" as const,
+    to: "/expertise" as const,
   },
 ] as const;
 
@@ -265,6 +265,13 @@ function Capabilities() {
           Five areas where I take accountability end to end — from architecture
           decisions through to the delivery org that sustains them.
         </p>
+        <Link
+          to="/expertise"
+          className="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-brand-1"
+        >
+          Full expertise breakdown
+          <ArrowUpRight className="h-4 w-4" />
+        </Link>
       </div>
 
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
