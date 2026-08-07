@@ -33,6 +33,7 @@ import { Route as NewsletterIndexRouteImport } from './routes/newsletter.index'
 import { Route as WhitePaperAgenticAiEnterpriseAutomationRouteImport } from './routes/white-paper.agentic-ai-enterprise-automation'
 import { Route as NewsletterSlugRouteImport } from './routes/newsletter.$slug'
 import { Route as EmailUnsubscribeRouteImport } from './routes/email/unsubscribe'
+import { Route as CaseStudySlugRouteImport } from './routes/case-study.$slug'
 import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
 import { Route as AuthenticatedRepositoryRouteImport } from './routes/_authenticated/repository'
 import { Route as AuthenticatedReportsRouteImport } from './routes/_authenticated/reports'
@@ -181,6 +182,11 @@ const NewsletterSlugRoute = NewsletterSlugRouteImport.update({
 const EmailUnsubscribeRoute = EmailUnsubscribeRouteImport.update({
   id: '/email/unsubscribe',
   path: '/email/unsubscribe',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CaseStudySlugRoute = CaseStudySlugRouteImport.update({
+  id: '/case-study/$slug',
+  path: '/case-study/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
 const BlogSlugRoute = BlogSlugRouteImport.update({
@@ -370,6 +376,7 @@ export interface FileRoutesByFullPath {
   '/reports': typeof AuthenticatedReportsRoute
   '/repository': typeof AuthenticatedRepositoryRoute
   '/blog/$slug': typeof BlogSlugRoute
+  '/case-study/$slug': typeof CaseStudySlugRoute
   '/email/unsubscribe': typeof EmailUnsubscribeRoute
   '/newsletter/$slug': typeof NewsletterSlugRoute
   '/white-paper/agentic-ai-enterprise-automation': typeof WhitePaperAgenticAiEnterpriseAutomationRoute
@@ -424,6 +431,7 @@ export interface FileRoutesByTo {
   '/reports': typeof AuthenticatedReportsRoute
   '/repository': typeof AuthenticatedRepositoryRoute
   '/blog/$slug': typeof BlogSlugRoute
+  '/case-study/$slug': typeof CaseStudySlugRoute
   '/email/unsubscribe': typeof EmailUnsubscribeRoute
   '/newsletter/$slug': typeof NewsletterSlugRoute
   '/white-paper/agentic-ai-enterprise-automation': typeof WhitePaperAgenticAiEnterpriseAutomationRoute
@@ -480,6 +488,7 @@ export interface FileRoutesById {
   '/_authenticated/reports': typeof AuthenticatedReportsRoute
   '/_authenticated/repository': typeof AuthenticatedRepositoryRoute
   '/blog/$slug': typeof BlogSlugRoute
+  '/case-study/$slug': typeof CaseStudySlugRoute
   '/email/unsubscribe': typeof EmailUnsubscribeRoute
   '/newsletter/$slug': typeof NewsletterSlugRoute
   '/white-paper/agentic-ai-enterprise-automation': typeof WhitePaperAgenticAiEnterpriseAutomationRoute
@@ -536,6 +545,7 @@ export interface FileRouteTypes {
     | '/reports'
     | '/repository'
     | '/blog/$slug'
+    | '/case-study/$slug'
     | '/email/unsubscribe'
     | '/newsletter/$slug'
     | '/white-paper/agentic-ai-enterprise-automation'
@@ -590,6 +600,7 @@ export interface FileRouteTypes {
     | '/reports'
     | '/repository'
     | '/blog/$slug'
+    | '/case-study/$slug'
     | '/email/unsubscribe'
     | '/newsletter/$slug'
     | '/white-paper/agentic-ai-enterprise-automation'
@@ -645,6 +656,7 @@ export interface FileRouteTypes {
     | '/_authenticated/reports'
     | '/_authenticated/repository'
     | '/blog/$slug'
+    | '/case-study/$slug'
     | '/email/unsubscribe'
     | '/newsletter/$slug'
     | '/white-paper/agentic-ai-enterprise-automation'
@@ -697,6 +709,7 @@ export interface RootRouteChildren {
   TrustRoute: typeof TrustRoute
   Char91DotmcpChar93ListToolsRoute: typeof Char91DotmcpChar93ListToolsRoute
   Char91DotwellKnownChar93OauthProtectedResourceRoute: typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
+  CaseStudySlugRoute: typeof CaseStudySlugRoute
   EmailUnsubscribeRoute: typeof EmailUnsubscribeRoute
   NewsletterSlugRoute: typeof NewsletterSlugRoute
   WhitePaperAgenticAiEnterpriseAutomationRoute: typeof WhitePaperAgenticAiEnterpriseAutomationRoute
@@ -889,6 +902,13 @@ declare module '@tanstack/react-router' {
       path: '/email/unsubscribe'
       fullPath: '/email/unsubscribe'
       preLoaderRoute: typeof EmailUnsubscribeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/case-study/$slug': {
+      id: '/case-study/$slug'
+      path: '/case-study/$slug'
+      fullPath: '/case-study/$slug'
+      preLoaderRoute: typeof CaseStudySlugRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/blog/$slug': {
@@ -1171,6 +1191,7 @@ const rootRouteChildren: RootRouteChildren = {
   Char91DotmcpChar93ListToolsRoute: Char91DotmcpChar93ListToolsRoute,
   Char91DotwellKnownChar93OauthProtectedResourceRoute:
     Char91DotwellKnownChar93OauthProtectedResourceRoute,
+  CaseStudySlugRoute: CaseStudySlugRoute,
   EmailUnsubscribeRoute: EmailUnsubscribeRoute,
   NewsletterSlugRoute: NewsletterSlugRoute,
   WhitePaperAgenticAiEnterpriseAutomationRoute:
