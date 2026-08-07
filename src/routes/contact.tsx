@@ -159,18 +159,6 @@ function Contact() {
                 <div className="truncate text-sm font-medium">contactme@dibyamishra.co.in</div>
               </div>
             </a>
-            <a
-              href="mailto:mishra.dibyaranjan@gmail.com"
-              className="card-flashy flex items-start gap-4 rounded-2xl glass-strong p-5 transition-all hover:-translate-y-0.5 hover:shadow-glow"
-            >
-              <div className="grid h-10 w-10 shrink-0 place-items-center rounded-lg bg-brand-gradient text-white">
-                <Mail className="h-5 w-5" />
-              </div>
-              <div className="min-w-0">
-                <div className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Alternate email</div>
-                <div className="truncate text-sm font-medium">mishra.dibyaranjan@gmail.com</div>
-              </div>
-            </a>
 
             <a
               href="https://bold.pro/my/dibya-mishra-260203120923"
