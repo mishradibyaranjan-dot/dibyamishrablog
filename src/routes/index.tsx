@@ -339,7 +339,7 @@ function FeaturedCaseStudies() {
       <SectionHead
         id="case-studies-heading"
         eyebrow="Case studies"
-        icon={Briefcase()}
+        icon={FlaskConical}
         title="Programs delivered end to end"
         description="Challenge, architecture, execution and outcome — written the way an executive review would read."
         linkTo="/case-studies"
@@ -610,11 +610,6 @@ function FinalCta() {
 }
 
 /* ------------------------------ SHARED ----------------------------- */
-
-// Small indirection so the eyebrow icon type stays uniform.
-function Briefcase() {
-  return FlaskConical;
-}
 
 function SectionEyebrow({
   icon: Icon,
