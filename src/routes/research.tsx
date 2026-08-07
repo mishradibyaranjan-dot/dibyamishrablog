@@ -1,6 +1,8 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
-import { useMemo, useState } from "react";
-import { ArrowRight, Search, Sparkles } from "lucide-react";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { useMemo } from "react";
+import { ArrowRight, Clock, Search, Sparkles, Tag } from "lucide-react";
+import { allTags, readingStats, tagsFor } from "@/lib/post-meta";
+
 import { Section, SectionHeader } from "@/components/layout/Section";
 import { Badge } from "@/components/ui/badge";
 import { posts, categories } from "@/lib/content";
@@ -51,23 +53,46 @@ export const Route = createFileRoute("/research")({
       }, breadcrumbScript([{ name: "Research", path: "/research" }])],
     };
   },
+  validateSearch: (search: Record<string, unknown>) => ({
+    q: typeof search.q === "string" ? search.q : "",
+    category: typeof search.category === "string" ? search.category : "All",
+    tag: typeof search.tag === "string" ? search.tag : "",
+    page: Number(search.page) > 1 ? Math.floor(Number(search.page)) : 1,
+  }),
   component: Research,
 });
 
+
+const PAGE_SIZE = 6;
+
+type ResearchSearch = { q: string; category: string; tag: string; page: number };
+
 function Research() {
-  const [q, setQ] = useState("");
-  const [active, setActive] = useState<string>("All");
+  const { q, category, tag, page } = Route.useSearch();
+  const navigate = useNavigate({ from: "/research" });
+
+  const setSearch = (patch: Partial<ResearchSearch>) =>
+    navigate({ search: (prev: ResearchSearch) => ({ ...prev, page: 1, ...patch }) });
+
 
   const filtered = useMemo(() => {
+    const needle = q.trim().toLowerCase();
     return posts.filter((p) => {
+      const tags = tagsFor(p);
       const matchesQ =
-        q.trim() === "" ||
-        p.title.toLowerCase().includes(q.toLowerCase()) ||
-        p.summary.toLowerCase().includes(q.toLowerCase());
-      const matchesCat = active === "All" || p.category === active;
-      return matchesQ && matchesCat;
+        needle === "" ||
+        p.title.toLowerCase().includes(needle) ||
+        p.summary.toLowerCase().includes(needle) ||
+        tags.some((t) => t.toLowerCase().includes(needle));
+      const matchesCat = category === "All" || p.category === category;
+      const matchesTag = tag === "" || tags.includes(tag);
+      return matchesQ && matchesCat && matchesTag;
     });
-  }, [q, active]);
+  }, [q, category, tag]);
+
+  const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
+  const safePage = Math.min(Math.max(1, page), totalPages);
+  const pageItems = filtered.slice((safePage - 1) * PAGE_SIZE, safePage * PAGE_SIZE);
 
   const featured = posts.find((p) => p.featured);
 
@@ -91,8 +116,6 @@ function Research() {
           decoding="async"
           className="mb-10 aspect-[16/9] w-full rounded-3xl border border-border/60 object-cover"
         />
-
-
 
         <h2 className="sr-only">Featured white paper</h2>
         {/* WHITE PAPER FEATURE */}
@@ -140,8 +163,11 @@ function Research() {
                 {featured.title}
               </h3>
               <p className="mt-3 text-muted-foreground">{featured.summary}</p>
-              <div className="mt-5 text-xs text-muted-foreground">
-                {featured.readingTime}
+              <div className="mt-5 flex items-center gap-3 text-xs text-muted-foreground">
+                <span className="inline-flex items-center gap-1">
+                  <Clock className="h-3.5 w-3.5" /> {readingStats(featured).label}
+                </span>
+                <span>{readingStats(featured).words.toLocaleString()} words</span>
               </div>
             </div>
           </Link>
@@ -157,20 +183,25 @@ function Research() {
               id="research-search"
               aria-label="Search articles"
               value={q}
-              onChange={(e) => setQ(e.target.value)}
+              onChange={(e) => setSearch({ q: e.target.value })}
               placeholder="Search articles..."
               className="w-full rounded-full border border-input bg-background py-2 pl-9 pr-4 text-sm outline-none focus:ring-2 focus:ring-ring sm:w-80"
             />
           </div>
+          <p className="self-center whitespace-nowrap text-xs text-muted-foreground">
+            {filtered.length} article{filtered.length === 1 ? "" : "s"}
+          </p>
         </div>
+
+        <h2 className="sr-only">Filter by category</h2>
         <div className="mt-3 flex flex-wrap gap-2">
           {["All", ...categories].map((c) => (
             <button
               key={c}
-              onClick={() => setActive(c)}
+              onClick={() => setSearch({ category: c })}
               className={cn(
                 "rounded-full border px-3 py-1.5 text-xs font-medium transition-colors",
-                active === c
+                category === c
                   ? "border-transparent bg-brand-gradient text-white"
                   : "border-border bg-card hover:bg-accent",
               )}
@@ -179,37 +210,118 @@ function Research() {
             </button>
           ))}
         </div>
+
+        <h2 className="sr-only">Filter by tag</h2>
+        <div className="mt-3 flex flex-wrap items-center gap-2">
+          <span className="inline-flex items-center gap-1 text-[11px] font-semibold uppercase tracking-widest text-muted-foreground">
+            <Tag className="h-3.5 w-3.5" /> Tags
+          </span>
+          {allTags.map((t) => (
+            <button
+              key={t}
+              onClick={() => setSearch({ tag: tag === t ? "" : t })}
+              aria-pressed={tag === t}
+              className={cn(
+                "rounded-full border px-2.5 py-1 text-xs font-medium transition-colors",
+                tag === t
+                  ? "border-transparent bg-primary text-primary-foreground"
+                  : "border-border bg-card text-muted-foreground hover:bg-accent hover:text-foreground",
+              )}
+            >
+              {t}
+            </button>
+          ))}
+          {(tag !== "" || category !== "All" || q !== "") && (
+            <button
+              onClick={() => setSearch({ tag: "", category: "All", q: "" })}
+              className="rounded-full px-2.5 py-1 text-xs font-medium text-primary underline-offset-2 hover:underline"
+            >
+              Clear filters
+            </button>
+          )}
+        </div>
       </Section>
 
       <Section className="pt-4">
         <h2 className="sr-only">All articles</h2>
         <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
-          {filtered.map((p) => (
-            <Link
-              key={p.slug}
-              to="/blog/$slug"
-              params={{ slug: p.slug }}
-              className="card-flashy group flex flex-col rounded-2xl glass-strong p-6 transition-all hover:-translate-y-0.5 hover:shadow-glow"
-            >
-              <Badge variant="secondary" className="relative z-[3] w-fit">
-                {p.category}
-              </Badge>
-              <h3 className="relative z-[3] mt-4 text-lg font-semibold group-hover:text-gradient">
-                {p.title}
-              </h3>
-              <p className="relative z-[3] mt-2 line-clamp-3 text-sm text-muted-foreground">
-                {p.summary}
-              </p>
-              <div className="relative z-[3] mt-auto flex items-center justify-end pt-4 text-xs text-muted-foreground">
-                <span>{p.readingTime}</span>
-              </div>
-            </Link>
-          ))}
+          {pageItems.map((p) => {
+            const stats = readingStats(p);
+            return (
+              <Link
+                key={p.slug}
+                to="/blog/$slug"
+                params={{ slug: p.slug }}
+                className="card-flashy group flex flex-col rounded-2xl glass-strong p-6 transition-all hover:-translate-y-0.5 hover:shadow-glow"
+              >
+                <Badge variant="secondary" className="relative z-[3] w-fit">
+                  {p.category}
+                </Badge>
+                <h3 className="relative z-[3] mt-4 text-lg font-semibold group-hover:text-gradient">
+                  {p.title}
+                </h3>
+                <p className="relative z-[3] mt-2 line-clamp-3 text-sm text-muted-foreground">
+                  {p.summary}
+                </p>
+                <div className="relative z-[3] mt-4 flex flex-wrap gap-1.5">
+                  {tagsFor(p).slice(0, 4).map((t) => (
+                    <span
+                      key={t}
+                      className="rounded-full border border-border bg-muted/40 px-2 py-0.5 text-[11px] font-medium text-muted-foreground"
+                    >
+                      {t}
+                    </span>
+                  ))}
+                </div>
+                <div className="relative z-[3] mt-auto flex items-center justify-between gap-2 pt-4 text-xs text-muted-foreground">
+                  <span className="inline-flex items-center gap-1">
+                    <Clock className="h-3.5 w-3.5" /> {stats.label}
+                  </span>
+                  <span>{stats.words.toLocaleString()} words</span>
+                </div>
+              </Link>
+            );
+          })}
           {filtered.length === 0 && (
             <p className="text-muted-foreground">No articles match your filter.</p>
           )}
         </div>
+
+        {totalPages > 1 && (
+          <nav aria-label="Pagination" className="mt-10 flex items-center justify-center gap-2">
+            <button
+              onClick={() => navigate({ search: (prev: ResearchSearch) => ({ ...prev, page: safePage - 1 }) })}
+              disabled={safePage === 1}
+              className="rounded-full border border-border bg-card px-3 py-1.5 text-xs font-medium disabled:opacity-40"
+            >
+              Previous
+            </button>
+            {Array.from({ length: totalPages }, (_, i) => i + 1).map((n) => (
+              <button
+                key={n}
+                aria-current={n === safePage ? "page" : undefined}
+                onClick={() => navigate({ search: (prev: ResearchSearch) => ({ ...prev, page: n }) })}
+                className={cn(
+                  "min-w-9 rounded-full border px-3 py-1.5 text-xs font-medium transition-colors",
+                  n === safePage
+                    ? "border-transparent bg-brand-gradient text-white"
+                    : "border-border bg-card hover:bg-accent",
+                )}
+              >
+                {n}
+              </button>
+            ))}
+            <button
+              onClick={() => navigate({ search: (prev: ResearchSearch) => ({ ...prev, page: safePage + 1 }) })}
+              disabled={safePage === totalPages}
+              className="rounded-full border border-border bg-card px-3 py-1.5 text-xs font-medium disabled:opacity-40"
+            >
+              Next
+            </button>
+          </nav>
+        )}
       </Section>
     </>
   );
 }
+

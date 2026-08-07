@@ -316,6 +316,9 @@ function About() {
 
             <div className="mt-7 flex flex-wrap gap-2">
               <Button asChild className="bg-brand-gradient text-white">
+                <a href="/api/download/pdf?doc=executive-summary">Download resume (PDF)</a>
+              </Button>
+              <Button asChild variant="outline">
                 <a href="https://bold.pro/my/dibya-mishra-260203120923" target="_blank" rel="noreferrer">Full Portfolio</a>
               </Button>
               <Button asChild variant="outline">
@@ -343,6 +346,57 @@ function About() {
           </div>
         </div>
       </Section>
+
+      <Section className="border-t border-border pb-8">
+        <SectionHeader
+          eyebrow="Leadership narrative"
+          title="How I lead — and what changes because of it"
+          description="Three consistent moves behind every turnaround, GCC build-out and platform modernisation I have led."
+        />
+        <div className="grid gap-5 lg:grid-cols-3">
+          {[
+            {
+              title: "Set the outcome, not the output",
+              body:
+                "Every programme starts with the business number it must move — revenue, cost-to-serve, cycle time or risk. Architecture, roadmap and org design are then chosen to serve that number, which is how a $1M portfolio grew to $20M in 24 months.",
+            },
+            {
+              title: "Build paved roads, then scale people onto them",
+              body:
+                "Platform teams ship reusable cloud, data and AI foundations with guardrails baked in. Product teams inherit CI/CD, observability and governance instead of reinventing them — the reason 500+ engineers across 5 time zones can move at one cadence.",
+            },
+            {
+              title: "Run the business on visible signals",
+              body:
+                "Weekly operating rhythms on flow metrics, DORA, quality and spend replace status theatre. Predictability becomes a managed metric, and escalations turn into forecasts long before they turn into surprises.",
+            },
+          ].map((c) => (
+            <article key={c.title} className="rounded-3xl border border-border bg-card/90 p-6">
+              <h3 className="font-display text-lg font-semibold text-foreground">{c.title}</h3>
+              <p className="mt-3 text-sm text-muted-foreground">{c.body}</p>
+            </article>
+          ))}
+        </div>
+
+        <div className="mt-8 flex flex-col gap-4 rounded-3xl border border-border bg-card/90 p-6 sm:flex-row sm:items-center sm:justify-between">
+          <div>
+            <h3 className="font-display text-lg font-semibold">Resume & executive summary</h3>
+            <p className="mt-1 text-sm text-muted-foreground">
+              A two-page executive summary covering roles, scope, budgets, technology depth and
+              measurable outcomes — plus the full white-paper repository.
+            </p>
+          </div>
+          <div className="flex flex-wrap gap-2">
+            <Button asChild className="bg-brand-gradient text-white">
+              <a href="/api/download/pdf?doc=executive-summary">Download PDF</a>
+            </Button>
+            <Button asChild variant="outline">
+              <Link to="/repository">Browse repository</Link>
+            </Button>
+          </div>
+        </div>
+      </Section>
+
 
       <Section className="border-t border-border pb-8">
         <SectionHeader eyebrow="Overview" title="At a glance" />

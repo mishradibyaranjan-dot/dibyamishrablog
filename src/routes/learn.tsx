@@ -82,6 +82,8 @@ import { breadcrumbScript } from "@/lib/breadcrumbs";
 import { LEARN_MODULES } from "@/lib/learn-catalog";
 import { useLearnProgress } from "@/lib/learn-progress";
 import { LearnSearch } from "@/components/learn/LearnSearch";
+import { LearnHub } from "@/components/learn/LearnHub";
+
 import { LessonPlayer } from "@/components/learn/LessonPlayer";
 import { MULTI_AGENT_CUES, VECTOR_SEARCH_CUES } from "@/lib/video-captions";
 
@@ -229,6 +231,8 @@ function Learn() {
 
       <div className="mt-6 space-y-4">
         <LearnSearch onOpenModule={(k) => setTab(k as TabKey)} completedModules={progress.modules} />
+        <LearnHub onOpenModule={(k) => setTab(k as TabKey)} />
+
         <div className="flex flex-wrap items-center gap-3 rounded-2xl border border-border bg-accent/40 px-4 py-3 text-sm text-foreground">
           <CheckCircle2 className="h-4 w-4 text-success" />
           <span>

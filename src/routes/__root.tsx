@@ -124,7 +124,55 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         href: "https://www.dibyamishra.co.in/atom.xml",
       },
     ],
+    scripts: [
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@graph": [
+            {
+              "@type": "Organization",
+              "@id": "https://www.dibyamishra.co.in/#organization",
+              name: "Dibya Ranjan Mishra",
+              url: "https://www.dibyamishra.co.in",
+              description:
+                "Advisory and engineering leadership on AI, Agentic AI, cloud-native platforms, SaaS architecture and delivery transformation.",
+              founder: { "@type": "Person", name: "Dibya Ranjan Mishra" },
+              sameAs: [
+                "https://www.linkedin.com/in/dibya-mishra-55b94654",
+                "https://github.com/mishradibyaranjan-dot/",
+              ],
+              contactPoint: [
+                {
+                  "@type": "ContactPoint",
+                  contactType: "business enquiries",
+                  email: "contactme@dibyamishra.co.in",
+                  availableLanguage: ["English", "Hindi"],
+                },
+              ],
+            },
+            {
+              "@type": "WebSite",
+              "@id": "https://www.dibyamishra.co.in/#website",
+              url: "https://www.dibyamishra.co.in",
+              name: "Dibya Ranjan Mishra",
+              publisher: { "@id": "https://www.dibyamishra.co.in/#organization" },
+              inLanguage: "en",
+              potentialAction: {
+                "@type": "SearchAction",
+                target: {
+                  "@type": "EntryPoint",
+                  urlTemplate: "https://www.dibyamishra.co.in/research?q={search_term_string}",
+                },
+                "query-input": "required name=search_term_string",
+              },
+            },
+          ],
+        }),
+      },
+    ],
   }),
+
   shellComponent: RootShell,
   component: RootComponent,
   notFoundComponent: NotFoundComponent,
