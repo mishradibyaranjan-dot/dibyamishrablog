@@ -113,6 +113,7 @@ const NAV = [
 ] as const;
 
 const MORE_NAV = [
+  { to: "/playbook", label: "AI Playbook" },
   { to: "/newsletter", label: "Newsletter" },
   { to: "/guide", label: "Guided Tour" },
   { to: "/repository", label: "Repository" },
