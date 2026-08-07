@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { FloatingChat } from "@/components/chat/FloatingChat";
+import { FloatingConnectCta } from "@/components/marketing/FloatingConnectCta";
 import { SiteBanner } from "@/components/layout/SiteBanner";
 import { AuroraBackground } from "@/components/cinematic/AuroraBackground";
 import { PageTransition } from "@/components/cinematic/PageTransition";
@@ -100,15 +101,20 @@ function NewsletterForm() {
 const NAV = [
   { to: "/", label: "Home" },
   { to: "/about", label: "About" },
-  { to: "/learn", label: "Learn" },
-  { to: "/guide", label: "Guide" },
-  { to: "/repository", label: "Repository" },
-  { to: "/research", label: "Research" },
-  { to: "/projects", label: "Projects" },
   { to: "/case-studies", label: "Case Studies" },
+  { to: "/projects", label: "Projects" },
+  { to: "/research", label: "Research" },
+  { to: "/learn", label: "Learn" },
   { to: "/newsletter", label: "Newsletter" },
   { to: "/contact", label: "Contact" },
 ] as const;
+
+const MORE_NAV = [
+  { to: "/guide", label: "Guided Tour" },
+  { to: "/repository", label: "Repository" },
+  { to: "/trust", label: "Trust & Privacy" },
+] as const;
+
 
 function Header() {
   const [open, setOpen] = useState(false);
@@ -176,6 +182,12 @@ function Header() {
         </nav>
 
         <div className="flex items-center gap-1 sm:gap-2">
+          <Link
+            to="/contact"
+            className="hidden min-h-11 items-center gap-2 rounded-full bg-brand-gradient px-4 py-2 text-sm font-semibold text-white transition-transform hover:-translate-y-0.5 lg:inline-flex"
+          >
+            Let&apos;s Connect
+          </Link>
           <ReadAloudButton />
           <ThemeToggle />
           <UserMenu />
@@ -201,17 +213,23 @@ function Header() {
             className="overflow-hidden border-t border-slate-200 bg-white/95 backdrop-blur-xl lg:hidden"
           >
             <nav className="mx-auto flex max-w-7xl flex-col px-4 py-3 sm:px-6">
-              {NAV.map((item) => (
+              {[...NAV, ...MORE_NAV].map((item) => (
                 <Link
                   key={item.to}
                   to={item.to}
-                  className="rounded-md px-3 py-2.5 text-sm font-medium text-slate-700 hover:bg-slate-100 hover:text-blue-600"
+                  className="min-h-11 rounded-md px-3 py-2.5 text-sm font-medium text-slate-700 hover:bg-slate-100 hover:text-blue-600"
                   activeProps={{ className: "text-blue-600 bg-blue-50" }}
                   activeOptions={{ exact: item.to === "/" }}
                 >
                   {item.label}
                 </Link>
               ))}
+              <Link
+                to="/contact"
+                className="mt-2 inline-flex min-h-11 items-center justify-center gap-2 rounded-xl bg-brand-gradient px-4 py-3 text-sm font-semibold text-white"
+              >
+                Let&apos;s Connect
+              </Link>
             </nav>
           </motion.div>
         )}
@@ -255,18 +273,13 @@ function Footer() {
         <div>
           <h4 className="text-sm font-semibold text-slate-900">Explore</h4>
           <ul className="mt-3 space-y-2 text-sm text-slate-600">
-            {NAV.slice(1).map((n) => (
+            {[...NAV.slice(1), ...MORE_NAV].map((n) => (
               <li key={n.to}>
                 <Link to={n.to} className="transition-colors hover:text-blue-600">
                   {n.label}
                 </Link>
               </li>
             ))}
-            <li>
-              <Link to="/trust" className="transition-colors hover:text-blue-600">
-                Trust & Privacy
-              </Link>
-            </li>
           </ul>
         </div>
         <div>
@@ -311,6 +324,7 @@ export function SiteLayout() {
             </main>
             <Footer />
             <FloatingChat />
+            <FloatingConnectCta />
           </div>
         </SpamDomainGuard>
       </AuthProvider>
