@@ -104,19 +104,21 @@ const NAV = [
   { to: "/", label: "Home" },
   { to: "/about", label: "About" },
   { to: "/expertise", label: "Expertise" },
+  { to: "/advisory", label: "Advisory" },
   { to: "/case-studies", label: "Case Studies" },
   { to: "/projects", label: "Projects" },
-  { to: "/research", label: "Research" },
   { to: "/learn", label: "Learn" },
-  { to: "/newsletter", label: "Newsletter" },
+  { to: "/research", label: "Research" },
   { to: "/contact", label: "Contact" },
 ] as const;
 
 const MORE_NAV = [
+  { to: "/newsletter", label: "Newsletter" },
   { to: "/guide", label: "Guided Tour" },
   { to: "/repository", label: "Repository" },
   { to: "/trust", label: "Trust & Privacy" },
 ] as const;
+
 
 
 function Header() {

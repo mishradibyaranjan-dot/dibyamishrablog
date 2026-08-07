@@ -33,11 +33,21 @@ function Contact() {
     e.preventDefault();
     const form = e.currentTarget;
     const fd = new FormData(form);
+    const company = String(fd.get("company") ?? "").trim();
+    const role = String(fd.get("role") ?? "").trim();
+    const area = String(fd.get("area") ?? "Other").trim();
+    const details = [
+      company ? `Company: ${company}` : null,
+      role ? `Role: ${role}` : null,
+      `Area of interest: ${area}`,
+    ]
+      .filter(Boolean)
+      .join("\n");
     const payload = {
       name: String(fd.get("name") ?? ""),
       email: String(fd.get("email") ?? ""),
-      subject: String(fd.get("subject") ?? ""),
-      message: String(fd.get("message") ?? ""),
+      subject: `${area} enquiry`,
+      message: `${details}\n\n${String(fd.get("message") ?? "")}`,
       website: String(fd.get("website") ?? ""),
     };
 
@@ -75,8 +85,8 @@ function Contact() {
         <SectionHeader
           as="h1"
           eyebrow="Contact"
-          title="Let's talk"
-          description="Advisory engagements, architecture reviews, speaking, or a thoughtful exchange on AI and engineering leadership."
+          title="Let's Turn the Next Technology Challenge Into an Outcome"
+          description="Whether you're exploring Agentic AI, modernizing an enterprise platform, establishing a GCC or scaling an engineering organization, let's start with a focused conversation."
         />
 
         <img
@@ -107,14 +117,39 @@ function Contact() {
               <form onSubmit={handleSubmit} className="space-y-4">
                 <div className="grid gap-4 sm:grid-cols-2">
                   <Field label="Name" name="name" placeholder="Your name" required />
-                  <Field label="Email" name="email" type="email" placeholder="you@company.com" required />
+                  <Field label="Work email" name="email" type="email" placeholder="you@company.com" required />
+                  <Field label="Company (optional)" name="company" placeholder="Company name" />
+                  <Field label="Role (optional)" name="role" placeholder="e.g. CTO, Head of AI" />
                 </div>
                 {/* Honeypot — hidden from humans, bots tend to fill it. */}
                 <div aria-hidden="true" className="absolute h-0 w-0 overflow-hidden opacity-0">
                   <label htmlFor="website">Website</label>
                   <input id="website" name="website" type="text" tabIndex={-1} autoComplete="off" />
                 </div>
-                <Field label="Subject" name="subject" placeholder="What's this about?" required />
+                <div>
+                  <label className="text-sm font-medium" htmlFor="area">Area of interest</label>
+                  <select
+                    id="area"
+                    name="area"
+                    required
+                    defaultValue="Enterprise AI"
+                    className="mt-1.5 w-full rounded-md border border-input bg-background px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-ring"
+                  >
+                    {[
+                      "Enterprise AI",
+                      "Cloud & Architecture",
+                      "GCC Strategy",
+                      "Engineering Transformation",
+                      "Speaking Engagement",
+                      "Collaboration",
+                      "Other",
+                    ].map((a) => (
+                      <option key={a} value={a}>
+                        {a}
+                      </option>
+                    ))}
+                  </select>
+                </div>
                 <div>
 
                   <label className="text-sm font-medium" htmlFor="message">Message</label>
@@ -130,6 +165,7 @@ function Contact() {
                 {captcha.required && (
                   <MathCaptcha verified={captcha.verified} onSolved={captcha.markVerified} />
                 )}
+
                 {error && (
                   <p className="text-sm text-destructive" role="alert">{error}</p>
                 )}
@@ -138,7 +174,7 @@ function Contact() {
                     {submitting ? (
                       <><Loader2 className="mr-1 h-4 w-4 animate-spin" /> Sending…</>
                     ) : (
-                      <><Send className="mr-1 h-4 w-4" /> Send message</>
+                      <><Send className="mr-1 h-4 w-4" /> Start the Conversation</>
                     )}
                   </Button>
                 </div>
