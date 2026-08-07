@@ -236,7 +236,7 @@ function PlaybookPage() {
             >
               <Badge variant="secondary" className="mb-2">Case study</Badge>
               <div className="font-semibold text-foreground">{cs.title}</div>
-              <p className="mt-2 line-clamp-3 text-sm text-muted-foreground">{cs.summary}</p>
+              <p className="mt-2 line-clamp-3 text-sm text-muted-foreground">{cs.executiveSummary}</p>
             </Link>
           ))}
         </div>
