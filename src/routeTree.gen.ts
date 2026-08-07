@@ -15,6 +15,7 @@ import { Route as RssDotxmlRouteImport } from './routes/rss[.]xml'
 import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as ResearchRouteImport } from './routes/research'
 import { Route as ProjectsRouteImport } from './routes/projects'
+import { Route as PlaybookRouteImport } from './routes/playbook'
 import { Route as McpRouteImport } from './routes/mcp'
 import { Route as LearnRouteImport } from './routes/learn'
 import { Route as GuideRouteImport } from './routes/guide'
@@ -92,6 +93,11 @@ const ResearchRoute = ResearchRouteImport.update({
 const ProjectsRoute = ProjectsRouteImport.update({
   id: '/projects',
   path: '/projects',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PlaybookRoute = PlaybookRouteImport.update({
+  id: '/playbook',
+  path: '/playbook',
   getParentRoute: () => rootRouteImport,
 } as any)
 const McpRoute = McpRouteImport.update({
@@ -364,6 +370,7 @@ export interface FileRoutesByFullPath {
   '/guide': typeof GuideRoute
   '/learn': typeof LearnRoute
   '/mcp': typeof McpRoute
+  '/playbook': typeof PlaybookRoute
   '/projects': typeof ProjectsRoute
   '/research': typeof ResearchRoute
   '/reset-password': typeof ResetPasswordRoute
@@ -419,6 +426,7 @@ export interface FileRoutesByTo {
   '/guide': typeof GuideRoute
   '/learn': typeof LearnRoute
   '/mcp': typeof McpRoute
+  '/playbook': typeof PlaybookRoute
   '/projects': typeof ProjectsRoute
   '/research': typeof ResearchRoute
   '/reset-password': typeof ResetPasswordRoute
@@ -476,6 +484,7 @@ export interface FileRoutesById {
   '/guide': typeof GuideRoute
   '/learn': typeof LearnRoute
   '/mcp': typeof McpRoute
+  '/playbook': typeof PlaybookRoute
   '/projects': typeof ProjectsRoute
   '/research': typeof ResearchRoute
   '/reset-password': typeof ResetPasswordRoute
@@ -533,6 +542,7 @@ export interface FileRouteTypes {
     | '/guide'
     | '/learn'
     | '/mcp'
+    | '/playbook'
     | '/projects'
     | '/research'
     | '/reset-password'
@@ -588,6 +598,7 @@ export interface FileRouteTypes {
     | '/guide'
     | '/learn'
     | '/mcp'
+    | '/playbook'
     | '/projects'
     | '/research'
     | '/reset-password'
@@ -644,6 +655,7 @@ export interface FileRouteTypes {
     | '/guide'
     | '/learn'
     | '/mcp'
+    | '/playbook'
     | '/projects'
     | '/research'
     | '/reset-password'
@@ -701,6 +713,7 @@ export interface RootRouteChildren {
   GuideRoute: typeof GuideRoute
   LearnRoute: typeof LearnRoute
   McpRoute: typeof McpRoute
+  PlaybookRoute: typeof PlaybookRoute
   ProjectsRoute: typeof ProjectsRoute
   ResearchRoute: typeof ResearchRoute
   ResetPasswordRoute: typeof ResetPasswordRoute
@@ -776,6 +789,13 @@ declare module '@tanstack/react-router' {
       path: '/projects'
       fullPath: '/projects'
       preLoaderRoute: typeof ProjectsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/playbook': {
+      id: '/playbook'
+      path: '/playbook'
+      fullPath: '/playbook'
+      preLoaderRoute: typeof PlaybookRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/mcp': {
@@ -1182,6 +1202,7 @@ const rootRouteChildren: RootRouteChildren = {
   GuideRoute: GuideRoute,
   LearnRoute: LearnRoute,
   McpRoute: McpRoute,
+  PlaybookRoute: PlaybookRoute,
   ProjectsRoute: ProjectsRoute,
   ResearchRoute: ResearchRoute,
   ResetPasswordRoute: ResetPasswordRoute,
