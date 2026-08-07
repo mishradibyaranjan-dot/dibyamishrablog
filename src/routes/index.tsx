@@ -18,7 +18,7 @@ import {
   Users,
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
-import { caseStudies, posts, projects } from "@/lib/content";
+import { caseStudies, posts, projects, testimonials } from "@/lib/content";
 import { Reveal } from "@/components/cinematic/Reveal";
 import { MetricStat } from "@/components/marketing/MetricStat";
 import { NewsletterCta } from "@/components/marketing/NewsletterCta";
@@ -134,6 +134,7 @@ function Home() {
         <FeaturedProjects />
         <LatestResearch />
         <QuickCards />
+        <Testimonials />
         <NewsletterSection latest={latest} />
         <FinalCta />
       </div>
@@ -333,8 +334,9 @@ function Outcomes() {
           id="outcomes-heading"
           className="mt-4 font-display text-3xl font-bold tracking-tight text-foreground sm:text-4xl"
         >
-          Results, not roadmaps
+          Technology Leadership Measured by Outcomes
         </h2>
+
       </div>
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         {OUTCOMES.map((o, i) => (
@@ -495,8 +497,8 @@ function FeaturedCaseStudies() {
         id="case-studies-heading"
         eyebrow="Case studies"
         icon={FlaskConical}
-        title="Programs delivered end to end"
-        description="Challenge, architecture, execution and outcome — written the way an executive review would read."
+        title="From Strategy to Measurable Outcomes"
+        description="Industry, business challenge, transformation, architecture and the outcomes — written the way an executive review would read."
         linkTo="/case-studies"
         linkLabel="All case studies"
       />
@@ -504,23 +506,29 @@ function FeaturedCaseStudies() {
         {featured.map((cs, i) => (
           <Reveal key={cs.slug} delay={i * 0.05}>
             <Link
-              to="/case-studies"
+              to="/case-study/$slug"
+              params={{ slug: cs.slug }}
               className="card-flashy group flex h-full flex-col gap-3 rounded-2xl border border-border bg-card p-6 transition-all hover:-translate-y-0.5 hover:shadow-glow"
             >
               <span className="inline-flex w-fit items-center rounded-full border border-chip-border bg-chip px-2.5 py-0.5 text-[11px] font-semibold uppercase tracking-[0.14em] text-chip-foreground">
-                {cs.area}
+                {cs.industry}
               </span>
               <h3 className="font-display text-lg font-semibold text-foreground">{cs.title}</h3>
               <p className="text-sm leading-relaxed text-muted-foreground">{cs.challenge}</p>
-              <p className="mt-auto pt-3 text-sm font-medium text-foreground">{cs.outcome}</p>
-              <span className="inline-flex items-center gap-1.5 text-sm font-semibold text-brand-1">
-                Read the breakdown
+              <ul className="mt-auto flex flex-col gap-1 pt-3 text-sm font-medium text-foreground">
+                {cs.outcomeMetrics.slice(0, 3).map((m) => (
+                  <li key={m}>· {m}</li>
+                ))}
+              </ul>
+              <span className="inline-flex items-center gap-1.5 pt-1 text-sm font-semibold text-brand-1">
+                View Case Study
                 <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
               </span>
             </Link>
           </Reveal>
         ))}
       </div>
+
     </section>
   );
 }
@@ -684,6 +692,34 @@ function LatestResearch() {
               </span>
             </Link>
           </Reveal>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+/* --------------------------- TESTIMONIALS -------------------------- */
+
+/** Renders only when verified, attributable testimonials exist. */
+function Testimonials() {
+  if (testimonials.length === 0) return null;
+  return (
+    <section aria-labelledby="testimonials-heading" className="flex flex-col gap-8">
+      <SectionHead
+        id="testimonials-heading"
+        eyebrow="Testimonials"
+        icon={Users}
+        title="What leaders say"
+      />
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        {testimonials.map((t) => (
+          <figure key={t.name} className="flex h-full flex-col gap-3 rounded-2xl border border-border bg-card p-6">
+            <blockquote className="text-sm leading-relaxed text-muted-foreground">{t.quote}</blockquote>
+            <figcaption className="mt-auto text-sm font-semibold text-foreground">
+              {t.name}
+              <span className="block text-xs font-medium text-muted-foreground">{t.role}</span>
+            </figcaption>
+          </figure>
         ))}
       </div>
     </section>

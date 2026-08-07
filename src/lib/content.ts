@@ -354,9 +354,34 @@ export const projects: Project[] = [
   },
 ];
 
+export interface Testimonial {
+  quote: string;
+  name: string;
+  role: string;
+}
+
+/**
+ * Verified testimonials only. Intentionally empty until real, attributable
+ * quotes are supplied — the Testimonials section stays hidden while empty.
+ */
+export const testimonials: Testimonial[] = [];
+
 export interface CaseStudy {
   slug: string;
   title: string;
+  /** Industry context for the engagement. */
+  industry: string;
+  /** Up to 3 headline business outcomes shown on cards. */
+  outcomeMetrics: string[];
+  executiveSummary: string;
+  businessContext: string;
+  constraints: string[];
+  strategy: string;
+  governance: string;
+  /** Slugs from `posts` for related research links. */
+  relatedPosts: string[];
+  /** Matching advisory area label. */
+  advisoryArea: string;
   challenge: string;
   architecture: string;
   stack: string[];
@@ -372,6 +397,23 @@ export const caseStudies: CaseStudy[] = [
     slug: "enterprise-agentic-automation",
     title: "Enterprise Agentic Automation at Scale",
     area: "AI & Agentic AI",
+    industry: "Multinational enterprise operations",
+    outcomeMetrics: ["72% faster cycle times", "$4.1M annual savings", "Zero compliance incidents"],
+    executiveSummary:
+      "Agentic automation applied to 40+ regulated back-office workflows, delivered behind guardrails and audit-grade traceability — 72% cycle-time reduction and $4.1M annual savings with no compliance incidents in 11 months of production use.",
+    businessContext:
+      "Back-office throughput limited growth while every workflow remained subject to compliance review and audit evidence requirements.",
+    constraints: [
+      "Strict compliance and audit obligations on every automated action",
+      "No tolerance for unreviewable or irreversible agent decisions",
+      "Existing human checklists and approval chains had to be honoured",
+    ],
+    strategy:
+      "Automate workflows where humans already followed checklists first, prove them in shadow mode, then expand the tool surface only as evaluation coverage grew.",
+    governance:
+      "Policy guardrails vetted every tool call, human-in-the-loop approvals gated irreversible actions, and each workflow shipped behind a kill switch with full traceability for audit.",
+    relatedPosts: ["what-is-agentic-ai", "agentic-ai-enterprise-automation", "how-to-build-an-ai-agent"],
+    advisoryArea: "Enterprise AI Strategy",
     challenge:
       "A multinational needed to automate 40+ back-office workflows under strict compliance and audit constraints.",
     architecture:
@@ -397,6 +439,23 @@ export const caseStudies: CaseStudy[] = [
     slug: "saas-cloud-modernization",
     title: "SaaS Cloud Modernization for a Global ISV",
     area: "Cloud & DevSecOps",
+    industry: "Enterprise SaaS / independent software vendor",
+    outcomeMetrics: ["40x deploy frequency", "38% lower infra cost", "99.99% availability"],
+    executiveSummary:
+      "An 18-month modernization of a legacy monolith into region-aware cells on an internal developer platform: 40x deploy frequency, 38% infrastructure cost reduction, 99.99% availability and 7 new regions in 12 months.",
+    businessContext:
+      "Enterprise buyers demanded SLAs and regional data residency the existing monolith could not satisfy, blocking expansion into new markets.",
+    constraints: [
+      "Regional data residency obligations per market",
+      "Enterprise SLA commitments during migration",
+      "Product delivery had to continue throughout the program",
+    ],
+    strategy:
+      "Strangler-fig decomposition into bounded contexts, cells treated as a versioned product, and platform debt paid down early to unlock product velocity.",
+    governance:
+      "Weekly stakeholder demos, parallel runs with automated data migration, progressive delivery and FinOps guardrails on every cell.",
+    relatedPosts: ["cloud-native-saas-patterns", "payments-platform-modernization"],
+    advisoryArea: "Architecture & Platform Review",
     challenge:
       "Legacy monolith couldn't meet enterprise SLAs or regional data residency demands.",
     architecture:
@@ -422,6 +481,23 @@ export const caseStudies: CaseStudy[] = [
     slug: "biller-advantage-bfsi",
     title: "BFSI Payments Onboarding at Scale",
     area: "BFSI & Payments",
+    industry: "BFSI / payments",
+    outcomeMetrics: ["Onboarding 3 months → 4 hours", "-98% onboarding time", "99.9% platform uptime"],
+    executiveSummary:
+      "A multi-portal payments platform with a hardened core engine and automated merchant onboarding: onboarding compressed from 3 months to 4 hours (-98%) with 99.9% uptime on Boarding & Servicing.",
+    businessContext:
+      "Merchant onboarding across 20+ US states took three months, capping growth for a multi-portal payments platform.",
+    constraints: [
+      "Regulatory KYC obligations across 20+ US states",
+      "Regulator-aligned release windows",
+      "Uptime commitments on live payment flows",
+    ],
+    strategy:
+      "Share one hardened payment engine across portals, automate onboarding with rules-driven KYC and routing, and align release trains to regulator windows.",
+    governance:
+      "Domain-driven release trains, SRE-led reliability program targeting 99.9% uptime, plus reconciliation and audit built into the platform.",
+    relatedPosts: ["payments-platform-modernization"],
+    advisoryArea: "Architecture & Platform Review",
     challenge:
       "Merchant onboarding took 3 months across 20+ US states, capping growth for a multi-portal payments platform.",
     architecture:

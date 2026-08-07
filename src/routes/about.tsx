@@ -296,17 +296,22 @@ function About() {
           <div>
             <Badge variant="secondary" className="mb-4">About me</Badge>
             <h1 className="font-display text-4xl font-bold tracking-tight sm:text-5xl">
-              Dibya Ranjan Mishra — Engineering Leader
+              About Dibya Mishra
             </h1>
             <p className="mt-3 text-lg font-medium text-gradient">
               Vice President & Country Head — Crystal Tech Ventures
             </p>
             <p className="mt-5 text-lg text-muted-foreground">
+              I build and scale technology organizations, enterprise platforms and AI-enabled
+              products that turn complex challenges into measurable business outcomes.
+            </p>
+            <p className="mt-4 text-muted-foreground">
               Technology executive with 20+ years leading engineering, product & delivery orgs across
               Shipping, BFSI, Insurance, Retail/FinTech, and Enterprise SaaS. Currently VP & Country
               Head driving a Global Capability Centre (GCC) setup in India and retail supply-chain
               digital transformation for an international client — from org design through delivery.
             </p>
+
             <p className="mt-4 text-muted-foreground">
               Scaled portfolio revenue $1M → $20M in 24 months, managed $28M+ combined budgets, and
               led 500+ engineers across 5 time zones. Deep expertise in cloud-native architecture
@@ -596,6 +601,83 @@ function About() {
           </Dialog>
         </div>
       </Section>
+
+      <Section className="border-t border-border pb-8">
+        <SectionHeader
+          eyebrow="Technology perspective"
+          title="How I think about technology"
+          description="The convictions that shape architecture, AI adoption and engineering decisions in every programme I lead."
+        />
+        <div className="grid gap-5 lg:grid-cols-3">
+          {[
+            {
+              title: "AI earns its place in production, not in demos",
+              body:
+                "Agentic AI and GenAI become valuable when they run inside governed workflows with evaluation, guardrails and human approval on irreversible actions.",
+            },
+            {
+              title: "Architecture is an operating decision",
+              body:
+                "Cloud-native, multi-tenant and cell-based choices are made for the SLAs, data residency and cost envelope the business must live with — not for novelty.",
+            },
+            {
+              title: "Delivery predictability is engineered",
+              body:
+                "Flow metrics, DORA signals and paved-road platforms turn delivery from a promise into a forecast across distributed teams.",
+            },
+          ].map((c) => (
+            <article key={c.title} className="rounded-3xl border border-border bg-card/90 p-6">
+              <h3 className="font-display text-lg font-semibold text-foreground">{c.title}</h3>
+              <p className="mt-3 text-sm text-muted-foreground">{c.body}</p>
+            </article>
+          ))}
+        </div>
+      </Section>
+
+      <Section className="border-t border-border pb-8">
+        <SectionHeader
+          eyebrow="Thought leadership"
+          title="What I publish"
+          description="Research, playbooks and learning modules on Agentic AI, enterprise architecture, cloud platforms and engineering leadership."
+        />
+        <div className="flex flex-wrap gap-3">
+          <Button asChild className="bg-brand-gradient text-white">
+            <Link to="/research" search={{ q: "", category: "All", tag: "", page: 1 }}>
+              Read the research
+            </Link>
+          </Button>
+          <Button asChild variant="outline">
+            <Link to="/learn">Learning modules</Link>
+          </Button>
+          <Button asChild variant="outline">
+            <Link to="/case-studies">Case studies</Link>
+          </Button>
+          <Button asChild variant="outline">
+            <Link to="/advisory">Advisory</Link>
+          </Button>
+        </div>
+      </Section>
+
+      <Section className="border-t border-border">
+        <div className="card-flashy flex flex-col items-start gap-5 rounded-3xl glass-strong p-8 sm:p-12">
+          <h2 className="font-display text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
+            Let&apos;s Discuss Technology Transformation
+          </h2>
+          <p className="max-w-2xl text-base text-muted-foreground sm:text-lg">
+            AI adoption, platform modernization, GCC build-out or engineering scale — start with the
+            outcome you need.
+          </p>
+          <div className="flex flex-wrap gap-3">
+            <Button asChild className="bg-brand-gradient text-white">
+              <Link to="/contact">Start a Conversation</Link>
+            </Button>
+            <Button asChild variant="outline">
+              <Link to="/advisory">Explore Advisory</Link>
+            </Button>
+          </div>
+        </div>
+      </Section>
+
 
     </>
   );
