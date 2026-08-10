@@ -507,7 +507,7 @@
   --glass-blur: 16px;
 }
 
-@utility glass {
+@utility glass-panel {
   background: var(--glass-bg);
   border: 1px solid var(--glass-border);
   border-radius: 1.5rem;
@@ -536,6 +536,23 @@
     transform: none;
   }
 }
+
+/* Glacier: every existing card/panel surface becomes glassmorphic, so the
+   theme reaches dashboards, admin panels and inner pages without rewriting
+   those components. */
+:root[data-theme="glacier"] .card-flashy {
+  background: var(--glass-bg) !important;
+  border: 1px solid var(--glass-border) !important;
+  border-top: 1px solid color-mix(in oklab, var(--primary) 34%, transparent) !important;
+  border-radius: 1.5rem !important;
+  backdrop-filter: blur(var(--glass-blur)) saturate(140%);
+  box-shadow: var(--shadow-card) !important;
+}
+:root[data-theme="glacier"] .card-flashy:hover {
+  border-color: color-mix(in oklab, var(--primary) 40%, transparent) !important;
+  box-shadow: var(--shadow-glow) !important;
+}
+
 
 /* .dark class kept for backward compatibility */
 
