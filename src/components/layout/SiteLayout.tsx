@@ -98,7 +98,9 @@ function NewsletterForm() {
           <p className="text-xs text-red-600">{error ?? "Something went wrong."}</p>
 
         )}
+        <FormPrivacyNotice />
       </div>
+
     </form>
   );
 }
