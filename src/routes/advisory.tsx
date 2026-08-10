@@ -4,7 +4,7 @@ import { Section, SectionHeader } from "@/components/layout/Section";
 import { Reveal } from "@/components/cinematic/Reveal";
 import { breadcrumbScript } from "@/lib/breadcrumbs";
 
-const TITLE = "Advisory — Enterprise AI, Cloud, GCC & Engineering | Dibya Ranjan Mishra";
+const TITLE = "Enterprise AI & Cloud Advisory | Dibya Ranjan Mishra";
 const DESCRIPTION =
   "Advisory engagements for enterprise AI strategy, architecture and platform reviews, GCC and engineering transformation, and executive technology guidance.";
 
