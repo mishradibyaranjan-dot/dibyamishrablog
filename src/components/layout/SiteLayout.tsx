@@ -355,6 +355,7 @@ export function SiteLayout() {
             <Footer />
             <FloatingChat />
             <FloatingConnectCta />
+            <CookieConsent />
           </div>
         </SpamDomainGuard>
       </AuthProvider>

@@ -2,6 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { motion } from "framer-motion";
 import { Copyright, ShieldCheck, Bot, Mail, AlertCircle, FileText } from "lucide-react";
 import { breadcrumbScript } from "@/lib/breadcrumbs";
+import { legalPageScript } from "@/lib/legal-schema";
 import { SITE_ORIGIN } from "@/lib/og-images";
 import { legalConfig, copyrightLine } from "@/lib/legal-config";
 
@@ -26,7 +27,10 @@ export const Route = createFileRoute("/copyright")({
       { name: "author", content: legalConfig.ownerName },
     ],
     links: [{ rel: "canonical", href: CANONICAL }],
-    scripts: [breadcrumbScript([{ name: "Copyright & Content Use", path: "/copyright" }])],
+    scripts: [
+      breadcrumbScript([{ name: "Copyright & Content Use", path: "/copyright" }]),
+      legalPageScript({ name: "Copyright & Content Use", path: "/copyright", description: DESC }),
+    ],
   }),
 });
 
