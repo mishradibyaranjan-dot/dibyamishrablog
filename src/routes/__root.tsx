@@ -185,9 +185,9 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
  */
 const THEME_BOOTSTRAP = `(function(){try{
 var t=localStorage.getItem('drm-theme');
-var all=['cinematic','midnight','aurora','sunset','noir','emerald','light','paper','sand','arctic'];
+var all=['glacier','cinematic','midnight','aurora','sunset','noir','emerald','light','paper','sand','arctic'];
 if(all.indexOf(t)<0)return;
-var light=['light','paper','sand','arctic'];
+var light=['glacier','light','paper','sand','arctic'];
 var m=light.indexOf(t)>=0?'light':'dark';
 var r=document.documentElement;
 r.dataset.theme=t;r.classList.toggle('dark',m==='dark');r.style.colorScheme=m;
@@ -197,11 +197,12 @@ function RootShell({ children }: { children: ReactNode }) {
   return (
     <html
       lang="en"
-      data-theme="light"
+      data-theme="glacier"
       className="light"
       style={{ colorScheme: "light" }}
       suppressHydrationWarning
     >
+
       <head>
         <HeadContent />
         <ScriptOnce>{THEME_BOOTSTRAP}</ScriptOnce>
