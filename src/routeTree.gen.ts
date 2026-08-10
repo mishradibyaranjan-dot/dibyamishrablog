@@ -21,6 +21,7 @@ import { Route as LearnRouteImport } from './routes/learn'
 import { Route as GuideRouteImport } from './routes/guide'
 import { Route as ForgotPasswordRouteImport } from './routes/forgot-password'
 import { Route as ExpertiseRouteImport } from './routes/expertise'
+import { Route as CopyrightRouteImport } from './routes/copyright'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as CaseStudiesRouteImport } from './routes/case-studies'
 import { Route as BlogRouteImport } from './routes/blog'
@@ -123,6 +124,11 @@ const ForgotPasswordRoute = ForgotPasswordRouteImport.update({
 const ExpertiseRoute = ExpertiseRouteImport.update({
   id: '/expertise',
   path: '/expertise',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CopyrightRoute = CopyrightRouteImport.update({
+  id: '/copyright',
+  path: '/copyright',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ContactRoute = ContactRouteImport.update({
@@ -365,6 +371,7 @@ export interface FileRoutesByFullPath {
   '/blog': typeof BlogRouteWithChildren
   '/case-studies': typeof CaseStudiesRoute
   '/contact': typeof ContactRoute
+  '/copyright': typeof CopyrightRoute
   '/expertise': typeof ExpertiseRoute
   '/forgot-password': typeof ForgotPasswordRoute
   '/guide': typeof GuideRoute
@@ -421,6 +428,7 @@ export interface FileRoutesByTo {
   '/blog': typeof BlogRouteWithChildren
   '/case-studies': typeof CaseStudiesRoute
   '/contact': typeof ContactRoute
+  '/copyright': typeof CopyrightRoute
   '/expertise': typeof ExpertiseRoute
   '/forgot-password': typeof ForgotPasswordRoute
   '/guide': typeof GuideRoute
@@ -479,6 +487,7 @@ export interface FileRoutesById {
   '/blog': typeof BlogRouteWithChildren
   '/case-studies': typeof CaseStudiesRoute
   '/contact': typeof ContactRoute
+  '/copyright': typeof CopyrightRoute
   '/expertise': typeof ExpertiseRoute
   '/forgot-password': typeof ForgotPasswordRoute
   '/guide': typeof GuideRoute
@@ -537,6 +546,7 @@ export interface FileRouteTypes {
     | '/blog'
     | '/case-studies'
     | '/contact'
+    | '/copyright'
     | '/expertise'
     | '/forgot-password'
     | '/guide'
@@ -593,6 +603,7 @@ export interface FileRouteTypes {
     | '/blog'
     | '/case-studies'
     | '/contact'
+    | '/copyright'
     | '/expertise'
     | '/forgot-password'
     | '/guide'
@@ -650,6 +661,7 @@ export interface FileRouteTypes {
     | '/blog'
     | '/case-studies'
     | '/contact'
+    | '/copyright'
     | '/expertise'
     | '/forgot-password'
     | '/guide'
@@ -708,6 +720,7 @@ export interface RootRouteChildren {
   BlogRoute: typeof BlogRouteWithChildren
   CaseStudiesRoute: typeof CaseStudiesRoute
   ContactRoute: typeof ContactRoute
+  CopyrightRoute: typeof CopyrightRoute
   ExpertiseRoute: typeof ExpertiseRoute
   ForgotPasswordRoute: typeof ForgotPasswordRoute
   GuideRoute: typeof GuideRoute
@@ -831,6 +844,13 @@ declare module '@tanstack/react-router' {
       path: '/expertise'
       fullPath: '/expertise'
       preLoaderRoute: typeof ExpertiseRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/copyright': {
+      id: '/copyright'
+      path: '/copyright'
+      fullPath: '/copyright'
+      preLoaderRoute: typeof CopyrightRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/contact': {
@@ -1197,6 +1217,7 @@ const rootRouteChildren: RootRouteChildren = {
   BlogRoute: BlogRouteWithChildren,
   CaseStudiesRoute: CaseStudiesRoute,
   ContactRoute: ContactRoute,
+  CopyrightRoute: CopyrightRoute,
   ExpertiseRoute: ExpertiseRoute,
   ForgotPasswordRoute: ForgotPasswordRoute,
   GuideRoute: GuideRoute,
