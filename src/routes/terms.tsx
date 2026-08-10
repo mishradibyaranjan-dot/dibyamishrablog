@@ -29,7 +29,7 @@ export const Route = createFileRoute("/terms")({
     links: [{ rel: "canonical", href: CANONICAL }],
     scripts: [
       breadcrumbScript([{ name: "Terms of Use", path: "/terms" }]),
-      legalPageScript({ name: "Terms of Use", path: "/terms", description: DESC }),
+      legalPageScript({ id: "terms", description: DESC }),
     ],
   }),
 });

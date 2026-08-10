@@ -29,7 +29,7 @@ export const Route = createFileRoute("/privacy")({
     links: [{ rel: "canonical", href: CANONICAL }],
     scripts: [
       breadcrumbScript([{ name: "Privacy Notice", path: "/privacy" }]),
-      legalPageScript({ name: "Privacy Notice", path: "/privacy", description: DESC }),
+      legalPageScript({ id: "privacy", description: DESC }),
     ],
   }),
 });

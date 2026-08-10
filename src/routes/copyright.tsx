@@ -29,7 +29,7 @@ export const Route = createFileRoute("/copyright")({
     links: [{ rel: "canonical", href: CANONICAL }],
     scripts: [
       breadcrumbScript([{ name: "Copyright & Content Use", path: "/copyright" }]),
-      legalPageScript({ name: "Copyright & Content Use", path: "/copyright", description: DESC }),
+      legalPageScript({ id: "copyright", description: DESC }),
     ],
   }),
 });
