@@ -5,6 +5,7 @@ import { Section, SectionHeader } from "@/components/layout/Section";
 import { Button } from "@/components/ui/button";
 import heroContact from "@/assets/hero-contact.jpg";
 import { breadcrumbScript } from "@/lib/breadcrumbs";
+import { FormPrivacyNotice } from "@/components/legal/FormPrivacyNotice";
 import { MathCaptcha, useCaptchaGate } from "@/components/security/CaptchaChallenge";
 
 
@@ -169,7 +170,8 @@ function Contact() {
                 {error && (
                   <p className="text-sm text-destructive" role="alert">{error}</p>
                 )}
-                <div className="flex flex-wrap items-center justify-end gap-3 border-t border-border pt-4">
+                <div className="flex flex-col gap-3 border-t border-border pt-4 sm:flex-row sm:items-center sm:justify-between">
+                  <FormPrivacyNotice className="sm:max-w-sm" />
                   <Button type="submit" disabled={submitting || !captcha.canSubmit} className="bg-brand-gradient text-white">
                     {submitting ? (
                       <><Loader2 className="mr-1 h-4 w-4 animate-spin" /> Sending…</>
