@@ -197,9 +197,9 @@ function RootShell({ children }: { children: ReactNode }) {
   return (
     <html
       lang="en"
-      data-theme="midnight"
-      className="dark"
-      style={{ colorScheme: "dark" }}
+      data-theme="light"
+      className="light"
+      style={{ colorScheme: "light" }}
       suppressHydrationWarning
     >
       <head>
