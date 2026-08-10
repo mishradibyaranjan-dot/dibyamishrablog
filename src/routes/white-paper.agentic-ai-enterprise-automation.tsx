@@ -1,4 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { ContentCopyright } from "@/components/legal/ContentCopyright";
 import { ArrowRight, Bot, Workflow, Brain, ShieldCheck, Sparkles, Network, Cog, Database, Users, Activity, Lock, Eye, FileCheck, DollarSign, Gauge, Headphones, ServerCog, Receipt, ShoppingCart, Code2, Shield, UserCheck, Truck, ExternalLink, Mail, Briefcase, TrendingUp, Layers, Target, GitBranch, BookOpen } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Section, SectionHeader } from "@/components/layout/Section";
@@ -730,6 +731,7 @@ function WhitePaper() {
           </div>
         </div>
       </Section>
+      <Section className="pt-0"><ContentCopyright /></Section>
     </>
   );
 }

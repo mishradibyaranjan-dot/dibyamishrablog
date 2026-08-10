@@ -1,4 +1,5 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
+import { ContentCopyright } from "@/components/legal/ContentCopyright";
 import { ArrowRight, ArrowUpRight, CheckCircle2 } from "lucide-react";
 import { Section } from "@/components/layout/Section";
 import { caseStudies, posts, type Post } from "@/lib/content";
@@ -204,6 +205,7 @@ function CaseStudyDetail() {
           </div>
         </div>
       </Section>
+      <Section className="pt-0"><ContentCopyright /></Section>
     </>
   );
 }
