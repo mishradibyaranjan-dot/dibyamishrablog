@@ -17,6 +17,7 @@ import { GlobalSearch } from "@/components/search/GlobalSearch";
 import { ReadAloudButton } from "@/components/voice/ReadAloudButton";
 import { AuthProvider, useAuth } from "@/lib/auth";
 import { SpamDomainGuard } from "@/components/auth/SpamDomainGuard";
+import { SessionTimeout } from "@/components/auth/SessionTimeout";
 import { UserMenu } from "@/components/auth/UserMenu";
 
 import { useActivityTracker } from "@/lib/tracking";
@@ -337,6 +338,7 @@ export function SiteLayout() {
       <AuthProvider>
         <SpamDomainGuard>
           <TrackerMount />
+          <SessionTimeout />
           <div className="relative flex min-h-screen flex-col">
             <AuroraBackground />
             <SiteBanner />

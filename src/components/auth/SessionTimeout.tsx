@@ -38,7 +38,7 @@ export function SessionTimeout() {
   const idleMs = isAdmin ? IDLE_MS_ADMIN : IDLE_MS_STANDARD;
 
   const endSession = useCallback(
-    async (reason: "idle" | "absolute") => {
+    async (_reason: "idle" | "absolute") => {
       if (endingRef.current) return;
       endingRef.current = true;
       setRemaining(null);
@@ -52,7 +52,7 @@ export function SessionTimeout() {
       }
       navigate({
         to: "/auth",
-        search: { redirect: "/", mode: "login", expired: reason },
+        search: { redirect: "/", mode: "login" },
         replace: true,
       });
     },
