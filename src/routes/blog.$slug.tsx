@@ -1,4 +1,5 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
+import { ContentCopyright } from "@/components/legal/ContentCopyright";
 import { ArrowLeft, CheckCircle2 } from "lucide-react";
 import { Section } from "@/components/layout/Section";
 import { Badge } from "@/components/ui/badge";
@@ -127,6 +128,8 @@ function BlogPost() {
               have feedback, counterexamples, or want to compare implementation notes, reach out.
             </p>
           </div>
+
+          <ContentCopyright className="border-t border-border pt-4" />
 
           <div id="key-takeaways" className="card-flashy rounded-2xl glass-strong p-6">
             <h3 className="text-lg font-semibold">Key takeaways</h3>
