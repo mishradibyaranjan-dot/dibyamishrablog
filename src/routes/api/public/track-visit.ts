@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { corsHeadersFor } from "@/lib/origin.server";
 
 function parseUA(ua: string) {
   const s = ua || "";
@@ -28,11 +29,11 @@ async function sha256Hex(input: string) {
     .join("");
 }
 
-const CORS = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers": "Content-Type, Authorization",
-  "Access-Control-Allow-Methods": "POST, OPTIONS",
-};
+// Same-origin / trusted-origin only: this endpoint accepts writes, so a
+// wildcard ACAO would let any site drive it with the visitor's credentials.
+function cors(request: Request) {
+  return corsHeadersFor(request, "POST, OPTIONS");
+}
 
 type AuditRow = {
   outcome: "accepted" | "rejected" | "error";
@@ -78,7 +79,7 @@ async function writeAudit(row: AuditRow) {
 export const Route = createFileRoute("/api/public/track-visit")({
   server: {
     handlers: {
-      OPTIONS: async () => new Response(null, { status: 204, headers: CORS }),
+      OPTIONS: async ({ request }) => new Response(null, { status: 204, headers: cors(request) }),
       POST: async ({ request }) => {
         const startedAt = Date.now();
         const audit: AuditRow = { outcome: "error" };
@@ -106,7 +107,7 @@ export const Route = createFileRoute("/api/public/track-visit")({
           audit.visitor_id = visitorId || null;
           if (!visitorId) {
             await writeAudit({ ...audit, outcome: "rejected", reason: "missing_visitor_id", duration_ms: Date.now() - startedAt });
-            return new Response(JSON.stringify({ ok: false, error: "missing visitorId" }), { status: 400, headers: { "Content-Type": "application/json", ...CORS } });
+            return new Response(JSON.stringify({ ok: false, error: "missing visitorId" }), { status: 400, headers: { "Content-Type": "application/json", ...cors(request) } });
           }
 
           const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
@@ -167,7 +168,7 @@ export const Route = createFileRoute("/api/public/track-visit")({
             });
             return new Response(JSON.stringify({ ok: false }), {
               status: 200,
-              headers: { "Content-Type": "application/json", ...CORS },
+              headers: { "Content-Type": "application/json", ...cors(request) },
             });
           }
 
@@ -247,7 +248,7 @@ export const Route = createFileRoute("/api/public/track-visit")({
 
           return new Response(JSON.stringify({ ok: true }), {
             status: 200,
-            headers: { "Content-Type": "application/json", ...CORS },
+            headers: { "Content-Type": "application/json", ...cors(request) },
           });
         } catch (err) {
           console.error("[track-visit]", err);
@@ -260,7 +261,7 @@ export const Route = createFileRoute("/api/public/track-visit")({
           });
           return new Response(JSON.stringify({ ok: false }), {
             status: 200,
-            headers: { "Content-Type": "application/json", ...CORS },
+            headers: { "Content-Type": "application/json", ...cors(request) },
           });
         }
       },
