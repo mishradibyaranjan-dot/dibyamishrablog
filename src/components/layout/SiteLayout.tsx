@@ -27,6 +27,7 @@ import drmLogo from "@/assets/drm-logo.png.asset.json";
 import { MathCaptcha, useCaptchaGate } from "@/components/security/CaptchaChallenge";
 import { copyrightLine, RESTRICTED_USE_LINE } from "@/lib/legal-config";
 import { FormPrivacyNotice } from "@/components/legal/FormPrivacyNotice";
+import { CookieConsent, CookiePreferencesLink } from "@/components/legal/CookieConsent";
 
 
 function NewsletterForm() {
@@ -311,7 +312,11 @@ function Footer() {
             <nav aria-label="Legal" className="flex flex-wrap items-center gap-x-3 gap-y-1">
               <Link to="/privacy" className="transition-colors hover:text-blue-600">Privacy Notice</Link>
               <span aria-hidden="true">|</span>
+              <Link to="/terms" className="transition-colors hover:text-blue-600">Terms of Use</Link>
+              <span aria-hidden="true">|</span>
               <Link to="/copyright" className="transition-colors hover:text-blue-600">Copyright &amp; Content Use</Link>
+              <span aria-hidden="true">|</span>
+              <CookiePreferencesLink className="transition-colors hover:text-blue-600" />
               <span aria-hidden="true">|</span>
               <Link to="/contact" className="transition-colors hover:text-blue-600">Contact</Link>
             </nav>
@@ -350,6 +355,7 @@ export function SiteLayout() {
             <Footer />
             <FloatingChat />
             <FloatingConnectCta />
+            <CookieConsent />
           </div>
         </SpamDomainGuard>
       </AuthProvider>

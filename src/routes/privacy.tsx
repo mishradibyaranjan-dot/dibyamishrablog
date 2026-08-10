@@ -2,6 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { motion } from "framer-motion";
 import { Database, Mail, Cookie, LineChart, Users, Server } from "lucide-react";
 import { breadcrumbScript } from "@/lib/breadcrumbs";
+import { legalPageScript } from "@/lib/legal-schema";
 import { SITE_ORIGIN } from "@/lib/og-images";
 import { legalConfig, copyrightLine } from "@/lib/legal-config";
 
@@ -26,7 +27,10 @@ export const Route = createFileRoute("/privacy")({
       { name: "author", content: legalConfig.ownerName },
     ],
     links: [{ rel: "canonical", href: CANONICAL }],
-    scripts: [breadcrumbScript([{ name: "Privacy Notice", path: "/privacy" }])],
+    scripts: [
+      breadcrumbScript([{ name: "Privacy Notice", path: "/privacy" }]),
+      legalPageScript({ name: "Privacy Notice", path: "/privacy", description: DESC }),
+    ],
   }),
 });
 
