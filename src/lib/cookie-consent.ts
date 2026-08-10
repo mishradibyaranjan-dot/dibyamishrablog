@@ -97,9 +97,17 @@ export function useCookieConsent() {
   useEffect(() => {
     setRecord(read());
     setHydrated(true);
-    const onChange = (e: Event) => setRecord((e as CustomEvent<ConsentRecord>).detail ?? read());
+    const onChange = (e: Event) => setRecord((e as CustomEvent<ConsentRecord | null>).detail ?? read());
+    // Cross-tab sync: another tab changing consent updates this one too.
+    const onStorage = (e: StorageEvent) => {
+      if (e.key === null || e.key === COOKIE_CONSENT_KEY) setRecord(read());
+    };
     window.addEventListener("drm-cookie-consent", onChange);
-    return () => window.removeEventListener("drm-cookie-consent", onChange);
+    window.addEventListener("storage", onStorage);
+    return () => {
+      window.removeEventListener("drm-cookie-consent", onChange);
+      window.removeEventListener("storage", onStorage);
+    };
   }, []);
 
   const save = useCallback((prefs: CookiePreferences) => setRecord(write(prefs)), []);
@@ -109,12 +117,7 @@ export function useCookieConsent() {
   );
   const rejectAll = useCallback(() => save({ ...DEFAULT_PREFS }), [save]);
   const reset = useCallback(() => {
-    try {
-      window.localStorage.removeItem(COOKIE_CONSENT_KEY);
-    } catch {
-      /* ignore */
-    }
-    setRecord(null);
+    setRecord(clearConsent());
   }, []);
 
   return {
@@ -122,9 +125,44 @@ export function useCookieConsent() {
     record,
     prefs: record?.prefs ?? DEFAULT_PREFS,
     decided: Boolean(record),
+    decidedAt: record?.decidedAt ?? null,
     save,
     acceptAll,
     rejectAll,
     reset,
   };
 }
+
+/**
+ * Wipes the stored decision and returns the store to its privacy-first default
+ * (optional categories OFF, banner shown again). Also clears storage written by
+ * optional categories so a reset genuinely undoes prior consent.
+ */
+export function clearConsent(): null {
+  try {
+    window.localStorage.removeItem(COOKIE_CONSENT_KEY);
+    for (const key of OPTIONAL_STORAGE_KEYS) window.localStorage.removeItem(key);
+    window.sessionStorage.removeItem("drm_session_id");
+  } catch {
+    /* ignore */
+  }
+  window.dispatchEvent(new CustomEvent("drm-cookie-consent", { detail: null }));
+  return null;
+}
+
+/** Subscribe to consent changes outside React. Returns an unsubscribe fn. */
+export function onConsentChange(cb: (rec: ConsentRecord | null) => void) {
+  const handler = () => cb(read());
+  window.addEventListener("drm-cookie-consent", handler);
+  window.addEventListener("storage", handler);
+  return () => {
+    window.removeEventListener("drm-cookie-consent", handler);
+    window.removeEventListener("storage", handler);
+  };
+}
+
+/** Opens the cookie preferences panel from anywhere in the app. */
+export function openCookiePreferences() {
+  window.dispatchEvent(new Event("drm-open-cookie-preferences"));
+}
+
