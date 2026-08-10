@@ -53,13 +53,14 @@ function readUtm(): Record<string, string> {
   return out;
 }
 
-export function useVisitorTracker() {
+export function useVisitorTracker(enabled = true) {
   const { user } = useAuth();
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const lastRef = useRef<string | null>(null);
 
   useEffect(() => {
     if (typeof window === "undefined") return;
+    if (!enabled) return;
     if (lastRef.current === pathname) return;
     lastRef.current = pathname;
 
@@ -121,5 +122,5 @@ export function useVisitorTracker() {
         // ignore
       }
     })();
-  }, [pathname, user?.id]);
+  }, [pathname, user?.id, enabled]);
 }

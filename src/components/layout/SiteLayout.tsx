@@ -28,6 +28,8 @@ import { MathCaptcha, useCaptchaGate } from "@/components/security/CaptchaChalle
 import { copyrightLine, RESTRICTED_USE_LINE } from "@/lib/legal-config";
 import { FormPrivacyNotice } from "@/components/legal/FormPrivacyNotice";
 import { CookieConsent, CookiePreferencesLink } from "@/components/legal/CookieConsent";
+import { ConsentGatedScripts } from "@/components/legal/ConsentGatedScripts";
+import { useCookieConsent } from "@/lib/cookie-consent";
 
 
 function NewsletterForm() {
@@ -359,6 +361,7 @@ export function SiteLayout() {
             <FloatingChat />
             <FloatingConnectCta />
             <CookieConsent />
+            <ConsentGatedScripts />
           </div>
         </SpamDomainGuard>
       </AuthProvider>
