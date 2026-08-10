@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { Cookie, Settings2, X } from "lucide-react";
+import { Cookie, RotateCcw, Settings2, X } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
 import {
   COOKIE_CATEGORIES,
   DEFAULT_PREFS,
+  openCookiePreferences,
   useCookieConsent,
   type CookiePreferences,
 } from "@/lib/cookie-consent";
@@ -51,7 +52,8 @@ function Toggle({
  * Optional categories default to OFF; nothing is stored until a choice is made.
  */
 export function CookieConsent() {
-  const { hydrated, decided, prefs, save, acceptAll, rejectAll } = useCookieConsent();
+  const { hydrated, decided, decidedAt, prefs, save, acceptAll, rejectAll, reset } =
+    useCookieConsent();
   const [showPrefs, setShowPrefs] = useState(false);
   const [draft, setDraft] = useState<CookiePreferences>(DEFAULT_PREFS);
 
@@ -152,6 +154,20 @@ export function CookieConsent() {
           )}
         </AnimatePresence>
 
+        {showPrefs && decided && decidedAt && (
+          <p className="mt-3 text-xs text-muted-foreground">
+            Your choices were saved on{" "}
+            {new Date(decidedAt).toLocaleString(undefined, {
+              dateStyle: "medium",
+              timeStyle: "short",
+            })}
+            . Analytics is currently{" "}
+            <span className="font-medium text-foreground">{prefs.analytics ? "on" : "off"}</span> and
+            preferences storage is{" "}
+            <span className="font-medium text-foreground">{prefs.preferences ? "on" : "off"}</span>.
+          </p>
+        )}
+
         <div className="mt-4 flex flex-wrap items-center gap-2">
           <Button size="sm" onClick={acceptAll}>
             Accept all
@@ -176,6 +192,21 @@ export function CookieConsent() {
               Manage preferences
             </Button>
           )}
+          {showPrefs && decided && (
+            <Button
+              size="sm"
+              variant="ghost"
+              className="text-muted-foreground"
+              onClick={() => {
+                reset();
+                setDraft(DEFAULT_PREFS);
+                setShowPrefs(false);
+              }}
+            >
+              <RotateCcw className="mr-1.5 h-4 w-4" />
+              Reset to default
+            </Button>
+          )}
         </div>
       </motion.aside>
     </AnimatePresence>
@@ -188,7 +219,7 @@ export function CookiePreferencesLink({ className }: { className?: string }) {
     <button
       type="button"
       className={className}
-      onClick={() => window.dispatchEvent(new Event("drm-open-cookie-preferences"))}
+      onClick={openCookiePreferences}
     >
       Cookie Preferences
     </button>

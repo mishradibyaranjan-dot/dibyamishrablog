@@ -2,6 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { motion } from "framer-motion";
 import { Shield, Lock, Database, Mail, Cookie, Users, AlertCircle, FileText } from "lucide-react";
 import { breadcrumbScript } from "@/lib/breadcrumbs";
+import { legalPageScript } from "@/lib/legal-schema";
 import { pageOgImages, SITE_ORIGIN } from "@/lib/og-images";
 
 const CANONICAL = `${SITE_ORIGIN}/trust`;
@@ -35,7 +36,14 @@ export const Route = createFileRoute("/trust")({
       { name: "twitter:image", content: pageOgImages.trust },
     ],
     links: [{ rel: "canonical", href: CANONICAL }],
-    scripts: [breadcrumbScript([{ name: "Trust & Privacy", path: "/trust" }])],
+    scripts: [
+      breadcrumbScript([{ name: "Trust & Privacy", path: "/trust" }]),
+      legalPageScript({
+        id: "trust",
+        description:
+          "How this site handles data, security, subprocessors, cookies, and privacy requests.",
+      }),
+    ],
   }),
 });
 
