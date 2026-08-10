@@ -17,7 +17,7 @@ export type ThemeId = (typeof THEMES)[number]["id"];
 export type ThemeMode = (typeof THEMES)[number]["mode"];
 
 const STORAGE_KEY = "drm-theme";
-const DEFAULT_THEME: ThemeId = "midnight";
+const DEFAULT_THEME: ThemeId = "light";
 
 export function themeMode(theme: ThemeId): ThemeMode {
   return THEMES.find((t) => t.id === theme)?.mode ?? "dark";
