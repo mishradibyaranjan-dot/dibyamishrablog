@@ -3,11 +3,11 @@
  * Reuse this file on other projects by editing only the values below.
  */
 export const legalConfig = {
-  ownerName: "Dibya Ranjan Mishra",
+  ownerName: "DIAA IT Solutions Pvt Ltd",
   websiteName: "dibyamishra.co.in",
-  copyrightStartYear: 2024,
-  copyrightContactEmail: "contactme@dibyamishra.co.in",
-  privacyContactEmail: "contactme@dibyamishra.co.in",
+  copyrightStartYear: 2026,
+  copyrightContactEmail: "dibya.mishra@diaaitsolutions.com",
+  privacyContactEmail: "dibya.mishra@diaaitsolutions.com",
   country: "India",
   privacyUrl: "/privacy",
   copyrightUrl: "/copyright",
