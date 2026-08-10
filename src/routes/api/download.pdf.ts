@@ -82,6 +82,13 @@ export const Route = createFileRoute("/api/download/pdf")({
         }
         log("authenticated", { userId: user.id });
 
+        // Light per-user throttle so an authenticated account can't be used to
+        // bulk-harvest the document repository. Does not affect normal reading.
+        if (!allow(user.id)) {
+          return errJson(429, "rate_limited", "Too many downloads in a short period. Please try again in a few minutes.");
+        }
+
+
         const url = new URL(request.url);
         const key = url.searchParams.get("key") ?? "";
         const doc = REPO[key];
