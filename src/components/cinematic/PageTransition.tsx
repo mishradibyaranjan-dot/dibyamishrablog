@@ -1,5 +1,5 @@
 import { Outlet, useRouterState } from "@tanstack/react-router";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { useRef } from "react";
 
 /**
@@ -11,14 +11,18 @@ import { useRef } from "react";
  * The very first paint is intentionally NOT animated: an initial opacity-0 +
  * blur + delay on the first render pushes Largest Contentful Paint several
  * seconds out and hides the hero heading from crawlers/audits.
+ *
+ * Users with `prefers-reduced-motion: reduce` get a plain, instant swap.
  */
 export function PageTransition() {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const firstPathRef = useRef(pathname);
-  const isFirstPaint = firstPathRef.current === pathname;
+  const reduceMotion = useReducedMotion();
+  const isFirstPaint = firstPathRef.current === pathname || !!reduceMotion;
 
   return (
     <AnimatePresence mode="wait" initial={false}>
+
       <motion.div
         key={pathname}
         initial={
