@@ -78,7 +78,14 @@ function PrivacyPage() {
           <p>
             <strong className="text-foreground">Contact form.</strong> When you use the contact
             form, the name, email address, subject/topic and message you enter are stored in this
-            site's database and emailed to {legalConfig.privacyContactEmail} so the enquiry can be
+            site's database and emailed to{" "}
+            <a
+              href={`mailto:${legalConfig.privacyContactEmail}`}
+              className="font-medium text-primary underline underline-offset-4"
+            >
+              {legalConfig.privacyContactEmail}
+            </a>{" "}
+            so the enquiry can be
             answered. Replies may be sent from the same address.
           </p>
           <p>
