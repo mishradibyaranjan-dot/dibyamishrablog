@@ -24,6 +24,9 @@ import { useVisitorTracker } from "@/lib/visitor-tracking";
 
 import drmLogo from "@/assets/drm-logo.png.asset.json";
 import { MathCaptcha, useCaptchaGate } from "@/components/security/CaptchaChallenge";
+import { copyrightLine, RESTRICTED_USE_LINE } from "@/lib/legal-config";
+import { FormPrivacyNotice } from "@/components/legal/FormPrivacyNotice";
+
 
 function NewsletterForm() {
   const [status, setStatus] = useState<"idle" | "sending" | "ok" | "error">("idle");
@@ -95,7 +98,9 @@ function NewsletterForm() {
           <p className="text-xs text-red-600">{error ?? "Something went wrong."}</p>
 
         )}
+        <FormPrivacyNotice />
       </div>
+
     </form>
   );
 }
@@ -299,14 +304,24 @@ function Footer() {
         </div>
       </div>
       <div className="border-t border-slate-200">
-        <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-2 px-4 py-5 text-xs text-slate-500 sm:flex-row sm:px-6">
-          <p>© {new Date().getFullYear()} Dibya Ranjan Mishra. All rights reserved.</p>
-          <p>Built with research, rigor, and a bias for clarity.</p>
+        <div className="mx-auto flex max-w-7xl flex-col gap-3 px-4 py-5 text-xs text-slate-500 sm:px-6">
+          <div className="flex flex-col items-center justify-between gap-2 sm:flex-row">
+            <p>{copyrightLine()}</p>
+            <nav aria-label="Legal" className="flex flex-wrap items-center gap-x-3 gap-y-1">
+              <Link to="/privacy" className="transition-colors hover:text-blue-600">Privacy Notice</Link>
+              <span aria-hidden="true">|</span>
+              <Link to="/copyright" className="transition-colors hover:text-blue-600">Copyright &amp; Content Use</Link>
+              <span aria-hidden="true">|</span>
+              <Link to="/contact" className="transition-colors hover:text-blue-600">Contact</Link>
+            </nav>
+          </div>
+          <p className="text-[11px] leading-relaxed text-slate-400">{RESTRICTED_USE_LINE}</p>
         </div>
       </div>
     </footer>
   );
 }
+
 
 
 function TrackerMount() {

@@ -32,6 +32,23 @@ const REPO: Record<string, { url: string; filename: string }> = {
 
 export const REPO_KEYS = Object.keys(REPO);
 
+// In-memory sliding-window throttle (per isolate). 20 downloads / 10 minutes.
+const WINDOW_MS = 10 * 60 * 1000;
+const MAX_PER_WINDOW = 20;
+const hits = new Map<string, number[]>();
+function allow(id: string): boolean {
+  const now = Date.now();
+  const recent = (hits.get(id) ?? []).filter((t) => now - t < WINDOW_MS);
+  if (recent.length >= MAX_PER_WINDOW) {
+    hits.set(id, recent);
+    return false;
+  }
+  recent.push(now);
+  hits.set(id, recent);
+  return true;
+}
+
+
 export const Route = createFileRoute("/api/download/pdf")({
   server: {
     handlers: {
@@ -81,6 +98,13 @@ export const Route = createFileRoute("/api/download/pdf")({
           );
         }
         log("authenticated", { userId: user.id });
+
+        // Light per-user throttle so an authenticated account can't be used to
+        // bulk-harvest the document repository. Does not affect normal reading.
+        if (!allow(user.id)) {
+          return errJson(429, "rate_limited", "Too many downloads in a short period. Please try again in a few minutes.");
+        }
+
 
         const url = new URL(request.url);
         const key = url.searchParams.get("key") ?? "";
