@@ -12,7 +12,8 @@ import { cn } from "@/lib/utils";
 import { THEMES, themeMode, useTheme, type ThemeId } from "./ThemeProvider";
 
 const DARK_THEME: ThemeId = "midnight";
-const LIGHT_THEME: ThemeId = "light";
+const LIGHT_THEME: ThemeId = "glacier";
+
 
 function Swatches({ colors }: { colors: readonly string[] }) {
   return (
