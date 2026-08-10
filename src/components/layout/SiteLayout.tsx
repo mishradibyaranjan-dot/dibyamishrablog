@@ -331,10 +331,13 @@ function Footer() {
 
 
 function TrackerMount() {
+  const { prefs } = useCookieConsent();
   useActivityTracker();
-  useVisitorTracker();
+  // First-party visitor analytics only run once the analytics category is accepted.
+  useVisitorTracker(prefs.analytics);
   return null;
 }
+
 
 
 export function SiteLayout() {
