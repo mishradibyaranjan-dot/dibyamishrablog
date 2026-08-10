@@ -8,6 +8,14 @@ import { useCallback, useEffect, useState } from "react";
 export const COOKIE_CONSENT_KEY = "drm-cookie-consent";
 export const CONSENT_VERSION = 1;
 
+/** Local storage written only by optional categories — cleared on reset. */
+export const OPTIONAL_STORAGE_KEYS = [
+  "drm_visitor_id",
+  "drm-learn-progress",
+  "drm-guide-progress",
+  "drm-captions",
+];
+
 export type CookieCategory = "necessary" | "preferences" | "analytics";
 
 export type CookiePreferences = {
