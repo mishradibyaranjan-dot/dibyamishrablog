@@ -24,6 +24,9 @@ import { useVisitorTracker } from "@/lib/visitor-tracking";
 
 import drmLogo from "@/assets/drm-logo.png.asset.json";
 import { MathCaptcha, useCaptchaGate } from "@/components/security/CaptchaChallenge";
+import { copyrightLine, RESTRICTED_USE_LINE } from "@/lib/legal-config";
+import { FormPrivacyNotice } from "@/components/legal/FormPrivacyNotice";
+
 
 function NewsletterForm() {
   const [status, setStatus] = useState<"idle" | "sending" | "ok" | "error">("idle");
