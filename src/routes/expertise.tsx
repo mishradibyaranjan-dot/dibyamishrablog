@@ -15,7 +15,7 @@ import { Reveal } from "@/components/cinematic/Reveal";
 import { techTags } from "@/lib/content";
 import { breadcrumbScript } from "@/lib/breadcrumbs";
 
-const TITLE = "Expertise — AI, Cloud, SaaS & Engineering Leadership | Dibya Ranjan Mishra";
+const TITLE = "Expertise: AI, Cloud & SaaS | Dibya Ranjan Mishra";
 const DESCRIPTION =
   "Agentic AI and GenAI in production, cloud-native modernization, multi-tenant SaaS architecture, data platforms, and global engineering leadership — how I work and what it delivers.";
 

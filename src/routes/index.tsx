@@ -477,7 +477,7 @@ function WaysToWork() {
               <h3 className="font-display text-base font-semibold text-foreground">{w.title}</h3>
               <p className="text-sm leading-relaxed text-muted-foreground">{w.body}</p>
               <span className="mt-auto inline-flex items-center gap-1.5 pt-2 text-sm font-semibold text-brand-1">
-                Learn more
+                Explore advisory services
                 <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
               </span>
             </Link>
