@@ -30,6 +30,7 @@ const securityMiddleware = createMiddleware().server(async ({ next, request }) =
     // Skip static assets and internal RPC to keep hot paths fast.
     if (
       pathname.startsWith("/_serverFn") ||
+      pathname.startsWith("/.well-known/") ||
       pathname.startsWith("/assets/") ||
       pathname.startsWith("/lovable/") ||
       pathname === "/favicon.ico" ||
