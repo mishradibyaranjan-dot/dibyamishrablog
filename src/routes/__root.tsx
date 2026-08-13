@@ -82,6 +82,9 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "google-site-verification", content: "8EO0An2G722tBY4Ux1AdMj7joxlF1vZkZcCy9qCwXs4" },
       { name: "google-site-verification", content: "zSv7Z_xrt_XkQYkl7c2EuLjbzO5inNSKvdq-3-ftVvY" },
       { name: "google-adsense-account", content: "ca-pub-8723914555454401" },
+      { name: "sentinel-qa", content: "sentinel-verify-643ba08aa58246928c524e46" },
+
+
 
       { name: "author", content: "Dibya Ranjan Mishra" },
       { property: "og:site_name", content: "Dibya Ranjan Mishra" },
