@@ -1,5 +1,5 @@
 import { Link, useNavigate } from "@tanstack/react-router";
-import { LogOut, LayoutDashboard, Mail, User as UserIcon, ShieldBan, ScrollText, ShieldAlert } from "lucide-react";
+import { LogOut, LayoutDashboard, Mail, User as UserIcon, ShieldBan, ScrollText, ShieldAlert, BookLock } from "lucide-react";
 import { useAuth } from "@/lib/auth";
 import {
   DropdownMenu,
@@ -72,6 +72,12 @@ export function UserMenu() {
             <Link to="/admin/visitor-audit"><ScrollText className="mr-2 h-4 w-4" /> Visitor tracking audit</Link>
           </DropdownMenuItem>
         )}
+        {isAdmin && user.email?.trim().toLowerCase() === "mishra.dibyaranjan@gmail.com" && (
+          <DropdownMenuItem asChild>
+            <Link to="/admin/docs"><BookLock className="mr-2 h-4 w-4" /> Engineering docs</Link>
+          </DropdownMenuItem>
+        )}
+
         <DropdownMenuSeparator />
         <DropdownMenuItem
           onClick={async () => {
