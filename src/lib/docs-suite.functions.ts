@@ -1,7 +1,7 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
-import type { DocMeta } from "@/lib/docs-suite.server";
+import type { DocMeta } from "@/lib/docs-suite.types";
 
 // The engineering documentation suite is restricted to the single owner
 // identity, on top of the admin role check. Both must pass.

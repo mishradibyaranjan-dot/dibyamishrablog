@@ -10,16 +10,9 @@ import testPlan from "@/content/docs-suite/test-plan.md?raw";
 import userGuide from "@/content/docs-suite/user-guide.md?raw";
 import releaseNotes from "@/content/docs-suite/release-notes.md?raw";
 
-export type DocCategory = "Requirements" | "Design" | "Quality" | "Operations";
+import type { DocCategory, DocMeta } from "@/lib/docs-suite.types";
 
-export type DocMeta = {
-  id: string;
-  title: string;
-  category: DocCategory;
-  summary: string;
-  filename: string;
-  bytes: number;
-};
+export type { DocCategory, DocMeta };
 
 type DocEntry = Omit<DocMeta, "bytes"> & { content: string };
 

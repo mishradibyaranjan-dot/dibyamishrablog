@@ -13,7 +13,7 @@ import { Section, SectionHeader } from "@/components/layout/Section";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/lib/auth";
 import { listEngineeringDocs, getEngineeringDoc } from "@/lib/docs-suite.functions";
-import type { DocMeta } from "@/lib/docs-suite.server";
+import type { DocMeta } from "@/lib/docs-suite.types";
 
 const SUPER_ADMIN_EMAIL = "mishra.dibyaranjan@gmail.com";
 
