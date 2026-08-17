@@ -94,7 +94,7 @@ async function assertSuperAdmin(
 export const listEngineeringDocs = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .handler(async ({ context }): Promise<{ docs: DocMeta[]; generatedAt: string }> => {
-    await assertSuperAdmin(context as never);
+    await assertSuperAdmin(context as never, "listEngineeringDocs");
     const { listDocMeta } = await import("@/lib/docs-suite.server");
     return { docs: listDocMeta(), generatedAt: new Date().toISOString() };
   });
@@ -109,7 +109,7 @@ export const getEngineeringDoc = createServerFn({ method: "POST" })
       data,
       context,
     }): Promise<{ id: string; title: string; filename: string; content: string }> => {
-      await assertSuperAdmin(context as never);
+      await assertSuperAdmin(context as never, `getEngineeringDoc:${data.id}`);
       const { getDocEntry } = await import("@/lib/docs-suite.server");
       const entry = getDocEntry(data.id);
       if (!entry) throw new Error("Not found");
