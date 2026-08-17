@@ -8,11 +8,17 @@ import type { DocMeta } from "@/lib/docs-suite.types";
 const SUPER_ADMIN_EMAIL = "mishra.dibyaranjan@gmail.com";
 
 async function assertSuperAdmin(context: {
-  supabase: { from: (t: string) => any };
+  supabase: { from: (t: string) => any; auth: { getUser: () => Promise<any> } };
   userId: string;
   claims: Record<string, unknown>;
 }) {
-  const email = String(context.claims["email"] ?? "").trim().toLowerCase();
+  // The email claim is not present in every token shape, so fall back to the
+  // authenticated user record when it is missing.
+  let email = String(context.claims["email"] ?? "").trim().toLowerCase();
+  if (!email) {
+    const { data } = await context.supabase.auth.getUser();
+    email = String(data?.user?.email ?? "").trim().toLowerCase();
+  }
   if (email !== SUPER_ADMIN_EMAIL) throw new Error("Forbidden");
 
   // Verified through the caller's RLS-scoped client, never the admin client.
@@ -24,6 +30,7 @@ async function assertSuperAdmin(context: {
     .maybeSingle();
   if (!data) throw new Error("Forbidden");
 }
+
 
 export const listEngineeringDocs = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
