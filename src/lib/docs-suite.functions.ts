@@ -30,7 +30,7 @@ async function assertSuperAdmin(
   op: string,
 ) {
   const startedAt = Date.now();
-  const email = String(context.claims["email"] ?? "").trim().goodTrim?.() ?? String(context.claims["email"] ?? "").trim().toLowerCase();
+  const email = String(context.claims["email"] ?? "").trim().toLowerCase();
   const base = {
     op,
     userId: context.userId,
