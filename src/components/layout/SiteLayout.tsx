@@ -321,6 +321,9 @@ function Footer() {
               <CookiePreferencesLink className="transition-colors hover:text-blue-600" />
               <span aria-hidden="true">|</span>
               <Link to="/contact" className="transition-colors hover:text-blue-600">Contact</Link>
+              <span aria-hidden="true">|</span>
+              <Link to="/auth" search={{ mode: "login" }} className="transition-colors hover:text-blue-600">Admin Login</Link>
+
             </nav>
           </div>
           <p className="text-[11px] leading-relaxed text-slate-400">{RESTRICTED_USE_LINE}</p>
