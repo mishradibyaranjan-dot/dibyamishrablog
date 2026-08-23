@@ -18,9 +18,17 @@ import {
   ShieldCheck,
   ChevronRight,
   PanelLeftClose,
+  BarChart3,
+  Ban,
+  Inbox,
+  FileText,
+  ShieldAlert,
+  Bug,
+  Radar,
   type LucideIcon,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useAuth } from "@/lib/auth";
 
 type RailItem = { to: string; label: string; icon: LucideIcon };
 
@@ -44,12 +52,25 @@ const SECONDARY: RailItem[] = [
   { to: "/trust", label: "Trust & Privacy", icon: ShieldCheck },
 ];
 
+const ADMIN: RailItem[] = [
+  { to: "/reports", label: "Reports", icon: BarChart3 },
+  { to: "/admin/contact-enquiries", label: "Enquiries", icon: Inbox },
+  { to: "/admin/blocked-domains", label: "Blocked Domains", icon: Ban },
+  { to: "/admin/spam-audit", label: "Spam Audit", icon: ShieldAlert },
+  { to: "/admin/security-events", label: "Security Events", icon: Bug },
+  { to: "/admin/visitor-audit", label: "Visitor Audit", icon: Radar },
+  { to: "/admin/docs", label: "Engineering Docs", icon: FileText },
+];
+
 const STORAGE_KEY = "drm-side-rail";
+
 
 export function SideRail() {
   const [hidden, setHidden] = useState(false);
   const [hovered, setHovered] = useState(false);
   const pathname = useRouterState({ select: (s) => s.location.pathname });
+  const { isAdmin } = useAuth();
+
 
   useEffect(() => {
     try {
@@ -135,7 +156,19 @@ export function SideRail() {
         {PRIMARY.map(renderItem)}
         <div className="my-1 h-px shrink-0 bg-border" />
         {SECONDARY.map(renderItem)}
+        {isAdmin && (
+          <>
+            <div className="my-1 h-px shrink-0 bg-border" />
+            {expanded && (
+              <span className="px-3 pb-1 text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
+                Admin
+              </span>
+            )}
+            {ADMIN.map(renderItem)}
+          </>
+        )}
       </nav>
+
       <button
         type="button"
         onClick={() => setHiddenPersisted(true)}
