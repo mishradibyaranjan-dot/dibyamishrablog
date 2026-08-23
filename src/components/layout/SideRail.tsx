@@ -69,6 +69,8 @@ export function SideRail() {
   const [hidden, setHidden] = useState(false);
   const [hovered, setHovered] = useState(false);
   const pathname = useRouterState({ select: (s) => s.location.pathname });
+  const { isAdmin } = useAuth();
+
 
   useEffect(() => {
     try {
