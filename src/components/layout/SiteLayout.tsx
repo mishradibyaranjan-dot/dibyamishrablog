@@ -7,6 +7,7 @@ import { cn } from "@/lib/utils";
 import { FloatingChat } from "@/components/chat/FloatingChat";
 import { FloatingConnectCta } from "@/components/marketing/FloatingConnectCta";
 import { SiteBanner } from "@/components/layout/SiteBanner";
+import { SideRail } from "@/components/layout/SideRail";
 import { AuroraBackground } from "@/components/cinematic/AuroraBackground";
 import { PageTransition } from "@/components/cinematic/PageTransition";
 import { ThemeProvider } from "@/components/theme/ThemeProvider";
