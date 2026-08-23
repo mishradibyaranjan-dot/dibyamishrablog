@@ -356,8 +356,9 @@ export function SiteLayout() {
             <AuroraBackground />
             <SiteBanner />
             <Header />
+            <SideRail />
 
-            <main className="relative flex-1">
+            <main className="relative flex-1 lg:pl-20">
               <PageTransition />
             </main>
             <Footer />
