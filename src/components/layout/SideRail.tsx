@@ -18,9 +18,17 @@ import {
   ShieldCheck,
   ChevronRight,
   PanelLeftClose,
+  BarChart3,
+  Ban,
+  Inbox,
+  FileText,
+  ShieldAlert,
+  Bug,
+  Radar,
   type LucideIcon,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useAuth } from "@/lib/auth";
 
 type RailItem = { to: string; label: string; icon: LucideIcon };
 
@@ -44,7 +52,18 @@ const SECONDARY: RailItem[] = [
   { to: "/trust", label: "Trust & Privacy", icon: ShieldCheck },
 ];
 
+const ADMIN: RailItem[] = [
+  { to: "/reports", label: "Reports", icon: BarChart3 },
+  { to: "/admin/contact-enquiries", label: "Enquiries", icon: Inbox },
+  { to: "/admin/blocked-domains", label: "Blocked Domains", icon: Ban },
+  { to: "/admin/spam-audit", label: "Spam Audit", icon: ShieldAlert },
+  { to: "/admin/security-events", label: "Security Events", icon: Bug },
+  { to: "/admin/visitor-audit", label: "Visitor Audit", icon: Radar },
+  { to: "/admin/docs", label: "Engineering Docs", icon: FileText },
+];
+
 const STORAGE_KEY = "drm-side-rail";
+
 
 export function SideRail() {
   const [hidden, setHidden] = useState(false);
