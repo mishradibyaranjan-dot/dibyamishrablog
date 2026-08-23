@@ -156,7 +156,19 @@ export function SideRail() {
         {PRIMARY.map(renderItem)}
         <div className="my-1 h-px shrink-0 bg-border" />
         {SECONDARY.map(renderItem)}
+        {isAdmin && (
+          <>
+            <div className="my-1 h-px shrink-0 bg-border" />
+            {expanded && (
+              <span className="px-3 pb-1 text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
+                Admin
+              </span>
+            )}
+            {ADMIN.map(renderItem)}
+          </>
+        )}
       </nav>
+
       <button
         type="button"
         onClick={() => setHiddenPersisted(true)}
