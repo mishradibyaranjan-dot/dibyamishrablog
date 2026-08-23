@@ -1,5 +1,5 @@
 import { Link, useNavigate } from "@tanstack/react-router";
-import { LogOut, LayoutDashboard, Mail, User as UserIcon, ShieldBan, ScrollText, ShieldAlert, BookLock } from "lucide-react";
+import { LogOut, LogIn, LayoutDashboard, Mail, User as UserIcon, ShieldBan, ScrollText, ShieldAlert, BookLock } from "lucide-react";
 import { useAuth } from "@/lib/auth";
 import {
   DropdownMenu,
@@ -16,10 +16,18 @@ export function UserMenu() {
 
   if (loading) return null;
 
-  // Login is currently hidden for public browsing; direct /auth still works when needed.
   if (!user) {
-    return null;
+    return (
+      <Link
+        to="/auth"
+        search={{ mode: "login" }}
+        className="inline-flex min-h-9 shrink-0 items-center gap-1.5 whitespace-nowrap rounded-full border border-border bg-card/60 px-3 py-1.5 text-sm font-medium text-foreground transition-colors hover:bg-accent hover:text-accent-foreground"
+      >
+        <LogIn className="h-4 w-4" /> Sign in
+      </Link>
+    );
   }
+
 
   const initial = (user.user_metadata?.full_name || user.email || "?").slice(0, 1).toUpperCase();
 
