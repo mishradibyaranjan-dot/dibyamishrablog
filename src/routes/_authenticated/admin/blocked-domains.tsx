@@ -36,7 +36,7 @@ function normalizeDomain(raw: string): string {
 }
 
 function BlockedDomainsAdmin() {
-  const { isAdmin, loading } = useAuth();
+  const { isAdmin, loading, authReady } = useAuth();
   const [rows, setRows] = useState<Row[]>([]);
   const [total, setTotal] = useState(0);
   const [page, setPage] = useState(0);
@@ -126,7 +126,7 @@ function BlockedDomainsAdmin() {
     return `${from}–${to} of ${total}`;
   }, [page, total]);
 
-  if (loading) {
+  if (loading || !authReady) {
     return (
       <Section className="pt-16">
         <div className="grid min-h-[40vh] place-items-center">
