@@ -214,6 +214,7 @@ function Header() {
           <ReadAloudButton />
 
           <ThemeToggle />
+          <AccessibilityMenu />
           <UserMenu />
           <Button
             variant="ghost"
