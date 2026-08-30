@@ -13,10 +13,10 @@ import { Section } from "@/components/layout/Section";
  * only to the single owner account by a database trigger.
  */
 export function RequireAdmin({ children }: { children: React.ReactNode }) {
-  const { user, isAdmin, loading } = useAuth();
+  const { user, isAdmin, loading, authReady } = useAuth();
   const pathname = useRouterState({ select: (s) => s.location.pathname });
 
-  if (loading) {
+  if (loading || (user && !authReady)) {
     return (
       <div className="grid min-h-[60vh] place-items-center">
         <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />

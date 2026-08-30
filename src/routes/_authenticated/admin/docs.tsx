@@ -42,7 +42,7 @@ function saveText(filename: string, content: string) {
 }
 
 function EngineeringDocsPage() {
-  const { user, isAdmin, loading } = useAuth();
+  const { user, isAdmin, loading, authReady } = useAuth();
   const fetchList = useServerFn(listEngineeringDocs);
   const fetchDoc = useServerFn(getEngineeringDoc);
 
@@ -72,10 +72,10 @@ function EngineeringDocsPage() {
   };
 
   useEffect(() => {
-    if (!loading && isSuperAdmin) void load();
-    else if (!loading) setBusy(false);
+    if (authReady && isSuperAdmin) void load();
+    else if (authReady) setBusy(false);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [loading, isSuperAdmin]);
+  }, [authReady, isSuperAdmin]);
 
   const openDoc = async (id: string, title: string) => {
     setActiveId(id);
@@ -127,7 +127,7 @@ function EngineeringDocsPage() {
     }
   };
 
-  if (loading) {
+  if (loading || !authReady) {
     return (
       <div className="grid min-h-[60vh] place-items-center">
         <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
