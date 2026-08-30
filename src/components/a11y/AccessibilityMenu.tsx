@@ -480,7 +480,9 @@ export function AccessibilityMenu({ className }: { className?: string }) {
       <PopoverTrigger asChild>{trigger}</PopoverTrigger>
       <PopoverContent
         align="end"
-        className="max-h-[80vh] w-[22rem] overflow-y-auto"
+        sideOffset={8}
+        collisionPadding={12}
+        className="max-h-[80vh] w-[min(22rem,calc(100vw-2rem))] overflow-y-auto"
         aria-label={t("a11y.title")}
       >
         <h2 className="mb-3 text-sm font-semibold text-foreground">{t("a11y.title")}</h2>
