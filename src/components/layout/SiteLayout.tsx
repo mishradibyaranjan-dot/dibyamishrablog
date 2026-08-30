@@ -174,58 +174,16 @@ function Header() {
           <span className="truncate text-slate-900">Dibya Ranjan Mishra</span>
         </Link>
 
-        <nav className="hidden items-center gap-1 2xl:flex" data-site-nav>
-          {NAV.map((item) => {
-            const active =
-              item.to === "/"
-                ? pathname === "/"
-                : pathname.startsWith(item.to);
-            return (
-              <Link
-                key={item.to}
-                to={item.to}
-                className={cn(
-                  "relative whitespace-nowrap rounded-md px-2.5 py-2 text-sm font-medium transition-colors",
-                  active ? "text-blue-600" : "text-slate-600 hover:text-slate-900",
-                )}
-                activeOptions={{ exact: item.to === "/" }}
-              >
-                {item.label}
-                {active && (
-                  <motion.span
-                    layoutId="nav-underline"
-                    className="absolute inset-x-2 -bottom-0.5 h-0.5 rounded-full bg-blue-500"
-                    transition={{ type: "spring", stiffness: 360, damping: 28 }}
-                  />
-                )}
-              </Link>
-            );
-          })}
-        </nav>
-
-        <div className="flex items-center gap-1 sm:gap-2">
-          <GlobalSearch />
-          <Link
-            to="/contact"
-            className="hidden min-h-11 shrink-0 items-center gap-2 whitespace-nowrap rounded-full bg-brand-gradient px-4 py-2 text-sm font-semibold text-white transition-transform hover:-translate-y-0.5 xl:inline-flex"
-          >
-            Let&apos;s Connect
-          </Link>
-          <ReadAloudButton />
-
-          <ThemeToggle />
-          <AccessibilityMenu />
-          <UserMenu />
-          <Button
-            variant="ghost"
-            size="icon"
-            className="min-h-11 min-w-11 text-slate-700 hover:bg-slate-100 2xl:hidden"
-            onClick={() => setOpen((o) => !o)}
-            aria-label="Main menu"
-          >
-            {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-          </Button>
-        </div>
+        <Button
+          variant="ghost"
+          className="min-h-11 gap-2 px-3 text-slate-700 hover:bg-slate-100"
+          onClick={() => setOpen((o) => !o)}
+          aria-label="Main menu"
+          aria-expanded={open}
+        >
+          {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+          <span className="text-sm font-medium">Menu</span>
+        </Button>
       </div>
 
       <AnimatePresence>
@@ -235,37 +193,45 @@ function Header() {
             animate={{ height: "auto", opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
             transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
-            className="overflow-hidden border-t border-slate-200 bg-white/95 backdrop-blur-xl 2xl:hidden"
+            className="overflow-hidden border-t border-slate-200 bg-white/95 backdrop-blur-xl"
           >
-            <nav className="mx-auto flex max-w-7xl flex-col px-4 py-3 sm:px-6">
-              {[...NAV, ...MORE_NAV].map((item) => (
-                <Link
-                  key={item.to}
-                  to={item.to}
-                  className="min-h-11 rounded-md px-3 py-2.5 text-sm font-medium text-slate-700 hover:bg-slate-100 hover:text-blue-600"
-                  activeProps={{ className: "text-blue-600 bg-blue-50" }}
-                  activeOptions={{ exact: item.to === "/" }}
-                >
-                  {item.label}
-                </Link>
-              ))}
-              <div className="mt-2 flex items-center gap-2 px-1">
+            <div className="mx-auto max-h-[80vh] max-w-7xl overflow-y-auto px-4 py-4 sm:px-6">
+              <nav className="grid gap-1 sm:grid-cols-2 lg:grid-cols-3">
+                {[...NAV, ...MORE_NAV].map((item) => (
+                  <Link
+                    key={item.to}
+                    to={item.to}
+                    className="min-h-11 rounded-md px-3 py-2.5 text-sm font-medium text-slate-700 hover:bg-slate-100 hover:text-blue-600"
+                    activeProps={{ className: "text-blue-600 bg-blue-50" }}
+                    activeOptions={{ exact: item.to === "/" }}
+                  >
+                    {item.label}
+                  </Link>
+                ))}
+              </nav>
+
+              <div className="mt-4 flex flex-wrap items-center gap-2 border-t border-slate-200 pt-4">
+                <GlobalSearch />
+                <ReadAloudButton />
+                <ThemeToggle />
                 <AccessibilityMenu />
-                <span className="text-sm text-slate-700">Accessibility &amp; preferences</span>
+                <UserMenu />
               </div>
+
               <Link
                 to="/contact"
-                className="mt-2 inline-flex min-h-11 items-center justify-center gap-2 rounded-xl bg-brand-gradient px-4 py-3 text-sm font-semibold text-white"
+                className="mt-4 inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-xl bg-brand-gradient px-4 py-3 text-sm font-semibold text-white sm:w-auto sm:px-6"
               >
                 Let&apos;s Connect
               </Link>
-            </nav>
+            </div>
           </motion.div>
         )}
       </AnimatePresence>
     </header>
   );
 }
+
 
 
 function Footer() {
