@@ -249,6 +249,10 @@ function Header() {
                   {item.label}
                 </Link>
               ))}
+              <div className="mt-2 flex items-center gap-2 px-1">
+                <AccessibilityMenu />
+                <span className="text-sm text-slate-700">Accessibility &amp; preferences</span>
+              </div>
               <Link
                 to="/contact"
                 className="mt-2 inline-flex min-h-11 items-center justify-center gap-2 rounded-xl bg-brand-gradient px-4 py-3 text-sm font-semibold text-white"
