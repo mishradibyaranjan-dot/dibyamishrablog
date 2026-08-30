@@ -95,6 +95,14 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
 
     links: [
       { rel: "stylesheet", href: appCss },
+      // Dyslexia-friendly face, only fetched when a visitor picks that option's
+      // family (the stylesheet is tiny and cached; the font itself is lazy).
+      { rel: "preconnect", href: "https://fonts.googleapis.com" },
+      { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
+      {
+        rel: "stylesheet",
+        href: "https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&display=swap",
+      },
       // Fonts are self-hosted (see src/styles.css @font-face). Preload only the
       // two faces used above the fold so the hero heading paints immediately.
       {
