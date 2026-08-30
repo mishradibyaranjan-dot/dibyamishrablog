@@ -13,6 +13,12 @@ import { PageTransition } from "@/components/cinematic/PageTransition";
 import { ThemeProvider } from "@/components/theme/ThemeProvider";
 import { ThemeToggle } from "@/components/theme/ThemeToggle";
 import { GlobalSearch } from "@/components/search/GlobalSearch";
+import { AccessibilityProvider } from "@/contexts/AccessibilityContext";
+import { LanguageProvider } from "@/contexts/LanguageContext";
+import { AccessibilityMenu, SelectionReader } from "@/components/a11y/AccessibilityMenu";
+import { SkipToContent, LiveAnnouncer } from "@/components/a11y/SkipToContent";
+import { ColorVisionFilters } from "@/components/a11y/ColorVisionFilters";
+import { MediaPauseGuard } from "@/components/a11y/MediaPauseGuard";
 
 
 import { ReadAloudButton } from "@/components/voice/ReadAloudButton";
