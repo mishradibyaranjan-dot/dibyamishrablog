@@ -13,6 +13,12 @@ import { PageTransition } from "@/components/cinematic/PageTransition";
 import { ThemeProvider } from "@/components/theme/ThemeProvider";
 import { ThemeToggle } from "@/components/theme/ThemeToggle";
 import { GlobalSearch } from "@/components/search/GlobalSearch";
+import { AccessibilityProvider } from "@/contexts/AccessibilityContext";
+import { LanguageProvider } from "@/contexts/LanguageContext";
+import { AccessibilityMenu, SelectionReader } from "@/components/a11y/AccessibilityMenu";
+import { SkipToContent, LiveAnnouncer } from "@/components/a11y/SkipToContent";
+import { ColorVisionFilters } from "@/components/a11y/ColorVisionFilters";
+import { MediaPauseGuard } from "@/components/a11y/MediaPauseGuard";
 
 
 import { ReadAloudButton } from "@/components/voice/ReadAloudButton";
@@ -168,7 +174,7 @@ function Header() {
           <span className="truncate text-slate-900">Dibya Ranjan Mishra</span>
         </Link>
 
-        <nav className="hidden items-center gap-1 lg:flex" data-site-nav>
+        <nav className="hidden items-center gap-1 2xl:flex" data-site-nav>
           {NAV.map((item) => {
             const active =
               item.to === "/"
@@ -208,13 +214,14 @@ function Header() {
           <ReadAloudButton />
 
           <ThemeToggle />
+          <AccessibilityMenu />
           <UserMenu />
           <Button
             variant="ghost"
             size="icon"
-            className="text-slate-700 hover:bg-slate-100 lg:hidden"
+            className="min-h-11 min-w-11 text-slate-700 hover:bg-slate-100 2xl:hidden"
             onClick={() => setOpen((o) => !o)}
-            aria-label="Menu"
+            aria-label="Main menu"
           >
             {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
           </Button>
@@ -228,7 +235,7 @@ function Header() {
             animate={{ height: "auto", opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
             transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
-            className="overflow-hidden border-t border-slate-200 bg-white/95 backdrop-blur-xl lg:hidden"
+            className="overflow-hidden border-t border-slate-200 bg-white/95 backdrop-blur-xl 2xl:hidden"
           >
             <nav className="mx-auto flex max-w-7xl flex-col px-4 py-3 sm:px-6">
               {[...NAV, ...MORE_NAV].map((item) => (
@@ -242,6 +249,10 @@ function Header() {
                   {item.label}
                 </Link>
               ))}
+              <div className="mt-2 flex items-center gap-2 px-1">
+                <AccessibilityMenu />
+                <span className="text-sm text-slate-700">Accessibility &amp; preferences</span>
+              </div>
               <Link
                 to="/contact"
                 className="mt-2 inline-flex min-h-11 items-center justify-center gap-2 rounded-xl bg-brand-gradient px-4 py-3 text-sm font-semibold text-white"
@@ -348,28 +359,37 @@ function TrackerMount() {
 
 export function SiteLayout() {
   return (
-    <ThemeProvider>
-      <AuthProvider>
-        <SpamDomainGuard>
-          <TrackerMount />
-          <SessionTimeout />
-          <div className="relative flex min-h-screen flex-col">
-            <AuroraBackground />
-            <SiteBanner />
-            <Header />
-            <SideRail />
+    <AccessibilityProvider>
+      <LanguageProvider>
+        <ThemeProvider>
+          <AuthProvider>
+            <SpamDomainGuard>
+              <TrackerMount />
+              <SessionTimeout />
+              <MediaPauseGuard />
+              <SelectionReader />
+              <ColorVisionFilters />
+              <div className="relative flex min-h-dvh flex-col">
+                <SkipToContent />
+                <AuroraBackground />
+                <SiteBanner />
+                <Header />
+                <SideRail />
 
-            <main className="relative flex-1 lg:pl-20">
-              <PageTransition />
-            </main>
-            <Footer />
-            <FloatingChat />
-            <FloatingConnectCta />
-            <CookieConsent />
-            <ConsentGatedScripts />
-          </div>
-        </SpamDomainGuard>
-      </AuthProvider>
-    </ThemeProvider>
+                <main id="main-content" className="relative flex-1 lg:pl-20">
+                  <PageTransition />
+                </main>
+                <Footer />
+                <LiveAnnouncer />
+                <FloatingChat />
+                <FloatingConnectCta />
+                <CookieConsent />
+                <ConsentGatedScripts />
+              </div>
+            </SpamDomainGuard>
+          </AuthProvider>
+        </ThemeProvider>
+      </LanguageProvider>
+    </AccessibilityProvider>
   );
 }

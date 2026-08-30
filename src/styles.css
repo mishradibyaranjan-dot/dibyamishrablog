@@ -1171,3 +1171,110 @@ table th, table td { border-color: var(--color-border); }
 .data-\[state\=active\]\:bg-brand-gradient[data-state="active"] * {
   color: #ffffff !important;
 }
+
+
+/* ================= Accessibility & preferences pack =================
+   All values driven by data-* attributes / CSS variables set on <html> by
+   src/lib/a11y-prefs.ts. Colours reference existing semantic tokens only. */
+
+:root {
+  --font-scale: 1;
+}
+
+html {
+  font-size: calc(100% * var(--font-scale, 1));
+}
+
+/* Dyslexia-friendly + family overrides */
+html[data-a11y-font="sans"] body,
+html[data-a11y-font="sans"] * {
+  font-family: "DM Sans", system-ui, sans-serif !important;
+}
+html[data-a11y-font="serif"] body,
+html[data-a11y-font="serif"] * {
+  font-family: Georgia, "Times New Roman", serif !important;
+}
+html[data-a11y-font="dyslexic"] body,
+html[data-a11y-font="dyslexic"] * {
+  font-family: "Atkinson Hyperlegible", "DM Sans", system-ui, sans-serif !important;
+  letter-spacing: 0.02em;
+}
+
+/* Letter spacing / line height */
+html[data-a11y-spacing="relaxed"] body {
+  line-height: 1.75;
+  letter-spacing: 0.015em;
+  word-spacing: 0.05em;
+}
+html[data-a11y-spacing="loose"] body {
+  line-height: 2;
+  letter-spacing: 0.04em;
+  word-spacing: 0.12em;
+}
+
+html[data-a11y-bold="on"] body,
+html[data-a11y-bold="on"] p,
+html[data-a11y-bold="on"] span,
+html[data-a11y-bold="on"] li,
+html[data-a11y-bold="on"] a {
+  font-weight: 700 !important;
+}
+
+html[data-a11y-links="underline"] a:not([data-no-underline]) {
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+/* Colour-vision simulation / assistive filters */
+html[data-a11y-filter="protanopia"] body {
+  filter: url("#a11y-protanopia");
+}
+html[data-a11y-filter="deuteranopia"] body {
+  filter: url("#a11y-deuteranopia");
+}
+html[data-a11y-filter="tritanopia"] body {
+  filter: url("#a11y-tritanopia");
+}
+html[data-a11y-filter="monochrome"] body {
+  filter: grayscale(1) contrast(1.05);
+}
+
+/* High-contrast (AAA-leaning) token overrides */
+html[data-a11y-contrast="high"] {
+  --muted-foreground: var(--foreground);
+  --border: var(--foreground);
+  --ring: var(--foreground);
+}
+html[data-a11y-contrast="high"] body {
+  filter: contrast(1.18);
+}
+html[data-a11y-contrast="high"] a,
+html[data-a11y-contrast="high"] button {
+  text-decoration-thickness: 2px;
+}
+
+/* Reduced motion — genuinely stops animation, transitions and smooth scroll */
+html[data-a11y-motion="reduce"] {
+  scroll-behavior: auto !important;
+}
+html[data-a11y-motion="reduce"] *,
+html[data-a11y-motion="reduce"] *::before,
+html[data-a11y-motion="reduce"] *::after {
+  animation-duration: 0.001ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.001ms !important;
+  scroll-behavior: auto !important;
+}
+
+/* Enhanced focus ring */
+html[data-a11y-focus="enhanced"] :focus-visible {
+  outline: 4px solid var(--ring) !important;
+  outline-offset: 3px !important;
+  border-radius: 4px;
+}
+
+/* Larger cursor */
+html[data-a11y-cursor="large"],
+html[data-a11y-cursor="large"] * {
+  cursor: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='48' height='48' viewBox='0 0 24 24'><path d='M5 2l14 9-6 1 4 8-3 1-4-8-5 4z' fill='%23000' stroke='%23fff' stroke-width='1.2'/></svg>") 4 2, auto;
+}

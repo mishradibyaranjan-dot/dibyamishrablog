@@ -12,11 +12,12 @@ import { useEffect, type ReactNode } from "react";
 
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
+import { A11Y_BOOTSTRAP } from "../lib/a11y-prefs";
 import { SiteLayout } from "../components/layout/SiteLayout";
 
 function NotFoundComponent() {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-background px-4">
+    <div className="flex min-h-dvh items-center justify-center bg-background px-4">
       <div className="max-w-md text-center">
         <h1 className="text-7xl font-bold text-foreground">404</h1>
         <h2 className="mt-4 text-xl font-semibold text-foreground">Page not found</h2>
@@ -44,7 +45,7 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
   }, [error]);
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-background px-4">
+    <div className="flex min-h-dvh items-center justify-center bg-background px-4">
       <div className="max-w-md text-center">
         <h1 className="text-xl font-semibold tracking-tight text-foreground">
           This page didn't load
@@ -95,6 +96,14 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
 
     links: [
       { rel: "stylesheet", href: appCss },
+      // Dyslexia-friendly face, only fetched when a visitor picks that option's
+      // family (the stylesheet is tiny and cached; the font itself is lazy).
+      { rel: "preconnect", href: "https://fonts.googleapis.com" },
+      { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
+      {
+        rel: "stylesheet",
+        href: "https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&display=swap",
+      },
       // Fonts are self-hosted (see src/styles.css @font-face). Preload only the
       // two faces used above the fold so the hero heading paints immediately.
       {
@@ -209,6 +218,7 @@ function RootShell({ children }: { children: ReactNode }) {
       <head>
         <HeadContent />
         <ScriptOnce>{THEME_BOOTSTRAP}</ScriptOnce>
+        <ScriptOnce>{A11Y_BOOTSTRAP}</ScriptOnce>
       </head>
       <body>
         {children}
