@@ -44,7 +44,7 @@ export function SpamDomainGuard({ children }: { children: React.ReactNode }) {
 
   if (blocked) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-background px-4">
+      <div className="flex min-h-dvh items-center justify-center bg-background px-4">
         <div className="max-w-md rounded-lg border border-border bg-card p-8 text-center shadow-sm">
           <h1 className="text-xl font-semibold text-foreground">Access blocked</h1>
           <p className="mt-3 text-sm text-muted-foreground">
