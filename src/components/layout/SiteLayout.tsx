@@ -355,28 +355,37 @@ function TrackerMount() {
 
 export function SiteLayout() {
   return (
-    <ThemeProvider>
-      <AuthProvider>
-        <SpamDomainGuard>
-          <TrackerMount />
-          <SessionTimeout />
-          <div className="relative flex min-h-screen flex-col">
-            <AuroraBackground />
-            <SiteBanner />
-            <Header />
-            <SideRail />
+    <AccessibilityProvider>
+      <LanguageProvider>
+        <ThemeProvider>
+          <AuthProvider>
+            <SpamDomainGuard>
+              <TrackerMount />
+              <SessionTimeout />
+              <MediaPauseGuard />
+              <SelectionReader />
+              <ColorVisionFilters />
+              <div className="relative flex min-h-dvh flex-col">
+                <SkipToContent />
+                <AuroraBackground />
+                <SiteBanner />
+                <Header />
+                <SideRail />
 
-            <main className="relative flex-1 lg:pl-20">
-              <PageTransition />
-            </main>
-            <Footer />
-            <FloatingChat />
-            <FloatingConnectCta />
-            <CookieConsent />
-            <ConsentGatedScripts />
-          </div>
-        </SpamDomainGuard>
-      </AuthProvider>
-    </ThemeProvider>
+                <main id="main-content" className="relative flex-1 lg:pl-20">
+                  <PageTransition />
+                </main>
+                <Footer />
+                <LiveAnnouncer />
+                <FloatingChat />
+                <FloatingConnectCta />
+                <CookieConsent />
+                <ConsentGatedScripts />
+              </div>
+            </SpamDomainGuard>
+          </AuthProvider>
+        </ThemeProvider>
+      </LanguageProvider>
+    </AccessibilityProvider>
   );
 }
