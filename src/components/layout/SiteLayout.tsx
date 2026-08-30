@@ -174,7 +174,7 @@ function Header() {
           <span className="truncate text-slate-900">Dibya Ranjan Mishra</span>
         </Link>
 
-        <nav className="hidden items-center gap-1 lg:flex" data-site-nav>
+        <nav className="hidden items-center gap-1 2xl:flex" data-site-nav>
           {NAV.map((item) => {
             const active =
               item.to === "/"
@@ -219,9 +219,9 @@ function Header() {
           <Button
             variant="ghost"
             size="icon"
-            className="text-slate-700 hover:bg-slate-100 lg:hidden"
+            className="min-h-11 min-w-11 text-slate-700 hover:bg-slate-100 2xl:hidden"
             onClick={() => setOpen((o) => !o)}
-            aria-label="Menu"
+            aria-label="Main menu"
           >
             {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
           </Button>
@@ -235,7 +235,7 @@ function Header() {
             animate={{ height: "auto", opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
             transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
-            className="overflow-hidden border-t border-slate-200 bg-white/95 backdrop-blur-xl lg:hidden"
+            className="overflow-hidden border-t border-slate-200 bg-white/95 backdrop-blur-xl 2xl:hidden"
           >
             <nav className="mx-auto flex max-w-7xl flex-col px-4 py-3 sm:px-6">
               {[...NAV, ...MORE_NAV].map((item) => (
