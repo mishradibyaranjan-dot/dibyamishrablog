@@ -320,8 +320,8 @@ export const publishNewsletterIssue = createServerFn({ method: "POST" })
       if (subErr) throw new Error(subErr.message);
       const list: { email: string }[] = subs ?? [];
 
-      // Enqueue one at a time using the internal /lovable/email/transactional/send route
-      // via the RPC enqueue_email (which is exactly what /send does under the hood).
+      // Send one at a time through Lovable's managed email delivery.
+
       const { enqueueRenderedTemplate } = await import("@/lib/newsletter-core.server");
       for (const s of list) {
         try {

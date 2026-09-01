@@ -27,11 +27,6 @@ export function nextRetryDelayMinutes(retryCount: number): number {
   return BACKOFF_MINUTES[Math.min(retryCount, BACKOFF_MINUTES.length - 1)] ?? 240;
 }
 
-function generateToken(): string {
-  const bytes = new Uint8Array(32);
-  crypto.getRandomValues(bytes);
-  return Array.from(bytes).map((b) => b.toString(16).padStart(2, "0")).join("");
-}
 
 export async function serviceClient(): Promise<SupabaseClient> {
   const { createClient } = await import("@supabase/supabase-js");
@@ -63,28 +58,6 @@ export async function renderTemplate(
   };
 }
 
-async function unsubscribeTokenFor(
-  supabase: SupabaseClient,
-  email: string,
-): Promise<string | null> {
-  const normalized = email.toLowerCase();
-  const { data: existing } = await supabase
-    .from("email_unsubscribe_tokens")
-    .select("token")
-    .eq("email", normalized)
-    .maybeSingle();
-  if (existing?.token) return existing.token as string;
-  const newToken = generateToken();
-  await supabase
-    .from("email_unsubscribe_tokens")
-    .upsert({ token: newToken, email: normalized }, { onConflict: "email", ignoreDuplicates: true });
-  const { data: stored } = await supabase
-    .from("email_unsubscribe_tokens")
-    .select("token")
-    .eq("email", normalized)
-    .maybeSingle();
-  return (stored?.token as string) ?? newToken;
-}
 
 export interface SendArgs {
   supabase: SupabaseClient;
@@ -116,9 +89,7 @@ export async function sendContactEmail({
   const apiKey = process.env.LOVABLE_API_KEY;
   if (!apiKey) return { ok: false, error: "email_api_key_missing" };
 
-  const { sendLovableEmail } = await import("@lovable.dev/email-js");
-  const unsubscribeToken = await unsubscribeTokenFor(supabase, recipient);
-  if (!unsubscribeToken) return { ok: false, error: "unsubscribe_token_unavailable" };
+  const { EmailAPIError, sendLovableEmail } = await import("@lovable.dev/email-js");
 
   const recordAttempt = async (status: "sent" | "failed", error?: string) => {
     if (!enquiryId) return;
@@ -134,12 +105,19 @@ export async function sendContactEmail({
     });
   };
 
-  await supabase.from("email_send_log").insert({
-    message_id: messageId,
-    template_name: templateName,
-    recipient_email: recipient,
-    status: "pending",
-  });
+  const logSend = async (
+    status: "sent" | "suppressed" | "failed",
+    errorMessage?: string,
+  ) => {
+    const { error } = await supabase.from("email_send_log").insert({
+      message_id: messageId,
+      template_name: templateName,
+      recipient_email: recipient,
+      status,
+      ...(errorMessage ? { error_message: errorMessage.slice(0, 1000) } : {}),
+    });
+    if (error) console.error("[contact-email] send log write failed", error.code, error.message);
+  };
 
   try {
     await sendLovableEmail(
@@ -154,34 +132,29 @@ export async function sendContactEmail({
         purpose: "transactional",
         label: templateName,
         idempotency_key: `${templateName}-${messageId}-${attemptNo}-${recipient}`,
-        unsubscribe_token: unsubscribeToken,
-        message_id: messageId,
       } as Parameters<typeof sendLovableEmail>[0],
       { apiKey, sendUrl: process.env.LOVABLE_SEND_URL ?? undefined } as Parameters<
         typeof sendLovableEmail
       >[1],
     );
-    await supabase.from("email_send_log").insert({
-      message_id: messageId,
-      template_name: templateName,
-      recipient_email: recipient,
-      status: "sent",
-    });
+    await logSend("sent");
     await recordAttempt("sent");
     return { ok: true };
   } catch (err) {
     const msg = err instanceof Error ? err.message : String(err);
+    // A suppressed recipient (earlier bounce, complaint or unsubscribe) is an
+    // expected outcome enforced by Lovable — never retried around.
+    if (err instanceof EmailAPIError && err.code === "recipient_suppressed") {
+      await logSend("suppressed", msg);
+      await recordAttempt("failed", "recipient_suppressed");
+      return { ok: false, error: "recipient_suppressed" };
+    }
     console.error("[contact-email] send failed", templateName, recipient, msg);
-    await supabase.from("email_send_log").insert({
-      message_id: messageId,
-      template_name: templateName,
-      recipient_email: recipient,
-      status: "failed",
-      error_message: msg.slice(0, 1000),
-    });
+    await logSend("failed", msg);
     await recordAttempt("failed", msg);
     return { ok: false, error: msg };
   }
+
 }
 
 interface RetryRow {

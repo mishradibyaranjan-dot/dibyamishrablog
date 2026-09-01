@@ -38,7 +38,7 @@ const staticEntries: SitemapEntry[] = [
   { path: "/auth", changefreq: "yearly", priority: "0.1" },
   { path: "/forgot-password", changefreq: "yearly", priority: "0.1" },
   { path: "/reset-password", changefreq: "yearly", priority: "0.1" },
-  { path: "/email/unsubscribe", changefreq: "yearly", priority: "0.1" },
+  
   { path: "/mcp", changefreq: "yearly", priority: "0.1" },
   { path: "/.mcp/list-tools", changefreq: "yearly", priority: "0.1" },
 ];
