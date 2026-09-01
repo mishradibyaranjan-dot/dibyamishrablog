@@ -58,28 +58,6 @@ export async function renderTemplate(
   };
 }
 
-async function unsubscribeTokenFor(
-  supabase: SupabaseClient,
-  email: string,
-): Promise<string | null> {
-  const normalized = email.toLowerCase();
-  const { data: existing } = await supabase
-    .from("email_unsubscribe_tokens")
-    .select("token")
-    .eq("email", normalized)
-    .maybeSingle();
-  if (existing?.token) return existing.token as string;
-  const newToken = generateToken();
-  await supabase
-    .from("email_unsubscribe_tokens")
-    .upsert({ token: newToken, email: normalized }, { onConflict: "email", ignoreDuplicates: true });
-  const { data: stored } = await supabase
-    .from("email_unsubscribe_tokens")
-    .select("token")
-    .eq("email", normalized)
-    .maybeSingle();
-  return (stored?.token as string) ?? newToken;
-}
 
 export interface SendArgs {
   supabase: SupabaseClient;
