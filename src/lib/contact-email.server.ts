@@ -27,11 +27,6 @@ export function nextRetryDelayMinutes(retryCount: number): number {
   return BACKOFF_MINUTES[Math.min(retryCount, BACKOFF_MINUTES.length - 1)] ?? 240;
 }
 
-function generateToken(): string {
-  const bytes = new Uint8Array(32);
-  crypto.getRandomValues(bytes);
-  return Array.from(bytes).map((b) => b.toString(16).padStart(2, "0")).join("");
-}
 
 export async function serviceClient(): Promise<SupabaseClient> {
   const { createClient } = await import("@supabase/supabase-js");
