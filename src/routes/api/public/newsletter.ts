@@ -61,20 +61,16 @@ export const Route = createFileRoute("/api/public/newsletter")({
 
           if (!wasActive) {
             try {
-              await supabaseAdmin.rpc("enqueue_email", {
-                queue_name: "transactional_emails",
-                payload: {
-                  template_name: "newsletter-welcome",
-                  recipient_email: email,
-                  template_data: {},
-                  idempotency_key: `newsletter-welcome-${email}`,
-                },
+              const { sendTemplateEmail } = await import("@/lib/email-templates/send-email");
+              await sendTemplateEmail("newsletter-welcome", email, {
+                idempotencyKey: `newsletter-welcome-${email}`,
               });
             } catch (e) {
-              // Never fail the subscribe just because the welcome mail queue balked.
-              console.error("welcome email enqueue failed", email, e);
+              // Never fail the subscribe just because the welcome mail balked.
+              console.error("welcome email send failed", email, e);
             }
           }
+
 
           return Response.json({ ok: true }, { headers: cors });
         } catch (err) {
