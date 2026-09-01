@@ -45,6 +45,7 @@ import { Route as Char91DotwellKnownChar93OauthProtectedResourceRouteImport } fr
 import { Route as Char91DotmcpChar93ListToolsRouteImport } from './routes/[.mcp]/list-tools'
 import { Route as AuthenticatedAdminRouteRouteImport } from './routes/_authenticated/admin/route'
 import { Route as LovableEmailSuppressionRouteImport } from './routes/lovable/email/suppression'
+import { Route as LovableEmailEventsRouteImport } from './routes/lovable/email/events'
 import { Route as ApiPublicTtsRouteImport } from './routes/api/public/tts'
 import { Route as ApiPublicTrackVisitRouteImport } from './routes/api/public/track-visit'
 import { Route as ApiPublicNewsletterRouteImport } from './routes/api/public/newsletter'
@@ -251,6 +252,11 @@ const LovableEmailSuppressionRoute = LovableEmailSuppressionRouteImport.update({
   path: '/lovable/email/suppression',
   getParentRoute: () => rootRouteImport,
 } as any)
+const LovableEmailEventsRoute = LovableEmailEventsRouteImport.update({
+  id: '/lovable/email/events',
+  path: '/lovable/email/events',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiPublicTtsRoute = ApiPublicTtsRouteImport.update({
   id: '/api/public/tts',
   path: '/api/public/tts',
@@ -429,6 +435,7 @@ export interface FileRoutesByFullPath {
   '/api/public/newsletter': typeof ApiPublicNewsletterRoute
   '/api/public/track-visit': typeof ApiPublicTrackVisitRoute
   '/api/public/tts': typeof ApiPublicTtsRoute
+  '/lovable/email/events': typeof LovableEmailEventsRoute
   '/lovable/email/suppression': typeof LovableEmailSuppressionRoute
   '/api/public/cron/contact-email-retry': typeof ApiPublicCronContactEmailRetryRoute
   '/api/public/cron/monthly-newsletter': typeof ApiPublicCronMonthlyNewsletterRoute
@@ -489,6 +496,7 @@ export interface FileRoutesByTo {
   '/api/public/newsletter': typeof ApiPublicNewsletterRoute
   '/api/public/track-visit': typeof ApiPublicTrackVisitRoute
   '/api/public/tts': typeof ApiPublicTtsRoute
+  '/lovable/email/events': typeof LovableEmailEventsRoute
   '/lovable/email/suppression': typeof LovableEmailSuppressionRoute
   '/api/public/cron/contact-email-retry': typeof ApiPublicCronContactEmailRetryRoute
   '/api/public/cron/monthly-newsletter': typeof ApiPublicCronMonthlyNewsletterRoute
@@ -551,6 +559,7 @@ export interface FileRoutesById {
   '/api/public/newsletter': typeof ApiPublicNewsletterRoute
   '/api/public/track-visit': typeof ApiPublicTrackVisitRoute
   '/api/public/tts': typeof ApiPublicTtsRoute
+  '/lovable/email/events': typeof LovableEmailEventsRoute
   '/lovable/email/suppression': typeof LovableEmailSuppressionRoute
   '/api/public/cron/contact-email-retry': typeof ApiPublicCronContactEmailRetryRoute
   '/api/public/cron/monthly-newsletter': typeof ApiPublicCronMonthlyNewsletterRoute
@@ -613,6 +622,7 @@ export interface FileRouteTypes {
     | '/api/public/newsletter'
     | '/api/public/track-visit'
     | '/api/public/tts'
+    | '/lovable/email/events'
     | '/lovable/email/suppression'
     | '/api/public/cron/contact-email-retry'
     | '/api/public/cron/monthly-newsletter'
@@ -673,6 +683,7 @@ export interface FileRouteTypes {
     | '/api/public/newsletter'
     | '/api/public/track-visit'
     | '/api/public/tts'
+    | '/lovable/email/events'
     | '/lovable/email/suppression'
     | '/api/public/cron/contact-email-retry'
     | '/api/public/cron/monthly-newsletter'
@@ -734,6 +745,7 @@ export interface FileRouteTypes {
     | '/api/public/newsletter'
     | '/api/public/track-visit'
     | '/api/public/tts'
+    | '/lovable/email/events'
     | '/lovable/email/suppression'
     | '/api/public/cron/contact-email-retry'
     | '/api/public/cron/monthly-newsletter'
@@ -786,6 +798,7 @@ export interface RootRouteChildren {
   ApiPublicNewsletterRoute: typeof ApiPublicNewsletterRoute
   ApiPublicTrackVisitRoute: typeof ApiPublicTrackVisitRoute
   ApiPublicTtsRoute: typeof ApiPublicTtsRoute
+  LovableEmailEventsRoute: typeof LovableEmailEventsRoute
   LovableEmailSuppressionRoute: typeof LovableEmailSuppressionRoute
   ApiPublicCronContactEmailRetryRoute: typeof ApiPublicCronContactEmailRetryRoute
   ApiPublicCronMonthlyNewsletterRoute: typeof ApiPublicCronMonthlyNewsletterRoute
@@ -1052,6 +1065,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LovableEmailSuppressionRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/lovable/email/events': {
+      id: '/lovable/email/events'
+      path: '/lovable/email/events'
+      fullPath: '/lovable/email/events'
+      preLoaderRoute: typeof LovableEmailEventsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/public/tts': {
       id: '/api/public/tts'
       path: '/api/public/tts'
@@ -1310,6 +1330,7 @@ const rootRouteChildren: RootRouteChildren = {
   ApiPublicNewsletterRoute: ApiPublicNewsletterRoute,
   ApiPublicTrackVisitRoute: ApiPublicTrackVisitRoute,
   ApiPublicTtsRoute: ApiPublicTtsRoute,
+  LovableEmailEventsRoute: LovableEmailEventsRoute,
   LovableEmailSuppressionRoute: LovableEmailSuppressionRoute,
   ApiPublicCronContactEmailRetryRoute: ApiPublicCronContactEmailRetryRoute,
   ApiPublicCronMonthlyNewsletterRoute: ApiPublicCronMonthlyNewsletterRoute,
