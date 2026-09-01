@@ -36,7 +36,6 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as NewsletterIndexRouteImport } from './routes/newsletter.index'
 import { Route as WhitePaperAgenticAiEnterpriseAutomationRouteImport } from './routes/white-paper.agentic-ai-enterprise-automation'
 import { Route as NewsletterSlugRouteImport } from './routes/newsletter.$slug'
-import { Route as EmailUnsubscribeRouteImport } from './routes/email/unsubscribe'
 import { Route as CaseStudySlugRouteImport } from './routes/case-study.$slug'
 import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
 import { Route as AuthenticatedRepositoryRouteImport } from './routes/_authenticated/repository'
@@ -44,7 +43,6 @@ import { Route as AuthenticatedReportsRouteImport } from './routes/_authenticate
 import { Route as Char91DotwellKnownChar93OauthProtectedResourceRouteImport } from './routes/[.well-known]/oauth-protected-resource'
 import { Route as Char91DotmcpChar93ListToolsRouteImport } from './routes/[.mcp]/list-tools'
 import { Route as AuthenticatedAdminRouteRouteImport } from './routes/_authenticated/admin/route'
-import { Route as LovableEmailSuppressionRouteImport } from './routes/lovable/email/suppression'
 import { Route as LovableEmailEventsRouteImport } from './routes/lovable/email/events'
 import { Route as ApiPublicTtsRouteImport } from './routes/api/public/tts'
 import { Route as ApiPublicTrackVisitRouteImport } from './routes/api/public/track-visit'
@@ -60,9 +58,7 @@ import { Route as AuthenticatedAdminContactEnquiriesRouteImport } from './routes
 import { Route as AuthenticatedAdminBlockedDomainsRouteImport } from './routes/_authenticated/admin/blocked-domains'
 import { Route as Char91DotmcpChar93InvokeToolToolRouteImport } from './routes/[.mcp]/invoke-tool/$tool'
 import { Route as DotlovableOauthConsentRouteImport } from './routes/[.]lovable.oauth.consent'
-import { Route as LovableEmailTransactionalSendRouteImport } from './routes/lovable/email/transactional/send'
 import { Route as LovableEmailTransactionalPreviewRouteImport } from './routes/lovable/email/transactional/preview'
-import { Route as LovableEmailQueueProcessRouteImport } from './routes/lovable/email/queue/process'
 import { Route as LovableEmailAuthWebhookRouteImport } from './routes/lovable/email/auth/webhook'
 import { Route as LovableEmailAuthPreviewRouteImport } from './routes/lovable/email/auth/preview'
 import { Route as ApiPublicCronVisitorAuditAlertsRouteImport } from './routes/api/public/cron/visitor-audit-alerts'
@@ -205,11 +201,6 @@ const NewsletterSlugRoute = NewsletterSlugRouteImport.update({
   path: '/newsletter/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
-const EmailUnsubscribeRoute = EmailUnsubscribeRouteImport.update({
-  id: '/email/unsubscribe',
-  path: '/email/unsubscribe',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const CaseStudySlugRoute = CaseStudySlugRouteImport.update({
   id: '/case-study/$slug',
   path: '/case-study/$slug',
@@ -246,11 +237,6 @@ const AuthenticatedAdminRouteRoute = AuthenticatedAdminRouteRouteImport.update({
   id: '/admin',
   path: '/admin',
   getParentRoute: () => AuthenticatedRouteRoute,
-} as any)
-const LovableEmailSuppressionRoute = LovableEmailSuppressionRouteImport.update({
-  id: '/lovable/email/suppression',
-  path: '/lovable/email/suppression',
-  getParentRoute: () => rootRouteImport,
 } as any)
 const LovableEmailEventsRoute = LovableEmailEventsRouteImport.update({
   id: '/lovable/email/events',
@@ -333,22 +319,10 @@ const DotlovableOauthConsentRoute = DotlovableOauthConsentRouteImport.update({
   path: '/.lovable/oauth/consent',
   getParentRoute: () => rootRouteImport,
 } as any)
-const LovableEmailTransactionalSendRoute =
-  LovableEmailTransactionalSendRouteImport.update({
-    id: '/lovable/email/transactional/send',
-    path: '/lovable/email/transactional/send',
-    getParentRoute: () => rootRouteImport,
-  } as any)
 const LovableEmailTransactionalPreviewRoute =
   LovableEmailTransactionalPreviewRouteImport.update({
     id: '/lovable/email/transactional/preview',
     path: '/lovable/email/transactional/preview',
-    getParentRoute: () => rootRouteImport,
-  } as any)
-const LovableEmailQueueProcessRoute =
-  LovableEmailQueueProcessRouteImport.update({
-    id: '/lovable/email/queue/process',
-    path: '/lovable/email/queue/process',
     getParentRoute: () => rootRouteImport,
   } as any)
 const LovableEmailAuthWebhookRoute = LovableEmailAuthWebhookRouteImport.update({
@@ -417,7 +391,6 @@ export interface FileRoutesByFullPath {
   '/repository': typeof AuthenticatedRepositoryRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/case-study/$slug': typeof CaseStudySlugRoute
-  '/email/unsubscribe': typeof EmailUnsubscribeRoute
   '/newsletter/$slug': typeof NewsletterSlugRoute
   '/white-paper/agentic-ai-enterprise-automation': typeof WhitePaperAgenticAiEnterpriseAutomationRoute
   '/newsletter/': typeof NewsletterIndexRoute
@@ -436,16 +409,13 @@ export interface FileRoutesByFullPath {
   '/api/public/track-visit': typeof ApiPublicTrackVisitRoute
   '/api/public/tts': typeof ApiPublicTtsRoute
   '/lovable/email/events': typeof LovableEmailEventsRoute
-  '/lovable/email/suppression': typeof LovableEmailSuppressionRoute
   '/api/public/cron/contact-email-retry': typeof ApiPublicCronContactEmailRetryRoute
   '/api/public/cron/monthly-newsletter': typeof ApiPublicCronMonthlyNewsletterRoute
   '/api/public/cron/newsletter-scheduler': typeof ApiPublicCronNewsletterSchedulerRoute
   '/api/public/cron/visitor-audit-alerts': typeof ApiPublicCronVisitorAuditAlertsRoute
   '/lovable/email/auth/preview': typeof LovableEmailAuthPreviewRoute
   '/lovable/email/auth/webhook': typeof LovableEmailAuthWebhookRoute
-  '/lovable/email/queue/process': typeof LovableEmailQueueProcessRoute
   '/lovable/email/transactional/preview': typeof LovableEmailTransactionalPreviewRoute
-  '/lovable/email/transactional/send': typeof LovableEmailTransactionalSendRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -478,7 +448,6 @@ export interface FileRoutesByTo {
   '/repository': typeof AuthenticatedRepositoryRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/case-study/$slug': typeof CaseStudySlugRoute
-  '/email/unsubscribe': typeof EmailUnsubscribeRoute
   '/newsletter/$slug': typeof NewsletterSlugRoute
   '/white-paper/agentic-ai-enterprise-automation': typeof WhitePaperAgenticAiEnterpriseAutomationRoute
   '/newsletter': typeof NewsletterIndexRoute
@@ -497,16 +466,13 @@ export interface FileRoutesByTo {
   '/api/public/track-visit': typeof ApiPublicTrackVisitRoute
   '/api/public/tts': typeof ApiPublicTtsRoute
   '/lovable/email/events': typeof LovableEmailEventsRoute
-  '/lovable/email/suppression': typeof LovableEmailSuppressionRoute
   '/api/public/cron/contact-email-retry': typeof ApiPublicCronContactEmailRetryRoute
   '/api/public/cron/monthly-newsletter': typeof ApiPublicCronMonthlyNewsletterRoute
   '/api/public/cron/newsletter-scheduler': typeof ApiPublicCronNewsletterSchedulerRoute
   '/api/public/cron/visitor-audit-alerts': typeof ApiPublicCronVisitorAuditAlertsRoute
   '/lovable/email/auth/preview': typeof LovableEmailAuthPreviewRoute
   '/lovable/email/auth/webhook': typeof LovableEmailAuthWebhookRoute
-  '/lovable/email/queue/process': typeof LovableEmailQueueProcessRoute
   '/lovable/email/transactional/preview': typeof LovableEmailTransactionalPreviewRoute
-  '/lovable/email/transactional/send': typeof LovableEmailTransactionalSendRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -541,7 +507,6 @@ export interface FileRoutesById {
   '/_authenticated/repository': typeof AuthenticatedRepositoryRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/case-study/$slug': typeof CaseStudySlugRoute
-  '/email/unsubscribe': typeof EmailUnsubscribeRoute
   '/newsletter/$slug': typeof NewsletterSlugRoute
   '/white-paper/agentic-ai-enterprise-automation': typeof WhitePaperAgenticAiEnterpriseAutomationRoute
   '/newsletter/': typeof NewsletterIndexRoute
@@ -560,16 +525,13 @@ export interface FileRoutesById {
   '/api/public/track-visit': typeof ApiPublicTrackVisitRoute
   '/api/public/tts': typeof ApiPublicTtsRoute
   '/lovable/email/events': typeof LovableEmailEventsRoute
-  '/lovable/email/suppression': typeof LovableEmailSuppressionRoute
   '/api/public/cron/contact-email-retry': typeof ApiPublicCronContactEmailRetryRoute
   '/api/public/cron/monthly-newsletter': typeof ApiPublicCronMonthlyNewsletterRoute
   '/api/public/cron/newsletter-scheduler': typeof ApiPublicCronNewsletterSchedulerRoute
   '/api/public/cron/visitor-audit-alerts': typeof ApiPublicCronVisitorAuditAlertsRoute
   '/lovable/email/auth/preview': typeof LovableEmailAuthPreviewRoute
   '/lovable/email/auth/webhook': typeof LovableEmailAuthWebhookRoute
-  '/lovable/email/queue/process': typeof LovableEmailQueueProcessRoute
   '/lovable/email/transactional/preview': typeof LovableEmailTransactionalPreviewRoute
-  '/lovable/email/transactional/send': typeof LovableEmailTransactionalSendRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -604,7 +566,6 @@ export interface FileRouteTypes {
     | '/repository'
     | '/blog/$slug'
     | '/case-study/$slug'
-    | '/email/unsubscribe'
     | '/newsletter/$slug'
     | '/white-paper/agentic-ai-enterprise-automation'
     | '/newsletter/'
@@ -623,16 +584,13 @@ export interface FileRouteTypes {
     | '/api/public/track-visit'
     | '/api/public/tts'
     | '/lovable/email/events'
-    | '/lovable/email/suppression'
     | '/api/public/cron/contact-email-retry'
     | '/api/public/cron/monthly-newsletter'
     | '/api/public/cron/newsletter-scheduler'
     | '/api/public/cron/visitor-audit-alerts'
     | '/lovable/email/auth/preview'
     | '/lovable/email/auth/webhook'
-    | '/lovable/email/queue/process'
     | '/lovable/email/transactional/preview'
-    | '/lovable/email/transactional/send'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -665,7 +623,6 @@ export interface FileRouteTypes {
     | '/repository'
     | '/blog/$slug'
     | '/case-study/$slug'
-    | '/email/unsubscribe'
     | '/newsletter/$slug'
     | '/white-paper/agentic-ai-enterprise-automation'
     | '/newsletter'
@@ -684,16 +641,13 @@ export interface FileRouteTypes {
     | '/api/public/track-visit'
     | '/api/public/tts'
     | '/lovable/email/events'
-    | '/lovable/email/suppression'
     | '/api/public/cron/contact-email-retry'
     | '/api/public/cron/monthly-newsletter'
     | '/api/public/cron/newsletter-scheduler'
     | '/api/public/cron/visitor-audit-alerts'
     | '/lovable/email/auth/preview'
     | '/lovable/email/auth/webhook'
-    | '/lovable/email/queue/process'
     | '/lovable/email/transactional/preview'
-    | '/lovable/email/transactional/send'
   id:
     | '__root__'
     | '/'
@@ -727,7 +681,6 @@ export interface FileRouteTypes {
     | '/_authenticated/repository'
     | '/blog/$slug'
     | '/case-study/$slug'
-    | '/email/unsubscribe'
     | '/newsletter/$slug'
     | '/white-paper/agentic-ai-enterprise-automation'
     | '/newsletter/'
@@ -746,16 +699,13 @@ export interface FileRouteTypes {
     | '/api/public/track-visit'
     | '/api/public/tts'
     | '/lovable/email/events'
-    | '/lovable/email/suppression'
     | '/api/public/cron/contact-email-retry'
     | '/api/public/cron/monthly-newsletter'
     | '/api/public/cron/newsletter-scheduler'
     | '/api/public/cron/visitor-audit-alerts'
     | '/lovable/email/auth/preview'
     | '/lovable/email/auth/webhook'
-    | '/lovable/email/queue/process'
     | '/lovable/email/transactional/preview'
-    | '/lovable/email/transactional/send'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -786,7 +736,6 @@ export interface RootRouteChildren {
   Char91DotmcpChar93ListToolsRoute: typeof Char91DotmcpChar93ListToolsRoute
   Char91DotwellKnownChar93OauthProtectedResourceRoute: typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   CaseStudySlugRoute: typeof CaseStudySlugRoute
-  EmailUnsubscribeRoute: typeof EmailUnsubscribeRoute
   NewsletterSlugRoute: typeof NewsletterSlugRoute
   WhitePaperAgenticAiEnterpriseAutomationRoute: typeof WhitePaperAgenticAiEnterpriseAutomationRoute
   NewsletterIndexRoute: typeof NewsletterIndexRoute
@@ -799,16 +748,13 @@ export interface RootRouteChildren {
   ApiPublicTrackVisitRoute: typeof ApiPublicTrackVisitRoute
   ApiPublicTtsRoute: typeof ApiPublicTtsRoute
   LovableEmailEventsRoute: typeof LovableEmailEventsRoute
-  LovableEmailSuppressionRoute: typeof LovableEmailSuppressionRoute
   ApiPublicCronContactEmailRetryRoute: typeof ApiPublicCronContactEmailRetryRoute
   ApiPublicCronMonthlyNewsletterRoute: typeof ApiPublicCronMonthlyNewsletterRoute
   ApiPublicCronNewsletterSchedulerRoute: typeof ApiPublicCronNewsletterSchedulerRoute
   ApiPublicCronVisitorAuditAlertsRoute: typeof ApiPublicCronVisitorAuditAlertsRoute
   LovableEmailAuthPreviewRoute: typeof LovableEmailAuthPreviewRoute
   LovableEmailAuthWebhookRoute: typeof LovableEmailAuthWebhookRoute
-  LovableEmailQueueProcessRoute: typeof LovableEmailQueueProcessRoute
   LovableEmailTransactionalPreviewRoute: typeof LovableEmailTransactionalPreviewRoute
-  LovableEmailTransactionalSendRoute: typeof LovableEmailTransactionalSendRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -1002,13 +948,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof NewsletterSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/email/unsubscribe': {
-      id: '/email/unsubscribe'
-      path: '/email/unsubscribe'
-      fullPath: '/email/unsubscribe'
-      preLoaderRoute: typeof EmailUnsubscribeRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/case-study/$slug': {
       id: '/case-study/$slug'
       path: '/case-study/$slug'
@@ -1057,13 +996,6 @@ declare module '@tanstack/react-router' {
       fullPath: '/admin'
       preLoaderRoute: typeof AuthenticatedAdminRouteRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
-    }
-    '/lovable/email/suppression': {
-      id: '/lovable/email/suppression'
-      path: '/lovable/email/suppression'
-      fullPath: '/lovable/email/suppression'
-      preLoaderRoute: typeof LovableEmailSuppressionRouteImport
-      parentRoute: typeof rootRouteImport
     }
     '/lovable/email/events': {
       id: '/lovable/email/events'
@@ -1170,25 +1102,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DotlovableOauthConsentRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/lovable/email/transactional/send': {
-      id: '/lovable/email/transactional/send'
-      path: '/lovable/email/transactional/send'
-      fullPath: '/lovable/email/transactional/send'
-      preLoaderRoute: typeof LovableEmailTransactionalSendRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/lovable/email/transactional/preview': {
       id: '/lovable/email/transactional/preview'
       path: '/lovable/email/transactional/preview'
       fullPath: '/lovable/email/transactional/preview'
       preLoaderRoute: typeof LovableEmailTransactionalPreviewRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/lovable/email/queue/process': {
-      id: '/lovable/email/queue/process'
-      path: '/lovable/email/queue/process'
-      fullPath: '/lovable/email/queue/process'
-      preLoaderRoute: typeof LovableEmailQueueProcessRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/lovable/email/auth/webhook': {
@@ -1317,7 +1235,6 @@ const rootRouteChildren: RootRouteChildren = {
   Char91DotwellKnownChar93OauthProtectedResourceRoute:
     Char91DotwellKnownChar93OauthProtectedResourceRoute,
   CaseStudySlugRoute: CaseStudySlugRoute,
-  EmailUnsubscribeRoute: EmailUnsubscribeRoute,
   NewsletterSlugRoute: NewsletterSlugRoute,
   WhitePaperAgenticAiEnterpriseAutomationRoute:
     WhitePaperAgenticAiEnterpriseAutomationRoute,
@@ -1331,16 +1248,13 @@ const rootRouteChildren: RootRouteChildren = {
   ApiPublicTrackVisitRoute: ApiPublicTrackVisitRoute,
   ApiPublicTtsRoute: ApiPublicTtsRoute,
   LovableEmailEventsRoute: LovableEmailEventsRoute,
-  LovableEmailSuppressionRoute: LovableEmailSuppressionRoute,
   ApiPublicCronContactEmailRetryRoute: ApiPublicCronContactEmailRetryRoute,
   ApiPublicCronMonthlyNewsletterRoute: ApiPublicCronMonthlyNewsletterRoute,
   ApiPublicCronNewsletterSchedulerRoute: ApiPublicCronNewsletterSchedulerRoute,
   ApiPublicCronVisitorAuditAlertsRoute: ApiPublicCronVisitorAuditAlertsRoute,
   LovableEmailAuthPreviewRoute: LovableEmailAuthPreviewRoute,
   LovableEmailAuthWebhookRoute: LovableEmailAuthWebhookRoute,
-  LovableEmailQueueProcessRoute: LovableEmailQueueProcessRoute,
   LovableEmailTransactionalPreviewRoute: LovableEmailTransactionalPreviewRoute,
-  LovableEmailTransactionalSendRoute: LovableEmailTransactionalSendRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
