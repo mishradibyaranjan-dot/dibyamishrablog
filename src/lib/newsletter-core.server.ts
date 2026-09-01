@@ -35,11 +35,27 @@ export async function enqueueRenderedTemplate(opts: {
     if (error) console.error("[newsletter] send log write failed", error.code, error.message);
   };
 
-  try {
-    const result = await sendTemplateEmail(opts.templateName, to, {
+  const send = () =>
+    sendTemplateEmail(opts.templateName, to, {
       templateData: opts.templateData as Record<string, any>,
       idempotencyKey: opts.idempotencyKey || messageId,
     });
+
+  try {
+    let result;
+    try {
+      result = await send();
+    } catch (err) {
+      // Rate limited: wait the advertised window once, then retry this send.
+      const { EmailAPIError } = await import("@lovable.dev/email-js");
+      if (err instanceof EmailAPIError && err.status === 429) {
+        const waitMs = (err.retryAfterSeconds ?? 60) * 1000;
+        await new Promise((r) => setTimeout(r, waitMs));
+        result = await send();
+      } else {
+        throw err;
+      }
+    }
     if (!result.sent) {
       await logOutcome("suppressed");
       return { queued: false, reason: result.reason };
@@ -51,6 +67,7 @@ export async function enqueueRenderedTemplate(opts: {
     await logOutcome("failed", msg);
     throw err;
   }
+
 }
 
 
