@@ -320,12 +320,11 @@ export const publishNewsletterIssue = createServerFn({ method: "POST" })
       if (subErr) throw new Error(subErr.message);
       const list: { email: string }[] = subs ?? [];
 
-      // Send one at a time through Lovable's managed email delivery.
+      // Bound concurrent delivery calls so one slow recipient cannot serialize the request.
 
-      const { enqueueRenderedTemplate } = await import("@/lib/newsletter-core.server");
-      for (const s of list) {
-        try {
-          const r = await enqueueRenderedTemplate({
+      const { enqueueRenderedTemplate, mapWithConcurrency } = await import("@/lib/newsletter-core.server");
+      const deliveries = await mapWithConcurrency(list, 5, async (s) =>
+        enqueueRenderedTemplate({
             templateName: "newsletter-issue",
             recipientEmail: s.email,
             templateData: {
@@ -335,13 +334,15 @@ export const publishNewsletterIssue = createServerFn({ method: "POST" })
               slug: issue.slug,
             },
             idempotencyKey: `newsletter-${issue.id}-${s.email}`,
-          });
-          if (r.queued) result.emailsQueued++;
-        } catch (e) {
-          console.error("enqueue failed", s.email, e);
+          }),
+      );
+      deliveries.forEach((delivery, index) => {
+        if (delivery.status === "fulfilled" && delivery.value.queued) result.emailsQueued++;
+        else {
+          console.error("newsletter send failed", list[index]?.email, delivery.status === "rejected" ? delivery.reason : delivery.value.reason);
           result.emailErrors++;
         }
-      }
+      });
 
       await supabaseAdmin
         .from("newsletter_issues")
@@ -479,10 +480,10 @@ export const autoSendNewsletterToRegisteredUsers = createServerFn({ method: "POS
 
     let queued = 0;
     let errors = 0;
-    const { enqueueRenderedTemplate } = await import("@/lib/newsletter-core.server");
-    for (const email of emails) {
-      try {
-        const r = await enqueueRenderedTemplate({
+    const emailList = Array.from(emails);
+    const { enqueueRenderedTemplate, mapWithConcurrency } = await import("@/lib/newsletter-core.server");
+    const deliveries = await mapWithConcurrency(emailList, 5, async (email) =>
+      enqueueRenderedTemplate({
           templateName: "newsletter-issue",
           recipientEmail: email,
           templateData: {
@@ -492,13 +493,15 @@ export const autoSendNewsletterToRegisteredUsers = createServerFn({ method: "POS
             slug: issue.slug,
           },
           idempotencyKey: `newsletter-${issue.id}-${email}`,
-        });
-        if (r.queued) queued++;
-      } catch (e) {
-        console.error("enqueue failed", email, e);
+        }),
+    );
+    deliveries.forEach((delivery, index) => {
+      if (delivery.status === "fulfilled" && delivery.value.queued) queued++;
+      else {
+        console.error("newsletter send failed", emailList[index], delivery.status === "rejected" ? delivery.reason : delivery.value.reason);
         errors++;
       }
-    }
+    });
 
     return {
       ok: true,

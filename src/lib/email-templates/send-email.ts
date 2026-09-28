@@ -23,6 +23,8 @@ export interface SendTemplateEmailOptions {
   /** Dedupes retries of the same logical send; defaults to a random UUID (no dedupe). */
   idempotencyKey?: string
   replyTo?: string
+  /** Enables managed unsubscribe headers for subscription email. */
+  unsubscribeToken?: string
 }
 
 /**
@@ -78,6 +80,7 @@ export async function sendTemplateEmail(
         label: templateName,
         idempotency_key: options.idempotencyKey || crypto.randomUUID(),
         reply_to: options.replyTo,
+        unsubscribe_token: options.unsubscribeToken,
       },
       { apiKey, sendUrl: process.env['LOVABLE_SEND_URL'] }
     )

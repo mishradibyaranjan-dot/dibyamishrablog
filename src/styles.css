@@ -1226,16 +1226,16 @@ html[data-a11y-links="underline"] a:not([data-no-underline]) {
 }
 
 /* Colour-vision simulation / assistive filters */
-html[data-a11y-filter="protanopia"] body {
+html[data-a11y-filter="protanopia"] [data-a11y-filter-surface] {
   filter: url("#a11y-protanopia");
 }
-html[data-a11y-filter="deuteranopia"] body {
+html[data-a11y-filter="deuteranopia"] [data-a11y-filter-surface] {
   filter: url("#a11y-deuteranopia");
 }
-html[data-a11y-filter="tritanopia"] body {
+html[data-a11y-filter="tritanopia"] [data-a11y-filter-surface] {
   filter: url("#a11y-tritanopia");
 }
-html[data-a11y-filter="monochrome"] body {
+html[data-a11y-filter="monochrome"] [data-a11y-filter-surface] {
   filter: grayscale(1) contrast(1.05);
 }
 
@@ -1244,9 +1244,6 @@ html[data-a11y-contrast="high"] {
   --muted-foreground: var(--foreground);
   --border: var(--foreground);
   --ring: var(--foreground);
-}
-html[data-a11y-contrast="high"] body {
-  filter: contrast(1.18);
 }
 html[data-a11y-contrast="high"] a,
 html[data-a11y-contrast="high"] button {
