@@ -167,6 +167,10 @@ function Header() {
           />
           <span className="truncate text-foreground">Dibya Ranjan Mishra</span>
         </Link>
+        <div className="flex shrink-0 items-center gap-1">
+          <ThemeToggle compact />
+          <LanguageToggle compact />
+        </div>
       </div>
     </header>
   );

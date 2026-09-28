@@ -29,7 +29,7 @@ function Swatches({ colors }: { colors: readonly string[] }) {
   );
 }
 
-export function ThemeToggle() {
+export function ThemeToggle({ compact = false }: { compact?: boolean }) {
   const { theme, setTheme } = useTheme();
   const isDark = themeMode(theme) === "dark";
   const quickNext = isDark ? LIGHT_THEME : DARK_THEME;
@@ -67,10 +67,13 @@ export function ThemeToggle() {
         aria-label={isDark ? "Switch to light mode" : "Switch to dark mode"}
         title={isDark ? "Switch to light mode" : "Switch to dark mode"}
         onClick={() => setTheme(quickNext)}
-        className="min-h-11 w-full justify-center gap-1.5 text-foreground/80 hover:bg-foreground/10"
+        className={cn(
+          "min-h-11 justify-center gap-1.5 text-foreground/80 hover:bg-foreground/10",
+          compact ? "w-11 px-0" : "w-full",
+        )}
       >
         {isDark ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
-        <span className="text-xs font-medium">{isDark ? "Light" : "Dark"}</span>
+        <span className={cn("text-xs font-medium", compact && "sr-only")}>{isDark ? "Light" : "Dark"}</span>
       </Button>
 
       <DropdownMenu>
@@ -80,10 +83,13 @@ export function ThemeToggle() {
             size="sm"
             aria-label="Choose a colour theme"
             title="Choose a colour theme"
-            className="min-h-11 w-full justify-center gap-1.5 px-2 text-foreground/80 hover:bg-foreground/10"
+            className={cn(
+              "min-h-11 justify-center gap-1.5 text-foreground/80 hover:bg-foreground/10",
+              compact ? "w-11 px-0" : "w-full px-2",
+            )}
           >
             <Palette className="h-4 w-4" />
-            <span className="text-xs font-medium">Themes</span>
+            <span className={cn("text-xs font-medium", compact && "sr-only")}>Themes</span>
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end" className="z-[120] w-60">
