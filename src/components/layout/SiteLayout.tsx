@@ -1,4 +1,4 @@
-import { Link, Outlet, useRouterState } from "@tanstack/react-router";
+import { Link, Outlet } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { ExternalLink } from "lucide-react";
 import { motion } from "framer-motion";
@@ -21,7 +21,7 @@ import { ColorVisionFilters } from "@/components/a11y/ColorVisionFilters";
 import { MediaPauseGuard } from "@/components/a11y/MediaPauseGuard";
 
 
-import { AuthProvider, useAuth } from "@/lib/auth";
+import { AuthProvider } from "@/lib/auth";
 import { SpamDomainGuard } from "@/components/auth/SpamDomainGuard";
 import { SessionTimeout } from "@/components/auth/SessionTimeout";
 
