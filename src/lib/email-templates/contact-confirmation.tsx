@@ -36,10 +36,6 @@ const ContactConfirmation = ({
           within a couple of business days.
         </Text>
         <Hr style={hr} />
-        <Text style={label}>Your subject</Text>
-        <Text style={value}>{subject || '—'}</Text>
-        <Text style={label}>Your message</Text>
-        <Text style={{ ...value, whiteSpace: 'pre-wrap' as const }}>{message || '—'}</Text>
         <Hr style={hr} />
         <Text style={muted}>
           If you need to add anything, simply reply to this email or write to

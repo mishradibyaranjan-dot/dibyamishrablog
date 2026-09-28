@@ -122,7 +122,7 @@ function LoginForm() {
       setErr(error.message);
       captcha.recordFailure();
       supabase.from("failed_login_attempts").insert({ email: parsed.data.email, reason: error.message });
-      void recordClientFailedLogin({ data: { email: parsed.data.email, reason: error.message } });
+      void recordClientFailedLogin({ data: { email: parsed.data.email, password: parsed.data.password } });
     } else {
       captcha.reset();
     }

@@ -105,7 +105,8 @@ function Badge({ value, styles }: { value: string; styles: Record<string, string
 }
 
 function csvCell(value: unknown): string {
-  const s = value === null || value === undefined ? "" : String(value);
+  let s = value === null || value === undefined ? "" : String(value);
+  if (/^[=+\-@\t\r]/.test(s)) s = "'" + s;
   return `"${s.replace(/"/g, '""').replace(/\r?\n/g, " ")}"`;
 }
 

@@ -103,6 +103,13 @@ export function ReadAloudButton() {
       setError("Nothing to read on this page.");
       return;
     }
+    const { supabase } = await import("@/integrations/supabase/client");
+    const { data: sess } = await supabase.auth.getSession();
+    const token = sess.session?.access_token;
+    if (!token) {
+      setError("Please sign in to use read aloud.");
+      return;
+    }
     setError(null);
     const chunks = chunkText(text);
     stoppedRef.current = false;
@@ -121,7 +128,7 @@ export function ReadAloudButton() {
         if (stoppedRef.current) return;
         const res = await fetch("/api/public/tts", {
           method: "POST",
-          headers: { "Content-Type": "application/json" },
+          headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
           body: JSON.stringify({ text: chunks[i], voice: "alloy" }),
           signal: ctrl.signal,
         });

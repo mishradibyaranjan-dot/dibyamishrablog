@@ -339,7 +339,7 @@ export const publishNewsletterIssue = createServerFn({ method: "POST" })
       deliveries.forEach((delivery, index) => {
         if (delivery.status === "fulfilled" && delivery.value.queued) result.emailsQueued++;
         else {
-          console.error("newsletter send failed", list[index]?.email, delivery.status === "rejected" ? delivery.reason : delivery.value.reason);
+          console.error("newsletter send failed", `recipient#${index}`, delivery.status === "rejected" ? delivery.reason : delivery.value.reason);
           result.emailErrors++;
         }
       });
@@ -498,7 +498,7 @@ export const autoSendNewsletterToRegisteredUsers = createServerFn({ method: "POS
     deliveries.forEach((delivery, index) => {
       if (delivery.status === "fulfilled" && delivery.value.queued) queued++;
       else {
-        console.error("newsletter send failed", emailList[index], delivery.status === "rejected" ? delivery.reason : delivery.value.reason);
+        console.error("newsletter send failed", `recipient#${index}`, delivery.status === "rejected" ? delivery.reason : delivery.value.reason);
         errors++;
       }
     });

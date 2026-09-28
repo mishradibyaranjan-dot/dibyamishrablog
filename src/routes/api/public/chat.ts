@@ -55,11 +55,23 @@ function isAllowedOrigin(request: Request): boolean {
   );
 }
 
+
+async function verifyBearer(request: Request): Promise<string | null> {
+  const h = request.headers.get("authorization") ?? "";
+  if (!h.toLowerCase().startsWith("bearer ")) return null;
+  const token = h.slice(7).trim();
+  if (!token) return null;
+  const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+  const { data, error } = await supabaseAdmin.auth.getUser(token);
+  return error || !data?.user?.id ? null : data.user.id;
+}
+
 export const Route = createFileRoute("/api/public/chat")({
   server: {
     handlers: {
       POST: async ({ request }) => {
         if (!isAllowedOrigin(request)) return new Response("Forbidden", { status: 403 });
+        if (!(await verifyBearer(request))) return new Response("Unauthorized", { status: 401 });
 
         const contentLength = Number(request.headers.get("content-length") ?? "0");
         if (contentLength && contentLength > MAX_BODY_BYTES) return new Response("Payload too large", { status: 413 });
