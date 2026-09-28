@@ -30,7 +30,7 @@ const fmt = (d?: string | null) =>
 
 function StatusBadge({ status }: { status: string | null }) {
   const ok = status === "completed" || status === "posted";
-  const running = status === "running";
+  const running = status === "running" || status === null;
   const Icon = ok ? CheckCircle2 : running ? Clock : XCircle;
   return (
     <span
