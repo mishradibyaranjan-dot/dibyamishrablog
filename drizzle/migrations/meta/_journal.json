@@ -15,6 +15,13 @@
       "when": 1790571938335,
       "tag": "0001_hide_disposable_domains",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1790575225492,
+      "tag": "0002_auto_weekly_monthly_newsletters",
+      "breakpoints": true
     }
   ]
 }
