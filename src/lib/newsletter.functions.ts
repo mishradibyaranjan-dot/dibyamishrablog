@@ -32,50 +32,9 @@ export const generateNewsletterDraft = createServerFn({ method: "POST" })
   )
   .handler(async ({ context, data }) => {
     await assertAdmin(context);
-    const apiKey = process.env.LOVABLE_API_KEY;
-    if (!apiKey) throw new Error("LOVABLE_API_KEY missing");
-
-    const now = new Date();
-    const monthYear = now.toLocaleDateString("en-US", { month: "long", year: "numeric" });
-
-    const system = `You are Dibya R. Mishra, VP & Head of Engineering. Write a monthly newsletter for a technical, senior audience (CTOs, VPs, architects). Voice: crisp, insightful, first-person, zero fluff. Cover Agentic AI, GenAI in Retail Supply Chains, Multi-Tenant SaaS, RAG systems, or Cloud Architecture.
-Return STRICT JSON with keys: title (string, <=90 chars), summary (string, <=180 chars), body_markdown (string, 500-900 words, use ## H2 and short paragraphs; may include bullet lists with "- "), linkedin_post (string, 900-1200 chars, plain text, 3-5 line breaks, ends with 3-5 hashtags).`;
-
-    const user = `Write the ${monthYear} issue.${data.topicHint ? ` Focus hint: ${data.topicHint}.` : ""} Return JSON only, no prose outside.`;
-
-    const res = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${apiKey}`,
-      },
-      body: JSON.stringify({
-        model: "google/gemini-2.5-pro",
-        response_format: { type: "json_object" },
-        messages: [
-          { role: "system", content: system },
-          { role: "user", content: user },
-        ],
-      }),
-    });
-    if (!res.ok) {
-      const txt = await res.text();
-      console.error("AI gateway error", res.status, txt);
-      throw new Error(`AI generation failed (${res.status})`);
-    }
-    const j = await res.json();
-    const raw = j?.choices?.[0]?.message?.content ?? "{}";
-    let parsed: Record<string, unknown>;
-    try {
-      parsed = JSON.parse(raw);
-    } catch {
-      throw new Error("AI returned invalid JSON");
-    }
-    const title = String(parsed.title ?? `${monthYear} Notes`).slice(0, 120);
-    const summary = String(parsed.summary ?? "").slice(0, 240);
-    const body_markdown = String(parsed.body_markdown ?? "");
-    const linkedin_post = String(parsed.linkedin_post ?? "");
-
+    const { generateNewsletterJSON } = await import("./newsletter-core.server");
+    const d = await generateNewsletterJSON(data.topicHint);
+    const { title, summary, body_markdown, linkedin_post } = d;
     return { title, summary, body_markdown, linkedin_post };
   });
 
@@ -420,32 +379,8 @@ export const autoSendNewsletterToRegisteredUsers = createServerFn({ method: "POS
   )
   .handler(async ({ context, data }) => {
     await assertAdmin(context);
-    const apiKey = process.env.LOVABLE_API_KEY;
-    if (!apiKey) throw new Error("LOVABLE_API_KEY missing");
-
-    const now = new Date();
-    const monthYear = now.toLocaleDateString("en-US", { month: "long", year: "numeric" });
-    const system = `You are Dibya R. Mishra, VP & Head of Engineering. Write a monthly newsletter for a technical, senior audience. Voice: crisp, first-person, zero fluff. Cover Agentic AI, GenAI in Retail Supply Chains, Multi-Tenant SaaS, RAG systems, or Cloud Architecture. Return STRICT JSON: title (<=90 chars), summary (<=180 chars), body_markdown (500-900 words, ## H2 + short paragraphs; may use "- " bullets), linkedin_post (900-1200 chars, plain text, 3-5 hashtags).`;
-    const user = `Write the ${monthYear} issue.${data.topicHint ? ` Focus: ${data.topicHint}.` : ""} Return JSON only.`;
-
-    const aiRes = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
-      method: "POST",
-      headers: { "Content-Type": "application/json", Authorization: `Bearer ${apiKey}` },
-      body: JSON.stringify({
-        model: "google/gemini-2.5-pro",
-        response_format: { type: "json_object" },
-        messages: [
-          { role: "system", content: system },
-          { role: "user", content: user },
-        ],
-      }),
-    });
-    if (!aiRes.ok) throw new Error(`AI generation failed (${aiRes.status})`);
-    const parsed = JSON.parse((await aiRes.json())?.choices?.[0]?.message?.content ?? "{}");
-    const title = String(parsed.title ?? `${monthYear} Notes`).slice(0, 120);
-    const summary = String(parsed.summary ?? "").slice(0, 240);
-    const body_markdown = String(parsed.body_markdown ?? "");
-    const linkedin_post = String(parsed.linkedin_post ?? "");
+    const { generateNewsletterJSON } = await import("./newsletter-core.server");
+    const { title, summary, body_markdown, linkedin_post } = await generateNewsletterJSON(data.topicHint);
     const slug = slugify(title);
 
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");

@@ -245,6 +245,7 @@ export async function autoSendNewsletter(opts: {
   createdBy?: string | null;
   scheduleId?: string | null;
   triggerSource?: NewsletterTriggerSource;
+  cadence?: string;
 }) {
   const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
   const triggerSource: NewsletterTriggerSource = opts.triggerSource ?? "one_click";
@@ -272,7 +273,7 @@ export async function autoSendNewsletter(opts: {
 
   let draft: Awaited<ReturnType<typeof generateNewsletterJSON>>;
   try {
-    draft = await generateNewsletterJSON(opts.topicHint);
+    draft = await generateNewsletterJSON(opts.topicHint, opts.cadence ?? "latest");
   } catch (e) {
     await finishRun({ status: "failed", error_message: e instanceof Error ? e.message : String(e) });
     throw e;
