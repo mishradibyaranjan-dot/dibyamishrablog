@@ -1,9 +1,9 @@
 import { Link, Outlet, useRouterState } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { createPortal } from "react-dom";
-import { Menu, X, ExternalLink } from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion";
+import { Menu, ExternalLink } from "lucide-react";
+import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
+import { Dialog, DialogContent, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { cn } from "@/lib/utils";
 import { FloatingChat } from "@/components/chat/FloatingChat";
 import { FloatingConnectCta } from "@/components/marketing/FloatingConnectCta";
@@ -153,15 +153,6 @@ function Header() {
 
   useEffect(() => setOpen(false), [pathname]);
 
-  useEffect(() => {
-    if (!open) return;
-    const onKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "Escape") setOpen(false);
-    };
-    document.addEventListener("keydown", onKeyDown, true);
-    return () => document.removeEventListener("keydown", onKeyDown, true);
-  }, [open]);
-
   return (
     <header
       data-site-header
@@ -184,92 +175,62 @@ function Header() {
           <span className="truncate text-slate-900">Dibya Ranjan Mishra</span>
         </Link>
 
-        <Button
-          variant="ghost"
-          className="min-h-11 gap-2 rounded-full border border-border bg-background/90 px-4 text-foreground shadow-sm backdrop-blur-xl hover:bg-muted"
-          onClick={() => setOpen((o) => !o)}
-          aria-label="Main menu"
-          aria-expanded={open}
-          aria-controls="main-menu-popover"
-        >
-          {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-          <span className="text-sm font-medium">Menu</span>
-        </Button>
-      </div>
-
-      {typeof document !== "undefined" && createPortal(
-        <AnimatePresence>
-          {open && (
-            <motion.div
-            className="fixed inset-0 z-[60] flex items-center justify-center bg-background/70 p-4 backdrop-blur-sm sm:p-6"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            onClick={() => setOpen(false)}
-          >
-            <motion.div
-              id="main-menu-popover"
-              role="dialog"
-              aria-modal="true"
-              aria-labelledby="main-menu-title"
-              initial={{ opacity: 0, y: 16, scale: 0.94 }}
-              animate={{ opacity: 1, y: 0, scale: 1 }}
-              exit={{ opacity: 0, y: 12, scale: 0.96 }}
-              transition={{ duration: 0.2, ease: [0.22, 1, 0.36, 1] }}
-              className="relative w-full max-w-3xl overflow-hidden rounded-3xl border border-border bg-background shadow-2xl"
-              onClick={(event) => event.stopPropagation()}
+        <Dialog open={open} onOpenChange={setOpen}>
+          <DialogTrigger asChild>
+            <Button
+              variant="ghost"
+              className="min-h-11 gap-2 rounded-full border border-border bg-background/90 px-4 text-foreground shadow-sm backdrop-blur-xl hover:bg-muted"
+              aria-label="Main menu"
+              aria-controls="main-menu-popover"
             >
-              <div className="flex items-center justify-between border-b border-border px-5 py-4">
-                <h2 id="main-menu-title" className="font-display text-lg font-semibold text-foreground">
-                  Menu
-                </h2>
-                <Button
-                  type="button"
-                  variant="ghost"
-                  size="icon"
-                  className="rounded-full"
-                  aria-label="Close main menu"
-                  onClick={() => setOpen(false)}
-                >
-                  <X className="h-5 w-5" />
-                </Button>
-              </div>
-              <div className="max-h-[min(72vh,42rem)] overflow-y-auto p-4 sm:p-5">
-                <nav className="grid gap-1 sm:grid-cols-2 lg:grid-cols-3">
-                  {[...NAV, ...MORE_NAV].map((item) => (
-                    <Link
-                      key={item.to}
-                      to={item.to}
-                      className="min-h-11 rounded-full px-4 py-2.5 text-sm font-medium text-foreground transition-colors hover:bg-muted hover:text-primary"
-                      activeProps={{ className: "bg-primary/10 text-primary" }}
-                      activeOptions={{ exact: item.to === "/" }}
-                    >
-                      {item.label}
-                    </Link>
-                  ))}
-                </nav>
+              <Menu className="h-5 w-5" />
+              <span className="text-sm font-medium">Menu</span>
+            </Button>
+          </DialogTrigger>
 
-                <div className="mt-4 flex flex-wrap items-center gap-2 border-t border-border pt-4">
-                  <GlobalSearch />
-                  <ReadAloudButton />
-                  <ThemeToggle />
-                  <AccessibilityMenu />
-                  <UserMenu />
-                </div>
+          <DialogContent
+            id="main-menu-popover"
+            aria-describedby={undefined}
+            className="z-[100] max-h-[calc(100dvh-2rem)] w-[calc(100%-2rem)] max-w-3xl gap-0 overflow-hidden rounded-2xl border-border p-0 shadow-2xl sm:max-h-[calc(100dvh-3rem)] sm:w-[calc(100%-3rem)] sm:rounded-3xl"
+          >
+            <div className="border-b border-border px-4 py-4 pr-14 sm:px-6 sm:py-5">
+              <DialogTitle className="font-display text-lg font-semibold text-foreground sm:text-xl">
+                Menu
+              </DialogTitle>
+            </div>
+            <div className="overflow-y-auto overscroll-contain p-3 sm:p-5">
+              <nav aria-label="Main navigation" className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
+                {[...NAV, ...MORE_NAV].map((item) => (
+                  <Link
+                    key={item.to}
+                    to={item.to}
+                    className="flex min-h-12 items-center rounded-xl px-4 py-3 text-base font-medium text-foreground outline-none transition-colors hover:bg-muted hover:text-primary focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 sm:min-h-11 sm:rounded-full sm:py-2.5 sm:text-sm"
+                    activeProps={{ className: "bg-primary/10 text-primary" }}
+                    activeOptions={{ exact: item.to === "/" }}
+                  >
+                    {item.label}
+                  </Link>
+                ))}
+              </nav>
 
-                <Link
-                  to="/contact"
-                  className="mt-4 inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-full bg-primary px-4 py-3 text-sm font-semibold text-primary-foreground sm:w-auto sm:px-6"
-                >
-                  Let&apos;s Connect
-                </Link>
+              <div className="mt-4 grid grid-cols-2 gap-2 border-t border-border pt-4 sm:flex sm:flex-wrap sm:items-center">
+                <GlobalSearch />
+                <ReadAloudButton />
+                <ThemeToggle />
+                <AccessibilityMenu />
+                <UserMenu />
               </div>
-              </motion.div>
-            </motion.div>
-          )}
-        </AnimatePresence>,
-        document.body,
-      )}
+
+              <Link
+                to="/contact"
+                className="mt-4 inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-full bg-primary px-4 py-3 text-sm font-semibold text-primary-foreground outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 sm:min-h-11 sm:w-auto sm:px-6"
+              >
+                Let&apos;s Connect
+              </Link>
+            </div>
+          </DialogContent>
+        </Dialog>
+      </div>
     </header>
   );
 }
