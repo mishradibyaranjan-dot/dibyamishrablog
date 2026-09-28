@@ -197,9 +197,10 @@ function Header() {
         </Button>
       </div>
 
-      <AnimatePresence>
-        {open && typeof document !== "undefined" && createPortal(
-          <motion.div
+      {typeof document !== "undefined" && createPortal(
+        <AnimatePresence>
+          {open && (
+            <motion.div
             className="fixed inset-0 z-[60] flex items-center justify-center bg-background/70 p-4 backdrop-blur-sm sm:p-6"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -263,11 +264,12 @@ function Header() {
                   Let&apos;s Connect
                 </Link>
               </div>
+              </motion.div>
             </motion.div>
-          </motion.div>,
-          document.body,
-        )}
-      </AnimatePresence>
+          )}
+        </AnimatePresence>,
+        document.body,
+      )}
     </header>
   );
 }
