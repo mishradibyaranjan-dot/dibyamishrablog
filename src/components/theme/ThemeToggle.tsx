@@ -60,17 +60,17 @@ export function ThemeToggle() {
   );
 
   return (
-    <div className="flex items-center gap-0.5">
+    <div className="contents">
       <Button
         variant="ghost"
         size="sm"
         aria-label={isDark ? "Switch to light mode" : "Switch to dark mode"}
         title={isDark ? "Switch to light mode" : "Switch to dark mode"}
         onClick={() => setTheme(quickNext)}
-        className="gap-1.5 text-foreground/80 hover:bg-foreground/10"
+        className="min-h-11 w-full justify-center gap-1.5 text-foreground/80 hover:bg-foreground/10"
       >
         {isDark ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
-        <span className="hidden text-xs font-medium sm:inline">{isDark ? "Light" : "Dark"}</span>
+        <span className="text-xs font-medium">{isDark ? "Light" : "Dark"}</span>
       </Button>
 
       <DropdownMenu>
@@ -80,13 +80,13 @@ export function ThemeToggle() {
             size="sm"
             aria-label="Choose a colour theme"
             title="Choose a colour theme"
-            className="px-2 text-foreground/80 hover:bg-foreground/10"
+            className="min-h-11 w-full justify-center gap-1.5 px-2 text-foreground/80 hover:bg-foreground/10"
           >
             <Palette className="h-4 w-4" />
             <span className="text-xs font-medium">Themes</span>
           </Button>
         </DropdownMenuTrigger>
-        <DropdownMenuContent align="end" className="w-60">
+        <DropdownMenuContent align="end" className="z-[120] w-60">
           {group("Dark themes", dark)}
           <DropdownMenuSeparator />
           {group("Light themes", light)}

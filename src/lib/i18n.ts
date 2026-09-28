@@ -34,6 +34,7 @@ export function localeDir(locale: string): "ltr" | "rtl" {
 const en = {
   "a11y.title": "Accessibility & Preferences",
   "a11y.open": "Accessibility options",
+  "a11y.short": "Access",
   "a11y.theme": "Theme",
   "a11y.light": "Light",
   "a11y.dark": "Dark",
@@ -77,6 +78,7 @@ const dictionaries: Record<LocaleId, Partial<Record<TranslationKey, string>>> = 
   hi: {
     "a11y.title": "सुगम्यता और प्राथमिकताएँ",
     "a11y.open": "सुगम्यता विकल्प",
+  "a11y.short": "एक्सेस",
     "a11y.theme": "थीम",
     "a11y.light": "हल्का",
     "a11y.dark": "गहरा",
@@ -97,6 +99,7 @@ const dictionaries: Record<LocaleId, Partial<Record<TranslationKey, string>>> = 
   ta: {
     "a11y.title": "அணுகல் & விருப்பங்கள்",
     "a11y.open": "அணுகல் விருப்பங்கள்",
+  "a11y.short": "அணுகல்",
     "a11y.theme": "தீம்",
     "a11y.language": "மொழி",
     "a11y.speech": "பக்கத்தை வாசி",
@@ -106,6 +109,7 @@ const dictionaries: Record<LocaleId, Partial<Record<TranslationKey, string>>> = 
   es: {
     "a11y.title": "Accesibilidad y preferencias",
     "a11y.open": "Opciones de accesibilidad",
+  "a11y.short": "Acceso",
     "a11y.theme": "Tema",
     "a11y.light": "Claro",
     "a11y.dark": "Oscuro",
@@ -126,6 +130,7 @@ const dictionaries: Record<LocaleId, Partial<Record<TranslationKey, string>>> = 
   fr: {
     "a11y.title": "Accessibilité et préférences",
     "a11y.open": "Options d'accessibilité",
+  "a11y.short": "Access",
     "a11y.theme": "Thème",
     "a11y.light": "Clair",
     "a11y.dark": "Sombre",
@@ -146,6 +151,7 @@ const dictionaries: Record<LocaleId, Partial<Record<TranslationKey, string>>> = 
   ar: {
     "a11y.title": "إمكانية الوصول والتفضيلات",
     "a11y.open": "خيارات إمكانية الوصول",
+    "a11y.short": "وصول",
     "a11y.theme": "المظهر",
     "a11y.light": "فاتح",
     "a11y.dark": "غامق",

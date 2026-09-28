@@ -58,10 +58,10 @@ export function GlobalSearch() {
         type="button"
         onClick={() => setOpen(true)}
         aria-label="Search the site"
-        className="inline-flex min-h-11 items-center gap-2 rounded-full border border-border bg-card px-3 py-2 text-sm text-muted-foreground transition-colors hover:text-foreground"
+        className="inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-full border border-border bg-card px-3 py-2 text-sm text-muted-foreground transition-colors hover:text-foreground"
       >
         <Search className="h-4 w-4" />
-        <span className="hidden md:inline">Search</span>
+        <span>Search</span>
         <kbd className="hidden rounded border border-border bg-muted px-1.5 py-0.5 text-[10px] font-medium xl:inline">
           ⌘K
         </kbd>

@@ -23,7 +23,7 @@ export function LanguageToggle({ compact = false }: { compact?: boolean }) {
           size="sm"
           aria-label={`Language: ${selected.english}`}
           title="Choose language"
-          className="min-h-11 gap-2 text-foreground hover:bg-accent hover:text-accent-foreground"
+          className="min-h-11 w-full justify-center gap-2 text-foreground hover:bg-accent hover:text-accent-foreground"
         >
           <Languages className="h-4 w-4" aria-hidden="true" />
           <span className={cn("text-xs font-medium", compact && "sr-only")}>{selected.native}</span>

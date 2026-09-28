@@ -168,17 +168,19 @@ export function ReadAloudButton() {
       <PopoverTrigger asChild>
         <Button
           variant="ghost"
-          size="icon"
+          size="sm"
           aria-label="Read this page aloud"
-          className="text-foreground/80 hover:bg-foreground/10"
+          title="Read this page aloud"
+          className="min-h-11 w-full justify-center gap-2 text-foreground/80 hover:bg-foreground/10"
         >
           {state === "loading" ? (
-            <Loader2 className="h-5 w-5 animate-spin" />
+            <Loader2 className="h-4 w-4 animate-spin" />
           ) : state === "playing" ? (
-            <Square className="h-5 w-5 fill-current text-primary" />
+            <Square className="h-4 w-4 fill-current text-primary" />
           ) : (
-            <VolumeIcon className="h-5 w-5" />
+            <VolumeIcon className="h-4 w-4" />
           )}
+          <span className="text-xs font-medium">Read aloud</span>
         </Button>
       </PopoverTrigger>
       <PopoverContent align="end" className="w-64 space-y-4" data-no-read>
