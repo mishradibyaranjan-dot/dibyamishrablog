@@ -83,6 +83,7 @@ export function ThemeToggle() {
             className="px-2 text-foreground/80 hover:bg-foreground/10"
           >
             <Palette className="h-4 w-4" />
+            <span className="text-xs font-medium">Themes</span>
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end" className="w-60">
