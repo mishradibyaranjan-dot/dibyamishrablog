@@ -320,7 +320,7 @@ export const publishNewsletterIssue = createServerFn({ method: "POST" })
       if (subErr) throw new Error(subErr.message);
       const list: { email: string }[] = subs ?? [];
 
-      // Send one at a time through Lovable's managed email delivery.
+      // Bound concurrent delivery calls so one slow recipient cannot serialize the request.
 
       const { enqueueRenderedTemplate, mapWithConcurrency } = await import("@/lib/newsletter-core.server");
       const deliveries = await mapWithConcurrency(list, 5, async (s) =>

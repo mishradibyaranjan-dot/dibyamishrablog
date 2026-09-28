@@ -248,9 +248,9 @@ export async function autoSendNewsletter(opts: {
   let queued = 0;
   let errors = 0;
   const recipientRows: Array<{ run_id: string; email: string; status: "queued" | "failed"; error_message: string | null }> = [];
-  for (const email of emails) {
-    try {
-      const r = await enqueueRenderedTemplate({
+  const emailList = Array.from(emails);
+  const deliveries = await mapWithConcurrency(emailList, 5, async (email) =>
+    enqueueRenderedTemplate({
         templateName: "newsletter-issue",
         recipientEmail: email,
         templateData: {
@@ -260,25 +260,30 @@ export async function autoSendNewsletter(opts: {
           slug: issue.slug,
         },
         idempotencyKey: `newsletter-${issue.id}-${email}`,
-      });
-      if (r.queued) {
+      }),
+  );
+  deliveries.forEach((delivery, index) => {
+    const email = emailList[index];
+    if (delivery.status === "fulfilled") {
+      if (delivery.value.queued) {
         queued++;
         if (runId) recipientRows.push({ run_id: runId, email, status: "queued", error_message: null });
       } else {
-        if (runId) recipientRows.push({ run_id: runId, email, status: "failed", error_message: r.reason ?? "not queued" });
+        errors++;
+        if (runId) recipientRows.push({ run_id: runId, email, status: "failed", error_message: delivery.value.reason ?? "not queued" });
       }
-    } catch (e) {
-      console.error("enqueue failed", email, e);
+    } else {
+      console.error("newsletter send failed", email, delivery.reason);
       errors++;
       if (runId)
         recipientRows.push({
           run_id: runId,
           email,
           status: "failed",
-          error_message: e instanceof Error ? e.message : String(e),
+          error_message: delivery.reason instanceof Error ? delivery.reason.message : String(delivery.reason),
         });
     }
-  }
+  });
 
   if (runId && recipientRows.length > 0) {
     // Chunk inserts to stay within row-size limits.
