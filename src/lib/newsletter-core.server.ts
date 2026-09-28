@@ -135,27 +135,99 @@ const slugify = (s: string) =>
     .replace(/\s+/g, "-")
     .slice(0, 80) || `issue-${Date.now()}`;
 
-export async function generateNewsletterJSON(topicHint?: string) {
+// Streams a JSON newsletter draft from the AI gateway (Responses API).
+async function streamNewsletterJSON(apiKey: string, system: string, user: string) {
+  const res = await fetch("https://ai.gateway.lovable.dev/v1/responses", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "Lovable-API-Key": apiKey,
+      Authorization: `Bearer ${apiKey}`,
+      "X-Lovable-AIG-SDK": "fetch",
+    },
+    body: JSON.stringify({
+      model: "openai/gpt-6-astra",
+      stream: true,
+      store: false,
+      reasoning: { effort: "low" },
+      text: { format: { type: "json_object" } },
+      instructions: system,
+      input: [{ role: "user", content: user }],
+    }),
+  });
+  if (!res.ok || !res.body) {
+    const t = await res.text().catch(() => "");
+    throw new Error(`AI generation failed (${res.status}) ${t.slice(0, 300)}`);
+  }
+  const reader = res.body.getReader();
+  const dec = new TextDecoder();
+  let buf = "";
+  let out = "";
+  let finalText = "";
+  for (;;) {
+    const { done, value } = await reader.read();
+    if (done) break;
+    buf += dec.decode(value, { stream: true });
+    let i;
+    while ((i = buf.indexOf("\n")) >= 0) {
+      const line = buf.slice(0, i).trim();
+      buf = buf.slice(i + 1);
+      if (!line.startsWith("data:")) continue;
+      const payload = line.slice(5).trim();
+      if (!payload || payload === "[DONE]") continue;
+      try {
+        const ev = JSON.parse(payload);
+        if (ev.type === "response.output_text.delta") out += ev.delta ?? "";
+        else if (ev.type === "response.output_text.done") finalText = ev.text ?? "";
+        else if (ev.type === "response.failed" || ev.type === "error")
+          throw new Error(`AI generation failed: ${ev.response?.error?.message ?? ev.message ?? "unknown"}`);
+      } catch (e) {
+        if (e instanceof Error && e.message.startsWith("AI generation failed")) throw e;
+      }
+    }
+  }
+  const text = (finalText || out).trim();
+  if (!text) throw new Error("AI returned an empty newsletter");
+  return JSON.parse(text.replace(/^```(?:json)?\s*|\s*```$/g, ""));
+}
+
+// Posts an issue to the owner's LinkedIn via the connector gateway.
+export async function postIssueToLinkedIn(issue: { id: string; slug: string; linkedin_post: string | null }) {
+  const lovKey = process.env.LOVABLE_API_KEY;
+  const liKey = process.env.LINKEDIN_API_KEY;
+  if (!lovKey || !liKey) throw new Error("LinkedIn connector not configured");
+  if (!issue.linkedin_post) throw new Error("No LinkedIn text");
+  const headers = { Authorization: `Bearer ${lovKey}`, "X-Connection-Api-Key": liKey };
+  const meRes = await fetch("https://connector-gateway.lovable.dev/linkedin/v2/userinfo", { headers });
+  if (!meRes.ok) throw new Error(`userinfo ${meRes.status}: ${await meRes.text()}`);
+  const sub = (await meRes.json())?.sub;
+  if (!sub) throw new Error("No LinkedIn member sub");
+  const text = `${issue.linkedin_post}\n\nRead the full issue: https://www.dibyamishra.co.in/newsletter/${issue.slug}`;
+  const postRes = await fetch("https://connector-gateway.lovable.dev/linkedin/v2/ugcPosts", {
+    method: "POST",
+    headers: { ...headers, "Content-Type": "application/json", "X-Restli-Protocol-Version": "2.0.0" },
+    body: JSON.stringify({
+      author: `urn:li:person:${sub}`,
+      lifecycleState: "PUBLISHED",
+      specificContent: {
+        "com.linkedin.ugc.ShareContent": { shareCommentary: { text }, shareMediaCategory: "NONE" },
+      },
+      visibility: { "com.linkedin.ugc.MemberNetworkVisibility": "PUBLIC" },
+    }),
+  });
+  if (!postRes.ok) throw new Error(`ugcPosts ${postRes.status}: ${await postRes.text()}`);
+  const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+  await supabaseAdmin.from("newsletter_issues").update({ linkedin_posted_at: new Date().toISOString() }).eq("id", issue.id);
+}
+
+export async function generateNewsletterJSON(topicHint?: string, cadenceLabel = "latest") {
   const apiKey = process.env.LOVABLE_API_KEY;
   if (!apiKey) throw new Error("LOVABLE_API_KEY missing");
   const now = new Date();
   const monthYear = now.toLocaleDateString("en-US", { month: "long", year: "numeric" });
   const system = `You are Dibya R. Mishra, VP & Head of Engineering. Write a newsletter for a technical, senior audience. Voice: crisp, first-person, zero fluff. Cover Agentic AI, GenAI in Retail Supply Chains, Multi-Tenant SaaS, RAG systems, or Cloud Architecture. Return STRICT JSON: title (<=90 chars), summary (<=180 chars), body_markdown (500-900 words, ## H2 + short paragraphs; may use "- " bullets), linkedin_post (900-1200 chars, plain text, 3-5 hashtags).`;
-  const user = `Write the ${monthYear} issue.${topicHint ? ` Focus: ${topicHint}.` : ""} Return JSON only.`;
-  const res = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
-    method: "POST",
-    headers: { "Content-Type": "application/json", Authorization: `Bearer ${apiKey}` },
-    body: JSON.stringify({
-      model: "google/gemini-2.5-pro",
-      response_format: { type: "json_object" },
-      messages: [
-        { role: "system", content: system },
-        { role: "user", content: user },
-      ],
-    }),
-  });
-  if (!res.ok) throw new Error(`AI generation failed (${res.status})`);
-  const parsed = JSON.parse((await res.json())?.choices?.[0]?.message?.content ?? "{}");
+  const user = `Write the ${cadenceLabel} issue for ${monthYear}.${topicHint ? ` Focus: ${topicHint}.` : ""} Return JSON only.`;
+  const parsed = await streamNewsletterJSON(apiKey, system, user);
   const title = String(parsed.title ?? `${monthYear} Notes`).slice(0, 120);
   return {
     title,
@@ -292,8 +364,19 @@ export async function autoSendNewsletter(opts: {
     }
   }
 
+  let linkedInPosted = false;
+  let linkedInError: string | null = null;
+  try {
+    await postIssueToLinkedIn({ id: issue.id, slug: issue.slug, linkedin_post: draft.linkedin_post });
+    linkedInPosted = true;
+  } catch (e) {
+    linkedInError = e instanceof Error ? e.message : String(e);
+    console.error("LinkedIn auto-post failed", linkedInError);
+  }
+
   await finishRun({
     status: "completed",
+    error_message: linkedInError ? `LinkedIn: ${linkedInError}`.slice(0, 500) : null,
     recipients_total: emails.size,
     queued_count: queued,
     failed_count: errors,
@@ -308,6 +391,8 @@ export async function autoSendNewsletter(opts: {
     recipients: emails.size,
     emailsQueued: queued,
     emailErrors: errors,
+    linkedInPosted,
+    linkedInError,
   };
 }
 
