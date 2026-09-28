@@ -191,7 +191,7 @@ function Header() {
           <DialogContent
             id="main-menu-popover"
             aria-describedby={undefined}
-            className="max-h-[calc(100dvh-2rem)] w-[calc(100%-2rem)] max-w-3xl gap-0 overflow-hidden rounded-2xl border-border p-0 shadow-2xl sm:max-h-[calc(100dvh-3rem)] sm:w-[calc(100%-3rem)] sm:rounded-3xl"
+            className="z-[100] max-h-[calc(100dvh-2rem)] w-[calc(100%-2rem)] max-w-3xl gap-0 overflow-hidden rounded-2xl border-border p-0 shadow-2xl sm:max-h-[calc(100dvh-3rem)] sm:w-[calc(100%-3rem)] sm:rounded-3xl"
           >
             <div className="border-b border-border px-4 py-4 pr-14 sm:px-6 sm:py-5">
               <DialogTitle className="font-display text-lg font-semibold text-foreground sm:text-xl">
