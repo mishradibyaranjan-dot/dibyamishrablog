@@ -443,7 +443,13 @@ function MenuBody() {
   );
 }
 
-export function AccessibilityMenu({ className }: { className?: string }) {
+export function AccessibilityMenu({
+  className,
+  compact = false,
+}: {
+  className?: string;
+  compact?: boolean;
+}) {
   const { t } = useTranslation();
   const isMobile = useIsMobile();
   const [open, setOpen] = useState(false);
@@ -454,10 +460,14 @@ export function AccessibilityMenu({ className }: { className?: string }) {
       size="sm"
       aria-label={t("a11y.open")}
       title={t("a11y.open")}
-      className={cn("min-h-11 w-full justify-center gap-2 text-foreground hover:bg-foreground/10", className)}
+      className={cn(
+        "min-h-11 justify-center gap-2 text-foreground hover:bg-foreground/10",
+        compact ? "w-11 px-0" : "w-full",
+        className,
+      )}
     >
       <Accessibility className="h-4 w-4" aria-hidden="true" />
-      <span className="text-xs font-medium">{t("a11y.short")}</span>
+      <span className={cn("text-xs font-medium", compact && "sr-only")}>{t("a11y.short")}</span>
     </Button>
   );
 
