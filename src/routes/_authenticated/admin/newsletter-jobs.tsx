@@ -185,6 +185,7 @@ function NewsletterJobsPage() {
     <Section>
       <SectionHeader
         eyebrow="Admin"
+        as="h1"
         title="Newsletter jobs"
         description="Weekly and monthly newsletters are written by AI, emailed to subscribers and posted to LinkedIn automatically."
       />

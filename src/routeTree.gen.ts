@@ -54,6 +54,7 @@ import { Route as ApiDownloadPdfRouteImport } from './routes/api/download.pdf'
 import { Route as AuthenticatedAdminVisitorAuditRouteImport } from './routes/_authenticated/admin/visitor-audit'
 import { Route as AuthenticatedAdminSpamAuditRouteImport } from './routes/_authenticated/admin/spam-audit'
 import { Route as AuthenticatedAdminSecurityEventsRouteImport } from './routes/_authenticated/admin/security-events'
+import { Route as AuthenticatedAdminNewsletterJobsRouteImport } from './routes/_authenticated/admin/newsletter-jobs'
 import { Route as AuthenticatedAdminDocsRouteImport } from './routes/_authenticated/admin/docs'
 import { Route as AuthenticatedAdminContactEnquiriesRouteImport } from './routes/_authenticated/admin/contact-enquiries'
 import { Route as AuthenticatedAdminBlockedDomainsRouteImport } from './routes/_authenticated/admin/blocked-domains'
@@ -297,6 +298,12 @@ const AuthenticatedAdminSecurityEventsRoute =
     path: '/security-events',
     getParentRoute: () => AuthenticatedAdminRouteRoute,
   } as any)
+const AuthenticatedAdminNewsletterJobsRoute =
+  AuthenticatedAdminNewsletterJobsRouteImport.update({
+    id: '/newsletter-jobs',
+    path: '/newsletter-jobs',
+    getParentRoute: () => AuthenticatedAdminRouteRoute,
+  } as any)
 const AuthenticatedAdminDocsRoute = AuthenticatedAdminDocsRouteImport.update({
   id: '/docs',
   path: '/docs',
@@ -406,6 +413,7 @@ export interface FileRoutesByFullPath {
   '/admin/blocked-domains': typeof AuthenticatedAdminBlockedDomainsRoute
   '/admin/contact-enquiries': typeof AuthenticatedAdminContactEnquiriesRoute
   '/admin/docs': typeof AuthenticatedAdminDocsRoute
+  '/admin/newsletter-jobs': typeof AuthenticatedAdminNewsletterJobsRoute
   '/admin/security-events': typeof AuthenticatedAdminSecurityEventsRoute
   '/admin/spam-audit': typeof AuthenticatedAdminSpamAuditRoute
   '/admin/visitor-audit': typeof AuthenticatedAdminVisitorAuditRoute
@@ -464,6 +472,7 @@ export interface FileRoutesByTo {
   '/admin/blocked-domains': typeof AuthenticatedAdminBlockedDomainsRoute
   '/admin/contact-enquiries': typeof AuthenticatedAdminContactEnquiriesRoute
   '/admin/docs': typeof AuthenticatedAdminDocsRoute
+  '/admin/newsletter-jobs': typeof AuthenticatedAdminNewsletterJobsRoute
   '/admin/security-events': typeof AuthenticatedAdminSecurityEventsRoute
   '/admin/spam-audit': typeof AuthenticatedAdminSpamAuditRoute
   '/admin/visitor-audit': typeof AuthenticatedAdminVisitorAuditRoute
@@ -524,6 +533,7 @@ export interface FileRoutesById {
   '/_authenticated/admin/blocked-domains': typeof AuthenticatedAdminBlockedDomainsRoute
   '/_authenticated/admin/contact-enquiries': typeof AuthenticatedAdminContactEnquiriesRoute
   '/_authenticated/admin/docs': typeof AuthenticatedAdminDocsRoute
+  '/_authenticated/admin/newsletter-jobs': typeof AuthenticatedAdminNewsletterJobsRoute
   '/_authenticated/admin/security-events': typeof AuthenticatedAdminSecurityEventsRoute
   '/_authenticated/admin/spam-audit': typeof AuthenticatedAdminSpamAuditRoute
   '/_authenticated/admin/visitor-audit': typeof AuthenticatedAdminVisitorAuditRoute
@@ -584,6 +594,7 @@ export interface FileRouteTypes {
     | '/admin/blocked-domains'
     | '/admin/contact-enquiries'
     | '/admin/docs'
+    | '/admin/newsletter-jobs'
     | '/admin/security-events'
     | '/admin/spam-audit'
     | '/admin/visitor-audit'
@@ -642,6 +653,7 @@ export interface FileRouteTypes {
     | '/admin/blocked-domains'
     | '/admin/contact-enquiries'
     | '/admin/docs'
+    | '/admin/newsletter-jobs'
     | '/admin/security-events'
     | '/admin/spam-audit'
     | '/admin/visitor-audit'
@@ -701,6 +713,7 @@ export interface FileRouteTypes {
     | '/_authenticated/admin/blocked-domains'
     | '/_authenticated/admin/contact-enquiries'
     | '/_authenticated/admin/docs'
+    | '/_authenticated/admin/newsletter-jobs'
     | '/_authenticated/admin/security-events'
     | '/_authenticated/admin/spam-audit'
     | '/_authenticated/admin/visitor-audit'
@@ -1087,6 +1100,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminSecurityEventsRouteImport
       parentRoute: typeof AuthenticatedAdminRouteRoute
     }
+    '/_authenticated/admin/newsletter-jobs': {
+      id: '/_authenticated/admin/newsletter-jobs'
+      path: '/newsletter-jobs'
+      fullPath: '/admin/newsletter-jobs'
+      preLoaderRoute: typeof AuthenticatedAdminNewsletterJobsRouteImport
+      parentRoute: typeof AuthenticatedAdminRouteRoute
+    }
     '/_authenticated/admin/docs': {
       id: '/_authenticated/admin/docs'
       path: '/docs'
@@ -1178,6 +1198,7 @@ interface AuthenticatedAdminRouteRouteChildren {
   AuthenticatedAdminBlockedDomainsRoute: typeof AuthenticatedAdminBlockedDomainsRoute
   AuthenticatedAdminContactEnquiriesRoute: typeof AuthenticatedAdminContactEnquiriesRoute
   AuthenticatedAdminDocsRoute: typeof AuthenticatedAdminDocsRoute
+  AuthenticatedAdminNewsletterJobsRoute: typeof AuthenticatedAdminNewsletterJobsRoute
   AuthenticatedAdminSecurityEventsRoute: typeof AuthenticatedAdminSecurityEventsRoute
   AuthenticatedAdminSpamAuditRoute: typeof AuthenticatedAdminSpamAuditRoute
   AuthenticatedAdminVisitorAuditRoute: typeof AuthenticatedAdminVisitorAuditRoute
@@ -1190,6 +1211,8 @@ const AuthenticatedAdminRouteRouteChildren: AuthenticatedAdminRouteRouteChildren
     AuthenticatedAdminContactEnquiriesRoute:
       AuthenticatedAdminContactEnquiriesRoute,
     AuthenticatedAdminDocsRoute: AuthenticatedAdminDocsRoute,
+    AuthenticatedAdminNewsletterJobsRoute:
+      AuthenticatedAdminNewsletterJobsRoute,
     AuthenticatedAdminSecurityEventsRoute:
       AuthenticatedAdminSecurityEventsRoute,
     AuthenticatedAdminSpamAuditRoute: AuthenticatedAdminSpamAuditRoute,
