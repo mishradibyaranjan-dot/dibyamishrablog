@@ -148,7 +148,7 @@ export const Route = createFileRoute("/api/public/contact")({
           };
 
           const notificationEmail = await renderTemplate("contact-notification", templateData);
-          const confirmationEmail = await renderTemplate("contact-confirmation", templateData);
+          const confirmationEmail = await renderTemplate("contact-confirmation", { name: "there" });
 
           const ownerResults = await Promise.all(
             OWNER_EMAILS.map((recipient) =>

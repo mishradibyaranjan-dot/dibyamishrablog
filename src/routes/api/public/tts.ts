@@ -7,6 +7,17 @@ const Body = z.object({
   voice: z.string().trim().max(40).optional(),
 });
 
+
+async function verifyBearer(request: Request): Promise<string | null> {
+  const h = request.headers.get("authorization") ?? "";
+  if (!h.toLowerCase().startsWith("bearer ")) return null;
+  const token = h.slice(7).trim();
+  if (!token) return null;
+  const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+  const { data, error } = await supabaseAdmin.auth.getUser(token);
+  return error || !data?.user?.id ? null : data.user.id;
+}
+
 export const Route = createFileRoute("/api/public/tts")({
   server: {
     handlers: {
@@ -16,6 +27,9 @@ export const Route = createFileRoute("/api/public/tts")({
         const cors = corsHeadersFor(request);
         if (!isAllowedOrigin(request)) {
           return new Response("Forbidden", { status: 403, headers: cors });
+        }
+        if (!(await verifyBearer(request))) {
+          return Response.json({ error: "Sign in required" }, { status: 401, headers: cors });
         }
         let json: unknown;
         try {

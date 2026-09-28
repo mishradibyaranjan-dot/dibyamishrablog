@@ -57,7 +57,14 @@ export function FloatingChat() {
   const { messages, sendMessage, status, setMessages, stop } = useChat({
     id: "floating-chat",
     messages: initialMessages,
-    transport: new DefaultChatTransport({ api: "/api/public/chat" }),
+    transport: new DefaultChatTransport({
+      api: "/api/public/chat",
+      headers: async (): Promise<Record<string, string>> => {
+        const { data } = await supabase.auth.getSession();
+        const t = data.session?.access_token;
+        return t ? { Authorization: `Bearer ${t}` } : {};
+      },
+    }),
   });
 
   // Log completed messages to the database (auth users only)
@@ -144,6 +151,13 @@ export function FloatingChat() {
   const handleSubmit = async (message: { text?: string }) => {
     const text = message.text?.trim();
     if (!text || isBusy) return;
+    if (!user) {
+      setMessages([
+        ...messages,
+        { id: `signin-${Date.now()}`, role: "assistant", parts: [{ type: "text", text: "Please [sign in](/auth?mode=login) to chat with the assistant." }] } as UIMessage,
+      ]);
+      return;
+    }
     await sendMessage({ text });
   };
 
