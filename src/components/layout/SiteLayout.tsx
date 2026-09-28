@@ -1,5 +1,6 @@
 import { Link, Outlet, useRouterState } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
+import { createPortal } from "react-dom";
 import { Menu, X, ExternalLink } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
@@ -197,7 +198,7 @@ function Header() {
       </div>
 
       <AnimatePresence>
-        {open && (
+        {open && typeof document !== "undefined" && createPortal(
           <motion.div
             className="fixed inset-0 z-[60] flex items-center justify-center bg-background/70 p-4 backdrop-blur-sm sm:p-6"
             initial={{ opacity: 0 }}
@@ -263,7 +264,8 @@ function Header() {
                 </Link>
               </div>
             </motion.div>
-          </motion.div>
+          </motion.div>,
+          document.body,
         )}
       </AnimatePresence>
     </header>
