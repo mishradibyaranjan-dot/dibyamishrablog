@@ -89,14 +89,14 @@ function NewsletterForm() {
             disabled={status === "sending"}
             placeholder="you@company.com"
             aria-label="Email address for newsletter"
-            className="w-full rounded-md border border-slate-200 bg-white px-3 py-2 text-sm text-slate-900 placeholder:text-slate-400 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/30 disabled:opacity-60"
+            className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground outline-none focus:border-primary focus:ring-2 focus:ring-ring/30 disabled:opacity-60"
           />
 
           <Button
             size="sm"
             type="submit"
             disabled={status === "sending" || !captcha.canSubmit}
-            className="bg-blue-600 text-white hover:bg-blue-700"
+            className="bg-primary text-primary-foreground hover:bg-primary/90"
           >
             {status === "sending" ? "…" : "Join"}
           </Button>
@@ -105,10 +105,10 @@ function NewsletterForm() {
           <MathCaptcha verified={captcha.verified} onSolved={captcha.markVerified} />
         )}
         {status === "ok" && (
-          <p className="text-xs text-emerald-600">Thanks — you're subscribed!</p>
+          <p className="text-xs text-success">Thanks — you're subscribed!</p>
         )}
         {status === "error" && (
-          <p className="text-xs text-red-600">{error ?? "Something went wrong."}</p>
+          <p className="text-xs text-danger">{error ?? "Something went wrong."}</p>
 
         )}
         <FormPrivacyNotice />
@@ -160,8 +160,8 @@ function Header() {
       className={cn(
         "sticky top-0 z-50 w-full overflow-visible transition-all duration-500",
         scrolled
-          ? "border-b border-slate-200 bg-white/85 backdrop-blur-xl shadow-[0_8px_30px_-15px_rgba(15,23,42,0.15)]"
-          : "border-b border-transparent bg-white/60 backdrop-blur",
+          ? "border-b border-border bg-background/85 backdrop-blur-xl shadow-card-soft"
+          : "border-b border-transparent bg-background/70 backdrop-blur",
       )}
     >
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-4 px-4 sm:px-6">
@@ -173,7 +173,7 @@ function Header() {
             alt="Dibya Ranjan Mishra personal brand logo"
             className="h-9 w-9 shrink-0 rounded-lg object-contain"
           />
-          <span className="truncate text-slate-900">Dibya Ranjan Mishra</span>
+          <span className="truncate text-foreground">Dibya Ranjan Mishra</span>
         </Link>
 
         <Dialog open={open} onOpenChange={setOpen}>
@@ -234,12 +234,16 @@ function Header() {
                 ))}
               </nav>
 
-              <div role="group" aria-label="Display and site tools" className="mt-4 grid grid-cols-2 gap-2 border-t border-border pt-4 sm:flex sm:flex-wrap sm:items-center">
+              <div role="group" aria-label="Site tools" className="mt-4 grid grid-cols-2 gap-2 border-t border-border pt-4 sm:flex sm:flex-wrap sm:items-center">
                 <GlobalSearch />
                 <ReadAloudButton />
+              </div>
+              <div role="group" aria-label="Display options" className="mt-3 grid grid-cols-2 gap-2 rounded-md bg-muted/50 p-2 sm:flex sm:flex-wrap sm:items-center">
                 <ThemeToggle />
                 <LanguageToggle />
                 <AccessibilityMenu />
+              </div>
+              <div className="mt-3">
                 <UserMenu />
               </div>
 
@@ -261,29 +265,29 @@ function Header() {
 
 function Footer() {
   return (
-    <footer data-site-footer className="relative border-t border-slate-200 bg-white">
+    <footer data-site-footer className="relative border-t border-border bg-background text-foreground">
       <div className="mx-auto grid max-w-7xl gap-10 px-4 py-16 sm:px-6 md:grid-cols-4">
         <div className="md:col-span-2">
-          <div className="flex items-center gap-2 font-display text-lg font-bold text-slate-900">
+          <div className="flex items-center gap-2 font-display text-lg font-bold text-foreground">
             <img src={drmLogo.url} alt="Dibya Ranjan Mishra site logo" width={36} height={36} decoding="async" className="h-9 w-9 rounded-lg object-contain" />
             Dibya Ranjan Mishra
           </div>
-          <p className="mt-3 max-w-md text-sm text-slate-600">
+          <p className="mt-3 max-w-md text-sm text-muted-foreground">
             Research, insights, and real-world technology work on GenAI, Agentic AI,
             Cloud-Native Platforms, SaaS Architecture, and Engineering Leadership.
           </p>
           <div className="mt-5 flex items-center gap-2">
-            <Button variant="outline" size="icon" asChild className="border-slate-200 bg-white text-slate-700 hover:bg-slate-100">
+            <Button variant="outline" size="icon" asChild>
               <a href="https://github.com/mishradibyaranjan-dot/" target="_blank" rel="noreferrer" aria-label="GitHub">
                 <ExternalLink className="h-4 w-4" />
               </a>
             </Button>
-            <Button variant="outline" size="icon" asChild className="border-slate-200 bg-white text-slate-700 hover:bg-slate-100">
+            <Button variant="outline" size="icon" asChild>
               <a href="https://bold.pro/my/dibya-mishra-260203120923" target="_blank" rel="noreferrer" aria-label="Portfolio">
                 <ExternalLink className="h-4 w-4" />
               </a>
             </Button>
-            <Button variant="outline" size="icon" asChild className="border-slate-200 bg-white text-slate-700 hover:bg-slate-100">
+            <Button variant="outline" size="icon" asChild>
               <a href="https://www.linkedin.com/in/dibya-mishra-55b94654" target="_blank" rel="noreferrer" aria-label="LinkedIn">
                 <ExternalLink className="h-4 w-4" />
               </a>
@@ -291,11 +295,11 @@ function Footer() {
           </div>
         </div>
         <div>
-          <h4 className="text-sm font-semibold text-slate-900">Explore</h4>
-          <ul className="mt-3 space-y-2 text-sm text-slate-600">
+          <h4 className="text-sm font-semibold text-foreground">Explore</h4>
+          <ul className="mt-3 space-y-2 text-sm text-muted-foreground">
             {[...NAV.slice(1), ...MORE_NAV].map((n) => (
               <li key={n.to}>
-                <Link to={n.to} className="transition-colors hover:text-blue-600">
+                <Link to={n.to} className="transition-colors hover:text-primary">
                   {n.label}
                 </Link>
               </li>
@@ -303,8 +307,8 @@ function Footer() {
           </ul>
         </div>
         <div>
-          <h4 className="text-sm font-semibold text-slate-900">Newsletter</h4>
-          <p className="mt-3 text-sm text-slate-600">
+          <h4 className="text-sm font-semibold text-foreground">Newsletter</h4>
+          <p className="mt-3 text-sm text-muted-foreground">
             Monthly research notes on AI, Cloud, and Engineering Leadership.
           </p>
           <NewsletterForm />
@@ -318,26 +322,26 @@ function Footer() {
           </div>
         </div>
       </div>
-      <div className="border-t border-slate-200">
-        <div className="mx-auto flex max-w-7xl flex-col gap-3 px-4 py-5 text-xs text-slate-500 sm:px-6">
+      <div className="border-t border-border">
+        <div className="mx-auto flex max-w-7xl flex-col gap-3 px-4 py-5 text-xs text-muted-foreground sm:px-6">
           <div className="flex flex-col items-center justify-between gap-2 sm:flex-row">
             <p>{copyrightLine()}</p>
             <nav aria-label="Legal" className="flex flex-wrap items-center gap-x-3 gap-y-1">
-              <Link to="/privacy" className="transition-colors hover:text-blue-600">Privacy Notice</Link>
+              <Link to="/privacy" className="transition-colors hover:text-primary">Privacy Notice</Link>
               <span aria-hidden="true">|</span>
-              <Link to="/terms" className="transition-colors hover:text-blue-600">Terms of Use</Link>
+              <Link to="/terms" className="transition-colors hover:text-primary">Terms of Use</Link>
               <span aria-hidden="true">|</span>
-              <Link to="/copyright" className="transition-colors hover:text-blue-600">Copyright &amp; Content Use</Link>
+              <Link to="/copyright" className="transition-colors hover:text-primary">Copyright &amp; Content Use</Link>
               <span aria-hidden="true">|</span>
-              <CookiePreferencesLink className="transition-colors hover:text-blue-600" />
+              <CookiePreferencesLink className="transition-colors hover:text-primary" />
               <span aria-hidden="true">|</span>
-              <Link to="/contact" className="transition-colors hover:text-blue-600">Contact</Link>
+              <Link to="/contact" className="transition-colors hover:text-primary">Contact</Link>
               <span aria-hidden="true">|</span>
-              <Link to="/auth" search={{ mode: "login" }} className="transition-colors hover:text-blue-600">Admin Login</Link>
+              <Link to="/auth" search={{ mode: "login" }} className="transition-colors hover:text-primary">Admin Login</Link>
 
             </nav>
           </div>
-          <p className="text-[11px] leading-relaxed text-slate-400">{RESTRICTED_USE_LINE}</p>
+          <p className="text-[11px] leading-relaxed text-muted-foreground/80">{RESTRICTED_USE_LINE}</p>
         </div>
       </div>
     </footer>
