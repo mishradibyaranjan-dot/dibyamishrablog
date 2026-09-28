@@ -234,11 +234,11 @@ function Header() {
                 ))}
               </nav>
 
-              <div role="group" aria-label="Site tools" className="mt-4 grid grid-cols-2 gap-2 border-t border-border pt-4 sm:flex sm:flex-wrap sm:items-center">
+              <div role="group" aria-label="Site tools" className="mt-4 grid grid-cols-2 gap-2 border-t border-border pt-4">
                 <GlobalSearch />
                 <ReadAloudButton />
               </div>
-              <div role="group" aria-label="Display options" className="mt-3 grid grid-cols-2 gap-2 rounded-md bg-muted/50 p-2 sm:flex sm:flex-wrap sm:items-center">
+              <div role="group" aria-label="Display options" className="mt-3 grid grid-cols-2 gap-2 rounded-md bg-muted/50 p-2 sm:grid-cols-4">
                 <ThemeToggle />
                 <LanguageToggle />
                 <AccessibilityMenu />
@@ -314,7 +314,7 @@ function Footer() {
           <NewsletterForm />
           <div className="mt-6 border-t border-border pt-4">
             <h4 className="text-sm font-semibold text-foreground">Display options</h4>
-            <div role="group" aria-label="Footer display options" className="mt-2 flex flex-wrap items-center gap-1">
+            <div role="group" aria-label="Footer display options" className="mt-2 grid grid-cols-2 gap-1.5">
               <ThemeToggle />
               <LanguageToggle />
               <AccessibilityMenu />

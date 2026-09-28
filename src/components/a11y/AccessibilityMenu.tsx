@@ -451,11 +451,13 @@ export function AccessibilityMenu({ className }: { className?: string }) {
   const trigger = (
     <Button
       variant="ghost"
-      size="icon"
+      size="sm"
       aria-label={t("a11y.open")}
-      className={cn("min-h-11 min-w-11 text-foreground", className)}
+      title={t("a11y.open")}
+      className={cn("min-h-11 w-full justify-center gap-2 text-foreground hover:bg-foreground/10", className)}
     >
-      <Accessibility className="h-5 w-5" aria-hidden="true" />
+      <Accessibility className="h-4 w-4" aria-hidden="true" />
+      <span className="text-xs font-medium">{t("a11y.short")}</span>
     </Button>
   );
 
