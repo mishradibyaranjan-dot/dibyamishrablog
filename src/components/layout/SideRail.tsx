@@ -1,5 +1,4 @@
-import {
-  CalendarClock, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useRouterState } from "@tanstack/react-router";
 import { motion, AnimatePresence } from "framer-motion";
 import {
@@ -27,6 +26,7 @@ import {
   Bug,
   Radar,
   type LucideIcon,
+  CalendarClock,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/lib/auth";
