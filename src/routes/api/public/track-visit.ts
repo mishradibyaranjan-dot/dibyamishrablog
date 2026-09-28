@@ -179,6 +179,19 @@ export const Route = createFileRoute("/api/public/track-visit")({
             .eq("visitor_id", visitorId)
             .maybeSingle();
 
+          // SECURITY: bind the visitor record to a server-signed httpOnly
+          // cookie so callers can't modify someone else's visitor row.
+          const sigSecret = process.env.CRON_SECRET || process.env.SUPABASE_SERVICE_ROLE_KEY || "";
+          const sigKey = await crypto.subtle.importKey("raw", new TextEncoder().encode(sigSecret), { name: "HMAC", hash: "SHA-256" }, false, ["sign"]);
+          const sigBuf = await crypto.subtle.sign("HMAC", sigKey, new TextEncoder().encode("visitor|" + visitorId));
+          const expectedSig = Array.from(new Uint8Array(sigBuf)).map((b) => b.toString(16).padStart(2, "0")).join("");
+          const cookieSig = (h.get("cookie") || "").split(/;\s*/).find((c) => c.startsWith("drm_vsig="))?.slice(9) ?? "";
+          if (existing && cookieSig !== expectedSig) {
+            await writeAudit({ ...audit, outcome: "rejected", reason: "visitor_signature_mismatch", duration_ms: Date.now() - startedAt });
+            return new Response(JSON.stringify({ ok: false }), { status: 403, headers: { "Content-Type": "application/json", ...cors(request) } });
+          }
+          const sigCookie = `drm_vsig=${expectedSig}; Path=/api/public/track-visit; Max-Age=31536000; HttpOnly; Secure; SameSite=Lax`;
+
           const now = new Date().toISOString();
           let email: string | null = null;
           let displayName: string | null = null;
@@ -248,7 +261,7 @@ export const Route = createFileRoute("/api/public/track-visit")({
 
           return new Response(JSON.stringify({ ok: true }), {
             status: 200,
-            headers: { "Content-Type": "application/json", ...cors(request) },
+            headers: { "Content-Type": "application/json", ...cors(request), "Set-Cookie": sigCookie },
           });
         } catch (err) {
           console.error("[track-visit]", err);
