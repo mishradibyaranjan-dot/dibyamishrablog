@@ -110,7 +110,7 @@ function Reports() {
         ["top_questions", "count"],
         ...topQuestions.map((p) => [p.q, p.count]),
       ];
-      const csv = rows.map((r) => r.map((c) => `"${String(c).replace(/"/g, '""')}"`).join(",")).join("\n");
+      const csv = rows.map((r) => r.map((c) => { let v = String(c); if (/^[=+\-@\t\r]/.test(v)) v = "'" + v; return `"${v.replace(/"/g, '""')}"`; }).join(",")).join("\n");
       const blob = new Blob([csv], { type: "text/csv" });
       const url = URL.createObjectURL(blob);
       const a = document.createElement("a");
