@@ -565,6 +565,8 @@ export type Database = {
           finished_at: string | null
           id: string
           issue_id: string | null
+          linkedin_error: string | null
+          linkedin_status: string | null
           queued_count: number
           recipients_total: number
           schedule_id: string | null
@@ -581,6 +583,8 @@ export type Database = {
           finished_at?: string | null
           id?: string
           issue_id?: string | null
+          linkedin_error?: string | null
+          linkedin_status?: string | null
           queued_count?: number
           recipients_total?: number
           schedule_id?: string | null
@@ -597,6 +601,8 @@ export type Database = {
           finished_at?: string | null
           id?: string
           issue_id?: string | null
+          linkedin_error?: string | null
+          linkedin_status?: string | null
           queued_count?: number
           recipients_total?: number
           schedule_id?: string | null
