@@ -1,9 +1,8 @@
 import { Link, Outlet, useRouterState } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { Menu, ExternalLink } from "lucide-react";
+import { ExternalLink } from "lucide-react";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
-import { Dialog, DialogContent, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { cn } from "@/lib/utils";
 import { FloatingChat } from "@/components/chat/FloatingChat";
 import { FloatingConnectCta } from "@/components/marketing/FloatingConnectCta";
@@ -13,7 +12,6 @@ import { AuroraBackground } from "@/components/cinematic/AuroraBackground";
 import { PageTransition } from "@/components/cinematic/PageTransition";
 import { ThemeProvider } from "@/components/theme/ThemeProvider";
 import { ThemeToggle } from "@/components/theme/ThemeToggle";
-import { GlobalSearch } from "@/components/search/GlobalSearch";
 import { AccessibilityProvider } from "@/contexts/AccessibilityContext";
 import { LanguageProvider } from "@/contexts/LanguageContext";
 import { AccessibilityMenu, SelectionReader } from "@/components/a11y/AccessibilityMenu";
@@ -23,11 +21,9 @@ import { ColorVisionFilters } from "@/components/a11y/ColorVisionFilters";
 import { MediaPauseGuard } from "@/components/a11y/MediaPauseGuard";
 
 
-import { ReadAloudButton } from "@/components/voice/ReadAloudButton";
 import { AuthProvider, useAuth } from "@/lib/auth";
 import { SpamDomainGuard } from "@/components/auth/SpamDomainGuard";
 import { SessionTimeout } from "@/components/auth/SessionTimeout";
-import { UserMenu } from "@/components/auth/UserMenu";
 
 import { useActivityTracker } from "@/lib/tracking";
 import { useVisitorTracker } from "@/lib/visitor-tracking";
