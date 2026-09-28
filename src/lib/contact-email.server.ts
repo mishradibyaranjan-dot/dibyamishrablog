@@ -149,7 +149,7 @@ export async function sendContactEmail({
       await recordAttempt("failed", "recipient_suppressed");
       return { ok: false, error: "recipient_suppressed" };
     }
-    console.error("[contact-email] send failed", templateName, recipient, msg);
+    console.error("[contact-email] send failed", templateName, msg);
     await logSend("failed", msg);
     await recordAttempt("failed", msg);
     return { ok: false, error: msg };

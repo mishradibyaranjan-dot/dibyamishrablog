@@ -34,7 +34,7 @@ const MAX_TEXT_PER_PART = 4000;
 const messagePartSchema = z.object({ type: z.string().max(64), text: z.string().max(MAX_TEXT_PER_PART).optional() }).passthrough();
 const messageSchema = z.object({
   id: z.string().max(128).optional(),
-  role: z.enum(["system", "user", "assistant", "tool"]),
+  role: z.enum(["user", "assistant"]),
   parts: z.array(messagePartSchema).max(32).optional(),
   content: z.union([z.string().max(MAX_TEXT_PER_PART), z.array(messagePartSchema).max(32)]).optional(),
 }).passthrough();
@@ -82,7 +82,15 @@ export const Route = createFileRoute("/api/public/chat")({
         try { json = JSON.parse(raw); } catch { return new Response("Invalid JSON", { status: 400 }); }
         const parsed = bodySchema.safeParse(json);
         if (!parsed.success) return new Response("Invalid request body", { status: 400 });
-        const messages = parsed.data.messages as unknown as UIMessage[];
+        // Only plain text from user/assistant turns reaches the model; the system
+        // prompt is always server-owned.
+        const messages = parsed.data.messages.map((m, i) => ({
+          id: m.id ?? `m${i}`,
+          role: m.role,
+          parts: (m.parts ?? (typeof m.content === "string" ? [{ type: "text", text: m.content }] : m.content ?? []))
+            .filter((p) => p.type === "text" && typeof p.text === "string")
+            .map((p) => ({ type: "text" as const, text: String(p.text) })),
+        })) as UIMessage[];
 
         const key = process.env.LOVABLE_API_KEY;
         if (!key) {

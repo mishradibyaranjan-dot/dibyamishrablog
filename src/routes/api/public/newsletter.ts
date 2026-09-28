@@ -67,7 +67,7 @@ export const Route = createFileRoute("/api/public/newsletter")({
               });
             } catch (e) {
               // Never fail the subscribe just because the welcome mail balked.
-              console.error("welcome email send failed", email, e);
+              console.error("welcome email send failed", e);
             }
           }
 

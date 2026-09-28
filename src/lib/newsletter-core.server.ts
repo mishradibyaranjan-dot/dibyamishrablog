@@ -273,7 +273,7 @@ export async function autoSendNewsletter(opts: {
         if (runId) recipientRows.push({ run_id: runId, email, status: "failed", error_message: delivery.value.reason ?? "not queued" });
       }
     } else {
-      console.error("newsletter send failed", email, delivery.reason);
+      console.error("newsletter send failed", delivery.reason);
       errors++;
       if (runId)
         recipientRows.push({
