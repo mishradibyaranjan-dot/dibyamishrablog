@@ -180,7 +180,9 @@ function Header() {
             <Button
               variant="ghost"
               className="min-h-11 gap-2 rounded-full border border-border bg-background/90 px-4 text-foreground shadow-sm backdrop-blur-xl hover:bg-muted"
-              aria-label="Main menu"
+              aria-label={open ? "Close main menu" : "Open main menu"}
+              aria-haspopup="dialog"
+              aria-expanded={open}
               aria-controls="main-menu-popover"
             >
               <Menu className="h-5 w-5" />
@@ -191,8 +193,9 @@ function Header() {
           <DialogContent
             id="main-menu-popover"
             aria-describedby={undefined}
+            aria-label="Main menu"
             overlayClassName="bg-transparent"
-            className="z-[100] left-auto right-3 top-20 max-h-[calc(100dvh-6rem)] w-[calc(100%-1.5rem)] max-w-md translate-x-0 translate-y-0 gap-0 overflow-hidden rounded-2xl border-border bg-background/95 p-0 shadow-2xl backdrop-blur-xl data-[state=closed]:zoom-out-100 data-[state=open]:zoom-in-100 data-[state=open]:slide-in-from-top-2 data-[state=closed]:slide-out-to-top-2 sm:right-6 sm:rounded-3xl"
+            className="z-[100] left-3 right-3 top-[4.5rem] max-h-[calc(100dvh-5.5rem)] w-auto sm:left-auto sm:top-20 sm:w-[calc(100%-3rem)] max-w-md translate-x-0 translate-y-0 gap-0 overflow-hidden rounded-2xl border-border bg-background/95 p-0 shadow-2xl backdrop-blur-xl data-[state=closed]:zoom-out-100 data-[state=open]:zoom-in-100 data-[state=open]:slide-in-from-top-2 data-[state=closed]:slide-out-to-top-2 sm:right-6 sm:rounded-3xl"
           >
             <div className="border-b border-border px-4 py-4 pr-14 sm:px-6 sm:py-5">
               <DialogTitle className="font-display text-lg font-semibold text-foreground sm:text-xl">
@@ -200,7 +203,23 @@ function Header() {
               </DialogTitle>
             </div>
             <div className="overflow-y-auto overscroll-contain p-3 sm:p-5">
-              <nav aria-label="Main navigation" className="grid gap-2 sm:grid-cols-2">
+              <nav
+                aria-label="Main navigation"
+                className="grid gap-2 sm:grid-cols-2"
+                onKeyDown={(e) => {
+                  const keys = ["ArrowDown", "ArrowUp", "ArrowRight", "ArrowLeft", "Home", "End"];
+                  if (!keys.includes(e.key)) return;
+                  const links = Array.from(e.currentTarget.querySelectorAll<HTMLAnchorElement>("a"));
+                  const i = links.indexOf(document.activeElement as HTMLAnchorElement);
+                  if (i < 0) return;
+                  e.preventDefault();
+                  const n = links.length;
+                  const next =
+                    e.key === "Home" ? 0 : e.key === "End" ? n - 1
+                    : e.key === "ArrowDown" || e.key === "ArrowRight" ? (i + 1) % n : (i - 1 + n) % n;
+                  links[next]?.focus();
+                }}
+              >
                 {[...NAV, ...MORE_NAV].map((item) => (
                   <Link
                     key={item.to}
@@ -214,7 +233,7 @@ function Header() {
                 ))}
               </nav>
 
-              <div className="mt-4 grid grid-cols-2 gap-2 border-t border-border pt-4 sm:flex sm:flex-wrap sm:items-center">
+              <div role="group" aria-label="Site tools" className="mt-4 grid grid-cols-2 gap-2 border-t border-border pt-4 sm:flex sm:flex-wrap sm:items-center">
                 <GlobalSearch />
                 <ReadAloudButton />
                 <ThemeToggle />

@@ -377,7 +377,8 @@ export async function autoSendNewsletter(opts: {
 
   await finishRun({
     status: "completed",
-    error_message: linkedInError ? `LinkedIn: ${linkedInError}`.slice(0, 500) : null,
+    linkedin_status: linkedInPosted ? "posted" : "failed",
+    linkedin_error: linkedInError ? linkedInError.slice(0, 1000) : null,
     recipients_total: emails.size,
     queued_count: queued,
     failed_count: errors,

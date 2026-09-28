@@ -22,6 +22,13 @@
       "when": 1790575225492,
       "tag": "0002_auto_weekly_monthly_newsletters",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1790575469292,
+      "tag": "0003_newsletter_runs_linkedin_status",
+      "breakpoints": true
     }
   ]
 }

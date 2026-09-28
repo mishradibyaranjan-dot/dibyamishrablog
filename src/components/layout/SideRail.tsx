@@ -26,6 +26,7 @@ import {
   Bug,
   Radar,
   type LucideIcon,
+  CalendarClock,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/lib/auth";
@@ -59,6 +60,7 @@ const ADMIN: RailItem[] = [
   { to: "/admin/spam-audit", label: "Spam Audit", icon: ShieldAlert },
   { to: "/admin/security-events", label: "Security Events", icon: Bug },
   { to: "/admin/visitor-audit", label: "Visitor Audit", icon: Radar },
+  { to: "/admin/newsletter-jobs", label: "Newsletter Jobs", icon: CalendarClock },
   { to: "/admin/docs", label: "Engineering Docs", icon: FileText },
 ];
 

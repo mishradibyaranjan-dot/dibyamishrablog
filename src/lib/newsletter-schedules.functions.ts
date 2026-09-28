@@ -130,7 +130,7 @@ export const listScheduleHistory = createServerFn({ method: "GET" })
     await assertAdmin(context);
     const { data: runs, error } = await context.supabase
       .from("newsletter_send_runs")
-      .select("id, issue_id, trigger_source, title, recipients_total, queued_count, failed_count, status, error_message, started_at, finished_at")
+      .select("id, issue_id, trigger_source, title, recipients_total, queued_count, failed_count, status, error_message, linkedin_status, linkedin_error, started_at, finished_at")
       .eq("schedule_id", data.scheduleId)
       .order("started_at", { ascending: false })
       .limit(data.limit);
