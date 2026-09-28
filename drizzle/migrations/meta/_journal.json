@@ -8,6 +8,13 @@
       "when": 1790570531807,
       "tag": "0000_restore_newsletter_unsubscribe_tokens",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1790571938335,
+      "tag": "0001_hide_disposable_domains",
+      "breakpoints": true
     }
   ]
 }
