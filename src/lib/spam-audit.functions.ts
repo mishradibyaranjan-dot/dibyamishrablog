@@ -14,11 +14,13 @@ export const logBlockedLoginAttempt = createServerFn({ method: "POST" })
       const email = data.email.toLowerCase();
       const domain = email.split("@")[1] ?? "";
       if (!domain) return { ok: false };
+      const { data: blocked } = await supabaseAdmin.rpc("is_blocked_email", { _email: email });
+      if (!blocked) return { ok: false };
       await supabaseAdmin.from("spam_audit_log").insert({
         action_type: "blocked_login_attempt",
         email,
         domain,
-        reason: data.reason ?? "email domain on blocklist",
+        reason: /sign-up/i.test(data.reason ?? "") ? "sign-up blocked: domain on blocklist" : /session/i.test(data.reason ?? "") ? "session blocked: domain on blocklist" : "sign-in blocked: domain on blocklist",
       });
       return { ok: true };
     } catch {

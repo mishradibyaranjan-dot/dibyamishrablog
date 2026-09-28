@@ -635,7 +635,7 @@ function IdentifiedVisitorsPanel({
       "device", "browser", "os", "total_visits", "total_pageviews",
       "first_seen_at", "last_seen_at", "identified_at", "first_referrer", "first_utm_source",
     ];
-    const esc = (v: unknown) => `"${String(v ?? "").replace(/"/g, '""')}"`;
+    const esc = (v: unknown) => { let s = String(v ?? ""); if (/^[=+\-@\t\r]/.test(s)) s = "'" + s; return `"${s.replace(/"/g, '""')}"`; };
     const csv = [
       cols.join(","),
       ...filtered.map((r) => cols.map((c) => esc((r as Record<string, unknown>)[c])).join(",")),

@@ -6,12 +6,23 @@ import { getRequest } from "@tanstack/react-start/server";
 // ---------- Public: record client-observed failed sign-in ----------
 const failedLoginSchema = z.object({
   email: z.string().trim().email().max(255),
-  reason: z.string().max(500).optional(),
+  password: z.string().min(1).max(256),
 });
 
 export const recordClientFailedLogin = createServerFn({ method: "POST" })
   .inputValidator((input: unknown) => failedLoginSchema.parse(input))
   .handler(async ({ data }) => {
+    // Verify server-side that these credentials really fail before recording.
+    const { createClient } = await import("@supabase/supabase-js");
+    const probe = createClient(process.env.SUPABASE_URL!, process.env.SUPABASE_PUBLISHABLE_KEY ?? process.env.SUPABASE_ANON_KEY!, {
+      auth: { persistSession: false, autoRefreshToken: false, storage: undefined },
+    });
+    const { data: signIn, error: signInErr } = await probe.auth.signInWithPassword({ email: data.email, password: data.password });
+    if (!signInErr && signIn.session) {
+      await probe.auth.signOut().catch(() => {});
+      return { ok: false };
+    }
+    if (!signInErr || !/invalid login credentials/i.test(signInErr.message)) return { ok: false };
     const req = getRequest();
     const { getClientIp, evaluateFailedLogin } = await import("@/lib/security-events.server");
     const ip = getClientIp(req);
@@ -20,7 +31,7 @@ export const recordClientFailedLogin = createServerFn({ method: "POST" })
       ip,
       email: data.email.toLowerCase(),
       userAgent,
-      reason: data.reason ?? "invalid_credentials",
+      reason: "invalid_credentials",
     });
     return { ok: true };
   });
