@@ -157,8 +157,8 @@ function Header() {
     const onKeyDown = (event: KeyboardEvent) => {
       if (event.key === "Escape") setOpen(false);
     };
-    window.addEventListener("keydown", onKeyDown);
-    return () => window.removeEventListener("keydown", onKeyDown);
+    document.addEventListener("keydown", onKeyDown, true);
+    return () => document.removeEventListener("keydown", onKeyDown, true);
   }, [open]);
 
   return (
@@ -214,7 +214,7 @@ function Header() {
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: -8, scale: 0.97 }}
               transition={{ duration: 0.2, ease: [0.22, 1, 0.36, 1] }}
-              className="absolute right-4 top-[calc(100%+0.75rem)] z-10 w-[min(92vw,42rem)] overflow-hidden rounded-3xl border border-border bg-background/95 shadow-xl backdrop-blur-xl sm:right-6"
+              className="absolute right-4 top-[calc(100%+0.75rem)] z-10 w-[min(92vw,42rem)] overflow-hidden rounded-3xl border border-border bg-background shadow-xl sm:right-6"
             >
               <div className="max-h-[min(75vh,42rem)] overflow-y-auto p-4 sm:p-5">
                 <nav className="grid gap-1 sm:grid-cols-2 lg:grid-cols-3">
