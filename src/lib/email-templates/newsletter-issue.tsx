@@ -18,6 +18,7 @@ interface Props {
   bodyMarkdown?: string;
   slug?: string;
   siteUrl?: string;
+  unsubscribeUrl?: string;
 }
 
 const SITE = "https://www.dibyamishra.co.in";
@@ -28,6 +29,7 @@ const Email = ({
   bodyMarkdown = "",
   slug = "",
   siteUrl = SITE,
+  unsubscribeUrl,
 }: Props) => {
   const paragraphs = bodyMarkdown
     .replace(/\r\n/g, "\n")
@@ -83,6 +85,11 @@ const Email = ({
             <Text style={small}>
               Sent by Dibya R. Mishra · <Link href={siteUrl} style={muted}>{siteUrl.replace(/^https?:\/\//, "")}</Link>
             </Text>
+            {unsubscribeUrl ? (
+              <Text style={small}>
+                No longer want these updates? <Link href={unsubscribeUrl} style={muted}>Unsubscribe</Link>
+              </Text>
+            ) : null}
           </Section>
         </Container>
       </Body>
@@ -103,6 +110,7 @@ export const template = {
     bodyMarkdown:
       "## What's new\n\nThis month I published three case studies on agentic automation and a research note on RAG at scale.\n\n## Deep dive\n\n- Multi-tenant LLM apps\n- LinkedIn auto-publishing\n- Vector DB comparison",
     slug: "sample-issue",
+    unsubscribeUrl: `${SITE}/email/unsubscribe?token=preview`,
   },
 } satisfies TemplateEntry;
 

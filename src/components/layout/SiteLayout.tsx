@@ -337,15 +337,16 @@ export function SiteLayout() {
               <ColorVisionFilters />
               <div className="relative flex min-h-dvh flex-col">
                 <SkipToContent />
-                <AuroraBackground />
-                <SiteBanner />
                 <Header />
                 <SideRail />
-
-                <main id="main-content" className="relative flex-1 lg:pl-20">
-                  <PageTransition />
-                </main>
-                <Footer />
+                <div data-a11y-filter-surface className="relative flex flex-1 flex-col">
+                  <AuroraBackground />
+                  <SiteBanner />
+                  <main id="main-content" className="relative flex-1 lg:pl-20">
+                    <PageTransition />
+                  </main>
+                  <Footer />
+                </div>
                 <LiveAnnouncer />
                 <FloatingChat />
                 <FloatingConnectCta />

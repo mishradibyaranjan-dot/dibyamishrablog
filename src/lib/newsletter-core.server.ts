@@ -21,6 +21,46 @@ export async function enqueueRenderedTemplate(opts: {
   const to = (template.to || opts.recipientEmail).toLowerCase();
   const messageId = crypto.randomUUID();
 
+  const { data: suppressed, error: suppressionError } = await supabaseAdmin
+    .from("suppressed_emails")
+    .select("id")
+    .eq("email", to)
+    .maybeSingle();
+  if (suppressionError) throw new Error("suppression check failed");
+  if (suppressed) {
+    await supabaseAdmin.from("email_send_log").insert({
+      message_id: messageId,
+      template_name: opts.templateName,
+      recipient_email: to,
+      status: "suppressed",
+    });
+    return { queued: false, reason: "recipient_suppressed" };
+  }
+
+  let unsubscribeToken: string | undefined;
+  if (opts.templateName === "newsletter-issue") {
+    const { data: current, error: tokenReadError } = await supabaseAdmin
+      .from("email_unsubscribe_tokens")
+      .select("token, used_at")
+      .eq("email", to)
+      .maybeSingle();
+    if (tokenReadError) throw new Error("unsubscribe token lookup failed");
+    if (current?.token && !current.used_at) {
+      unsubscribeToken = current.token;
+    } else {
+      const bytes = new Uint8Array(32);
+      crypto.getRandomValues(bytes);
+      const token = Array.from(bytes, (byte) => byte.toString(16).padStart(2, "0")).join("");
+      const { data: stored, error: tokenWriteError } = await supabaseAdmin
+        .from("email_unsubscribe_tokens")
+        .upsert({ email: to, token, used_at: null }, { onConflict: "email" })
+        .select("token")
+        .single();
+      if (tokenWriteError || !stored) throw new Error("unsubscribe token creation failed");
+      unsubscribeToken = stored.token;
+    }
+  }
+
   const logOutcome = async (
     status: "sent" | "suppressed" | "failed",
     errorMessage?: string,
@@ -35,27 +75,22 @@ export async function enqueueRenderedTemplate(opts: {
     if (error) console.error("[newsletter] send log write failed", error.code, error.message);
   };
 
-  const send = () =>
-    sendTemplateEmail(opts.templateName, to, {
-      templateData: opts.templateData as Record<string, any>,
+  const send = () => {
+    const templateData = unsubscribeToken
+      ? {
+          ...opts.templateData,
+          unsubscribeUrl: `https://www.dibyamishra.co.in/email/unsubscribe?token=${encodeURIComponent(unsubscribeToken)}`,
+        }
+      : opts.templateData;
+    return sendTemplateEmail(opts.templateName, to, {
+      templateData: templateData as Record<string, any>,
       idempotencyKey: opts.idempotencyKey || messageId,
+      unsubscribeToken,
     });
+  };
 
   try {
-    let result;
-    try {
-      result = await send();
-    } catch (err) {
-      // Rate limited: wait the advertised window once, then retry this send.
-      const { EmailAPIError } = await import("@lovable.dev/email-js");
-      if (err instanceof EmailAPIError && err.status === 429) {
-        const waitMs = (err.retryAfterSeconds ?? 60) * 1000;
-        await new Promise((r) => setTimeout(r, waitMs));
-        result = await send();
-      } else {
-        throw err;
-      }
-    }
+    const result = await send();
     if (!result.sent) {
       await logOutcome("suppressed");
       return { queued: false, reason: result.reason };
@@ -68,6 +103,27 @@ export async function enqueueRenderedTemplate(opts: {
     throw err;
   }
 
+}
+
+export async function mapWithConcurrency<T, R>(
+  items: readonly T[],
+  limit: number,
+  task: (item: T) => Promise<R>,
+): Promise<Array<PromiseSettledResult<R>>> {
+  const results: Array<PromiseSettledResult<R>> = new Array(items.length);
+  let nextIndex = 0;
+  const workers = Array.from({ length: Math.min(Math.max(1, limit), items.length) }, async () => {
+    while (nextIndex < items.length) {
+      const index = nextIndex++;
+      try {
+        results[index] = { status: "fulfilled", value: await task(items[index]) };
+      } catch (reason) {
+        results[index] = { status: "rejected", reason };
+      }
+    }
+  });
+  await Promise.all(workers);
+  return results;
 }
 
 
