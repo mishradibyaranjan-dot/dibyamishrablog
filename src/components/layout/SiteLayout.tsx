@@ -1,5 +1,6 @@
 import { Link, Outlet, useRouterState } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
+import { createPortal } from "react-dom";
 import { Menu, X, ExternalLink } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
@@ -196,60 +197,79 @@ function Header() {
         </Button>
       </div>
 
-      <AnimatePresence>
-        {open && (
-          <>
-            <motion.button
-              type="button"
-              aria-label="Close main menu"
-              className="fixed inset-0 top-16 cursor-default bg-transparent"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              onClick={() => setOpen(false)}
-            />
+      {typeof document !== "undefined" && createPortal(
+        <AnimatePresence>
+          {open && (
+            <motion.div
+            className="fixed inset-0 z-[60] flex items-center justify-center bg-background/70 p-4 backdrop-blur-sm sm:p-6"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => setOpen(false)}
+          >
             <motion.div
               id="main-menu-popover"
-              initial={{ opacity: 0, y: -10, scale: 0.97 }}
+              role="dialog"
+              aria-modal="true"
+              aria-labelledby="main-menu-title"
+              initial={{ opacity: 0, y: 16, scale: 0.94 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
-              exit={{ opacity: 0, y: -8, scale: 0.97 }}
+              exit={{ opacity: 0, y: 12, scale: 0.96 }}
               transition={{ duration: 0.2, ease: [0.22, 1, 0.36, 1] }}
-              className="absolute right-4 top-[calc(100%+0.75rem)] z-10 w-[min(92vw,42rem)] overflow-hidden rounded-3xl border border-border bg-background shadow-xl sm:right-6"
+              className="relative w-full max-w-3xl overflow-hidden rounded-3xl border border-border bg-background shadow-2xl"
+              onClick={(event) => event.stopPropagation()}
             >
-              <div className="max-h-[min(75vh,42rem)] overflow-y-auto p-4 sm:p-5">
-                <nav className="grid gap-1 sm:grid-cols-2 lg:grid-cols-3">
-                {[...NAV, ...MORE_NAV].map((item) => (
-                  <Link
-                    key={item.to}
-                    to={item.to}
-                    className="min-h-11 rounded-full px-4 py-2.5 text-sm font-medium text-foreground transition-colors hover:bg-muted hover:text-primary"
-                    activeProps={{ className: "bg-primary/10 text-primary" }}
-                    activeOptions={{ exact: item.to === "/" }}
-                  >
-                    {item.label}
-                  </Link>
-                ))}
-              </nav>
-
-              <div className="mt-4 flex flex-wrap items-center gap-2 border-t border-border pt-4">
-                <GlobalSearch />
-                <ReadAloudButton />
-                <ThemeToggle />
-                <AccessibilityMenu />
-                <UserMenu />
+              <div className="flex items-center justify-between border-b border-border px-5 py-4">
+                <h2 id="main-menu-title" className="font-display text-lg font-semibold text-foreground">
+                  Menu
+                </h2>
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="icon"
+                  className="rounded-full"
+                  aria-label="Close main menu"
+                  onClick={() => setOpen(false)}
+                >
+                  <X className="h-5 w-5" />
+                </Button>
               </div>
+              <div className="max-h-[min(72vh,42rem)] overflow-y-auto p-4 sm:p-5">
+                <nav className="grid gap-1 sm:grid-cols-2 lg:grid-cols-3">
+                  {[...NAV, ...MORE_NAV].map((item) => (
+                    <Link
+                      key={item.to}
+                      to={item.to}
+                      className="min-h-11 rounded-full px-4 py-2.5 text-sm font-medium text-foreground transition-colors hover:bg-muted hover:text-primary"
+                      activeProps={{ className: "bg-primary/10 text-primary" }}
+                      activeOptions={{ exact: item.to === "/" }}
+                    >
+                      {item.label}
+                    </Link>
+                  ))}
+                </nav>
 
-              <Link
-                to="/contact"
-                className="mt-4 inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-full bg-primary px-4 py-3 text-sm font-semibold text-primary-foreground sm:w-auto sm:px-6"
-              >
-                Let&apos;s Connect
-              </Link>
-            </div>
+                <div className="mt-4 flex flex-wrap items-center gap-2 border-t border-border pt-4">
+                  <GlobalSearch />
+                  <ReadAloudButton />
+                  <ThemeToggle />
+                  <AccessibilityMenu />
+                  <UserMenu />
+                </div>
+
+                <Link
+                  to="/contact"
+                  className="mt-4 inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-full bg-primary px-4 py-3 text-sm font-semibold text-primary-foreground sm:w-auto sm:px-6"
+                >
+                  Let&apos;s Connect
+                </Link>
+              </div>
+              </motion.div>
             </motion.div>
-          </>
-        )}
-      </AnimatePresence>
+          )}
+        </AnimatePresence>,
+        document.body,
+      )}
     </header>
   );
 }
