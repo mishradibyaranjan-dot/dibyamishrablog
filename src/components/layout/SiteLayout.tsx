@@ -152,11 +152,20 @@ function Header() {
 
   useEffect(() => setOpen(false), [pathname]);
 
+  useEffect(() => {
+    if (!open) return;
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setOpen(false);
+    };
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [open]);
+
   return (
     <header
       data-site-header
       className={cn(
-        "sticky top-0 z-50 w-full transition-all duration-500",
+        "sticky top-0 z-50 w-full overflow-visible transition-all duration-500",
         scrolled
           ? "border-b border-slate-200 bg-white/85 backdrop-blur-xl shadow-[0_8px_30px_-15px_rgba(15,23,42,0.15)]"
           : "border-b border-transparent bg-white/60 backdrop-blur",
@@ -176,10 +185,11 @@ function Header() {
 
         <Button
           variant="ghost"
-          className="min-h-11 gap-2 px-3 text-slate-700 hover:bg-slate-100"
+          className="min-h-11 gap-2 rounded-full border border-border bg-background/90 px-4 text-foreground shadow-sm backdrop-blur-xl hover:bg-muted"
           onClick={() => setOpen((o) => !o)}
           aria-label="Main menu"
           aria-expanded={open}
+          aria-controls="main-menu-popover"
         >
           {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
           <span className="text-sm font-medium">Menu</span>
@@ -188,21 +198,32 @@ function Header() {
 
       <AnimatePresence>
         {open && (
-          <motion.div
-            initial={{ height: 0, opacity: 0 }}
-            animate={{ height: "auto", opacity: 1 }}
-            exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
-            className="overflow-hidden border-t border-slate-200 bg-white/95 backdrop-blur-xl"
-          >
-            <div className="mx-auto max-h-[80vh] max-w-7xl overflow-y-auto px-4 py-4 sm:px-6">
-              <nav className="grid gap-1 sm:grid-cols-2 lg:grid-cols-3">
+          <>
+            <motion.button
+              type="button"
+              aria-label="Close main menu"
+              className="fixed inset-0 top-16 cursor-default bg-transparent"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setOpen(false)}
+            />
+            <motion.div
+              id="main-menu-popover"
+              initial={{ opacity: 0, y: -10, scale: 0.97 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: -8, scale: 0.97 }}
+              transition={{ duration: 0.2, ease: [0.22, 1, 0.36, 1] }}
+              className="absolute right-4 top-[calc(100%+0.75rem)] z-10 w-[min(92vw,42rem)] overflow-hidden rounded-3xl border border-border bg-background/95 shadow-xl backdrop-blur-xl sm:right-6"
+            >
+              <div className="max-h-[min(75vh,42rem)] overflow-y-auto p-4 sm:p-5">
+                <nav className="grid gap-1 sm:grid-cols-2 lg:grid-cols-3">
                 {[...NAV, ...MORE_NAV].map((item) => (
                   <Link
                     key={item.to}
                     to={item.to}
-                    className="min-h-11 rounded-md px-3 py-2.5 text-sm font-medium text-slate-700 hover:bg-slate-100 hover:text-blue-600"
-                    activeProps={{ className: "text-blue-600 bg-blue-50" }}
+                    className="min-h-11 rounded-full px-4 py-2.5 text-sm font-medium text-foreground transition-colors hover:bg-muted hover:text-primary"
+                    activeProps={{ className: "bg-primary/10 text-primary" }}
                     activeOptions={{ exact: item.to === "/" }}
                   >
                     {item.label}
@@ -210,7 +231,7 @@ function Header() {
                 ))}
               </nav>
 
-              <div className="mt-4 flex flex-wrap items-center gap-2 border-t border-slate-200 pt-4">
+              <div className="mt-4 flex flex-wrap items-center gap-2 border-t border-border pt-4">
                 <GlobalSearch />
                 <ReadAloudButton />
                 <ThemeToggle />
@@ -220,12 +241,13 @@ function Header() {
 
               <Link
                 to="/contact"
-                className="mt-4 inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-xl bg-brand-gradient px-4 py-3 text-sm font-semibold text-white sm:w-auto sm:px-6"
+                className="mt-4 inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-full bg-primary px-4 py-3 text-sm font-semibold text-primary-foreground sm:w-auto sm:px-6"
               >
                 Let&apos;s Connect
               </Link>
             </div>
-          </motion.div>
+            </motion.div>
+          </>
         )}
       </AnimatePresence>
     </header>
