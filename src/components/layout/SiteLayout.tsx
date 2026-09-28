@@ -191,7 +191,8 @@ function Header() {
           <DialogContent
             id="main-menu-popover"
             aria-describedby={undefined}
-            className="z-[100] max-h-[calc(100dvh-2rem)] w-[calc(100%-2rem)] max-w-3xl gap-0 overflow-hidden rounded-2xl border-border p-0 shadow-2xl sm:max-h-[calc(100dvh-3rem)] sm:w-[calc(100%-3rem)] sm:rounded-3xl"
+            overlayClassName="bg-transparent"
+            className="z-[100] left-auto right-3 top-20 max-h-[calc(100dvh-6rem)] w-[calc(100%-1.5rem)] max-w-md translate-x-0 translate-y-0 gap-0 overflow-hidden rounded-2xl border-border bg-background/95 p-0 shadow-2xl backdrop-blur-xl data-[state=closed]:zoom-out-100 data-[state=open]:zoom-in-100 data-[state=open]:slide-in-from-top-2 data-[state=closed]:slide-out-to-top-2 sm:right-6 sm:rounded-3xl"
           >
             <div className="border-b border-border px-4 py-4 pr-14 sm:px-6 sm:py-5">
               <DialogTitle className="font-display text-lg font-semibold text-foreground sm:text-xl">
@@ -199,7 +200,7 @@ function Header() {
               </DialogTitle>
             </div>
             <div className="overflow-y-auto overscroll-contain p-3 sm:p-5">
-              <nav aria-label="Main navigation" className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
+              <nav aria-label="Main navigation" className="grid gap-2 sm:grid-cols-2">
                 {[...NAV, ...MORE_NAV].map((item) => (
                   <Link
                     key={item.to}
