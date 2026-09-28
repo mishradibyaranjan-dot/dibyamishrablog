@@ -34,7 +34,9 @@ const MAX_TEXT_PER_PART = 4000;
 const messagePartSchema = z.object({ type: z.string().max(64), text: z.string().max(MAX_TEXT_PER_PART).optional() }).passthrough();
 const messageSchema = z.object({
   id: z.string().max(128).optional(),
-  role: z.enum(["user", "assistant"]),
+  // Only caller-owned user turns are accepted; assistant history is never
+  // trusted from the client, so fabricated assistant turns cannot steer the model.
+  role: z.literal("user"),
   parts: z.array(messagePartSchema).max(32).optional(),
   content: z.union([z.string().max(MAX_TEXT_PER_PART), z.array(messagePartSchema).max(32)]).optional(),
 }).passthrough();
