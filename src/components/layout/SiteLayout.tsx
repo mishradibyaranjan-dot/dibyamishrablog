@@ -17,6 +17,7 @@ import { GlobalSearch } from "@/components/search/GlobalSearch";
 import { AccessibilityProvider } from "@/contexts/AccessibilityContext";
 import { LanguageProvider } from "@/contexts/LanguageContext";
 import { AccessibilityMenu, SelectionReader } from "@/components/a11y/AccessibilityMenu";
+import { LanguageToggle } from "@/components/a11y/LanguageToggle";
 import { SkipToContent, LiveAnnouncer } from "@/components/a11y/SkipToContent";
 import { ColorVisionFilters } from "@/components/a11y/ColorVisionFilters";
 import { MediaPauseGuard } from "@/components/a11y/MediaPauseGuard";
@@ -205,7 +206,7 @@ function Header() {
             <div className="overflow-y-auto overscroll-contain p-3 sm:p-5">
               <nav
                 aria-label="Main navigation"
-                className="grid gap-2 sm:grid-cols-2"
+                className="grid grid-cols-2 gap-1.5 sm:gap-2"
                 onKeyDown={(e) => {
                   const keys = ["ArrowDown", "ArrowUp", "ArrowRight", "ArrowLeft", "Home", "End"];
                   if (!keys.includes(e.key)) return;
@@ -224,7 +225,7 @@ function Header() {
                   <Link
                     key={item.to}
                     to={item.to}
-                    className="flex min-h-12 items-center rounded-xl px-4 py-3 text-base font-medium text-foreground outline-none transition-colors hover:bg-muted hover:text-primary focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 sm:min-h-11 sm:rounded-full sm:py-2.5 sm:text-sm"
+                    className="flex min-h-12 items-center rounded-xl px-3 py-2.5 text-sm font-medium text-foreground outline-none transition-colors hover:bg-muted hover:text-primary focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 sm:min-h-11 sm:rounded-full sm:px-4"
                     activeProps={{ className: "bg-primary/10 text-primary" }}
                     activeOptions={{ exact: item.to === "/" }}
                   >
@@ -233,10 +234,11 @@ function Header() {
                 ))}
               </nav>
 
-              <div role="group" aria-label="Site tools" className="mt-4 grid grid-cols-2 gap-2 border-t border-border pt-4 sm:flex sm:flex-wrap sm:items-center">
+              <div role="group" aria-label="Display and site tools" className="mt-4 grid grid-cols-2 gap-2 border-t border-border pt-4 sm:flex sm:flex-wrap sm:items-center">
                 <GlobalSearch />
                 <ReadAloudButton />
                 <ThemeToggle />
+                <LanguageToggle />
                 <AccessibilityMenu />
                 <UserMenu />
               </div>
@@ -306,6 +308,14 @@ function Footer() {
             Monthly research notes on AI, Cloud, and Engineering Leadership.
           </p>
           <NewsletterForm />
+          <div className="mt-6 border-t border-border pt-4">
+            <h4 className="text-sm font-semibold text-foreground">Display options</h4>
+            <div role="group" aria-label="Footer display options" className="mt-2 flex flex-wrap items-center gap-1">
+              <ThemeToggle />
+              <LanguageToggle />
+              <AccessibilityMenu />
+            </div>
+          </div>
         </div>
       </div>
       <div className="border-t border-slate-200">
