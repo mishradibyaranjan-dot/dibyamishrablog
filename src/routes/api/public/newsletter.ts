@@ -51,6 +51,13 @@ export const Route = createFileRoute("/api/public/newsletter")({
             .maybeSingle();
           const wasActive = existing?.status === "active";
 
+          if (existing?.status === "unsubscribed") {
+            // Never reactivate an unsubscribed address from an unauthenticated
+            // request — that would let anyone reverse another person's opt-out.
+            // The owner must resubscribe via a signed-in or confirmed flow.
+            return Response.json({ ok: true }, { headers: cors });
+          }
+
           const { error } = await supabaseAdmin
             .from("newsletter_subscribers")
             .upsert(

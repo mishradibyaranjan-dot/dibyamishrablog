@@ -84,13 +84,18 @@ export const Route = createFileRoute("/api/public/chat")({
         if (!parsed.success) return new Response("Invalid request body", { status: 400 });
         // Only plain text from user/assistant turns reaches the model; the system
         // prompt is always server-owned.
-        const messages = parsed.data.messages.map((m, i) => ({
-          id: m.id ?? `m${i}`,
-          role: m.role,
-          parts: (m.parts ?? (typeof m.content === "string" ? [{ type: "text", text: m.content }] : m.content ?? []))
-            .filter((p) => p.type === "text" && typeof p.text === "string")
-            .map((p) => ({ type: "text" as const, text: String(p.text) })),
-        })) as UIMessage[];
+        // Assistant-role history from the client is never trusted: a caller
+        // could fabricate assistant turns to steer the model. Only user turns
+        // are forwarded; the system prompt stays server-owned.
+        const messages = parsed.data.messages
+          .filter((m) => m.role === "user")
+          .map((m, i) => ({
+            id: m.id ?? `m${i}`,
+            role: "user" as const,
+            parts: (m.parts ?? (typeof m.content === "string" ? [{ type: "text", text: m.content }] : m.content ?? []))
+              .filter((p) => p.type === "text" && typeof p.text === "string")
+              .map((p) => ({ type: "text" as const, text: String(p.text) })),
+          })) as UIMessage[];
 
         const key = process.env.LOVABLE_API_KEY;
         if (!key) {
