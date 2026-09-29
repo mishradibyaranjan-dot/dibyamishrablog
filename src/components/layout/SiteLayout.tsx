@@ -159,8 +159,11 @@ function Header() {
           : "border-b border-transparent bg-background/70 backdrop-blur",
       )}
     >
-      <div className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-4 px-4 sm:px-6">
-        <Link to="/" className="group flex items-center gap-2 font-display text-lg font-bold">
+      <div className="mx-auto flex w-full max-w-7xl flex-wrap items-center gap-x-3 gap-y-0 px-4 pb-1.5 pt-2 sm:px-6 lg:h-16 lg:flex-nowrap lg:gap-4 lg:pb-0 lg:pt-0">
+        <Link
+          to="/"
+          className="order-1 flex min-w-0 flex-1 items-center gap-2 font-display text-lg font-bold lg:order-1 lg:flex-none"
+        >
           <motion.img
             whileHover={{ rotate: 8, scale: 1.06 }}
             transition={{ type: "spring", stiffness: 280, damping: 18 }}
@@ -170,13 +173,19 @@ function Header() {
           />
           <span className="truncate text-foreground">Dibya Ranjan Mishra</span>
         </Link>
-        <div className="flex shrink-0 items-center gap-1">
+        <div className="order-2 flex shrink-0 lg:order-3">
+          <UserMenu />
+        </div>
+        <div
+          role="group"
+          aria-label="Site controls"
+          className="order-3 flex w-full items-center justify-between gap-1 border-t border-border/50 pb-0.5 pt-2 lg:order-2 lg:w-auto lg:justify-end lg:border-0 lg:pt-0"
+        >
           <GlobalSearch compact />
           <ReadAloudButton compact />
           <ThemeToggle compact />
           <LanguageToggle compact />
           <AccessibilityMenu compact />
-          <UserMenu />
         </div>
       </div>
     </header>
