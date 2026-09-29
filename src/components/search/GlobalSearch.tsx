@@ -10,7 +10,7 @@ import { cn } from "@/lib/utils";
  * Site-wide search across Research/Blog, Case Studies, Projects, Expertise and
  * Learn. Opens with the header button or Cmd/Ctrl+K.
  */
-export function GlobalSearch() {
+export function GlobalSearch({ compact = false }: { compact?: boolean }) {
   const [open, setOpen] = useState(false);
   const [query, setQuery] = useState("");
   const [section, setSection] = useState<SearchSection | "all">("all");
@@ -58,13 +58,19 @@ export function GlobalSearch() {
         type="button"
         onClick={() => setOpen(true)}
         aria-label="Search the site"
-        className="inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-full border border-border bg-card px-3 py-2 text-sm text-muted-foreground transition-colors hover:text-foreground"
+        title="Search the site (⌘K)"
+        className={cn(
+          "inline-flex min-h-11 items-center justify-center gap-2 rounded-full border border-border bg-card px-3 py-2 text-sm text-muted-foreground transition-colors hover:text-foreground",
+          compact ? "w-11 px-0" : "w-full",
+        )}
       >
         <Search className="h-4 w-4" />
-        <span>Search</span>
-        <kbd className="hidden rounded border border-border bg-muted px-1.5 py-0.5 text-[10px] font-medium xl:inline">
-          ⌘K
-        </kbd>
+        <span className={cn(compact && "sr-only")}>Search</span>
+        {!compact && (
+          <kbd className="hidden rounded border border-border bg-muted px-1.5 py-0.5 text-[10px] font-medium xl:inline">
+            ⌘K
+          </kbd>
+        )}
       </button>
 
       <Dialog open={open} onOpenChange={setOpen}>
