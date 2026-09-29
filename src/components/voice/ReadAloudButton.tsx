@@ -3,6 +3,7 @@ import { Volume2, Square, Loader2, Play, VolumeX } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Slider } from "@/components/ui/slider";
+import { cn } from "@/lib/utils";
 
 const VOLUME_KEY = "drm-tts-volume:v1";
 
@@ -44,7 +45,7 @@ function collectPageText(): string {
   return text.slice(0, 4500);
 }
 
-export function ReadAloudButton() {
+export function ReadAloudButton({ compact = false }: { compact?: boolean }) {
   const [state, setState] = useState<"idle" | "loading" | "playing">("idle");
   // Initialize with a stable default so SSR and first client render match.
   // The persisted value is loaded from localStorage after mount.
@@ -171,7 +172,10 @@ export function ReadAloudButton() {
           size="sm"
           aria-label="Read this page aloud"
           title="Read this page aloud"
-          className="min-h-11 w-full justify-center gap-2 text-foreground/80 hover:bg-foreground/10"
+          className={cn(
+            "min-h-11 justify-center gap-2 text-foreground/80 hover:bg-foreground/10",
+            compact ? "w-11 px-0" : "w-full",
+          )}
         >
           {state === "loading" ? (
             <Loader2 className="h-4 w-4 animate-spin" />
@@ -180,7 +184,7 @@ export function ReadAloudButton() {
           ) : (
             <VolumeIcon className="h-4 w-4" />
           )}
-          <span className="text-xs font-medium">Read aloud</span>
+          <span className={cn("text-xs font-medium", compact && "sr-only")}>Read aloud</span>
         </Button>
       </PopoverTrigger>
       <PopoverContent align="end" className="w-64 space-y-4" data-no-read>

@@ -12,6 +12,9 @@ import { AuroraBackground } from "@/components/cinematic/AuroraBackground";
 import { PageTransition } from "@/components/cinematic/PageTransition";
 import { ThemeProvider } from "@/components/theme/ThemeProvider";
 import { ThemeToggle } from "@/components/theme/ThemeToggle";
+import { GlobalSearch } from "@/components/search/GlobalSearch";
+import { ReadAloudButton } from "@/components/voice/ReadAloudButton";
+import { UserMenu } from "@/components/auth/UserMenu";
 import { AccessibilityProvider } from "@/contexts/AccessibilityContext";
 import { LanguageProvider } from "@/contexts/LanguageContext";
 import { AccessibilityMenu, SelectionReader } from "@/components/a11y/AccessibilityMenu";
@@ -168,9 +171,12 @@ function Header() {
           <span className="truncate text-foreground">Dibya Ranjan Mishra</span>
         </Link>
         <div className="flex shrink-0 items-center gap-1">
+          <GlobalSearch compact />
+          <ReadAloudButton compact />
           <ThemeToggle compact />
           <LanguageToggle compact />
           <AccessibilityMenu compact />
+          <UserMenu />
         </div>
       </div>
     </header>
