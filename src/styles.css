@@ -119,18 +119,6 @@
   --special-border: color-mix(in oklab, var(--special) 40%, transparent);
 }
 
-/* The translation service UI stays hidden; visitors use the site's accessible selector. */
-.translation-widget,
-.goog-te-banner-frame,
-.goog-te-balloon-frame,
-#goog-gt-tt {
-  display: none !important;
-}
-html.translated-ltr body,
-html.translated-rtl body {
-  top: 0 !important;
-}
-
 
 /* Futuristic cinematic dark theme — default for entire site */
 :root,

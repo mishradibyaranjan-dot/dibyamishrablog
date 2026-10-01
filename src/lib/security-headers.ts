@@ -19,14 +19,14 @@ export const SECURITY_HEADERS: Readonly<Record<string, string>> = Object.freeze(
     "object-src 'none'",
     "frame-ancestors 'none'",
     "form-action 'self'",
-    "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.gpteng.co https://translate.google.com https://translate.googleapis.com https://translate-pa.googleapis.com",
-    "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://www.gstatic.com",
+    "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.gpteng.co",
+    "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
     "font-src 'self' https://fonts.gstatic.com https://cdn.gpteng.co data:",
     "img-src 'self' data: blob: https:",
     "connect-src 'self' https: wss:",
     "media-src 'self' blob: data:",
     // All site video is self-hosted; no third-party video embeds are allowed.
-    "frame-src 'self' https://translate.google.com",
+    "frame-src 'self'",
     // pdf.js renders the inline Learn PDF reader in a same-origin/blob worker.
     "worker-src 'self' blob:",
     "upgrade-insecure-requests",
