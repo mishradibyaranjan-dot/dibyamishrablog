@@ -3,32 +3,82 @@
  * back to English so a raw key is never rendered.
  */
 
-export type LocaleId = "en" | "hi" | "ta" | "es" | "fr" | "ar";
+export type LocaleId = string;
 
-export const LOCALES: { id: LocaleId; native: string; english: string; dir: "ltr" | "rtl" }[] = [
-  { id: "en", native: "English", english: "English", dir: "ltr" },
-  { id: "hi", native: "हिन्दी", english: "Hindi", dir: "ltr" },
-  { id: "ta", native: "தமிழ்", english: "Tamil", dir: "ltr" },
-  { id: "es", native: "Español", english: "Spanish", dir: "ltr" },
-  { id: "fr", native: "Français", english: "French", dir: "ltr" },
-  { id: "ar", native: "العربية", english: "Arabic", dir: "rtl" },
-];
-
-export const SPEECH_LANG: Record<LocaleId, string> = {
-  en: "en-US",
-  hi: "hi-IN",
-  ta: "ta-IN",
-  es: "es-ES",
-  fr: "fr-FR",
-  ar: "ar-SA",
+export type LocaleOption = {
+  id: string;
+  native: string;
+  english: string;
+  dir: "ltr" | "rtl";
+  speech?: string;
 };
 
+const RTL_LOCALES = new Set(["ar", "dv", "he", "fa", "ps", "sd", "ug", "ur", "yi", "ku"]);
+
+/** Languages supported by the full-page translation service. */
+export const LOCALES: LocaleOption[] = [
+  ["af", "Afrikaans", "Afrikaans"], ["sq", "Shqip", "Albanian"], ["am", "አማርኛ", "Amharic"],
+  ["ar", "العربية", "Arabic", "ar-SA"], ["hy", "Հայերեն", "Armenian"], ["as", "অসমীয়া", "Assamese"],
+  ["ay", "Aymar aru", "Aymara"], ["az", "Azərbaycan", "Azerbaijani"], ["bm", "Bamanankan", "Bambara"],
+  ["eu", "Euskara", "Basque"], ["be", "Беларуская", "Belarusian"], ["bn", "বাংলা", "Bengali", "bn-IN"],
+  ["bho", "भोजपुरी", "Bhojpuri"], ["bs", "Bosanski", "Bosnian"], ["bg", "Български", "Bulgarian"],
+  ["ca", "Català", "Catalan"], ["ceb", "Cebuano", "Cebuano"], ["zh-CN", "简体中文", "Chinese (Simplified)", "zh-CN"],
+  ["zh-TW", "繁體中文", "Chinese (Traditional)", "zh-TW"], ["co", "Corsu", "Corsican"], ["hr", "Hrvatski", "Croatian"],
+  ["cs", "Čeština", "Czech"], ["da", "Dansk", "Danish"], ["dv", "ދިވެހި", "Dhivehi"],
+  ["doi", "डोगरी", "Dogri"], ["nl", "Nederlands", "Dutch"], ["en", "English", "English", "en-US"],
+  ["eo", "Esperanto", "Esperanto"], ["et", "Eesti", "Estonian"], ["ee", "Eʋegbe", "Ewe"],
+  ["fil", "Filipino", "Filipino"], ["fi", "Suomi", "Finnish"], ["fr", "Français", "French", "fr-FR"],
+  ["fy", "Frysk", "Frisian"], ["gl", "Galego", "Galician"], ["ka", "ქართული", "Georgian"],
+  ["de", "Deutsch", "German", "de-DE"], ["el", "Ελληνικά", "Greek"], ["gn", "Avañe'ẽ", "Guarani"],
+  ["gu", "ગુજરાતી", "Gujarati", "gu-IN"], ["ht", "Kreyòl ayisyen", "Haitian Creole"], ["ha", "Hausa", "Hausa"],
+  ["haw", "ʻŌlelo Hawaiʻi", "Hawaiian"], ["he", "עברית", "Hebrew", "he-IL"], ["hi", "हिन्दी", "Hindi", "hi-IN"],
+  ["hmn", "Hmoob", "Hmong"], ["hu", "Magyar", "Hungarian"], ["is", "Íslenska", "Icelandic"],
+  ["ig", "Igbo", "Igbo"], ["ilo", "Ilocano", "Ilocano"], ["id", "Bahasa Indonesia", "Indonesian"],
+  ["ga", "Gaeilge", "Irish"], ["it", "Italiano", "Italian", "it-IT"], ["ja", "日本語", "Japanese", "ja-JP"],
+  ["jv", "Basa Jawa", "Javanese"], ["kn", "ಕನ್ನಡ", "Kannada", "kn-IN"], ["kk", "Қазақша", "Kazakh"],
+  ["km", "ខ្មែរ", "Khmer"], ["rw", "Kinyarwanda", "Kinyarwanda"], ["ko", "한국어", "Korean", "ko-KR"],
+  ["kri", "Krio", "Krio"], ["ku", "Kurdî", "Kurdish"], ["ky", "Кыргызча", "Kyrgyz"],
+  ["lo", "ລາວ", "Lao"], ["la", "Latina", "Latin"], ["lv", "Latviešu", "Latvian"],
+  ["ln", "Lingála", "Lingala"], ["lt", "Lietuvių", "Lithuanian"], ["lg", "Luganda", "Luganda"],
+  ["lb", "Lëtzebuergesch", "Luxembourgish"], ["mk", "Македонски", "Macedonian"], ["mai", "मैथिली", "Maithili"],
+  ["mg", "Malagasy", "Malagasy"], ["ms", "Bahasa Melayu", "Malay"], ["ml", "മലയാളം", "Malayalam", "ml-IN"],
+  ["mt", "Malti", "Maltese"], ["mi", "Māori", "Māori"], ["mr", "मराठी", "Marathi", "mr-IN"],
+  ["mni-Mtei", "ꯃꯤꯇꯩꯂꯣꯟ", "Meiteilon"], ["lus", "Mizo ṭawng", "Mizo"], ["mn", "Монгол", "Mongolian"],
+  ["my", "မြန်မာ", "Myanmar"], ["ne", "नेपाली", "Nepali", "ne-NP"], ["no", "Norsk", "Norwegian"],
+  ["ny", "Chichewa", "Nyanja"], ["or", "ଓଡ଼ିଆ", "Odia"], ["om", "Afaan Oromoo", "Oromo"],
+  ["ps", "پښتو", "Pashto"], ["fa", "فارسی", "Persian", "fa-IR"], ["pl", "Polski", "Polish"],
+  ["pt", "Português", "Portuguese", "pt-PT"], ["pa", "ਪੰਜਾਬੀ", "Punjabi", "pa-IN"], ["qu", "Runasimi", "Quechua"],
+  ["ro", "Română", "Romanian"], ["ru", "Русский", "Russian", "ru-RU"], ["sm", "Gagana Sāmoa", "Samoan"],
+  ["sa", "संस्कृतम्", "Sanskrit"], ["gd", "Gàidhlig", "Scots Gaelic"], ["nso", "Sepedi", "Sepedi"],
+  ["sr", "Српски", "Serbian"], ["st", "Sesotho", "Sesotho"], ["sn", "ChiShona", "Shona"],
+  ["sd", "سنڌي", "Sindhi"], ["si", "සිංහල", "Sinhala"], ["sk", "Slovenčina", "Slovak"],
+  ["sl", "Slovenščina", "Slovenian"], ["so", "Soomaali", "Somali"], ["es", "Español", "Spanish", "es-ES"],
+  ["su", "Basa Sunda", "Sundanese"], ["sw", "Kiswahili", "Swahili"], ["sv", "Svenska", "Swedish"],
+  ["ta", "தமிழ்", "Tamil", "ta-IN"], ["tt", "Татарча", "Tatar"], ["te", "తెలుగు", "Telugu", "te-IN"],
+  ["th", "ไทย", "Thai", "th-TH"], ["ti", "ትግርኛ", "Tigrinya"], ["ts", "Tsonga", "Tsonga"],
+  ["tr", "Türkçe", "Turkish", "tr-TR"], ["tk", "Türkmençe", "Turkmen"], ["ak", "Twi", "Twi"],
+  ["uk", "Українська", "Ukrainian"], ["ur", "اردو", "Urdu", "ur-PK"], ["ug", "ئۇيغۇرچە", "Uyghur"],
+  ["uz", "Oʻzbekcha", "Uzbek"], ["vi", "Tiếng Việt", "Vietnamese", "vi-VN"], ["cy", "Cymraeg", "Welsh"],
+  ["xh", "IsiXhosa", "Xhosa"], ["yi", "ייִדיש", "Yiddish"], ["yo", "Yorùbá", "Yoruba"],
+  ["zu", "IsiZulu", "Zulu"],
+].map(([id, native, english, speech]) => ({
+  id,
+  native,
+  english,
+  dir: RTL_LOCALES.has(id) ? "rtl" : "ltr",
+  speech,
+}));
+
+export const SPEECH_LANG: Record<string, string> = Object.fromEntries(
+  LOCALES.map((locale) => [locale.id, locale.speech ?? locale.id]),
+);
+
 export function isLocaleId(v: unknown): v is LocaleId {
-  return typeof v === "string" && LOCALES.some((l) => l.id === v);
+  return typeof v === "string" && LOCALES.some((locale) => locale.id === v);
 }
 
 export function localeDir(locale: string): "ltr" | "rtl" {
-  return LOCALES.find((l) => l.id === locale)?.dir ?? "ltr";
+  return LOCALES.find((item) => item.id === locale)?.dir ?? "ltr";
 }
 
 const en = {
@@ -73,7 +123,7 @@ const en = {
 
 export type TranslationKey = keyof typeof en;
 
-const dictionaries: Record<LocaleId, Partial<Record<TranslationKey, string>>> = {
+const dictionaries: Record<string, Partial<Record<TranslationKey, string>>> = {
   en,
   hi: {
     "a11y.title": "सुगम्यता और प्राथमिकताएँ",
