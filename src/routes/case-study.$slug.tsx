@@ -49,7 +49,7 @@ export const Route = createFileRoute("/case-study/$slug")({
       ],
     };
   },
-  notFoundComponent: CaseStudyMissing,
+  notFoundComponent: () => <CaseStudyMissing />,
   component: CaseStudyDetail,
 });
 

@@ -100,7 +100,7 @@ export function normalizePrefs(raw: unknown): A11yPreferences {
     speechPitch: num(p.speechPitch, d.speechPitch, 0.5, 1.5),
     speechVolume: num(p.speechVolume, d.speechVolume, 0, 1),
     readOnSelection: p.readOnSelection === true,
-    locale: typeof p.locale === "string" && p.locale.length <= 8 ? p.locale : d.locale,
+    locale: typeof p.locale === "string" && p.locale.length <= 16 ? p.locale : d.locale,
   };
 }
 

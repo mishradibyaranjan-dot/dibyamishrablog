@@ -19,6 +19,7 @@ import { AccessibilityProvider } from "@/contexts/AccessibilityContext";
 import { LanguageProvider } from "@/contexts/LanguageContext";
 import { AccessibilityMenu, SelectionReader } from "@/components/a11y/AccessibilityMenu";
 import { LanguageToggle } from "@/components/a11y/LanguageToggle";
+import { FullPageTranslation } from "@/components/a11y/FullPageTranslation";
 import { SkipToContent, LiveAnnouncer } from "@/components/a11y/SkipToContent";
 import { ColorVisionFilters } from "@/components/a11y/ColorVisionFilters";
 import { MediaPauseGuard } from "@/components/a11y/MediaPauseGuard";
@@ -303,6 +304,7 @@ export function SiteLayout() {
               <MediaPauseGuard />
               <SelectionReader />
               <ColorVisionFilters />
+              <FullPageTranslation />
               <div className="relative flex min-h-dvh flex-col">
                 <SkipToContent />
                 <Header />
