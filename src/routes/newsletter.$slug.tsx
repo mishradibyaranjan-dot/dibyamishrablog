@@ -103,7 +103,7 @@ function PendingIssue() {
   );
 }
 
-function IssueError({ error }: { error: Error }) {
+function IssueError({ error }: import("@tanstack/react-router").ErrorComponentProps) {
   const router = useRouter();
   return (
     <Section>
