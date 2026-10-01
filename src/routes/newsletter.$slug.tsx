@@ -116,7 +116,7 @@ function IssueError({ error }: import("@tanstack/react-router").ErrorComponentPr
           Couldn't load this issue
         </h1>
         <p className="text-sm text-white/70">
-          {error?.message || "Something went wrong while fetching this newsletter."}
+          {(error as Error)?.message || "Something went wrong while fetching this newsletter."}
         </p>
         <div className="flex flex-wrap justify-center gap-2">
           <Button onClick={() => router.invalidate()} className="bg-brand-gradient text-white">
