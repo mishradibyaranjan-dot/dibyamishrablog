@@ -231,7 +231,7 @@ function MenuBody() {
   const speech = useSpeech();
 
   const themeMode = prefs.themeMode;
-  const colorThemes = useMemo(() => THEMES.filter((x) => x.mode === (theme === DARK_THEME || THEMES.find((th) => th.id === theme)?.mode === "dark" ? "dark" : "light")), [theme]);
+  const colorThemes = useMemo(() => THEMES, []);
 
   const applyThemeMode = (mode: "light" | "dark" | "system") => {
     setPref("themeMode", mode);

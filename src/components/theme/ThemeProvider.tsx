@@ -22,23 +22,54 @@ export const THEMES = [
 
 export type ThemeId = (typeof THEMES)[number]["id"];
 export type ThemeMode = (typeof THEMES)[number]["mode"];
+export type CustomBrandColors = { primary: string; accent: string };
 
 const STORAGE_KEY = "drm-theme";
+const CUSTOM_COLORS_KEY = "drm-custom-brand-colors";
 const DEFAULT_THEME: ThemeId = "glacier";
+export const DEFAULT_CUSTOM_COLORS: CustomBrandColors = { primary: "#1267D6", accent: "#16A394" };
 
 export function themeMode(theme: ThemeId): ThemeMode {
   return THEMES.find((t) => t.id === theme)?.mode ?? "light";
 }
 
-type Ctx = { theme: ThemeId; setTheme: (t: ThemeId) => void };
-const ThemeContext = createContext<Ctx>({ theme: DEFAULT_THEME, setTheme: () => {} });
+type Ctx = {
+  theme: ThemeId;
+  setTheme: (t: ThemeId) => void;
+  customColors: CustomBrandColors | null;
+  setCustomColors: (colors: CustomBrandColors) => void;
+  resetCustomColors: () => void;
+};
+const ThemeContext = createContext<Ctx>({
+  theme: DEFAULT_THEME,
+  setTheme: () => {},
+  customColors: null,
+  setCustomColors: () => {},
+  resetCustomColors: () => {},
+});
 
 function isThemeId(v: string | null | undefined): v is ThemeId {
   return !!v && THEMES.some((t) => t.id === v);
 }
 
+function isHexColor(value: unknown): value is string {
+  return typeof value === "string" && /^#[0-9a-f]{6}$/i.test(value);
+}
+
+function readCustomColors(): CustomBrandColors | null {
+  try {
+    const parsed = JSON.parse(window.localStorage.getItem(CUSTOM_COLORS_KEY) ?? "null") as Partial<CustomBrandColors> | null;
+    return parsed && isHexColor(parsed.primary) && isHexColor(parsed.accent)
+      ? { primary: parsed.primary.toUpperCase(), accent: parsed.accent.toUpperCase() }
+      : null;
+  } catch {
+    return null;
+  }
+}
+
 export function ThemeProvider({ children }: { children: ReactNode }) {
   const [theme, setThemeState] = useState<ThemeId>(DEFAULT_THEME);
+  const [customColors, setCustomColorsState] = useState<CustomBrandColors | null>(null);
   const userIdRef = useRef<string | null>(null);
 
   // Local (per-browser) restore — instant, no network.
@@ -47,6 +78,9 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     const initial = isThemeId(stored) ? stored : DEFAULT_THEME;
     setThemeState(initial);
     applyTheme(initial, false);
+    const storedColors = readCustomColors();
+    setCustomColorsState(storedColors);
+    applyCustomColors(storedColors);
   }, []);
 
   // Cross-device restore + sync: signed-in users carry their theme in their profile.
@@ -110,7 +144,58 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     }
   }, []);
 
-  return <ThemeContext.Provider value={{ theme, setTheme }}>{children}</ThemeContext.Provider>;
+  const setCustomColors = useCallback((colors: CustomBrandColors) => {
+    if (!isHexColor(colors.primary) || !isHexColor(colors.accent)) return;
+    const next = { primary: colors.primary.toUpperCase(), accent: colors.accent.toUpperCase() };
+    setCustomColorsState(next);
+    applyCustomColors(next);
+    try {
+      window.localStorage.setItem(CUSTOM_COLORS_KEY, JSON.stringify(next));
+    } catch {
+      /* preferences remain available for this session */
+    }
+  }, []);
+
+  const resetCustomColors = useCallback(() => {
+    setCustomColorsState(null);
+    applyCustomColors(null);
+    try {
+      window.localStorage.removeItem(CUSTOM_COLORS_KEY);
+    } catch {
+      /* ignore */
+    }
+  }, []);
+
+  return (
+    <ThemeContext.Provider value={{ theme, setTheme, customColors, setCustomColors, resetCustomColors }}>
+      {children}
+    </ThemeContext.Provider>
+  );
+}
+
+function readableForeground(hex: string): string {
+  const channels = [1, 3, 5].map((index) => Number.parseInt(hex.slice(index, index + 2), 16) / 255);
+  const [red = 0, green = 0, blue = 0] = channels.map((channel) =>
+    channel <= 0.04045 ? channel / 12.92 : ((channel + 0.055) / 1.055) ** 2.4,
+  );
+  return 0.2126 * red + 0.7152 * green + 0.0722 * blue > 0.42 ? "#111827" : "#FFFFFF";
+}
+
+function applyCustomColors(colors: CustomBrandColors | null) {
+  if (typeof document === "undefined") return;
+  const style = document.documentElement.style;
+  const properties = ["--primary", "--primary-foreground", "--ring", "--brand", "--brand-2", "--gradient-brand", "--gradient-text"];
+  if (!colors) {
+    properties.forEach((property) => style.removeProperty(property));
+    return;
+  }
+  style.setProperty("--primary", colors.primary);
+  style.setProperty("--primary-foreground", readableForeground(colors.primary));
+  style.setProperty("--ring", colors.primary);
+  style.setProperty("--brand", colors.primary);
+  style.setProperty("--brand-2", colors.accent);
+  style.setProperty("--gradient-brand", `linear-gradient(135deg, ${colors.primary}, ${colors.accent})`);
+  style.setProperty("--gradient-text", `linear-gradient(100deg, ${colors.primary}, ${colors.accent})`);
 }
 
 function applyTheme(theme: ThemeId, enableTransition: boolean) {
