@@ -2,22 +2,33 @@ import { useEffect, useRef } from "react";
 import { useRouterState } from "@tanstack/react-router";
 import { useTranslation } from "@/contexts/LanguageContext";
 
-const TRANSLATABLE_SELECTOR = "h1,h2,h3,h4,h5,h6,p,li,a,button,label,th,td,figcaption,blockquote,option,[role='menuitem']";
+const TRANSLATABLE_SELECTOR = "h1,h2,h3,h4,h5,h6,p,li,a,button,label,th,td,figcaption,blockquote,option,span,[role='menuitem']";
 const SKIP_SELECTOR = "[translate='no'],[data-no-translate],code,pre,kbd,samp,script,style,textarea,input,select,.translation-widget";
 const MAX_BATCH_CHARS = 2800;
 const cache = new Map<string, string>();
 const originalText = new WeakMap<Text, string>();
+const translatedAs = new WeakMap<Text, { locale: string; text: string }>();
 
-function eligibleTextNodes(): Text[] {
+/** Collects text nodes not yet translated into `locale` (new or re-rendered by React). */
+function eligibleTextNodes(locale: string): Text[] {
   const nodes: Text[] = [];
+  const seen = new Set<Text>();
   document.querySelectorAll<HTMLElement>(TRANSLATABLE_SELECTOR).forEach((element) => {
     if (element.closest(SKIP_SELECTOR)) return;
     element.childNodes.forEach((node) => {
       if (node.nodeType !== Node.TEXT_NODE) return;
-      const value = node.textContent?.trim() ?? "";
+      const text = node as Text;
+      if (seen.has(text)) return;
+      seen.add(text);
+      const current = text.textContent ?? "";
+      const done = translatedAs.get(text);
+      if (done && done.text === current && done.locale === locale) return;
+      // React replaced translated text with fresh English: treat it as the new source.
+      if (done && done.text !== current) originalText.set(text, current);
+      const value = current.trim();
       if (value.length < 2 || !/[A-Za-z]/.test(value) || /^(https?:\/\/|\S+@\S+)$/.test(value)) return;
-      originalText.set(node as Text, originalText.get(node as Text) ?? node.textContent ?? "");
-      nodes.push(node as Text);
+      if (!originalText.has(text)) originalText.set(text, current);
+      nodes.push(text);
     });
   });
   return nodes;
@@ -27,8 +38,11 @@ function restoreEnglish() {
   document.querySelectorAll<HTMLElement>(TRANSLATABLE_SELECTOR).forEach((element) => {
     element.childNodes.forEach((node) => {
       if (node.nodeType !== Node.TEXT_NODE) return;
-      const original = originalText.get(node as Text);
-      if (original !== undefined) node.textContent = original;
+      const text = node as Text;
+      const done = translatedAs.get(text);
+      const original = originalText.get(text);
+      if (done && original !== undefined && done.text === text.textContent) text.textContent = original;
+      translatedAs.delete(text);
     });
   });
 }
@@ -76,6 +90,7 @@ async function translateNodes(nodes: Text[], locale: string, signal: AbortSignal
     const source = group.map((node) => originalText.get(node) ?? node.textContent ?? "");
     const separator = "\n⟪DRM_BREAK⟫\n";
     const translated = await translateText(source.join(separator), locale, signal);
+    if (signal.aborted) return;
     let parts = translated.split(/\s*⟪DRM_BREAK⟫\s*/);
     if (parts.length !== group.length) {
       parts = [];
@@ -83,14 +98,18 @@ async function translateNodes(nodes: Text[], locale: string, signal: AbortSignal
     }
     group.forEach((node, index) => {
       const original = originalText.get(node) ?? "";
+      // Skip nodes React changed while the request was in flight; the next pass handles them.
+      if (node.textContent !== original && !translatedAs.has(node)) return;
       const leading = original.match(/^\s*/)?.[0] ?? "";
       const trailing = original.match(/\s*$/)?.[0] ?? "";
-      node.textContent = `${leading}${parts[index]?.trim() ?? original.trim()}${trailing}`;
+      const next = `${leading}${parts[index]?.trim() ?? original.trim()}${trailing}`;
+      node.textContent = next;
+      translatedAs.set(node, { locale, text: next });
     });
   }
 }
 
-/** Translates authored and route-loaded visible text after a visitor selects a language. */
+/** Translates visible text after a visitor selects a language, including content that loads later. */
 export function FullPageTranslation() {
   const { locale, setTranslationStatus } = useTranslation();
   const pathname = useRouterState({ select: (state) => state.location.pathname });
@@ -98,29 +117,59 @@ export function FullPageTranslation() {
 
   useEffect(() => {
     const controller = new AbortController();
-    const timer = window.setTimeout(async () => {
+    let running = false;
+    let pending = false;
+    let debounce: number | undefined;
+    let observer: MutationObserver | undefined;
+
+    const pass = async (initial: boolean) => {
+      if (running) {
+        pending = true;
+        return;
+      }
+      running = true;
       try {
-        restoreEnglish();
-        if (locale === "en") {
-          translatedLocale.current = "en";
-          setTranslationStatus("idle");
-          return;
+        const nodes = eligibleTextNodes(locale);
+        if (nodes.length || initial) {
+          if (initial) setTranslationStatus("loading");
+          await translateNodes(nodes, locale, controller.signal);
         }
-        setTranslationStatus("loading");
-        const nodes = eligibleTextNodes();
-        await translateNodes(nodes, locale, controller.signal);
         if (controller.signal.aborted) return;
         translatedLocale.current = locale;
-        setTranslationStatus("ready");
+        if (initial) setTranslationStatus("ready");
       } catch (error) {
         if (controller.signal.aborted) return;
         console.warn("Page translation unavailable", error);
         setTranslationStatus("error");
+      } finally {
+        running = false;
+        if (pending && !controller.signal.aborted) {
+          pending = false;
+          void pass(false);
+        }
       }
+    };
+
+    const timer = window.setTimeout(async () => {
+      restoreEnglish();
+      if (locale === "en") {
+        translatedLocale.current = "en";
+        setTranslationStatus("idle");
+        return;
+      }
+      await pass(true);
+      if (controller.signal.aborted) return;
+      observer = new MutationObserver(() => {
+        window.clearTimeout(debounce);
+        debounce = window.setTimeout(() => void pass(false), 250);
+      });
+      observer.observe(document.body, { childList: true, subtree: true, characterData: true });
     }, pathname ? 180 : 0);
 
     return () => {
       window.clearTimeout(timer);
+      window.clearTimeout(debounce);
+      observer?.disconnect();
       controller.abort();
     };
   }, [locale, pathname, setTranslationStatus]);
