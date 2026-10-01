@@ -1,4 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { readingMinutes, issueExtras } from "@/lib/newsletter-format";
+import { Badge } from "@/components/ui/badge";
 import { useEffect, useState } from "react";
 import { Mail, ArrowRight, FileText } from "lucide-react";
 import { Section, SectionHeader } from "@/components/layout/Section";
@@ -15,6 +17,7 @@ type IssueRow = {
   summary: string;
   hero_emoji: string;
   published_at: string | null;
+  body_markdown: string | null;
 };
 
 export const Route = createFileRoute("/newsletter/")({
@@ -54,7 +57,7 @@ function NewsletterArchive() {
   useEffect(() => {
     supabase
       .from("newsletter_issues")
-      .select("id, slug, title, summary, hero_emoji, published_at")
+      .select("id, slug, title, summary, hero_emoji, published_at, body_markdown")
       .eq("status", "published")
       .order("published_at", { ascending: false })
       .then(({ data }) => {
@@ -112,6 +115,13 @@ function NewsletterArchive() {
               {it.title}
             </h3>
             <p className="mt-2 line-clamp-3 text-sm text-white/70">{it.summary}</p>
+            {issueExtras[it.slug]?.categories && (
+              <div className="mt-3 flex flex-wrap gap-1.5">
+                {issueExtras[it.slug]!.categories!.slice(0, 4).map((c) => (
+                  <Badge key={c} variant="secondary">{c}</Badge>
+                ))}
+              </div>
+            )}
             <div className="mt-auto flex items-center justify-between pt-4 text-xs text-white/50">
               <span>
                 {it.published_at
@@ -120,6 +130,7 @@ function NewsletterArchive() {
                       year: "numeric",
                     })
                   : ""}
+                {" · "}{readingMinutes(it.body_markdown)} min read
               </span>
               <ArrowRight className="h-4 w-4 transition group-hover:translate-x-1" />
             </div>

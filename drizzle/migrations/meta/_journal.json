@@ -29,6 +29,13 @@
       "when": 1790575469292,
       "tag": "0003_newsletter_runs_linkedin_status",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1790826470872,
+      "tag": "0004_publish_october_2026_brief",
+      "breakpoints": true
     }
   ]
 }

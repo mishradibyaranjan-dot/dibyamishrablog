@@ -6,6 +6,8 @@ import { supabase } from "@/integrations/supabase/client";
 import { SITE_ORIGIN, pageOgImages } from "@/lib/og-images";
 import { breadcrumbScript } from "@/lib/breadcrumbs";
 import collabNewsletter from "@/assets/collab-newsletter.jpg";
+import { Badge } from "@/components/ui/badge";
+import { issueExtras, readingMinutes, extractHeadings, slugifyHeading } from "@/lib/newsletter-format";
 
 type Issue = {
   id: string;
@@ -101,7 +103,7 @@ function PendingIssue() {
   );
 }
 
-function IssueError({ error }: { error: Error }) {
+function IssueError({ error }: import("@tanstack/react-router").ErrorComponentProps) {
   const router = useRouter();
   return (
     <Section>
@@ -114,7 +116,7 @@ function IssueError({ error }: { error: Error }) {
           Couldn't load this issue
         </h1>
         <p className="text-sm text-white/70">
-          {error?.message || "Something went wrong while fetching this newsletter."}
+          {(error as Error)?.message || "Something went wrong while fetching this newsletter."}
         </p>
         <div className="flex flex-wrap justify-center gap-2">
           <Button onClick={() => router.invalidate()} className="bg-brand-gradient text-white">
@@ -155,6 +157,9 @@ function IssueNotFound() {
 
 function IssuePage() {
   const issue = Route.useLoaderData() as Issue;
+  const extras = issueExtras[issue.slug] ?? {};
+  const minutes = readingMinutes(issue.body_markdown);
+  const headings = extractHeadings(issue.body_markdown);
   const paragraphs: string[] = issue.body_markdown
     .replace(/\r\n/g, "\n")
     .split(/\n{2,}/)
@@ -163,14 +168,17 @@ function IssuePage() {
 
   return (
     <Section>
-      <div className="mx-auto max-w-3xl">
-        <Link
-          to="/newsletter"
-          className="mb-6 inline-flex items-center gap-1 text-sm text-white/60 hover:text-white"
-        >
-          <ArrowLeft className="h-4 w-4" /> All issues
-        </Link>
-        <figure className="mb-6 overflow-hidden rounded-2xl border border-blue-100 bg-gradient-to-br from-blue-50 via-white to-amber-50">
+      <div className="mx-auto max-w-5xl">
+        <nav aria-label="Breadcrumb" className="mb-6 text-sm text-muted-foreground">
+          <ol className="flex flex-wrap items-center gap-1.5">
+            <li><Link to="/" className="hover:text-foreground">Home</Link></li>
+            <li aria-hidden="true">/</li>
+            <li><Link to="/newsletter" className="hover:text-foreground">Newsletter</Link></li>
+            <li aria-hidden="true">/</li>
+            <li aria-current="page" className="truncate text-foreground">{issue.title}</li>
+          </ol>
+        </nav>
+        <figure className="mb-8 overflow-hidden rounded-2xl border border-border bg-card">
           <img
             src={collabNewsletter}
             alt="Human reader and friendly robot mailman delivering the monthly newsletter"
@@ -181,48 +189,84 @@ function IssuePage() {
             className="aspect-[16/6] w-full object-cover"
           />
         </figure>
-        <div className="text-4xl">{issue.hero_emoji || "📰"}</div>
-        <h1 className="mt-3 font-display text-3xl font-bold text-white sm:text-4xl">
-          {issue.title}
-        </h1>
-        {issue.published_at && (
-          <p className="mt-2 text-sm text-white/50">
-            {new Date(issue.published_at).toLocaleDateString("en-US", {
-              month: "long",
-              day: "numeric",
-              year: "numeric",
-            })}
+
+        <header className="max-w-3xl">
+          <h1 className="font-display text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
+            {issue.title}
+          </h1>
+          {extras.subtitle && (
+            <p className="mt-3 text-xl font-medium text-muted-foreground">{extras.subtitle}</p>
+          )}
+          <p className="mt-4 flex flex-wrap gap-x-3 gap-y-1 text-sm text-muted-foreground">
+            <span className="font-medium text-foreground">{extras.author ?? "Dibya Ranjan Mishra"}</span>
+            {issue.published_at && (
+              <time dateTime={issue.published_at}>
+                · {new Date(issue.published_at).toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric", timeZone: "Asia/Kolkata" })}
+              </time>
+            )}
+            <span>· {minutes} min read</span>
           </p>
-        )}
-        {issue.summary && (
-          <p className="mt-4 text-lg leading-relaxed text-white/80">{issue.summary}</p>
-        )}
-        <article className="prose prose-invert mt-8 max-w-none text-white/85">
-          {paragraphs.map((p, i) => {
-            if (p.startsWith("## ")) {
-              return (
-                <h2 key={i} className="mt-8 font-display text-2xl font-bold text-white">
-                  {p.replace(/^##\s+/, "")}
-                </h2>
-              );
-            }
-            if (p.startsWith("- ")) {
-              const items = p.split(/\n- /).map((s) => s.replace(/^-\s+/, ""));
-              return (
-                <ul key={i} className="my-4 list-disc space-y-1 pl-6">
-                  {items.map((it, j) => (
-                    <li key={j}>{it}</li>
+          {extras.categories && (
+            <ul className="mt-4 flex flex-wrap gap-2" aria-label="Categories">
+              {extras.categories.map((c) => (
+                <li key={c}><Badge variant="secondary">{c}</Badge></li>
+              ))}
+            </ul>
+          )}
+        </header>
+
+        <div className="mt-10 grid gap-10 lg:grid-cols-[minmax(0,1fr)_240px]">
+          <article className="min-w-0 max-w-3xl text-base leading-relaxed text-foreground">
+            {paragraphs.map((p, i) => {
+              if (p.startsWith("## ")) {
+                const title = p.replace(/^##\s+/, "");
+                return (
+                  <h2 key={i} id={slugifyHeading(title)} className="mt-10 scroll-mt-24 font-display text-2xl font-bold text-foreground">
+                    {title}
+                  </h2>
+                );
+              }
+              if (p.startsWith("- ")) {
+                const items = p.split(/\n- /).map((s) => s.replace(/^-\s+/, ""));
+                return (
+                  <ul key={i} className="my-4 list-disc space-y-1 pl-6">
+                    {items.map((it, j) => <li key={j}>{it}</li>)}
+                  </ul>
+                );
+              }
+              if (/^\d+\.\s/.test(p)) {
+                const items = p.split("\n").map((s) => s.replace(/^\d+\.\s+/, ""));
+                return (
+                  <ol key={i} className="my-4 list-decimal space-y-1 pl-6">
+                    {items.map((it, j) => <li key={j}>{it}</li>)}
+                  </ol>
+                );
+              }
+              if (/^https?:\/\/\S+$/.test(p)) {
+                return (
+                  <p key={i} className="my-4">
+                    <a href={p} className="font-medium text-primary underline-offset-4 hover:underline">{p}</a>
+                  </p>
+                );
+              }
+              return <p key={i} className="my-4 text-muted-foreground">{p}</p>;
+            })}
+          </article>
+          {headings.length > 0 && (
+            <aside className="order-first lg:order-none">
+              <nav aria-label="Table of contents" className="rounded-2xl border border-border bg-card p-5 lg:sticky lg:top-24">
+                <div className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">In this issue</div>
+                <ul className="mt-3 space-y-2 text-sm">
+                  {headings.map((h) => (
+                    <li key={h.id}>
+                      <a href={`#${h.id}`} className="text-muted-foreground hover:text-foreground">{h.title}</a>
+                    </li>
                   ))}
                 </ul>
-              );
-            }
-            return (
-              <p key={i} className="my-4 leading-relaxed">
-                {p}
-              </p>
-            );
-          })}
-        </article>
+              </nav>
+            </aside>
+          )}
+        </div>
       </div>
     </Section>
   );
