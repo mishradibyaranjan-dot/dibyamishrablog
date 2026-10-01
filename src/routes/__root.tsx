@@ -203,6 +203,11 @@ var light=['glacier','light','paper','sand','arctic'];
 var m=light.indexOf(t)>=0?'light':'dark';
 var r=document.documentElement;
 r.dataset.theme=t;r.classList.toggle('dark',m==='dark');r.style.colorScheme=m;
+var c=JSON.parse(localStorage.getItem('drm-custom-brand-colors')||'null');
+if(c&&/^#[0-9a-f]{6}$/i.test(c.primary)&&/^#[0-9a-f]{6}$/i.test(c.accent)){
+var rgb=[1,3,5].map(function(i){var x=parseInt(c.primary.slice(i,i+2),16)/255;return x<=.04045?x/12.92:Math.pow((x+.055)/1.055,2.4)});
+var fg=.2126*rgb[0]+.7152*rgb[1]+.0722*rgb[2]>.42?'#111827':'#FFFFFF';
+r.style.setProperty('--primary',c.primary);r.style.setProperty('--primary-foreground',fg);r.style.setProperty('--ring',c.primary);r.style.setProperty('--brand',c.primary);r.style.setProperty('--brand-2',c.accent);r.style.setProperty('--gradient-brand','linear-gradient(135deg,'+c.primary+','+c.accent+')');r.style.setProperty('--gradient-text','linear-gradient(100deg,'+c.primary+','+c.accent+')');}
 }catch(e){}})();`;
 
 function RootShell({ children }: { children: ReactNode }) {

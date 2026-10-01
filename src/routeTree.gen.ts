@@ -9,172 +9,68 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as IndexRouteImport } from './routes/index'
-import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
-import { Route as AboutRouteImport } from './routes/about'
-import { Route as AdvisoryRouteImport } from './routes/advisory'
-import { Route as AtomDotxmlRouteImport } from './routes/atom[.]xml'
-import { Route as AuthRouteImport } from './routes/auth'
-import { Route as BlogRouteImport } from './routes/blog'
-import { Route as CaseStudiesRouteImport } from './routes/case-studies'
-import { Route as ContactRouteImport } from './routes/contact'
-import { Route as CopyrightRouteImport } from './routes/copyright'
-import { Route as ExpertiseRouteImport } from './routes/expertise'
-import { Route as ForgotPasswordRouteImport } from './routes/forgot-password'
-import { Route as GuideRouteImport } from './routes/guide'
-import { Route as LearnRouteImport } from './routes/learn'
-import { Route as McpRouteImport } from './routes/mcp'
-import { Route as PlaybookRouteImport } from './routes/playbook'
-import { Route as PrivacyRouteImport } from './routes/privacy'
-import { Route as ProjectsRouteImport } from './routes/projects'
-import { Route as ResearchRouteImport } from './routes/research'
-import { Route as ResetPasswordRouteImport } from './routes/reset-password'
-import { Route as RssDotxmlRouteImport } from './routes/rss[.]xml'
-import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
-import { Route as TermsRouteImport } from './routes/terms'
 import { Route as TrustRouteImport } from './routes/trust'
-import { Route as Char91DotmcpChar93ListToolsRouteImport } from './routes/[.mcp]/list-tools'
-import { Route as Char91DotwellKnownChar93OauthProtectedResourceRouteImport } from './routes/[.well-known]/oauth-protected-resource'
-import { Route as AuthenticatedAdminRouteRouteImport } from './routes/_authenticated/admin/route'
-import { Route as AuthenticatedReportsRouteImport } from './routes/_authenticated/reports'
-import { Route as AuthenticatedRepositoryRouteImport } from './routes/_authenticated/repository'
-import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
-import { Route as CaseStudySlugRouteImport } from './routes/case-study.$slug'
-import { Route as EmailUnsubscribeRouteImport } from './routes/email/unsubscribe'
+import { Route as TermsRouteImport } from './routes/terms'
+import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
+import { Route as RssDotxmlRouteImport } from './routes/rss[.]xml'
+import { Route as ResetPasswordRouteImport } from './routes/reset-password'
+import { Route as ResearchRouteImport } from './routes/research'
+import { Route as ProjectsRouteImport } from './routes/projects'
+import { Route as PrivacyRouteImport } from './routes/privacy'
+import { Route as PlaybookRouteImport } from './routes/playbook'
+import { Route as McpRouteImport } from './routes/mcp'
+import { Route as LearnRouteImport } from './routes/learn'
+import { Route as GuideRouteImport } from './routes/guide'
+import { Route as ForgotPasswordRouteImport } from './routes/forgot-password'
+import { Route as ExpertiseRouteImport } from './routes/expertise'
+import { Route as CopyrightRouteImport } from './routes/copyright'
+import { Route as ContactRouteImport } from './routes/contact'
+import { Route as CaseStudiesRouteImport } from './routes/case-studies'
+import { Route as BlogRouteImport } from './routes/blog'
+import { Route as AuthRouteImport } from './routes/auth'
+import { Route as AtomDotxmlRouteImport } from './routes/atom[.]xml'
+import { Route as AdvisoryRouteImport } from './routes/advisory'
+import { Route as AboutRouteImport } from './routes/about'
+import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
+import { Route as IndexRouteImport } from './routes/index'
 import { Route as NewsletterIndexRouteImport } from './routes/newsletter.index'
-import { Route as NewsletterSlugRouteImport } from './routes/newsletter.$slug'
 import { Route as WhitePaperAgenticAiEnterpriseAutomationRouteImport } from './routes/white-paper.agentic-ai-enterprise-automation'
-import { Route as DotlovableOauthConsentRouteImport } from './routes/[.]lovable.oauth.consent'
-import { Route as Char91DotmcpChar93InvokeToolToolRouteImport } from './routes/[.mcp]/invoke-tool/$tool'
-import { Route as AuthenticatedAdminBlockedDomainsRouteImport } from './routes/_authenticated/admin/blocked-domains'
-import { Route as AuthenticatedAdminContactEnquiriesRouteImport } from './routes/_authenticated/admin/contact-enquiries'
-import { Route as AuthenticatedAdminDocsRouteImport } from './routes/_authenticated/admin/docs'
-import { Route as AuthenticatedAdminNewsletterJobsRouteImport } from './routes/_authenticated/admin/newsletter-jobs'
-import { Route as AuthenticatedAdminSecurityEventsRouteImport } from './routes/_authenticated/admin/security-events'
-import { Route as AuthenticatedAdminSpamAuditRouteImport } from './routes/_authenticated/admin/spam-audit'
-import { Route as AuthenticatedAdminVisitorAuditRouteImport } from './routes/_authenticated/admin/visitor-audit'
-import { Route as ApiDownloadPdfRouteImport } from './routes/api/download.pdf'
-import { Route as ApiPublicChatRouteImport } from './routes/api/public/chat'
-import { Route as ApiPublicContactRouteImport } from './routes/api/public/contact'
-import { Route as ApiPublicNewsletterRouteImport } from './routes/api/public/newsletter'
-import { Route as ApiPublicTrackVisitRouteImport } from './routes/api/public/track-visit'
-import { Route as ApiPublicTtsRouteImport } from './routes/api/public/tts'
+import { Route as NewsletterSlugRouteImport } from './routes/newsletter.$slug'
+import { Route as EmailUnsubscribeRouteImport } from './routes/email/unsubscribe'
+import { Route as CaseStudySlugRouteImport } from './routes/case-study.$slug'
+import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
+import { Route as AuthenticatedRepositoryRouteImport } from './routes/_authenticated/repository'
+import { Route as AuthenticatedReportsRouteImport } from './routes/_authenticated/reports'
+import { Route as Char91DotwellKnownChar93OauthProtectedResourceRouteImport } from './routes/[.well-known]/oauth-protected-resource'
+import { Route as Char91DotmcpChar93ListToolsRouteImport } from './routes/[.mcp]/list-tools'
+import { Route as AuthenticatedAdminRouteRouteImport } from './routes/_authenticated/admin/route'
 import { Route as LovableEmailEventsRouteImport } from './routes/lovable/email/events'
-import { Route as ApiPublicCronContactEmailRetryRouteImport } from './routes/api/public/cron/contact-email-retry'
-import { Route as ApiPublicCronMonthlyNewsletterRouteImport } from './routes/api/public/cron/monthly-newsletter'
-import { Route as ApiPublicCronNewsletterSchedulerRouteImport } from './routes/api/public/cron/newsletter-scheduler'
-import { Route as ApiPublicCronVisitorAuditAlertsRouteImport } from './routes/api/public/cron/visitor-audit-alerts'
-import { Route as LovableEmailAuthPreviewRouteImport } from './routes/lovable/email/auth/preview'
-import { Route as LovableEmailAuthWebhookRouteImport } from './routes/lovable/email/auth/webhook'
+import { Route as ApiPublicTtsRouteImport } from './routes/api/public/tts'
+import { Route as ApiPublicTrackVisitRouteImport } from './routes/api/public/track-visit'
+import { Route as ApiPublicNewsletterRouteImport } from './routes/api/public/newsletter'
+import { Route as ApiPublicContactRouteImport } from './routes/api/public/contact'
+import { Route as ApiPublicChatRouteImport } from './routes/api/public/chat'
+import { Route as ApiDownloadPdfRouteImport } from './routes/api/download.pdf'
+import { Route as AuthenticatedAdminVisitorAuditRouteImport } from './routes/_authenticated/admin/visitor-audit'
+import { Route as AuthenticatedAdminSpamAuditRouteImport } from './routes/_authenticated/admin/spam-audit'
+import { Route as AuthenticatedAdminSecurityEventsRouteImport } from './routes/_authenticated/admin/security-events'
+import { Route as AuthenticatedAdminNewsletterJobsRouteImport } from './routes/_authenticated/admin/newsletter-jobs'
+import { Route as AuthenticatedAdminDocsRouteImport } from './routes/_authenticated/admin/docs'
+import { Route as AuthenticatedAdminContactEnquiriesRouteImport } from './routes/_authenticated/admin/contact-enquiries'
+import { Route as AuthenticatedAdminBlockedDomainsRouteImport } from './routes/_authenticated/admin/blocked-domains'
+import { Route as Char91DotmcpChar93InvokeToolToolRouteImport } from './routes/[.mcp]/invoke-tool/$tool'
+import { Route as DotlovableOauthConsentRouteImport } from './routes/[.]lovable.oauth.consent'
 import { Route as LovableEmailTransactionalPreviewRouteImport } from './routes/lovable/email/transactional/preview'
+import { Route as LovableEmailAuthWebhookRouteImport } from './routes/lovable/email/auth/webhook'
+import { Route as LovableEmailAuthPreviewRouteImport } from './routes/lovable/email/auth/preview'
+import { Route as ApiPublicCronVisitorAuditAlertsRouteImport } from './routes/api/public/cron/visitor-audit-alerts'
+import { Route as ApiPublicCronNewsletterSchedulerRouteImport } from './routes/api/public/cron/newsletter-scheduler'
+import { Route as ApiPublicCronMonthlyNewsletterRouteImport } from './routes/api/public/cron/monthly-newsletter'
+import { Route as ApiPublicCronContactEmailRetryRouteImport } from './routes/api/public/cron/contact-email-retry'
 
-const IndexRoute = IndexRouteImport.update({
-  id: '/',
-  path: '/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
-  id: '/_authenticated',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AboutRoute = AboutRouteImport.update({
-  id: '/about',
-  path: '/about',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AdvisoryRoute = AdvisoryRouteImport.update({
-  id: '/advisory',
-  path: '/advisory',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AtomDotxmlRoute = AtomDotxmlRouteImport.update({
-  id: '/atom.xml',
-  path: '/atom.xml',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AuthRoute = AuthRouteImport.update({
-  id: '/auth',
-  path: '/auth',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const BlogRoute = BlogRouteImport.update({
-  id: '/blog',
-  path: '/blog',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const CaseStudiesRoute = CaseStudiesRouteImport.update({
-  id: '/case-studies',
-  path: '/case-studies',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ContactRoute = ContactRouteImport.update({
-  id: '/contact',
-  path: '/contact',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const CopyrightRoute = CopyrightRouteImport.update({
-  id: '/copyright',
-  path: '/copyright',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ExpertiseRoute = ExpertiseRouteImport.update({
-  id: '/expertise',
-  path: '/expertise',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ForgotPasswordRoute = ForgotPasswordRouteImport.update({
-  id: '/forgot-password',
-  path: '/forgot-password',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const GuideRoute = GuideRouteImport.update({
-  id: '/guide',
-  path: '/guide',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const LearnRoute = LearnRouteImport.update({
-  id: '/learn',
-  path: '/learn',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const McpRoute = McpRouteImport.update({
-  id: '/mcp',
-  path: '/mcp',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const PlaybookRoute = PlaybookRouteImport.update({
-  id: '/playbook',
-  path: '/playbook',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const PrivacyRoute = PrivacyRouteImport.update({
-  id: '/privacy',
-  path: '/privacy',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ProjectsRoute = ProjectsRouteImport.update({
-  id: '/projects',
-  path: '/projects',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ResearchRoute = ResearchRouteImport.update({
-  id: '/research',
-  path: '/research',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ResetPasswordRoute = ResetPasswordRouteImport.update({
-  id: '/reset-password',
-  path: '/reset-password',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const RssDotxmlRoute = RssDotxmlRouteImport.update({
-  id: '/rss.xml',
-  path: '/rss.xml',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
-  id: '/sitemap.xml',
-  path: '/sitemap.xml',
+const TrustRoute = TrustRouteImport.update({
+  id: '/trust',
+  path: '/trust',
   getParentRoute: () => rootRouteImport,
 } as any)
 const TermsRoute = TermsRouteImport.update({
@@ -182,61 +78,118 @@ const TermsRoute = TermsRouteImport.update({
   path: '/terms',
   getParentRoute: () => rootRouteImport,
 } as any)
-const TrustRoute = TrustRouteImport.update({
-  id: '/trust',
-  path: '/trust',
+const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
+  id: '/sitemap.xml',
+  path: '/sitemap.xml',
   getParentRoute: () => rootRouteImport,
 } as any)
-const Char91DotmcpChar93ListToolsRoute =
-  Char91DotmcpChar93ListToolsRouteImport.update({
-    id: '/.mcp/list-tools',
-    path: '/.mcp/list-tools',
-    getParentRoute: () => rootRouteImport,
-  } as any)
-const Char91DotwellKnownChar93OauthProtectedResourceRoute =
-  Char91DotwellKnownChar93OauthProtectedResourceRouteImport.update({
-    id: '/.well-known/oauth-protected-resource',
-    path: '/.well-known/oauth-protected-resource',
-    getParentRoute: () => rootRouteImport,
-  } as any)
-const AuthenticatedAdminRouteRoute = AuthenticatedAdminRouteRouteImport.update({
-  id: '/admin',
-  path: '/admin',
-  getParentRoute: () => AuthenticatedRouteRoute,
-} as any)
-const AuthenticatedReportsRoute = AuthenticatedReportsRouteImport.update({
-  id: '/reports',
-  path: '/reports',
-  getParentRoute: () => AuthenticatedRouteRoute,
-} as any)
-const AuthenticatedRepositoryRoute = AuthenticatedRepositoryRouteImport.update({
-  id: '/repository',
-  path: '/repository',
-  getParentRoute: () => AuthenticatedRouteRoute,
-} as any)
-const BlogSlugRoute = BlogSlugRouteImport.update({
-  id: '/$slug',
-  path: '/$slug',
-  getParentRoute: () => BlogRoute,
-} as any)
-const CaseStudySlugRoute = CaseStudySlugRouteImport.update({
-  id: '/case-study/$slug',
-  path: '/case-study/$slug',
+const RssDotxmlRoute = RssDotxmlRouteImport.update({
+  id: '/rss.xml',
+  path: '/rss.xml',
   getParentRoute: () => rootRouteImport,
 } as any)
-const EmailUnsubscribeRoute = EmailUnsubscribeRouteImport.update({
-  id: '/email/unsubscribe',
-  path: '/email/unsubscribe',
+const ResetPasswordRoute = ResetPasswordRouteImport.update({
+  id: '/reset-password',
+  path: '/reset-password',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ResearchRoute = ResearchRouteImport.update({
+  id: '/research',
+  path: '/research',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProjectsRoute = ProjectsRouteImport.update({
+  id: '/projects',
+  path: '/projects',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PrivacyRoute = PrivacyRouteImport.update({
+  id: '/privacy',
+  path: '/privacy',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PlaybookRoute = PlaybookRouteImport.update({
+  id: '/playbook',
+  path: '/playbook',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const McpRoute = McpRouteImport.update({
+  id: '/mcp',
+  path: '/mcp',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LearnRoute = LearnRouteImport.update({
+  id: '/learn',
+  path: '/learn',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const GuideRoute = GuideRouteImport.update({
+  id: '/guide',
+  path: '/guide',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ForgotPasswordRoute = ForgotPasswordRouteImport.update({
+  id: '/forgot-password',
+  path: '/forgot-password',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ExpertiseRoute = ExpertiseRouteImport.update({
+  id: '/expertise',
+  path: '/expertise',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CopyrightRoute = CopyrightRouteImport.update({
+  id: '/copyright',
+  path: '/copyright',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ContactRoute = ContactRouteImport.update({
+  id: '/contact',
+  path: '/contact',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CaseStudiesRoute = CaseStudiesRouteImport.update({
+  id: '/case-studies',
+  path: '/case-studies',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BlogRoute = BlogRouteImport.update({
+  id: '/blog',
+  path: '/blog',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthRoute = AuthRouteImport.update({
+  id: '/auth',
+  path: '/auth',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AtomDotxmlRoute = AtomDotxmlRouteImport.update({
+  id: '/atom.xml',
+  path: '/atom.xml',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdvisoryRoute = AdvisoryRouteImport.update({
+  id: '/advisory',
+  path: '/advisory',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AboutRoute = AboutRouteImport.update({
+  id: '/about',
+  path: '/about',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
+  id: '/_authenticated',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const IndexRoute = IndexRouteImport.update({
+  id: '/',
+  path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const NewsletterIndexRoute = NewsletterIndexRouteImport.update({
   id: '/newsletter/',
   path: '/newsletter/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const NewsletterSlugRoute = NewsletterSlugRouteImport.update({
-  id: '/newsletter/$slug',
-  path: '/newsletter/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
 const WhitePaperAgenticAiEnterpriseAutomationRoute =
@@ -245,44 +198,92 @@ const WhitePaperAgenticAiEnterpriseAutomationRoute =
     path: '/white-paper/agentic-ai-enterprise-automation',
     getParentRoute: () => rootRouteImport,
   } as any)
-const DotlovableOauthConsentRoute = DotlovableOauthConsentRouteImport.update({
-  id: '/.lovable/oauth/consent',
-  path: '/.lovable/oauth/consent',
+const NewsletterSlugRoute = NewsletterSlugRouteImport.update({
+  id: '/newsletter/$slug',
+  path: '/newsletter/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
-const Char91DotmcpChar93InvokeToolToolRoute =
-  Char91DotmcpChar93InvokeToolToolRouteImport.update({
-    id: '/.mcp/invoke-tool/$tool',
-    path: '/.mcp/invoke-tool/$tool',
+const EmailUnsubscribeRoute = EmailUnsubscribeRouteImport.update({
+  id: '/email/unsubscribe',
+  path: '/email/unsubscribe',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CaseStudySlugRoute = CaseStudySlugRouteImport.update({
+  id: '/case-study/$slug',
+  path: '/case-study/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BlogSlugRoute = BlogSlugRouteImport.update({
+  id: '/$slug',
+  path: '/$slug',
+  getParentRoute: () => BlogRoute,
+} as any)
+const AuthenticatedRepositoryRoute = AuthenticatedRepositoryRouteImport.update({
+  id: '/repository',
+  path: '/repository',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedReportsRoute = AuthenticatedReportsRouteImport.update({
+  id: '/reports',
+  path: '/reports',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const Char91DotwellKnownChar93OauthProtectedResourceRoute =
+  Char91DotwellKnownChar93OauthProtectedResourceRouteImport.update({
+    id: '/.well-known/oauth-protected-resource',
+    path: '/.well-known/oauth-protected-resource',
     getParentRoute: () => rootRouteImport,
   } as any)
-const AuthenticatedAdminBlockedDomainsRoute =
-  AuthenticatedAdminBlockedDomainsRouteImport.update({
-    id: '/blocked-domains',
-    path: '/blocked-domains',
-    getParentRoute: () => AuthenticatedAdminRouteRoute,
+const Char91DotmcpChar93ListToolsRoute =
+  Char91DotmcpChar93ListToolsRouteImport.update({
+    id: '/.mcp/list-tools',
+    path: '/.mcp/list-tools',
+    getParentRoute: () => rootRouteImport,
   } as any)
-const AuthenticatedAdminContactEnquiriesRoute =
-  AuthenticatedAdminContactEnquiriesRouteImport.update({
-    id: '/contact-enquiries',
-    path: '/contact-enquiries',
-    getParentRoute: () => AuthenticatedAdminRouteRoute,
-  } as any)
-const AuthenticatedAdminDocsRoute = AuthenticatedAdminDocsRouteImport.update({
-  id: '/docs',
-  path: '/docs',
-  getParentRoute: () => AuthenticatedAdminRouteRoute,
+const AuthenticatedAdminRouteRoute = AuthenticatedAdminRouteRouteImport.update({
+  id: '/admin',
+  path: '/admin',
+  getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
-const AuthenticatedAdminNewsletterJobsRoute =
-  AuthenticatedAdminNewsletterJobsRouteImport.update({
-    id: '/newsletter-jobs',
-    path: '/newsletter-jobs',
-    getParentRoute: () => AuthenticatedAdminRouteRoute,
-  } as any)
-const AuthenticatedAdminSecurityEventsRoute =
-  AuthenticatedAdminSecurityEventsRouteImport.update({
-    id: '/security-events',
-    path: '/security-events',
+const LovableEmailEventsRoute = LovableEmailEventsRouteImport.update({
+  id: '/lovable/email/events',
+  path: '/lovable/email/events',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiPublicTtsRoute = ApiPublicTtsRouteImport.update({
+  id: '/api/public/tts',
+  path: '/api/public/tts',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiPublicTrackVisitRoute = ApiPublicTrackVisitRouteImport.update({
+  id: '/api/public/track-visit',
+  path: '/api/public/track-visit',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiPublicNewsletterRoute = ApiPublicNewsletterRouteImport.update({
+  id: '/api/public/newsletter',
+  path: '/api/public/newsletter',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiPublicContactRoute = ApiPublicContactRouteImport.update({
+  id: '/api/public/contact',
+  path: '/api/public/contact',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiPublicChatRoute = ApiPublicChatRouteImport.update({
+  id: '/api/public/chat',
+  path: '/api/public/chat',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiDownloadPdfRoute = ApiDownloadPdfRouteImport.update({
+  id: '/api/download/pdf',
+  path: '/api/download/pdf',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedAdminVisitorAuditRoute =
+  AuthenticatedAdminVisitorAuditRouteImport.update({
+    id: '/visitor-audit',
+    path: '/visitor-audit',
     getParentRoute: () => AuthenticatedAdminRouteRoute,
   } as any)
 const AuthenticatedAdminSpamAuditRoute =
@@ -291,57 +292,66 @@ const AuthenticatedAdminSpamAuditRoute =
     path: '/spam-audit',
     getParentRoute: () => AuthenticatedAdminRouteRoute,
   } as any)
-const AuthenticatedAdminVisitorAuditRoute =
-  AuthenticatedAdminVisitorAuditRouteImport.update({
-    id: '/visitor-audit',
-    path: '/visitor-audit',
+const AuthenticatedAdminSecurityEventsRoute =
+  AuthenticatedAdminSecurityEventsRouteImport.update({
+    id: '/security-events',
+    path: '/security-events',
     getParentRoute: () => AuthenticatedAdminRouteRoute,
   } as any)
-const ApiDownloadPdfRoute = ApiDownloadPdfRouteImport.update({
-  id: '/api/download/pdf',
-  path: '/api/download/pdf',
-  getParentRoute: () => rootRouteImport,
+const AuthenticatedAdminNewsletterJobsRoute =
+  AuthenticatedAdminNewsletterJobsRouteImport.update({
+    id: '/newsletter-jobs',
+    path: '/newsletter-jobs',
+    getParentRoute: () => AuthenticatedAdminRouteRoute,
+  } as any)
+const AuthenticatedAdminDocsRoute = AuthenticatedAdminDocsRouteImport.update({
+  id: '/docs',
+  path: '/docs',
+  getParentRoute: () => AuthenticatedAdminRouteRoute,
 } as any)
-const ApiPublicChatRoute = ApiPublicChatRouteImport.update({
-  id: '/api/public/chat',
-  path: '/api/public/chat',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ApiPublicContactRoute = ApiPublicContactRouteImport.update({
-  id: '/api/public/contact',
-  path: '/api/public/contact',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ApiPublicNewsletterRoute = ApiPublicNewsletterRouteImport.update({
-  id: '/api/public/newsletter',
-  path: '/api/public/newsletter',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ApiPublicTrackVisitRoute = ApiPublicTrackVisitRouteImport.update({
-  id: '/api/public/track-visit',
-  path: '/api/public/track-visit',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ApiPublicTtsRoute = ApiPublicTtsRouteImport.update({
-  id: '/api/public/tts',
-  path: '/api/public/tts',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const LovableEmailEventsRoute = LovableEmailEventsRouteImport.update({
-  id: '/lovable/email/events',
-  path: '/lovable/email/events',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ApiPublicCronContactEmailRetryRoute =
-  ApiPublicCronContactEmailRetryRouteImport.update({
-    id: '/api/public/cron/contact-email-retry',
-    path: '/api/public/cron/contact-email-retry',
+const AuthenticatedAdminContactEnquiriesRoute =
+  AuthenticatedAdminContactEnquiriesRouteImport.update({
+    id: '/contact-enquiries',
+    path: '/contact-enquiries',
+    getParentRoute: () => AuthenticatedAdminRouteRoute,
+  } as any)
+const AuthenticatedAdminBlockedDomainsRoute =
+  AuthenticatedAdminBlockedDomainsRouteImport.update({
+    id: '/blocked-domains',
+    path: '/blocked-domains',
+    getParentRoute: () => AuthenticatedAdminRouteRoute,
+  } as any)
+const Char91DotmcpChar93InvokeToolToolRoute =
+  Char91DotmcpChar93InvokeToolToolRouteImport.update({
+    id: '/.mcp/invoke-tool/$tool',
+    path: '/.mcp/invoke-tool/$tool',
     getParentRoute: () => rootRouteImport,
   } as any)
-const ApiPublicCronMonthlyNewsletterRoute =
-  ApiPublicCronMonthlyNewsletterRouteImport.update({
-    id: '/api/public/cron/monthly-newsletter',
-    path: '/api/public/cron/monthly-newsletter',
+const DotlovableOauthConsentRoute = DotlovableOauthConsentRouteImport.update({
+  id: '/.lovable/oauth/consent',
+  path: '/.lovable/oauth/consent',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LovableEmailTransactionalPreviewRoute =
+  LovableEmailTransactionalPreviewRouteImport.update({
+    id: '/lovable/email/transactional/preview',
+    path: '/lovable/email/transactional/preview',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const LovableEmailAuthWebhookRoute = LovableEmailAuthWebhookRouteImport.update({
+  id: '/lovable/email/auth/webhook',
+  path: '/lovable/email/auth/webhook',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LovableEmailAuthPreviewRoute = LovableEmailAuthPreviewRouteImport.update({
+  id: '/lovable/email/auth/preview',
+  path: '/lovable/email/auth/preview',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiPublicCronVisitorAuditAlertsRoute =
+  ApiPublicCronVisitorAuditAlertsRouteImport.update({
+    id: '/api/public/cron/visitor-audit-alerts',
+    path: '/api/public/cron/visitor-audit-alerts',
     getParentRoute: () => rootRouteImport,
   } as any)
 const ApiPublicCronNewsletterSchedulerRoute =
@@ -350,26 +360,16 @@ const ApiPublicCronNewsletterSchedulerRoute =
     path: '/api/public/cron/newsletter-scheduler',
     getParentRoute: () => rootRouteImport,
   } as any)
-const ApiPublicCronVisitorAuditAlertsRoute =
-  ApiPublicCronVisitorAuditAlertsRouteImport.update({
-    id: '/api/public/cron/visitor-audit-alerts',
-    path: '/api/public/cron/visitor-audit-alerts',
+const ApiPublicCronMonthlyNewsletterRoute =
+  ApiPublicCronMonthlyNewsletterRouteImport.update({
+    id: '/api/public/cron/monthly-newsletter',
+    path: '/api/public/cron/monthly-newsletter',
     getParentRoute: () => rootRouteImport,
   } as any)
-const LovableEmailAuthPreviewRoute = LovableEmailAuthPreviewRouteImport.update({
-  id: '/lovable/email/auth/preview',
-  path: '/lovable/email/auth/preview',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const LovableEmailAuthWebhookRoute = LovableEmailAuthWebhookRouteImport.update({
-  id: '/lovable/email/auth/webhook',
-  path: '/lovable/email/auth/webhook',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const LovableEmailTransactionalPreviewRoute =
-  LovableEmailTransactionalPreviewRouteImport.update({
-    id: '/lovable/email/transactional/preview',
-    path: '/lovable/email/transactional/preview',
+const ApiPublicCronContactEmailRetryRoute =
+  ApiPublicCronContactEmailRetryRouteImport.update({
+    id: '/api/public/cron/contact-email-retry',
+    path: '/api/public/cron/contact-email-retry',
     getParentRoute: () => rootRouteImport,
   } as any)
 
@@ -785,158 +785,11 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/': {
-      id: '/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/_authenticated': {
-      id: '/_authenticated'
-      path: ''
-      fullPath: '/'
-      preLoaderRoute: typeof AuthenticatedRouteRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/about': {
-      id: '/about'
-      path: '/about'
-      fullPath: '/about'
-      preLoaderRoute: typeof AboutRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/advisory': {
-      id: '/advisory'
-      path: '/advisory'
-      fullPath: '/advisory'
-      preLoaderRoute: typeof AdvisoryRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/atom.xml': {
-      id: '/atom.xml'
-      path: '/atom.xml'
-      fullPath: '/atom.xml'
-      preLoaderRoute: typeof AtomDotxmlRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/auth': {
-      id: '/auth'
-      path: '/auth'
-      fullPath: '/auth'
-      preLoaderRoute: typeof AuthRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/blog': {
-      id: '/blog'
-      path: '/blog'
-      fullPath: '/blog'
-      preLoaderRoute: typeof BlogRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/case-studies': {
-      id: '/case-studies'
-      path: '/case-studies'
-      fullPath: '/case-studies'
-      preLoaderRoute: typeof CaseStudiesRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/contact': {
-      id: '/contact'
-      path: '/contact'
-      fullPath: '/contact'
-      preLoaderRoute: typeof ContactRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/copyright': {
-      id: '/copyright'
-      path: '/copyright'
-      fullPath: '/copyright'
-      preLoaderRoute: typeof CopyrightRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/expertise': {
-      id: '/expertise'
-      path: '/expertise'
-      fullPath: '/expertise'
-      preLoaderRoute: typeof ExpertiseRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/forgot-password': {
-      id: '/forgot-password'
-      path: '/forgot-password'
-      fullPath: '/forgot-password'
-      preLoaderRoute: typeof ForgotPasswordRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/guide': {
-      id: '/guide'
-      path: '/guide'
-      fullPath: '/guide'
-      preLoaderRoute: typeof GuideRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/learn': {
-      id: '/learn'
-      path: '/learn'
-      fullPath: '/learn'
-      preLoaderRoute: typeof LearnRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/mcp': {
-      id: '/mcp'
-      path: '/mcp'
-      fullPath: '/mcp'
-      preLoaderRoute: typeof McpRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/playbook': {
-      id: '/playbook'
-      path: '/playbook'
-      fullPath: '/playbook'
-      preLoaderRoute: typeof PlaybookRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/privacy': {
-      id: '/privacy'
-      path: '/privacy'
-      fullPath: '/privacy'
-      preLoaderRoute: typeof PrivacyRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/projects': {
-      id: '/projects'
-      path: '/projects'
-      fullPath: '/projects'
-      preLoaderRoute: typeof ProjectsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/research': {
-      id: '/research'
-      path: '/research'
-      fullPath: '/research'
-      preLoaderRoute: typeof ResearchRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/reset-password': {
-      id: '/reset-password'
-      path: '/reset-password'
-      fullPath: '/reset-password'
-      preLoaderRoute: typeof ResetPasswordRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/rss.xml': {
-      id: '/rss.xml'
-      path: '/rss.xml'
-      fullPath: '/rss.xml'
-      preLoaderRoute: typeof RssDotxmlRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/sitemap.xml': {
-      id: '/sitemap.xml'
-      path: '/sitemap.xml'
-      fullPath: '/sitemap.xml'
-      preLoaderRoute: typeof SitemapDotxmlRouteImport
+    '/trust': {
+      id: '/trust'
+      path: '/trust'
+      fullPath: '/trust'
+      preLoaderRoute: typeof TrustRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/terms': {
@@ -946,67 +799,158 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TermsRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/trust': {
-      id: '/trust'
-      path: '/trust'
-      fullPath: '/trust'
-      preLoaderRoute: typeof TrustRouteImport
+    '/sitemap.xml': {
+      id: '/sitemap.xml'
+      path: '/sitemap.xml'
+      fullPath: '/sitemap.xml'
+      preLoaderRoute: typeof SitemapDotxmlRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/.mcp/list-tools': {
-      id: '/.mcp/list-tools'
-      path: '/.mcp/list-tools'
-      fullPath: '/.mcp/list-tools'
-      preLoaderRoute: typeof Char91DotmcpChar93ListToolsRouteImport
+    '/rss.xml': {
+      id: '/rss.xml'
+      path: '/rss.xml'
+      fullPath: '/rss.xml'
+      preLoaderRoute: typeof RssDotxmlRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/.well-known/oauth-protected-resource': {
-      id: '/.well-known/oauth-protected-resource'
-      path: '/.well-known/oauth-protected-resource'
-      fullPath: '/.well-known/oauth-protected-resource'
-      preLoaderRoute: typeof Char91DotwellKnownChar93OauthProtectedResourceRouteImport
+    '/reset-password': {
+      id: '/reset-password'
+      path: '/reset-password'
+      fullPath: '/reset-password'
+      preLoaderRoute: typeof ResetPasswordRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/_authenticated/admin': {
-      id: '/_authenticated/admin'
-      path: '/admin'
-      fullPath: '/admin'
-      preLoaderRoute: typeof AuthenticatedAdminRouteRouteImport
-      parentRoute: typeof AuthenticatedRouteRoute
-    }
-    '/_authenticated/reports': {
-      id: '/_authenticated/reports'
-      path: '/reports'
-      fullPath: '/reports'
-      preLoaderRoute: typeof AuthenticatedReportsRouteImport
-      parentRoute: typeof AuthenticatedRouteRoute
-    }
-    '/_authenticated/repository': {
-      id: '/_authenticated/repository'
-      path: '/repository'
-      fullPath: '/repository'
-      preLoaderRoute: typeof AuthenticatedRepositoryRouteImport
-      parentRoute: typeof AuthenticatedRouteRoute
-    }
-    '/blog/$slug': {
-      id: '/blog/$slug'
-      path: '/$slug'
-      fullPath: '/blog/$slug'
-      preLoaderRoute: typeof BlogSlugRouteImport
-      parentRoute: typeof BlogRoute
-    }
-    '/case-study/$slug': {
-      id: '/case-study/$slug'
-      path: '/case-study/$slug'
-      fullPath: '/case-study/$slug'
-      preLoaderRoute: typeof CaseStudySlugRouteImport
+    '/research': {
+      id: '/research'
+      path: '/research'
+      fullPath: '/research'
+      preLoaderRoute: typeof ResearchRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/email/unsubscribe': {
-      id: '/email/unsubscribe'
-      path: '/email/unsubscribe'
-      fullPath: '/email/unsubscribe'
-      preLoaderRoute: typeof EmailUnsubscribeRouteImport
+    '/projects': {
+      id: '/projects'
+      path: '/projects'
+      fullPath: '/projects'
+      preLoaderRoute: typeof ProjectsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/privacy': {
+      id: '/privacy'
+      path: '/privacy'
+      fullPath: '/privacy'
+      preLoaderRoute: typeof PrivacyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/playbook': {
+      id: '/playbook'
+      path: '/playbook'
+      fullPath: '/playbook'
+      preLoaderRoute: typeof PlaybookRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/mcp': {
+      id: '/mcp'
+      path: '/mcp'
+      fullPath: '/mcp'
+      preLoaderRoute: typeof McpRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/learn': {
+      id: '/learn'
+      path: '/learn'
+      fullPath: '/learn'
+      preLoaderRoute: typeof LearnRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/guide': {
+      id: '/guide'
+      path: '/guide'
+      fullPath: '/guide'
+      preLoaderRoute: typeof GuideRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/forgot-password': {
+      id: '/forgot-password'
+      path: '/forgot-password'
+      fullPath: '/forgot-password'
+      preLoaderRoute: typeof ForgotPasswordRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/expertise': {
+      id: '/expertise'
+      path: '/expertise'
+      fullPath: '/expertise'
+      preLoaderRoute: typeof ExpertiseRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/copyright': {
+      id: '/copyright'
+      path: '/copyright'
+      fullPath: '/copyright'
+      preLoaderRoute: typeof CopyrightRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/contact': {
+      id: '/contact'
+      path: '/contact'
+      fullPath: '/contact'
+      preLoaderRoute: typeof ContactRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/case-studies': {
+      id: '/case-studies'
+      path: '/case-studies'
+      fullPath: '/case-studies'
+      preLoaderRoute: typeof CaseStudiesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/blog': {
+      id: '/blog'
+      path: '/blog'
+      fullPath: '/blog'
+      preLoaderRoute: typeof BlogRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/auth': {
+      id: '/auth'
+      path: '/auth'
+      fullPath: '/auth'
+      preLoaderRoute: typeof AuthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/atom.xml': {
+      id: '/atom.xml'
+      path: '/atom.xml'
+      fullPath: '/atom.xml'
+      preLoaderRoute: typeof AtomDotxmlRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/advisory': {
+      id: '/advisory'
+      path: '/advisory'
+      fullPath: '/advisory'
+      preLoaderRoute: typeof AdvisoryRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/about': {
+      id: '/about'
+      path: '/about'
+      fullPath: '/about'
+      preLoaderRoute: typeof AboutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated': {
+      id: '/_authenticated'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof AuthenticatedRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/': {
+      id: '/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/newsletter/': {
@@ -1016,13 +960,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof NewsletterIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/newsletter/$slug': {
-      id: '/newsletter/$slug'
-      path: '/newsletter/$slug'
-      fullPath: '/newsletter/$slug'
-      preLoaderRoute: typeof NewsletterSlugRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/white-paper/agentic-ai-enterprise-automation': {
       id: '/white-paper/agentic-ai-enterprise-automation'
       path: '/white-paper/agentic-ai-enterprise-automation'
@@ -1030,102 +967,74 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof WhitePaperAgenticAiEnterpriseAutomationRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/.lovable/oauth/consent': {
-      id: '/.lovable/oauth/consent'
-      path: '/.lovable/oauth/consent'
-      fullPath: '/.lovable/oauth/consent'
-      preLoaderRoute: typeof DotlovableOauthConsentRouteImport
+    '/newsletter/$slug': {
+      id: '/newsletter/$slug'
+      path: '/newsletter/$slug'
+      fullPath: '/newsletter/$slug'
+      preLoaderRoute: typeof NewsletterSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/.mcp/invoke-tool/$tool': {
-      id: '/.mcp/invoke-tool/$tool'
-      path: '/.mcp/invoke-tool/$tool'
-      fullPath: '/.mcp/invoke-tool/$tool'
-      preLoaderRoute: typeof Char91DotmcpChar93InvokeToolToolRouteImport
+    '/email/unsubscribe': {
+      id: '/email/unsubscribe'
+      path: '/email/unsubscribe'
+      fullPath: '/email/unsubscribe'
+      preLoaderRoute: typeof EmailUnsubscribeRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/_authenticated/admin/blocked-domains': {
-      id: '/_authenticated/admin/blocked-domains'
-      path: '/blocked-domains'
-      fullPath: '/admin/blocked-domains'
-      preLoaderRoute: typeof AuthenticatedAdminBlockedDomainsRouteImport
-      parentRoute: typeof AuthenticatedAdminRouteRoute
-    }
-    '/_authenticated/admin/contact-enquiries': {
-      id: '/_authenticated/admin/contact-enquiries'
-      path: '/contact-enquiries'
-      fullPath: '/admin/contact-enquiries'
-      preLoaderRoute: typeof AuthenticatedAdminContactEnquiriesRouteImport
-      parentRoute: typeof AuthenticatedAdminRouteRoute
-    }
-    '/_authenticated/admin/docs': {
-      id: '/_authenticated/admin/docs'
-      path: '/docs'
-      fullPath: '/admin/docs'
-      preLoaderRoute: typeof AuthenticatedAdminDocsRouteImport
-      parentRoute: typeof AuthenticatedAdminRouteRoute
-    }
-    '/_authenticated/admin/newsletter-jobs': {
-      id: '/_authenticated/admin/newsletter-jobs'
-      path: '/newsletter-jobs'
-      fullPath: '/admin/newsletter-jobs'
-      preLoaderRoute: typeof AuthenticatedAdminNewsletterJobsRouteImport
-      parentRoute: typeof AuthenticatedAdminRouteRoute
-    }
-    '/_authenticated/admin/security-events': {
-      id: '/_authenticated/admin/security-events'
-      path: '/security-events'
-      fullPath: '/admin/security-events'
-      preLoaderRoute: typeof AuthenticatedAdminSecurityEventsRouteImport
-      parentRoute: typeof AuthenticatedAdminRouteRoute
-    }
-    '/_authenticated/admin/spam-audit': {
-      id: '/_authenticated/admin/spam-audit'
-      path: '/spam-audit'
-      fullPath: '/admin/spam-audit'
-      preLoaderRoute: typeof AuthenticatedAdminSpamAuditRouteImport
-      parentRoute: typeof AuthenticatedAdminRouteRoute
-    }
-    '/_authenticated/admin/visitor-audit': {
-      id: '/_authenticated/admin/visitor-audit'
-      path: '/visitor-audit'
-      fullPath: '/admin/visitor-audit'
-      preLoaderRoute: typeof AuthenticatedAdminVisitorAuditRouteImport
-      parentRoute: typeof AuthenticatedAdminRouteRoute
-    }
-    '/api/download/pdf': {
-      id: '/api/download/pdf'
-      path: '/api/download/pdf'
-      fullPath: '/api/download/pdf'
-      preLoaderRoute: typeof ApiDownloadPdfRouteImport
+    '/case-study/$slug': {
+      id: '/case-study/$slug'
+      path: '/case-study/$slug'
+      fullPath: '/case-study/$slug'
+      preLoaderRoute: typeof CaseStudySlugRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/api/public/chat': {
-      id: '/api/public/chat'
-      path: '/api/public/chat'
-      fullPath: '/api/public/chat'
-      preLoaderRoute: typeof ApiPublicChatRouteImport
+    '/blog/$slug': {
+      id: '/blog/$slug'
+      path: '/$slug'
+      fullPath: '/blog/$slug'
+      preLoaderRoute: typeof BlogSlugRouteImport
+      parentRoute: typeof BlogRoute
+    }
+    '/_authenticated/repository': {
+      id: '/_authenticated/repository'
+      path: '/repository'
+      fullPath: '/repository'
+      preLoaderRoute: typeof AuthenticatedRepositoryRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/reports': {
+      id: '/_authenticated/reports'
+      path: '/reports'
+      fullPath: '/reports'
+      preLoaderRoute: typeof AuthenticatedReportsRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/.well-known/oauth-protected-resource': {
+      id: '/.well-known/oauth-protected-resource'
+      path: '/.well-known/oauth-protected-resource'
+      fullPath: '/.well-known/oauth-protected-resource'
+      preLoaderRoute: typeof Char91DotwellKnownChar93OauthProtectedResourceRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/api/public/contact': {
-      id: '/api/public/contact'
-      path: '/api/public/contact'
-      fullPath: '/api/public/contact'
-      preLoaderRoute: typeof ApiPublicContactRouteImport
+    '/.mcp/list-tools': {
+      id: '/.mcp/list-tools'
+      path: '/.mcp/list-tools'
+      fullPath: '/.mcp/list-tools'
+      preLoaderRoute: typeof Char91DotmcpChar93ListToolsRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/api/public/newsletter': {
-      id: '/api/public/newsletter'
-      path: '/api/public/newsletter'
-      fullPath: '/api/public/newsletter'
-      preLoaderRoute: typeof ApiPublicNewsletterRouteImport
-      parentRoute: typeof rootRouteImport
+    '/_authenticated/admin': {
+      id: '/_authenticated/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AuthenticatedAdminRouteRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
     }
-    '/api/public/track-visit': {
-      id: '/api/public/track-visit'
-      path: '/api/public/track-visit'
-      fullPath: '/api/public/track-visit'
-      preLoaderRoute: typeof ApiPublicTrackVisitRouteImport
+    '/lovable/email/events': {
+      id: '/lovable/email/events'
+      path: '/lovable/email/events'
+      fullPath: '/lovable/email/events'
+      preLoaderRoute: typeof LovableEmailEventsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/public/tts': {
@@ -1135,46 +1044,109 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPublicTtsRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/lovable/email/events': {
-      id: '/lovable/email/events'
-      path: '/lovable/email/events'
-      fullPath: '/lovable/email/events'
-      preLoaderRoute: typeof LovableEmailEventsRouteImport
+    '/api/public/track-visit': {
+      id: '/api/public/track-visit'
+      path: '/api/public/track-visit'
+      fullPath: '/api/public/track-visit'
+      preLoaderRoute: typeof ApiPublicTrackVisitRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/api/public/cron/contact-email-retry': {
-      id: '/api/public/cron/contact-email-retry'
-      path: '/api/public/cron/contact-email-retry'
-      fullPath: '/api/public/cron/contact-email-retry'
-      preLoaderRoute: typeof ApiPublicCronContactEmailRetryRouteImport
+    '/api/public/newsletter': {
+      id: '/api/public/newsletter'
+      path: '/api/public/newsletter'
+      fullPath: '/api/public/newsletter'
+      preLoaderRoute: typeof ApiPublicNewsletterRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/api/public/cron/monthly-newsletter': {
-      id: '/api/public/cron/monthly-newsletter'
-      path: '/api/public/cron/monthly-newsletter'
-      fullPath: '/api/public/cron/monthly-newsletter'
-      preLoaderRoute: typeof ApiPublicCronMonthlyNewsletterRouteImport
+    '/api/public/contact': {
+      id: '/api/public/contact'
+      path: '/api/public/contact'
+      fullPath: '/api/public/contact'
+      preLoaderRoute: typeof ApiPublicContactRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/api/public/cron/newsletter-scheduler': {
-      id: '/api/public/cron/newsletter-scheduler'
-      path: '/api/public/cron/newsletter-scheduler'
-      fullPath: '/api/public/cron/newsletter-scheduler'
-      preLoaderRoute: typeof ApiPublicCronNewsletterSchedulerRouteImport
+    '/api/public/chat': {
+      id: '/api/public/chat'
+      path: '/api/public/chat'
+      fullPath: '/api/public/chat'
+      preLoaderRoute: typeof ApiPublicChatRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/api/public/cron/visitor-audit-alerts': {
-      id: '/api/public/cron/visitor-audit-alerts'
-      path: '/api/public/cron/visitor-audit-alerts'
-      fullPath: '/api/public/cron/visitor-audit-alerts'
-      preLoaderRoute: typeof ApiPublicCronVisitorAuditAlertsRouteImport
+    '/api/download/pdf': {
+      id: '/api/download/pdf'
+      path: '/api/download/pdf'
+      fullPath: '/api/download/pdf'
+      preLoaderRoute: typeof ApiDownloadPdfRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/lovable/email/auth/preview': {
-      id: '/lovable/email/auth/preview'
-      path: '/lovable/email/auth/preview'
-      fullPath: '/lovable/email/auth/preview'
-      preLoaderRoute: typeof LovableEmailAuthPreviewRouteImport
+    '/_authenticated/admin/visitor-audit': {
+      id: '/_authenticated/admin/visitor-audit'
+      path: '/visitor-audit'
+      fullPath: '/admin/visitor-audit'
+      preLoaderRoute: typeof AuthenticatedAdminVisitorAuditRouteImport
+      parentRoute: typeof AuthenticatedAdminRouteRoute
+    }
+    '/_authenticated/admin/spam-audit': {
+      id: '/_authenticated/admin/spam-audit'
+      path: '/spam-audit'
+      fullPath: '/admin/spam-audit'
+      preLoaderRoute: typeof AuthenticatedAdminSpamAuditRouteImport
+      parentRoute: typeof AuthenticatedAdminRouteRoute
+    }
+    '/_authenticated/admin/security-events': {
+      id: '/_authenticated/admin/security-events'
+      path: '/security-events'
+      fullPath: '/admin/security-events'
+      preLoaderRoute: typeof AuthenticatedAdminSecurityEventsRouteImport
+      parentRoute: typeof AuthenticatedAdminRouteRoute
+    }
+    '/_authenticated/admin/newsletter-jobs': {
+      id: '/_authenticated/admin/newsletter-jobs'
+      path: '/newsletter-jobs'
+      fullPath: '/admin/newsletter-jobs'
+      preLoaderRoute: typeof AuthenticatedAdminNewsletterJobsRouteImport
+      parentRoute: typeof AuthenticatedAdminRouteRoute
+    }
+    '/_authenticated/admin/docs': {
+      id: '/_authenticated/admin/docs'
+      path: '/docs'
+      fullPath: '/admin/docs'
+      preLoaderRoute: typeof AuthenticatedAdminDocsRouteImport
+      parentRoute: typeof AuthenticatedAdminRouteRoute
+    }
+    '/_authenticated/admin/contact-enquiries': {
+      id: '/_authenticated/admin/contact-enquiries'
+      path: '/contact-enquiries'
+      fullPath: '/admin/contact-enquiries'
+      preLoaderRoute: typeof AuthenticatedAdminContactEnquiriesRouteImport
+      parentRoute: typeof AuthenticatedAdminRouteRoute
+    }
+    '/_authenticated/admin/blocked-domains': {
+      id: '/_authenticated/admin/blocked-domains'
+      path: '/blocked-domains'
+      fullPath: '/admin/blocked-domains'
+      preLoaderRoute: typeof AuthenticatedAdminBlockedDomainsRouteImport
+      parentRoute: typeof AuthenticatedAdminRouteRoute
+    }
+    '/.mcp/invoke-tool/$tool': {
+      id: '/.mcp/invoke-tool/$tool'
+      path: '/.mcp/invoke-tool/$tool'
+      fullPath: '/.mcp/invoke-tool/$tool'
+      preLoaderRoute: typeof Char91DotmcpChar93InvokeToolToolRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/.lovable/oauth/consent': {
+      id: '/.lovable/oauth/consent'
+      path: '/.lovable/oauth/consent'
+      fullPath: '/.lovable/oauth/consent'
+      preLoaderRoute: typeof DotlovableOauthConsentRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/lovable/email/transactional/preview': {
+      id: '/lovable/email/transactional/preview'
+      path: '/lovable/email/transactional/preview'
+      fullPath: '/lovable/email/transactional/preview'
+      preLoaderRoute: typeof LovableEmailTransactionalPreviewRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/lovable/email/auth/webhook': {
@@ -1184,11 +1156,39 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LovableEmailAuthWebhookRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/lovable/email/transactional/preview': {
-      id: '/lovable/email/transactional/preview'
-      path: '/lovable/email/transactional/preview'
-      fullPath: '/lovable/email/transactional/preview'
-      preLoaderRoute: typeof LovableEmailTransactionalPreviewRouteImport
+    '/lovable/email/auth/preview': {
+      id: '/lovable/email/auth/preview'
+      path: '/lovable/email/auth/preview'
+      fullPath: '/lovable/email/auth/preview'
+      preLoaderRoute: typeof LovableEmailAuthPreviewRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/cron/visitor-audit-alerts': {
+      id: '/api/public/cron/visitor-audit-alerts'
+      path: '/api/public/cron/visitor-audit-alerts'
+      fullPath: '/api/public/cron/visitor-audit-alerts'
+      preLoaderRoute: typeof ApiPublicCronVisitorAuditAlertsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/cron/newsletter-scheduler': {
+      id: '/api/public/cron/newsletter-scheduler'
+      path: '/api/public/cron/newsletter-scheduler'
+      fullPath: '/api/public/cron/newsletter-scheduler'
+      preLoaderRoute: typeof ApiPublicCronNewsletterSchedulerRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/cron/monthly-newsletter': {
+      id: '/api/public/cron/monthly-newsletter'
+      path: '/api/public/cron/monthly-newsletter'
+      fullPath: '/api/public/cron/monthly-newsletter'
+      preLoaderRoute: typeof ApiPublicCronMonthlyNewsletterRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/cron/contact-email-retry': {
+      id: '/api/public/cron/contact-email-retry'
+      path: '/api/public/cron/contact-email-retry'
+      fullPath: '/api/public/cron/contact-email-retry'
+      preLoaderRoute: typeof ApiPublicCronContactEmailRetryRouteImport
       parentRoute: typeof rootRouteImport
     }
   }
