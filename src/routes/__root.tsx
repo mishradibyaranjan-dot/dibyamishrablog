@@ -198,7 +198,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
 const THEME_BOOTSTRAP = `(function(){try{
 var t=localStorage.getItem('drm-theme');
 var all=['glacier','cinematic','midnight','aurora','sunset','noir','emerald','light','paper','sand','arctic'];
-if(all.indexOf(t)<0)return;
+if(all.indexOf(t)<0)t='glacier';
 var light=['glacier','light','paper','sand','arctic'];
 var m=light.indexOf(t)>=0?'light':'dark';
 var r=document.documentElement;
