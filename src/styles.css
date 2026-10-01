@@ -568,7 +568,9 @@
     overflow-x: clip;
   }
   body {
-    background-color: var(--color-background);
+    /* No background-color here: an opaque body background paints over
+       fixed -z-10 background layers (aurora, AI scroll background).
+       The canvas background comes from html instead. */
     color: var(--color-foreground);
     font-family: var(--font-sans);
     font-feature-settings: "cv11", "ss01";
@@ -830,8 +832,11 @@
    light theme airy and professional.
 */
 
-html, body {
+html {
   background-color: var(--color-background);
+  color: var(--color-foreground);
+}
+body {
   color: var(--color-foreground);
 }
 

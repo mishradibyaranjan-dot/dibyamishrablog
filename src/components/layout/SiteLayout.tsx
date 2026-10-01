@@ -9,6 +9,7 @@ import { FloatingConnectCta } from "@/components/marketing/FloatingConnectCta";
 import { SiteBanner } from "@/components/layout/SiteBanner";
 import { SideRail } from "@/components/layout/SideRail";
 import { AuroraBackground } from "@/components/cinematic/AuroraBackground";
+import { AiScrollBackground } from "@/components/layout/AiScrollBackground";
 import { PageTransition } from "@/components/cinematic/PageTransition";
 import { ThemeProvider } from "@/components/theme/ThemeProvider";
 import { ThemeToggle } from "@/components/theme/ThemeToggle";
@@ -311,6 +312,7 @@ export function SiteLayout() {
                 <SideRail />
                 <div data-a11y-filter-surface className="relative flex flex-1 flex-col">
                   <AuroraBackground />
+                  <AiScrollBackground />
                   <SiteBanner />
                   <main id="main-content" className="relative flex-1 lg:pl-20">
                     <PageTransition />
