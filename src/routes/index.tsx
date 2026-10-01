@@ -96,6 +96,7 @@ type LatestIssue = {
   summary: string;
   hero_emoji: string | null;
   published_at: string | null;
+  body_markdown: string | null;
 };
 
 function useLatestIssue() {
@@ -104,7 +105,7 @@ function useLatestIssue() {
     let alive = true;
     supabase
       .from("newsletter_issues")
-      .select("slug, title, summary, hero_emoji, published_at")
+      .select("slug, title, summary, hero_emoji, published_at, body_markdown")
       .eq("status", "published")
       .order("published_at", { ascending: false })
       .limit(1)
@@ -777,25 +778,30 @@ function NewsletterSection({ latest }: { latest: LatestIssue | null }) {
       </h2>
       <NewsletterCta />
       {latest && (
-        <Link
-          to="/newsletter/$slug"
-          params={{ slug: latest.slug }}
-          className="group inline-flex items-center gap-3 rounded-2xl border border-border bg-card p-5 transition-all hover:-translate-y-0.5 hover:shadow-glow"
-        >
-          <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-brand-gradient text-white">
-            <Mail className="h-5 w-5" />
-          </span>
-          <span className="min-w-0">
-            <span className="block text-xs font-semibold uppercase tracking-[0.16em] text-muted-foreground">
-              Latest issue
-            </span>
-            <span className="block truncate text-sm font-semibold text-foreground">
-              {latest.hero_emoji ? `${latest.hero_emoji} ` : ""}
-              {latest.title}
-            </span>
-          </span>
-          <ArrowRight className="ml-auto h-4 w-4 shrink-0 text-brand-1 transition-transform group-hover:translate-x-0.5" />
-        </Link>
+        <article className="card-flashy flex flex-col gap-3 rounded-2xl border border-border bg-card p-5 sm:p-6">
+          <div className="flex flex-wrap items-center gap-2 text-xs font-semibold uppercase tracking-[0.16em] text-muted-foreground">
+            <Mail className="h-4 w-4 text-primary" aria-hidden="true" />
+            <span>Latest Newsletter</span>
+            {latest.published_at && (
+              <span>
+                · {new Date(latest.published_at).toLocaleDateString("en-US", { month: "long", year: "numeric", timeZone: "Asia/Kolkata" })}
+              </span>
+            )}
+          </div>
+          <h3 className="font-display text-lg font-bold text-foreground sm:text-xl">{latest.title}</h3>
+          <p className="text-sm text-muted-foreground">{latest.summary}</p>
+          <div className="flex flex-wrap items-center gap-4 pt-1">
+            <Link
+              to="/newsletter/$slug"
+              params={{ slug: latest.slug }}
+              className="inline-flex min-h-11 items-center gap-2 rounded-xl bg-brand-gradient px-5 py-2.5 text-sm font-semibold text-white transition-transform hover:-translate-y-0.5"
+            >
+              {latest.slug === "intelligent-enterprise-brief-october-2026" ? "Read the October Brief" : "Read the latest issue"}
+              <ArrowRight className="h-4 w-4" />
+            </Link>
+            <span className="text-xs text-muted-foreground">{readingMinutes(latest.body_markdown)} min read</span>
+          </div>
+        </article>
       )}
     </section>
   );

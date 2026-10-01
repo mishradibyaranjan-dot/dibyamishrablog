@@ -1,4 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { readingMinutes, issueExtras } from "@/lib/newsletter-format";
+import { Badge } from "@/components/ui/badge";
 import { useEffect, useState } from "react";
 import { Mail, ArrowRight, FileText } from "lucide-react";
 import { Section, SectionHeader } from "@/components/layout/Section";
