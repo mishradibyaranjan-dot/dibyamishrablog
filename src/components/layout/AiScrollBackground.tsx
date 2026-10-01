@@ -4,9 +4,9 @@ import aiBgCircuit from "@/assets/ai-bg-circuit.jpg";
 import aiBgParticles from "@/assets/ai-bg-particles.jpg";
 
 const LAYERS = [
-  { src: aiBgNeural, speed: 0.12, top: "-5%", opacity: 0.28 },
-  { src: aiBgCircuit, speed: 0.22, top: "35%", opacity: 0.22 },
-  { src: aiBgParticles, speed: 0.34, top: "70%", opacity: 0.26 },
+  { src: aiBgNeural, speed: 0.12, top: "-5%", opacity: 0.55 },
+  { src: aiBgCircuit, speed: 0.22, top: "35%", opacity: 0.45 },
+  { src: aiBgParticles, speed: 0.34, top: "70%", opacity: 0.5 },
 ];
 
 /**
@@ -65,7 +65,7 @@ export function AiScrollBackground() {
         </div>
       ))}
       {/* readability veil so text stays legible over the imagery */}
-      <div className="absolute inset-0 bg-background/70" />
+      <div className="absolute inset-0 bg-background/45" />
     </div>
   );
 }
