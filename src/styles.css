@@ -832,8 +832,11 @@
    light theme airy and professional.
 */
 
-html, body {
+html {
   background-color: var(--color-background);
+  color: var(--color-foreground);
+}
+body {
   color: var(--color-foreground);
 }
 
