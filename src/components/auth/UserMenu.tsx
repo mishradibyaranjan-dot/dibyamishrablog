@@ -77,6 +77,11 @@ export function UserMenu() {
         )}
         {isAdmin && (
           <DropdownMenuItem asChild>
+            <Link to="/admin/jobs"><ScrollText className="mr-2 h-4 w-4" /> Jobs platform</Link>
+          </DropdownMenuItem>
+        )}
+        {isAdmin && (
+          <DropdownMenuItem asChild>
             <Link to="/admin/visitor-audit"><ScrollText className="mr-2 h-4 w-4" /> Visitor tracking audit</Link>
           </DropdownMenuItem>
         )}

@@ -213,6 +213,7 @@ function Hero() {
             ["/achievements", "Achievements"],
             ["/certifications", "Certifications"],
             ["/blog", "Leadership Insights"],
+            ["/jobs", "Explore Verified Jobs"],
           ] as const).map(([to, label]) => (
             <Link key={to} to={to} className="inline-flex min-h-11 items-center rounded-full border border-border px-4 text-sm font-medium text-foreground hover:bg-accent">
               {label}

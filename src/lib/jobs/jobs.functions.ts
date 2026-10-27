@@ -1,0 +1,163 @@
+import { createServerFn } from "@tanstack/react-start";
+import { z } from "zod";
+import { createClient } from "@supabase/supabase-js";
+import type { Database } from "@/integrations/supabase/types";
+import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
+
+function publicClient() {
+  const key = process.env["SUPABASE_PUBLISHABLE_KEY"]!;
+  return createClient<Database>(process.env["SUPABASE_URL"]!, key, {
+    auth: { persistSession: false, autoRefreshToken: false, storage: undefined },
+    global: {
+      fetch: (input, init) => {
+        const h = new Headers(init?.headers);
+        if (key.startsWith("sb_") && h.get("Authorization") === `Bearer ${key}`) h.delete("Authorization");
+        h.set("apikey", key);
+        return fetch(input, { ...init, headers: h });
+      },
+    },
+  });
+}
+
+const PUBLIC_COLS =
+  "id,slug,title,company,location,country,work_arrangement,employment_type,categories,career_level,salary_min,salary_max,salary_currency,summary,source_url,apply_url,original_posted_at,expires_at,last_verified_at,verification_status,job_sources(name,provider)";
+
+export const jobFilters = z.object({
+  q: z.string().max(120).optional().default(""),
+  level: z.string().max(60).optional().default(""),
+  category: z.string().max(60).optional().default(""),
+  country: z.string().max(60).optional().default(""),
+  arrangement: z.enum(["", "remote", "hybrid", "onsite"]).optional().default(""),
+  company: z.string().max(80).optional().default(""),
+  hours: z.number().int().refine((h) => [1, 3, 6, 12, 24].includes(h)).optional().default(24),
+  page: z.number().int().min(1).max(200).optional().default(1),
+});
+export type JobFilters = z.infer<typeof jobFilters>;
+const PAGE = 20;
+
+export const listJobs = createServerFn({ method: "GET" })
+  .inputValidator((d: unknown) => jobFilters.parse(d ?? {}))
+  .handler(async ({ data }) => {
+    const db = publicClient();
+    // Database policy already restricts to verified, open jobs < 24h old; the window filter narrows further.
+    let q = db.from("jobs").select(PUBLIC_COLS, { count: "exact" })
+      .gt("original_posted_at", new Date(Date.now() - data.hours * 3600_000).toISOString())
+      .order("original_posted_at", { ascending: false })
+      .range((data.page - 1) * PAGE, data.page * PAGE - 1);
+    if (data.q) q = q.textSearch("search", data.q.trim().split(/\s+/).map((w) => w.replace(/[^\p{L}\p{N}]/gu, "")).filter(Boolean).map((w) => `${w}:*`).join(" & "), { config: "simple" });
+    if (data.level) q = q.eq("career_level", data.level);
+    if (data.category) q = q.contains("categories", [data.category]);
+    if (data.country) q = q.eq("country", data.country);
+    if (data.arrangement) q = q.eq("work_arrangement", data.arrangement);
+    if (data.company) q = q.ilike("company", data.company.replace(/[%_]/g, ""));
+    const { data: rows, count, error } = await q;
+    if (error) { console.error("[jobs:list]", error.message); return { jobs: [], total: 0, pageSize: PAGE, error: "unavailable" as string | null }; }
+    return { jobs: rows ?? [], total: count ?? 0, pageSize: PAGE, error: null as string | null };
+  });
+
+export const getJob = createServerFn({ method: "GET" })
+  .inputValidator((d: { slug: string }) => z.object({ slug: z.string().min(1).max(120) }).parse(d))
+  .handler(async ({ data }) => {
+    const { data: row } = await publicClient().from("jobs").select(PUBLIC_COLS).eq("slug", data.slug).maybeSingle();
+    return row ?? null;
+  });
+
+export const listSources = createServerFn({ method: "GET" }).handler(async () => {
+  const { data } = await publicClient().from("job_sources").select("name,provider,status,poll_minutes,terms_note,last_synced_at").order("status").order("name");
+  return data ?? [];
+});
+
+export const reportJob = createServerFn({ method: "POST" })
+  .inputValidator((d: unknown) => z.object({
+    jobId: z.string().uuid(),
+    reason: z.enum(["expired", "suspicious", "inaccurate", "broken_link"]),
+    details: z.string().max(1000).optional(),
+  }).parse(d))
+  .handler(async ({ data }) => {
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const { error } = await supabaseAdmin.from("reported_jobs").insert({ job_id: data.jobId, reason: data.reason, details: data.details ?? null });
+    if (error) throw new Error("Could not submit report");
+    return { ok: true };
+  });
+
+// ---------- Admin ----------
+async function assertAdmin(context: { supabase: any; userId: string }) {
+  const { data, error } = await context.supabase.from("user_roles").select("role").eq("user_id", context.userId).eq("role", "admin").maybeSingle();
+  if (error) throw new Error("Role check failed");
+  if (!data) throw new Error("Forbidden");
+}
+
+export const adminJobsOverview = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }) => {
+    await assertAdmin(context);
+    const { supabaseAdmin: db } = await import("@/integrations/supabase/client.server");
+    const now = Date.now();
+    const iso = (ms: number) => new Date(now - ms).toISOString();
+    const c = async (f: (q: any) => any) => (await f(db.from("jobs").select("id", { count: "exact", head: true }))).count ?? 0;
+    const startOfDay = new Date(); startOfDay.setUTCHours(0, 0, 0, 0);
+    const [live, lastHour, expiringSoon, expiredToday, quarantined, duplicates, closed, reports] = await Promise.all([
+      c((q) => q.eq("verification_status", "VERIFIED").eq("application_status", "OPEN").eq("is_primary", true).gt("original_posted_at", iso(86_400_000))),
+      c((q) => q.gt("first_seen_at", iso(3_600_000))),
+      c((q) => q.eq("application_status", "OPEN").gt("original_posted_at", iso(86_400_000)).lt("original_posted_at", iso(82_800_000))),
+      c((q) => q.lt("expires_at", new Date(now).toISOString()).gt("expires_at", startOfDay.toISOString())),
+      c((q) => q.in("verification_status", ["QUARANTINED", "REJECTED"])),
+      c((q) => q.eq("is_primary", false)),
+      c((q) => q.eq("application_status", "CLOSED")),
+      (await db.from("reported_jobs").select("id", { count: "exact", head: true }).eq("status", "open")).count ?? 0,
+    ]);
+    const { data: sources } = await db.from("job_sources").select("id,slug,name,provider,status,poll_minutes,last_synced_at,last_error,active").order("name");
+    const { data: runs } = await db.from("source_sync_runs").select("id,started_at,finished_at,status,fetched,accepted,rejected,closed,error,job_sources(name)").order("started_at", { ascending: false }).limit(40);
+    const { data: recent } = await db.from("jobs").select("id,slug,title,company,career_level,country,verification_status,application_status,is_primary,original_posted_at,verification_notes").order("original_posted_at", { ascending: false }).limit(100);
+    const { data: reported } = await db.from("reported_jobs").select("id,reason,details,created_at,status,jobs(title,company)").eq("status", "open").order("created_at", { ascending: false }).limit(50);
+    return { stats: { live, lastHour, expiringSoon, expiredToday, quarantined, duplicates, closed, reports }, sources: sources ?? [], runs: runs ?? [], recent: recent ?? [], reported: reported ?? [] };
+  });
+
+export const adminJobAction = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d: unknown) => z.object({ jobId: z.string().uuid(), action: z.enum(["quarantine", "reject", "republish"]), note: z.string().max(500).optional() }).parse(d))
+  .handler(async ({ data, context }) => {
+    await assertAdmin(context);
+    const { supabaseAdmin: db } = await import("@/integrations/supabase/client.server");
+    const status = data.action === "republish" ? "VERIFIED" : data.action === "reject" ? "REJECTED" : "QUARANTINED";
+    // Republishing only flips verification; the 24-hour rule is still enforced by the database policy.
+    const { error } = await db.from("jobs").update({ verification_status: status, verification_notes: `Admin ${data.action}${data.note ? `: ${data.note}` : ""}`, updated_at: new Date().toISOString() }).eq("id", data.jobId);
+    if (error) throw new Error(error.message);
+    await db.from("job_admin_audit").insert({ actor_id: context.userId, job_id: data.jobId, action: data.action, note: data.note ?? null });
+    return { ok: true };
+  });
+
+export const adminSourceUpdate = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d: unknown) => z.object({ id: z.string().uuid(), active: z.boolean().optional(), poll_minutes: z.number().int().min(15).max(1440).optional() }).parse(d))
+  .handler(async ({ data, context }) => {
+    await assertAdmin(context);
+    const { supabaseAdmin: db } = await import("@/integrations/supabase/client.server");
+    const { id, ...patch } = data;
+    const { error } = await db.from("job_sources").update({ ...patch, updated_at: new Date().toISOString() }).eq("id", id);
+    if (error) throw new Error(error.message);
+    await db.from("job_admin_audit").insert({ actor_id: context.userId, action: "source_update", note: JSON.stringify(data) });
+    return { ok: true };
+  });
+
+export const adminRunSync = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }) => {
+    await assertAdmin(context);
+    const { runJobSync } = await import("./sync.server");
+    const results = await runJobSync();
+    const { supabaseAdmin: db } = await import("@/integrations/supabase/client.server");
+    await db.from("job_admin_audit").insert({ actor_id: context.userId, action: "manual_sync" });
+    return results;
+  });
+
+export const adminResolveReport = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d: unknown) => z.object({ id: z.string().uuid() }).parse(d))
+  .handler(async ({ data, context }) => {
+    await assertAdmin(context);
+    const { supabaseAdmin: db } = await import("@/integrations/supabase/client.server");
+    await db.from("reported_jobs").update({ status: "resolved" }).eq("id", data.id);
+    await db.from("job_admin_audit").insert({ actor_id: context.userId, action: "resolve_report", note: data.id });
+    return { ok: true };
+  });

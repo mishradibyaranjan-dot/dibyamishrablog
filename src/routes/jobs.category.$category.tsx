@@ -1,0 +1,31 @@
+import { createFileRoute, notFound } from "@tanstack/react-router";
+import { useState } from "react";
+import { Section } from "@/components/layout/Section";
+import { JobsDirectory, JobsHero, DEFAULT_FILTERS, jobsQuery } from "@/components/jobs/JobsDirectory";
+import { jobsHead } from "@/components/jobs/jobs-head";
+import { CATEGORY_RULES, slugify } from "@/lib/jobs/rules";
+
+const find = (s: string) => CATEGORY_RULES.map(([c]) => c).find((c) => slugify(c) === s);
+export const Route = createFileRoute("/jobs/category/$category")({
+  loader: ({ params, context }) => {
+    const category = find(params.category);
+    if (!category) throw notFound();
+    const filters = { ...DEFAULT_FILTERS, category };
+    return context.queryClient.ensureQueryData(jobsQuery(filters)).then((data) => ({ category, initial: { filters, data } }));
+  },
+  head: ({ params, loaderData }) => loaderData
+    ? jobsHead(`/jobs/category/${params.category}`, `${loaderData.category} Jobs — Verified, Last 24 Hours`, `Fresh ${loaderData.category} job openings from official employer career sites, posted within the last 24 hours.`, [{ name: loaderData.category, path: `/jobs/category/${params.category}` }])
+    : { meta: [{ title: "Category not found" }, { name: "robots", content: "noindex" }] },
+  notFoundComponent: () => <Section>Unknown job category.</Section>,
+  component: Page,
+});
+function Page() {
+  const { category, initial } = Route.useLoaderData();
+  const [f, setF] = useState({ ...DEFAULT_FILTERS, category });
+  return (
+    <Section className="pt-14">
+      <JobsHero title={`${category} Jobs`} subtitle={`Verified ${category} roles posted within the last 24 hours, from intern to executive level.`} />
+      <JobsDirectory initial={initial} filters={f} onChange={(n) => setF({ ...n, category })} lockedKeys={["category"]} />
+    </Section>
+  );
+}

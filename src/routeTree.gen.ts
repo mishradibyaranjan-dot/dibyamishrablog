@@ -45,6 +45,13 @@ import { Route as AuthenticatedRepositoryRouteImport } from './routes/_authentic
 import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
 import { Route as CaseStudySlugRouteImport } from './routes/case-study.$slug'
 import { Route as EmailUnsubscribeRouteImport } from './routes/email/unsubscribe'
+import { Route as JobsIndexRouteImport } from './routes/jobs.index'
+import { Route as JobsSlugRouteImport } from './routes/jobs.$slug'
+import { Route as JobsAboutVerificationRouteImport } from './routes/jobs.about-verification'
+import { Route as JobsAlertsRouteImport } from './routes/jobs.alerts'
+import { Route as JobsRemoteRouteImport } from './routes/jobs.remote'
+import { Route as JobsSavedRouteImport } from './routes/jobs.saved'
+import { Route as JobsSourcesRouteImport } from './routes/jobs.sources'
 import { Route as NewsletterIndexRouteImport } from './routes/newsletter.index'
 import { Route as NewsletterSlugRouteImport } from './routes/newsletter.$slug'
 import { Route as WhitePaperAgenticAiEnterpriseAutomationRouteImport } from './routes/white-paper.agentic-ai-enterprise-automation'
@@ -53,6 +60,7 @@ import { Route as Char91DotmcpChar93InvokeToolToolRouteImport } from './routes/[
 import { Route as AuthenticatedAdminBlockedDomainsRouteImport } from './routes/_authenticated/admin/blocked-domains'
 import { Route as AuthenticatedAdminContactEnquiriesRouteImport } from './routes/_authenticated/admin/contact-enquiries'
 import { Route as AuthenticatedAdminDocsRouteImport } from './routes/_authenticated/admin/docs'
+import { Route as AuthenticatedAdminJobsRouteImport } from './routes/_authenticated/admin/jobs'
 import { Route as AuthenticatedAdminNewsletterJobsRouteImport } from './routes/_authenticated/admin/newsletter-jobs'
 import { Route as AuthenticatedAdminSecurityEventsRouteImport } from './routes/_authenticated/admin/security-events'
 import { Route as AuthenticatedAdminSpamAuditRouteImport } from './routes/_authenticated/admin/spam-audit'
@@ -63,8 +71,12 @@ import { Route as ApiPublicContactRouteImport } from './routes/api/public/contac
 import { Route as ApiPublicNewsletterRouteImport } from './routes/api/public/newsletter'
 import { Route as ApiPublicTrackVisitRouteImport } from './routes/api/public/track-visit'
 import { Route as ApiPublicTtsRouteImport } from './routes/api/public/tts'
+import { Route as JobsCategoryCategoryRouteImport } from './routes/jobs.category.$category'
+import { Route as JobsCompanyCompanyRouteImport } from './routes/jobs.company.$company'
+import { Route as JobsLevelLevelRouteImport } from './routes/jobs.level.$level'
 import { Route as LovableEmailEventsRouteImport } from './routes/lovable/email/events'
 import { Route as ApiPublicCronContactEmailRetryRouteImport } from './routes/api/public/cron/contact-email-retry'
+import { Route as ApiPublicCronJobsSyncRouteImport } from './routes/api/public/cron/jobs-sync'
 import { Route as ApiPublicCronMonthlyNewsletterRouteImport } from './routes/api/public/cron/monthly-newsletter'
 import { Route as ApiPublicCronNewsletterSchedulerRouteImport } from './routes/api/public/cron/newsletter-scheduler'
 import { Route as ApiPublicCronVisitorAuditAlertsRouteImport } from './routes/api/public/cron/visitor-audit-alerts'
@@ -253,6 +265,41 @@ const EmailUnsubscribeRoute = EmailUnsubscribeRouteImport.update({
   path: '/email/unsubscribe',
   getParentRoute: () => rootRouteImport,
 } as any)
+const JobsIndexRoute = JobsIndexRouteImport.update({
+  id: '/jobs/',
+  path: '/jobs/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const JobsSlugRoute = JobsSlugRouteImport.update({
+  id: '/jobs/$slug',
+  path: '/jobs/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const JobsAboutVerificationRoute = JobsAboutVerificationRouteImport.update({
+  id: '/jobs/about-verification',
+  path: '/jobs/about-verification',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const JobsAlertsRoute = JobsAlertsRouteImport.update({
+  id: '/jobs/alerts',
+  path: '/jobs/alerts',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const JobsRemoteRoute = JobsRemoteRouteImport.update({
+  id: '/jobs/remote',
+  path: '/jobs/remote',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const JobsSavedRoute = JobsSavedRouteImport.update({
+  id: '/jobs/saved',
+  path: '/jobs/saved',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const JobsSourcesRoute = JobsSourcesRouteImport.update({
+  id: '/jobs/sources',
+  path: '/jobs/sources',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const NewsletterIndexRoute = NewsletterIndexRouteImport.update({
   id: '/newsletter/',
   path: '/newsletter/',
@@ -295,6 +342,11 @@ const AuthenticatedAdminContactEnquiriesRoute =
 const AuthenticatedAdminDocsRoute = AuthenticatedAdminDocsRouteImport.update({
   id: '/docs',
   path: '/docs',
+  getParentRoute: () => AuthenticatedAdminRouteRoute,
+} as any)
+const AuthenticatedAdminJobsRoute = AuthenticatedAdminJobsRouteImport.update({
+  id: '/jobs',
+  path: '/jobs',
   getParentRoute: () => AuthenticatedAdminRouteRoute,
 } as any)
 const AuthenticatedAdminNewsletterJobsRoute =
@@ -351,6 +403,21 @@ const ApiPublicTtsRoute = ApiPublicTtsRouteImport.update({
   path: '/api/public/tts',
   getParentRoute: () => rootRouteImport,
 } as any)
+const JobsCategoryCategoryRoute = JobsCategoryCategoryRouteImport.update({
+  id: '/jobs/category/$category',
+  path: '/jobs/category/$category',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const JobsCompanyCompanyRoute = JobsCompanyCompanyRouteImport.update({
+  id: '/jobs/company/$company',
+  path: '/jobs/company/$company',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const JobsLevelLevelRoute = JobsLevelLevelRouteImport.update({
+  id: '/jobs/level/$level',
+  path: '/jobs/level/$level',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const LovableEmailEventsRoute = LovableEmailEventsRouteImport.update({
   id: '/lovable/email/events',
   path: '/lovable/email/events',
@@ -362,6 +429,11 @@ const ApiPublicCronContactEmailRetryRoute =
     path: '/api/public/cron/contact-email-retry',
     getParentRoute: () => rootRouteImport,
   } as any)
+const ApiPublicCronJobsSyncRoute = ApiPublicCronJobsSyncRouteImport.update({
+  id: '/api/public/cron/jobs-sync',
+  path: '/api/public/cron/jobs-sync',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiPublicCronMonthlyNewsletterRoute =
   ApiPublicCronMonthlyNewsletterRouteImport.update({
     id: '/api/public/cron/monthly-newsletter',
@@ -433,14 +505,22 @@ export interface FileRoutesByFullPath {
   '/blog/$slug': typeof BlogSlugRoute
   '/case-study/$slug': typeof CaseStudySlugRoute
   '/email/unsubscribe': typeof EmailUnsubscribeRoute
+  '/jobs/$slug': typeof JobsSlugRoute
+  '/jobs/about-verification': typeof JobsAboutVerificationRoute
+  '/jobs/alerts': typeof JobsAlertsRoute
+  '/jobs/remote': typeof JobsRemoteRoute
+  '/jobs/saved': typeof JobsSavedRoute
+  '/jobs/sources': typeof JobsSourcesRoute
   '/newsletter/$slug': typeof NewsletterSlugRoute
   '/white-paper/agentic-ai-enterprise-automation': typeof WhitePaperAgenticAiEnterpriseAutomationRoute
+  '/jobs/': typeof JobsIndexRoute
   '/newsletter/': typeof NewsletterIndexRoute
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
   '/admin/blocked-domains': typeof AuthenticatedAdminBlockedDomainsRoute
   '/admin/contact-enquiries': typeof AuthenticatedAdminContactEnquiriesRoute
   '/admin/docs': typeof AuthenticatedAdminDocsRoute
+  '/admin/jobs': typeof AuthenticatedAdminJobsRoute
   '/admin/newsletter-jobs': typeof AuthenticatedAdminNewsletterJobsRoute
   '/admin/security-events': typeof AuthenticatedAdminSecurityEventsRoute
   '/admin/spam-audit': typeof AuthenticatedAdminSpamAuditRoute
@@ -451,8 +531,12 @@ export interface FileRoutesByFullPath {
   '/api/public/newsletter': typeof ApiPublicNewsletterRoute
   '/api/public/track-visit': typeof ApiPublicTrackVisitRoute
   '/api/public/tts': typeof ApiPublicTtsRoute
+  '/jobs/category/$category': typeof JobsCategoryCategoryRoute
+  '/jobs/company/$company': typeof JobsCompanyCompanyRoute
+  '/jobs/level/$level': typeof JobsLevelLevelRoute
   '/lovable/email/events': typeof LovableEmailEventsRoute
   '/api/public/cron/contact-email-retry': typeof ApiPublicCronContactEmailRetryRoute
+  '/api/public/cron/jobs-sync': typeof ApiPublicCronJobsSyncRoute
   '/api/public/cron/monthly-newsletter': typeof ApiPublicCronMonthlyNewsletterRoute
   '/api/public/cron/newsletter-scheduler': typeof ApiPublicCronNewsletterSchedulerRoute
   '/api/public/cron/visitor-audit-alerts': typeof ApiPublicCronVisitorAuditAlertsRoute
@@ -496,14 +580,22 @@ export interface FileRoutesByTo {
   '/blog/$slug': typeof BlogSlugRoute
   '/case-study/$slug': typeof CaseStudySlugRoute
   '/email/unsubscribe': typeof EmailUnsubscribeRoute
+  '/jobs/$slug': typeof JobsSlugRoute
+  '/jobs/about-verification': typeof JobsAboutVerificationRoute
+  '/jobs/alerts': typeof JobsAlertsRoute
+  '/jobs/remote': typeof JobsRemoteRoute
+  '/jobs/saved': typeof JobsSavedRoute
+  '/jobs/sources': typeof JobsSourcesRoute
   '/newsletter/$slug': typeof NewsletterSlugRoute
   '/white-paper/agentic-ai-enterprise-automation': typeof WhitePaperAgenticAiEnterpriseAutomationRoute
+  '/jobs': typeof JobsIndexRoute
   '/newsletter': typeof NewsletterIndexRoute
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
   '/admin/blocked-domains': typeof AuthenticatedAdminBlockedDomainsRoute
   '/admin/contact-enquiries': typeof AuthenticatedAdminContactEnquiriesRoute
   '/admin/docs': typeof AuthenticatedAdminDocsRoute
+  '/admin/jobs': typeof AuthenticatedAdminJobsRoute
   '/admin/newsletter-jobs': typeof AuthenticatedAdminNewsletterJobsRoute
   '/admin/security-events': typeof AuthenticatedAdminSecurityEventsRoute
   '/admin/spam-audit': typeof AuthenticatedAdminSpamAuditRoute
@@ -514,8 +606,12 @@ export interface FileRoutesByTo {
   '/api/public/newsletter': typeof ApiPublicNewsletterRoute
   '/api/public/track-visit': typeof ApiPublicTrackVisitRoute
   '/api/public/tts': typeof ApiPublicTtsRoute
+  '/jobs/category/$category': typeof JobsCategoryCategoryRoute
+  '/jobs/company/$company': typeof JobsCompanyCompanyRoute
+  '/jobs/level/$level': typeof JobsLevelLevelRoute
   '/lovable/email/events': typeof LovableEmailEventsRoute
   '/api/public/cron/contact-email-retry': typeof ApiPublicCronContactEmailRetryRoute
+  '/api/public/cron/jobs-sync': typeof ApiPublicCronJobsSyncRoute
   '/api/public/cron/monthly-newsletter': typeof ApiPublicCronMonthlyNewsletterRoute
   '/api/public/cron/newsletter-scheduler': typeof ApiPublicCronNewsletterSchedulerRoute
   '/api/public/cron/visitor-audit-alerts': typeof ApiPublicCronVisitorAuditAlertsRoute
@@ -561,14 +657,22 @@ export interface FileRoutesById {
   '/blog/$slug': typeof BlogSlugRoute
   '/case-study/$slug': typeof CaseStudySlugRoute
   '/email/unsubscribe': typeof EmailUnsubscribeRoute
+  '/jobs/$slug': typeof JobsSlugRoute
+  '/jobs/about-verification': typeof JobsAboutVerificationRoute
+  '/jobs/alerts': typeof JobsAlertsRoute
+  '/jobs/remote': typeof JobsRemoteRoute
+  '/jobs/saved': typeof JobsSavedRoute
+  '/jobs/sources': typeof JobsSourcesRoute
   '/newsletter/$slug': typeof NewsletterSlugRoute
   '/white-paper/agentic-ai-enterprise-automation': typeof WhitePaperAgenticAiEnterpriseAutomationRoute
+  '/jobs/': typeof JobsIndexRoute
   '/newsletter/': typeof NewsletterIndexRoute
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
   '/_authenticated/admin/blocked-domains': typeof AuthenticatedAdminBlockedDomainsRoute
   '/_authenticated/admin/contact-enquiries': typeof AuthenticatedAdminContactEnquiriesRoute
   '/_authenticated/admin/docs': typeof AuthenticatedAdminDocsRoute
+  '/_authenticated/admin/jobs': typeof AuthenticatedAdminJobsRoute
   '/_authenticated/admin/newsletter-jobs': typeof AuthenticatedAdminNewsletterJobsRoute
   '/_authenticated/admin/security-events': typeof AuthenticatedAdminSecurityEventsRoute
   '/_authenticated/admin/spam-audit': typeof AuthenticatedAdminSpamAuditRoute
@@ -579,8 +683,12 @@ export interface FileRoutesById {
   '/api/public/newsletter': typeof ApiPublicNewsletterRoute
   '/api/public/track-visit': typeof ApiPublicTrackVisitRoute
   '/api/public/tts': typeof ApiPublicTtsRoute
+  '/jobs/category/$category': typeof JobsCategoryCategoryRoute
+  '/jobs/company/$company': typeof JobsCompanyCompanyRoute
+  '/jobs/level/$level': typeof JobsLevelLevelRoute
   '/lovable/email/events': typeof LovableEmailEventsRoute
   '/api/public/cron/contact-email-retry': typeof ApiPublicCronContactEmailRetryRoute
+  '/api/public/cron/jobs-sync': typeof ApiPublicCronJobsSyncRoute
   '/api/public/cron/monthly-newsletter': typeof ApiPublicCronMonthlyNewsletterRoute
   '/api/public/cron/newsletter-scheduler': typeof ApiPublicCronNewsletterSchedulerRoute
   '/api/public/cron/visitor-audit-alerts': typeof ApiPublicCronVisitorAuditAlertsRoute
@@ -626,14 +734,22 @@ export interface FileRouteTypes {
     | '/blog/$slug'
     | '/case-study/$slug'
     | '/email/unsubscribe'
+    | '/jobs/$slug'
+    | '/jobs/about-verification'
+    | '/jobs/alerts'
+    | '/jobs/remote'
+    | '/jobs/saved'
+    | '/jobs/sources'
     | '/newsletter/$slug'
     | '/white-paper/agentic-ai-enterprise-automation'
+    | '/jobs/'
     | '/newsletter/'
     | '/.lovable/oauth/consent'
     | '/.mcp/invoke-tool/$tool'
     | '/admin/blocked-domains'
     | '/admin/contact-enquiries'
     | '/admin/docs'
+    | '/admin/jobs'
     | '/admin/newsletter-jobs'
     | '/admin/security-events'
     | '/admin/spam-audit'
@@ -644,8 +760,12 @@ export interface FileRouteTypes {
     | '/api/public/newsletter'
     | '/api/public/track-visit'
     | '/api/public/tts'
+    | '/jobs/category/$category'
+    | '/jobs/company/$company'
+    | '/jobs/level/$level'
     | '/lovable/email/events'
     | '/api/public/cron/contact-email-retry'
+    | '/api/public/cron/jobs-sync'
     | '/api/public/cron/monthly-newsletter'
     | '/api/public/cron/newsletter-scheduler'
     | '/api/public/cron/visitor-audit-alerts'
@@ -689,14 +809,22 @@ export interface FileRouteTypes {
     | '/blog/$slug'
     | '/case-study/$slug'
     | '/email/unsubscribe'
+    | '/jobs/$slug'
+    | '/jobs/about-verification'
+    | '/jobs/alerts'
+    | '/jobs/remote'
+    | '/jobs/saved'
+    | '/jobs/sources'
     | '/newsletter/$slug'
     | '/white-paper/agentic-ai-enterprise-automation'
+    | '/jobs'
     | '/newsletter'
     | '/.lovable/oauth/consent'
     | '/.mcp/invoke-tool/$tool'
     | '/admin/blocked-domains'
     | '/admin/contact-enquiries'
     | '/admin/docs'
+    | '/admin/jobs'
     | '/admin/newsletter-jobs'
     | '/admin/security-events'
     | '/admin/spam-audit'
@@ -707,8 +835,12 @@ export interface FileRouteTypes {
     | '/api/public/newsletter'
     | '/api/public/track-visit'
     | '/api/public/tts'
+    | '/jobs/category/$category'
+    | '/jobs/company/$company'
+    | '/jobs/level/$level'
     | '/lovable/email/events'
     | '/api/public/cron/contact-email-retry'
+    | '/api/public/cron/jobs-sync'
     | '/api/public/cron/monthly-newsletter'
     | '/api/public/cron/newsletter-scheduler'
     | '/api/public/cron/visitor-audit-alerts'
@@ -753,14 +885,22 @@ export interface FileRouteTypes {
     | '/blog/$slug'
     | '/case-study/$slug'
     | '/email/unsubscribe'
+    | '/jobs/$slug'
+    | '/jobs/about-verification'
+    | '/jobs/alerts'
+    | '/jobs/remote'
+    | '/jobs/saved'
+    | '/jobs/sources'
     | '/newsletter/$slug'
     | '/white-paper/agentic-ai-enterprise-automation'
+    | '/jobs/'
     | '/newsletter/'
     | '/.lovable/oauth/consent'
     | '/.mcp/invoke-tool/$tool'
     | '/_authenticated/admin/blocked-domains'
     | '/_authenticated/admin/contact-enquiries'
     | '/_authenticated/admin/docs'
+    | '/_authenticated/admin/jobs'
     | '/_authenticated/admin/newsletter-jobs'
     | '/_authenticated/admin/security-events'
     | '/_authenticated/admin/spam-audit'
@@ -771,8 +911,12 @@ export interface FileRouteTypes {
     | '/api/public/newsletter'
     | '/api/public/track-visit'
     | '/api/public/tts'
+    | '/jobs/category/$category'
+    | '/jobs/company/$company'
+    | '/jobs/level/$level'
     | '/lovable/email/events'
     | '/api/public/cron/contact-email-retry'
+    | '/api/public/cron/jobs-sync'
     | '/api/public/cron/monthly-newsletter'
     | '/api/public/cron/newsletter-scheduler'
     | '/api/public/cron/visitor-audit-alerts'
@@ -814,8 +958,15 @@ export interface RootRouteChildren {
   Char91DotwellKnownChar93OauthProtectedResourceRoute: typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   CaseStudySlugRoute: typeof CaseStudySlugRoute
   EmailUnsubscribeRoute: typeof EmailUnsubscribeRoute
+  JobsSlugRoute: typeof JobsSlugRoute
+  JobsAboutVerificationRoute: typeof JobsAboutVerificationRoute
+  JobsAlertsRoute: typeof JobsAlertsRoute
+  JobsRemoteRoute: typeof JobsRemoteRoute
+  JobsSavedRoute: typeof JobsSavedRoute
+  JobsSourcesRoute: typeof JobsSourcesRoute
   NewsletterSlugRoute: typeof NewsletterSlugRoute
   WhitePaperAgenticAiEnterpriseAutomationRoute: typeof WhitePaperAgenticAiEnterpriseAutomationRoute
+  JobsIndexRoute: typeof JobsIndexRoute
   NewsletterIndexRoute: typeof NewsletterIndexRoute
   DotlovableOauthConsentRoute: typeof DotlovableOauthConsentRoute
   Char91DotmcpChar93InvokeToolToolRoute: typeof Char91DotmcpChar93InvokeToolToolRoute
@@ -825,8 +976,12 @@ export interface RootRouteChildren {
   ApiPublicNewsletterRoute: typeof ApiPublicNewsletterRoute
   ApiPublicTrackVisitRoute: typeof ApiPublicTrackVisitRoute
   ApiPublicTtsRoute: typeof ApiPublicTtsRoute
+  JobsCategoryCategoryRoute: typeof JobsCategoryCategoryRoute
+  JobsCompanyCompanyRoute: typeof JobsCompanyCompanyRoute
+  JobsLevelLevelRoute: typeof JobsLevelLevelRoute
   LovableEmailEventsRoute: typeof LovableEmailEventsRoute
   ApiPublicCronContactEmailRetryRoute: typeof ApiPublicCronContactEmailRetryRoute
+  ApiPublicCronJobsSyncRoute: typeof ApiPublicCronJobsSyncRoute
   ApiPublicCronMonthlyNewsletterRoute: typeof ApiPublicCronMonthlyNewsletterRoute
   ApiPublicCronNewsletterSchedulerRoute: typeof ApiPublicCronNewsletterSchedulerRoute
   ApiPublicCronVisitorAuditAlertsRoute: typeof ApiPublicCronVisitorAuditAlertsRoute
@@ -1089,6 +1244,55 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof EmailUnsubscribeRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/jobs/': {
+      id: '/jobs/'
+      path: '/jobs'
+      fullPath: '/jobs/'
+      preLoaderRoute: typeof JobsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/jobs/$slug': {
+      id: '/jobs/$slug'
+      path: '/jobs/$slug'
+      fullPath: '/jobs/$slug'
+      preLoaderRoute: typeof JobsSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/jobs/about-verification': {
+      id: '/jobs/about-verification'
+      path: '/jobs/about-verification'
+      fullPath: '/jobs/about-verification'
+      preLoaderRoute: typeof JobsAboutVerificationRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/jobs/alerts': {
+      id: '/jobs/alerts'
+      path: '/jobs/alerts'
+      fullPath: '/jobs/alerts'
+      preLoaderRoute: typeof JobsAlertsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/jobs/remote': {
+      id: '/jobs/remote'
+      path: '/jobs/remote'
+      fullPath: '/jobs/remote'
+      preLoaderRoute: typeof JobsRemoteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/jobs/saved': {
+      id: '/jobs/saved'
+      path: '/jobs/saved'
+      fullPath: '/jobs/saved'
+      preLoaderRoute: typeof JobsSavedRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/jobs/sources': {
+      id: '/jobs/sources'
+      path: '/jobs/sources'
+      fullPath: '/jobs/sources'
+      preLoaderRoute: typeof JobsSourcesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/newsletter/': {
       id: '/newsletter/'
       path: '/newsletter'
@@ -1143,6 +1347,13 @@ declare module '@tanstack/react-router' {
       path: '/docs'
       fullPath: '/admin/docs'
       preLoaderRoute: typeof AuthenticatedAdminDocsRouteImport
+      parentRoute: typeof AuthenticatedAdminRouteRoute
+    }
+    '/_authenticated/admin/jobs': {
+      id: '/_authenticated/admin/jobs'
+      path: '/jobs'
+      fullPath: '/admin/jobs'
+      preLoaderRoute: typeof AuthenticatedAdminJobsRouteImport
       parentRoute: typeof AuthenticatedAdminRouteRoute
     }
     '/_authenticated/admin/newsletter-jobs': {
@@ -1215,6 +1426,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPublicTtsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/jobs/category/$category': {
+      id: '/jobs/category/$category'
+      path: '/jobs/category/$category'
+      fullPath: '/jobs/category/$category'
+      preLoaderRoute: typeof JobsCategoryCategoryRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/jobs/company/$company': {
+      id: '/jobs/company/$company'
+      path: '/jobs/company/$company'
+      fullPath: '/jobs/company/$company'
+      preLoaderRoute: typeof JobsCompanyCompanyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/jobs/level/$level': {
+      id: '/jobs/level/$level'
+      path: '/jobs/level/$level'
+      fullPath: '/jobs/level/$level'
+      preLoaderRoute: typeof JobsLevelLevelRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/lovable/email/events': {
       id: '/lovable/email/events'
       path: '/lovable/email/events'
@@ -1227,6 +1459,13 @@ declare module '@tanstack/react-router' {
       path: '/api/public/cron/contact-email-retry'
       fullPath: '/api/public/cron/contact-email-retry'
       preLoaderRoute: typeof ApiPublicCronContactEmailRetryRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/cron/jobs-sync': {
+      id: '/api/public/cron/jobs-sync'
+      path: '/api/public/cron/jobs-sync'
+      fullPath: '/api/public/cron/jobs-sync'
+      preLoaderRoute: typeof ApiPublicCronJobsSyncRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/public/cron/monthly-newsletter': {
@@ -1278,6 +1517,7 @@ interface AuthenticatedAdminRouteRouteChildren {
   AuthenticatedAdminBlockedDomainsRoute: typeof AuthenticatedAdminBlockedDomainsRoute
   AuthenticatedAdminContactEnquiriesRoute: typeof AuthenticatedAdminContactEnquiriesRoute
   AuthenticatedAdminDocsRoute: typeof AuthenticatedAdminDocsRoute
+  AuthenticatedAdminJobsRoute: typeof AuthenticatedAdminJobsRoute
   AuthenticatedAdminNewsletterJobsRoute: typeof AuthenticatedAdminNewsletterJobsRoute
   AuthenticatedAdminSecurityEventsRoute: typeof AuthenticatedAdminSecurityEventsRoute
   AuthenticatedAdminSpamAuditRoute: typeof AuthenticatedAdminSpamAuditRoute
@@ -1291,6 +1531,7 @@ const AuthenticatedAdminRouteRouteChildren: AuthenticatedAdminRouteRouteChildren
     AuthenticatedAdminContactEnquiriesRoute:
       AuthenticatedAdminContactEnquiriesRoute,
     AuthenticatedAdminDocsRoute: AuthenticatedAdminDocsRoute,
+    AuthenticatedAdminJobsRoute: AuthenticatedAdminJobsRoute,
     AuthenticatedAdminNewsletterJobsRoute:
       AuthenticatedAdminNewsletterJobsRoute,
     AuthenticatedAdminSecurityEventsRoute:
@@ -1363,9 +1604,16 @@ const rootRouteChildren: RootRouteChildren = {
     Char91DotwellKnownChar93OauthProtectedResourceRoute,
   CaseStudySlugRoute: CaseStudySlugRoute,
   EmailUnsubscribeRoute: EmailUnsubscribeRoute,
+  JobsSlugRoute: JobsSlugRoute,
+  JobsAboutVerificationRoute: JobsAboutVerificationRoute,
+  JobsAlertsRoute: JobsAlertsRoute,
+  JobsRemoteRoute: JobsRemoteRoute,
+  JobsSavedRoute: JobsSavedRoute,
+  JobsSourcesRoute: JobsSourcesRoute,
   NewsletterSlugRoute: NewsletterSlugRoute,
   WhitePaperAgenticAiEnterpriseAutomationRoute:
     WhitePaperAgenticAiEnterpriseAutomationRoute,
+  JobsIndexRoute: JobsIndexRoute,
   NewsletterIndexRoute: NewsletterIndexRoute,
   DotlovableOauthConsentRoute: DotlovableOauthConsentRoute,
   Char91DotmcpChar93InvokeToolToolRoute: Char91DotmcpChar93InvokeToolToolRoute,
@@ -1375,8 +1623,12 @@ const rootRouteChildren: RootRouteChildren = {
   ApiPublicNewsletterRoute: ApiPublicNewsletterRoute,
   ApiPublicTrackVisitRoute: ApiPublicTrackVisitRoute,
   ApiPublicTtsRoute: ApiPublicTtsRoute,
+  JobsCategoryCategoryRoute: JobsCategoryCategoryRoute,
+  JobsCompanyCompanyRoute: JobsCompanyCompanyRoute,
+  JobsLevelLevelRoute: JobsLevelLevelRoute,
   LovableEmailEventsRoute: LovableEmailEventsRoute,
   ApiPublicCronContactEmailRetryRoute: ApiPublicCronContactEmailRetryRoute,
+  ApiPublicCronJobsSyncRoute: ApiPublicCronJobsSyncRoute,
   ApiPublicCronMonthlyNewsletterRoute: ApiPublicCronMonthlyNewsletterRoute,
   ApiPublicCronNewsletterSchedulerRoute: ApiPublicCronNewsletterSchedulerRoute,
   ApiPublicCronVisitorAuditAlertsRoute: ApiPublicCronVisitorAuditAlertsRoute,
