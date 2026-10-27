@@ -7,10 +7,10 @@ const steps = [
   ["Official sources only", "Jobs come from employers' own applicant tracking feeds (Greenhouse, Lever, Ashby) or approved providers with public APIs. We never scrape sites that forbid it or bypass logins."],
   ["Exact original posting time", "We use the employer's original publication timestamp — never the time we found the job. Listings without a reliable timestamp, or with a date but no time, are not shown."],
   ["Strict 24-hour window", "A job is visible only while it is less than 24 hours old. The database itself enforces this on every request, so jobs disappear on time even if a background task is delayed."],
-  ["Still open", "Each source is re-checked every 15 minutes. If a job leaves the employer's feed, it is marked closed and removed immediately."],
-  ["Safe application links", "Apply links must be secure (https) and public. Link shorteners, messaging apps, internal addresses and fee or payment pages are blocked and sent for review."],
+  ["Still open", "The job must appear in an authorized feed and pass a recent live application-link check. Listings with inconclusive checks are quarantined. Sources follow their configured polling interval; a complete feed snapshot removes missing jobs."],
+  ["Safe application links", "Application checks follow only approved provider and board addresses. Redirects outside those addresses, shorteners, messaging apps, internal addresses and payment pages are quarantined."],
   ["One card per job", "When the same role appears on several sources, we show one card and prefer the employer's own careers link."],
-  ["Seniority and category", "Levels and categories are inferred by rules from the employer's original job title. The original title is never changed; unclear roles are left as 'not stated'."],
+  ["Seniority and category", "Rules and AI normalize employer-provided text with recorded evidence. The original title is never changed; unclear roles are left as 'not stated'. Skills are retained only when explicitly named."],
   ["Report a problem", "Every listing has a Report button. Reports are reviewed and listings can be quarantined or removed."],
 ];
 
