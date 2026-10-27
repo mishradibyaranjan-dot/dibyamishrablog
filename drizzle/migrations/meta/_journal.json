@@ -99,6 +99,13 @@
       "when": 1793119381001,
       "tag": "0013_private_career_resume_review",
       "breakpoints": true
+    },
+    {
+      "idx": 14,
+      "version": "7",
+      "when": 1793119653893,
+      "tag": "0014_career_usage_and_retention",
+      "breakpoints": true
     }
   ]
 }

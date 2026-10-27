@@ -2288,8 +2288,10 @@ export type Database = {
       is_ip_blocked: { Args: { _ip: string }; Returns: boolean }
       jobs_daily_summary: { Args: never; Returns: undefined }
       jobs_expiry_maintenance: { Args: never; Returns: number }
+      purge_career_text: { Args: { p_user: string }; Returns: undefined }
       purge_expired_ip_blocks: { Args: never; Returns: number }
       purge_visitor_tracking_audit: { Args: never; Returns: number }
+      reserve_career_usage: { Args: { p_user: string }; Returns: string }
       reserve_interview_usage: {
         Args: { p_operation: string; p_session: string; p_user: string }
         Returns: string

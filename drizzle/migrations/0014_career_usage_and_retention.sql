@@ -1,0 +1,4 @@
+CREATE OR REPLACE FUNCTION public.reserve_career_usage(p_user uuid) RETURNS uuid LANGUAGE plpgsql SECURITY DEFINER SET search_path=public AS $$ BEGIN RETURN public.reserve_interview_usage(p_user,NULL,'resume_analysis'); END $$;
+REVOKE ALL ON FUNCTION public.reserve_career_usage(uuid) FROM PUBLIC,anon,authenticated; GRANT EXECUTE ON FUNCTION public.reserve_career_usage(uuid) TO service_role;
+CREATE OR REPLACE FUNCTION public.purge_career_text(p_user uuid) RETURNS void LANGUAGE plpgsql SECURITY DEFINER SET search_path=public AS $$ BEGIN DELETE FROM public.career_resumes WHERE user_id=p_user AND expires_at<=now() AND original_path IS NULL; END $$;
+REVOKE ALL ON FUNCTION public.purge_career_text(uuid) FROM PUBLIC,anon,authenticated; GRANT EXECUTE ON FUNCTION public.purge_career_text(uuid) TO service_role;
