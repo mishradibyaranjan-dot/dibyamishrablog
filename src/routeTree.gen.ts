@@ -12,16 +12,20 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as AboutRouteImport } from './routes/about'
+import { Route as AchievementsRouteImport } from './routes/achievements'
 import { Route as AdvisoryRouteImport } from './routes/advisory'
 import { Route as AtomDotxmlRouteImport } from './routes/atom[.]xml'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as BlogRouteImport } from './routes/blog'
 import { Route as CaseStudiesRouteImport } from './routes/case-studies'
+import { Route as CertificationsRouteImport } from './routes/certifications'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as CopyrightRouteImport } from './routes/copyright'
+import { Route as ExperienceRouteImport } from './routes/experience'
 import { Route as ExpertiseRouteImport } from './routes/expertise'
 import { Route as ForgotPasswordRouteImport } from './routes/forgot-password'
 import { Route as GuideRouteImport } from './routes/guide'
+import { Route as LeadershipRouteImport } from './routes/leadership'
 import { Route as LearnRouteImport } from './routes/learn'
 import { Route as McpRouteImport } from './routes/mcp'
 import { Route as PlaybookRouteImport } from './routes/playbook'
@@ -82,6 +86,11 @@ const AboutRoute = AboutRouteImport.update({
   path: '/about',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AchievementsRoute = AchievementsRouteImport.update({
+  id: '/achievements',
+  path: '/achievements',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AdvisoryRoute = AdvisoryRouteImport.update({
   id: '/advisory',
   path: '/advisory',
@@ -107,6 +116,11 @@ const CaseStudiesRoute = CaseStudiesRouteImport.update({
   path: '/case-studies',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CertificationsRoute = CertificationsRouteImport.update({
+  id: '/certifications',
+  path: '/certifications',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ContactRoute = ContactRouteImport.update({
   id: '/contact',
   path: '/contact',
@@ -115,6 +129,11 @@ const ContactRoute = ContactRouteImport.update({
 const CopyrightRoute = CopyrightRouteImport.update({
   id: '/copyright',
   path: '/copyright',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ExperienceRoute = ExperienceRouteImport.update({
+  id: '/experience',
+  path: '/experience',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ExpertiseRoute = ExpertiseRouteImport.update({
@@ -130,6 +149,11 @@ const ForgotPasswordRoute = ForgotPasswordRouteImport.update({
 const GuideRoute = GuideRouteImport.update({
   id: '/guide',
   path: '/guide',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LeadershipRoute = LeadershipRouteImport.update({
+  id: '/leadership',
+  path: '/leadership',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LearnRoute = LearnRouteImport.update({
@@ -376,16 +400,20 @@ const LovableEmailTransactionalPreviewRoute =
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/achievements': typeof AchievementsRoute
   '/advisory': typeof AdvisoryRoute
   '/atom.xml': typeof AtomDotxmlRoute
   '/auth': typeof AuthRoute
   '/blog': typeof BlogRouteWithChildren
   '/case-studies': typeof CaseStudiesRoute
+  '/certifications': typeof CertificationsRoute
   '/contact': typeof ContactRoute
   '/copyright': typeof CopyrightRoute
+  '/experience': typeof ExperienceRoute
   '/expertise': typeof ExpertiseRoute
   '/forgot-password': typeof ForgotPasswordRoute
   '/guide': typeof GuideRoute
+  '/leadership': typeof LeadershipRoute
   '/learn': typeof LearnRoute
   '/mcp': typeof McpRoute
   '/playbook': typeof PlaybookRoute
@@ -435,16 +463,20 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/achievements': typeof AchievementsRoute
   '/advisory': typeof AdvisoryRoute
   '/atom.xml': typeof AtomDotxmlRoute
   '/auth': typeof AuthRoute
   '/blog': typeof BlogRouteWithChildren
   '/case-studies': typeof CaseStudiesRoute
+  '/certifications': typeof CertificationsRoute
   '/contact': typeof ContactRoute
   '/copyright': typeof CopyrightRoute
+  '/experience': typeof ExperienceRoute
   '/expertise': typeof ExpertiseRoute
   '/forgot-password': typeof ForgotPasswordRoute
   '/guide': typeof GuideRoute
+  '/leadership': typeof LeadershipRoute
   '/learn': typeof LearnRoute
   '/mcp': typeof McpRoute
   '/playbook': typeof PlaybookRoute
@@ -496,16 +528,20 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/about': typeof AboutRoute
+  '/achievements': typeof AchievementsRoute
   '/advisory': typeof AdvisoryRoute
   '/atom.xml': typeof AtomDotxmlRoute
   '/auth': typeof AuthRoute
   '/blog': typeof BlogRouteWithChildren
   '/case-studies': typeof CaseStudiesRoute
+  '/certifications': typeof CertificationsRoute
   '/contact': typeof ContactRoute
   '/copyright': typeof CopyrightRoute
+  '/experience': typeof ExperienceRoute
   '/expertise': typeof ExpertiseRoute
   '/forgot-password': typeof ForgotPasswordRoute
   '/guide': typeof GuideRoute
+  '/leadership': typeof LeadershipRoute
   '/learn': typeof LearnRoute
   '/mcp': typeof McpRoute
   '/playbook': typeof PlaybookRoute
@@ -557,16 +593,20 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/about'
+    | '/achievements'
     | '/advisory'
     | '/atom.xml'
     | '/auth'
     | '/blog'
     | '/case-studies'
+    | '/certifications'
     | '/contact'
     | '/copyright'
+    | '/experience'
     | '/expertise'
     | '/forgot-password'
     | '/guide'
+    | '/leadership'
     | '/learn'
     | '/mcp'
     | '/playbook'
@@ -616,16 +656,20 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/about'
+    | '/achievements'
     | '/advisory'
     | '/atom.xml'
     | '/auth'
     | '/blog'
     | '/case-studies'
+    | '/certifications'
     | '/contact'
     | '/copyright'
+    | '/experience'
     | '/expertise'
     | '/forgot-password'
     | '/guide'
+    | '/leadership'
     | '/learn'
     | '/mcp'
     | '/playbook'
@@ -676,16 +720,20 @@ export interface FileRouteTypes {
     | '/'
     | '/_authenticated'
     | '/about'
+    | '/achievements'
     | '/advisory'
     | '/atom.xml'
     | '/auth'
     | '/blog'
     | '/case-studies'
+    | '/certifications'
     | '/contact'
     | '/copyright'
+    | '/experience'
     | '/expertise'
     | '/forgot-password'
     | '/guide'
+    | '/leadership'
     | '/learn'
     | '/mcp'
     | '/playbook'
@@ -737,16 +785,20 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
   AboutRoute: typeof AboutRoute
+  AchievementsRoute: typeof AchievementsRoute
   AdvisoryRoute: typeof AdvisoryRoute
   AtomDotxmlRoute: typeof AtomDotxmlRoute
   AuthRoute: typeof AuthRoute
   BlogRoute: typeof BlogRouteWithChildren
   CaseStudiesRoute: typeof CaseStudiesRoute
+  CertificationsRoute: typeof CertificationsRoute
   ContactRoute: typeof ContactRoute
   CopyrightRoute: typeof CopyrightRoute
+  ExperienceRoute: typeof ExperienceRoute
   ExpertiseRoute: typeof ExpertiseRoute
   ForgotPasswordRoute: typeof ForgotPasswordRoute
   GuideRoute: typeof GuideRoute
+  LeadershipRoute: typeof LeadershipRoute
   LearnRoute: typeof LearnRoute
   McpRoute: typeof McpRoute
   PlaybookRoute: typeof PlaybookRoute
@@ -806,6 +858,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AboutRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/achievements': {
+      id: '/achievements'
+      path: '/achievements'
+      fullPath: '/achievements'
+      preLoaderRoute: typeof AchievementsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/advisory': {
       id: '/advisory'
       path: '/advisory'
@@ -841,6 +900,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CaseStudiesRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/certifications': {
+      id: '/certifications'
+      path: '/certifications'
+      fullPath: '/certifications'
+      preLoaderRoute: typeof CertificationsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/contact': {
       id: '/contact'
       path: '/contact'
@@ -853,6 +919,13 @@ declare module '@tanstack/react-router' {
       path: '/copyright'
       fullPath: '/copyright'
       preLoaderRoute: typeof CopyrightRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/experience': {
+      id: '/experience'
+      path: '/experience'
+      fullPath: '/experience'
+      preLoaderRoute: typeof ExperienceRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/expertise': {
@@ -874,6 +947,13 @@ declare module '@tanstack/react-router' {
       path: '/guide'
       fullPath: '/guide'
       preLoaderRoute: typeof GuideRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/leadership': {
+      id: '/leadership'
+      path: '/leadership'
+      fullPath: '/leadership'
+      preLoaderRoute: typeof LeadershipRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/learn': {
@@ -1253,16 +1333,20 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
   AboutRoute: AboutRoute,
+  AchievementsRoute: AchievementsRoute,
   AdvisoryRoute: AdvisoryRoute,
   AtomDotxmlRoute: AtomDotxmlRoute,
   AuthRoute: AuthRoute,
   BlogRoute: BlogRouteWithChildren,
   CaseStudiesRoute: CaseStudiesRoute,
+  CertificationsRoute: CertificationsRoute,
   ContactRoute: ContactRoute,
   CopyrightRoute: CopyrightRoute,
+  ExperienceRoute: ExperienceRoute,
   ExpertiseRoute: ExpertiseRoute,
   ForgotPasswordRoute: ForgotPasswordRoute,
   GuideRoute: GuideRoute,
+  LeadershipRoute: LeadershipRoute,
   LearnRoute: LearnRoute,
   McpRoute: McpRoute,
   PlaybookRoute: PlaybookRoute,
