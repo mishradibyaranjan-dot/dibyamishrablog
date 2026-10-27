@@ -186,11 +186,37 @@ function AdminJobs() {
         </table>
       </div>
 
+      <h2 className="mt-12 font-display text-2xl font-semibold">Source health</h2>
+      <p className="mt-1 text-sm text-muted-foreground">Latest run per source: fetched → too old / no date → link not verified → published. "India" counts fresh jobs located in India.</p>
+      <div className="mt-4 overflow-x-auto rounded-lg border border-border">
+        <table className="w-full text-sm">
+          <thead className="bg-muted text-left"><tr>{["Source", "Status", "Last run", "Fetched", "Too old", "Link failed", "Published", "India", "Error"].map((h) => <th key={h} className="p-3">{h}</th>)}</tr></thead>
+          <tbody>
+            {data.sources.map((s: any) => {
+              const r: any = data.runs.find((x: any) => x.job_sources?.name === s.name);
+              return (
+                <tr key={s.id} className="border-t border-border">
+                  <td className="p-3 font-medium">{s.name}</td>
+                  <td className={`p-3 ${s.last_error || r?.status === "failed" ? "text-destructive" : ""}`}>{s.status}</td>
+                  <td className="p-3">{r ? fmt(r.started_at) : "—"}</td>
+                  <td className="p-3">{r?.fetched ?? "—"}</td>
+                  <td className="p-3">{r?.stale_rejected ?? "—"}</td>
+                  <td className="p-3">{r?.link_rejected ?? "—"}</td>
+                  <td className="p-3">{r?.accepted ?? "—"}</td>
+                  <td className="p-3">{r?.india_matched ?? "—"}</td>
+                  <td className="p-3 text-muted-foreground">{s.last_error ?? r?.error ?? ""}</td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
+
       <h2 className="mt-12 font-display text-2xl font-semibold">Sync runs</h2>
       <ul className="mt-4 space-y-1 text-sm">
         {data.runs.map((r: any) => (
           <li key={r.id} className={r.status === "failed" ? "text-destructive" : ""}>
-            {fmt(r.started_at)} · {r.job_sources?.name} · {r.status} · fetched {r.fetched}, accepted {r.accepted}, rejected {r.rejected}, closed {r.closed}{r.error ? ` · ${r.error}` : ""}
+            {fmt(r.started_at)} · {r.job_sources?.name} · {r.status} · fetched {r.fetched}, too old {r.stale_rejected ?? 0}, link failed {r.link_rejected ?? 0}, published {r.accepted}, India {r.india_matched ?? 0}, closed {r.closed}{r.error ? ` · ${r.error}` : ""}
           </li>
         ))}
       </ul>

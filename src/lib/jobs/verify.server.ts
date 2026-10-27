@@ -10,6 +10,8 @@ export async function verifyApplication(url: string, provider: string, board: st
         const location = response.headers.get("location");
         await response.body?.cancel();
         if (!location) return { ok: false, status: response.status, finalUrl: target, evidence: "Redirect without a destination" };
+        // Adzuna's live listing redirects onward to the employer; an active redirect is the evidence (the employer host is not fetched).
+        if (provider === "adzuna") { const next = new URL(location, target); if (next.protocol === "https:" && !/adzuna\./.test(next.hostname)) return { ok: true, status: response.status, finalUrl: canonicalApplication(target), evidence: "Listed in the Adzuna API with an active redirect to the employer" }; }
         target = new URL(location, target).toString(); continue;
       }
       if (!response.ok) { await response.body?.cancel(); return { ok: false, status: response.status, finalUrl: target, evidence: `Application link returned HTTP ${response.status}` }; }

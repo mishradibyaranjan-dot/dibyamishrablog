@@ -10,6 +10,8 @@ export function approvedDestination(url: string, provider: string, board: string
   const u = new URL(url);
   const originalHost = new URL(original).hostname;
   if ((ATS_HOSTS[provider] ?? []).includes(u.hostname)) return Boolean(board && u.pathname.toLowerCase().startsWith(`/${board.toLowerCase()}/`));
+  // Adzuna's official redirect link (validated host + path); its next hop is the employer, accepted by verify.server.
+  if (provider === "adzuna") return /(^|\.)adzuna\.(in|com|co\.uk)$/.test(u.hostname) && /^\/(land|details)\//.test(u.pathname);
   // Employer-custom career domains require explicit source configuration, not arbitrary feed-provided trust.
   return provider === "remoteok" && u.hostname === "remoteok.com" && originalHost === "remoteok.com" && u.pathname.startsWith("/remote-jobs/");
 }
