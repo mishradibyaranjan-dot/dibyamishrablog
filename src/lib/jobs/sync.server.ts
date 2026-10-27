@@ -149,7 +149,8 @@ export async function runJobSync(opts: { sourceSlug?: string; force?: boolean } 
     try {
       const items = await adapter(s);
       fetched = items.length;
-      const { data: existing, error: existingError } = await db.from("jobs").select("id,source_job_id,slug,admin_hold,career_level,categories,skills,last_application_checked_at,verification_status").eq("source_id", s.id).gt("original_posted_at", new Date(now.getTime()-86400_000).toISOString());
+      // Match the 7-day public window so prior checks, slugs and holds are reused for every visible job.
+      const { data: existing, error: existingError } = await db.from("jobs").select("id,source_job_id,slug,admin_hold,career_level,categories,skills,last_application_checked_at,verification_status").eq("source_id", s.id).gt("original_posted_at", new Date(now.getTime()-7*86400_000).toISOString());
       if (existingError) throw new Error("Could not read prior source snapshot");
       if (!safeSnapshot(existing?.length ?? 0, items.length)) throw new Error("Incomplete source snapshot: closure processing deferred");
       const previous = new Map((existing ?? []).map((j) => [j.source_job_id, j]));
@@ -159,7 +160,8 @@ export async function runJobSync(opts: { sourceSlug?: string; force?: boolean } 
       for (const j of items) {
         seen.push(j.source_job_id);
         const posted = parsePostedAt(j.posted_raw);
-        if (!posted || !isFresh(posted, now)) { rejected++; continue; } // no credible timestamp or too old
+        if (!posted || !isFresh(posted, now)) { rejected++; staleRejected++; continue; } // no credible timestamp or too old
+        if (countryOf(j.location) === "India") indiaMatched++;
         const link = checkApplyUrl(j.apply_url);
         const src = checkApplyUrl(j.source_url);
         const old = previous.get(j.source_job_id);
@@ -167,7 +169,7 @@ export async function runJobSync(opts: { sourceSlug?: string; force?: boolean } 
         const check = link.ok && src.ok && due ? await verifyApplication(j.apply_url, s.provider, s.board_token) : null;
         const verified = link.ok && src.ok && (check ? check.ok : old?.verification_status === "VERIFIED");
         if (check) evidenceRows.push({ source_job_id: j.source_job_id, status: check.ok ? "VERIFIED" : "QUARANTINED", http_status: check.status, final_url: check.finalUrl, evidence: check.evidence });
-        if (!verified) rejected++; else accepted++;
+        if (!verified) { rejected++; linkRejected++; } else accepted++;
         const text = `${j.title} ${j.location ?? ""}`;
         rows.push({
           source_id: s.id, source_job_id: j.source_job_id,
