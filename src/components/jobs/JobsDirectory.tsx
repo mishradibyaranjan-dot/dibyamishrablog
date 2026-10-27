@@ -87,7 +87,7 @@ export function JobsDirectory({ filters, onChange, lockedKeys = [], initial }: {
       </form>
 
       <p className="mt-4 text-sm text-muted-foreground" aria-live="polite">
-        {data ? `${data.total} verified job${data.total === 1 ? "" : "s"} posted in the last ${filters.hours} hour${filters.hours === 1 ? "" : "s"}` : "Loading jobs…"}
+        {data ? `${data.total} verified job${data.total === 1 ? "" : "s"} posted in the last ${filters.hours === 168 ? "7 days" : `${filters.hours} hour${filters.hours === 1 ? "" : "s"}`}` : "Loading jobs…"}
         {isFetching && data ? " · updating…" : ""}
       </p>
       {data?.error && <p role="alert" className="mt-2 text-sm text-destructive">Jobs are temporarily unavailable. Please try again shortly.</p>}
