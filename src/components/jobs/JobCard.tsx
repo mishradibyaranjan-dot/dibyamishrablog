@@ -76,6 +76,7 @@ export function JobActions({ job, showDetails = true }: { job: PublicJob; showDe
   return (
     <div className="flex flex-wrap items-center gap-2">
       {showDetails && <Button asChild size="sm" variant="outline"><Link to="/jobs/$slug" params={{ slug: job.slug }}>View Details</Link></Button>}
+      <Button asChild size="sm" variant="outline"><Link to="/interview-prep" search={{job:job.slug}}>AI Interview Prep</Link></Button>
       <Button asChild size="sm">
         <a href={job.apply_url} target="_blank" rel="noopener noreferrer nofollow">Apply at Source <ExternalLink className="ml-1 h-3.5 w-3.5" aria-hidden /></a>
       </Button>

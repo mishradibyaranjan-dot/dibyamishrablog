@@ -1,4 +1,5 @@
 # Project engineering rules
+- Interview preparation uses account-private sanitized text snapshots and server-only streaming generation; browser-only document extraction avoids public upload URLs. Generation commits bounded batches atomically and uses a durable queue lease with drain-based retry removal.
 
 - Send bulk newsletter email with bounded concurrency and never sleep inside request handlers; managed delivery and explicit retries handle rate limits.
 - Newsletter sends must include a stable per-recipient unsubscribe token and retain the public `/email/unsubscribe` compatibility route.

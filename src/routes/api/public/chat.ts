@@ -108,9 +108,12 @@ export const Route = createFileRoute("/api/public/chat")({
           model: gateway("google/gemini-3.1-flash-lite"),
           system: SYSTEM_PROMPT,
           messages: await convertToModelMessages(messages),
+          maxRetries: 0,
+          abortSignal: request.signal,
+          onError: ({ error }) => console.error('[assistant] upstream response failed', error instanceof Error ? error.message : 'Unknown error'),
         });
 
-        return result.toUIMessageStreamResponse({ originalMessages: messages });
+        return result.toUIMessageStreamResponse({ originalMessages: messages, onError: (error) => error instanceof Error ? error.message : 'The AI service could not respond.' });
       },
     },
   },

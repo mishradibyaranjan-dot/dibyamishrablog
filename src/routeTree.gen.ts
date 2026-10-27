@@ -25,6 +25,7 @@ import { Route as ExperienceRouteImport } from './routes/experience'
 import { Route as ExpertiseRouteImport } from './routes/expertise'
 import { Route as ForgotPasswordRouteImport } from './routes/forgot-password'
 import { Route as GuideRouteImport } from './routes/guide'
+import { Route as InterviewPrepRouteImport } from './routes/interview-prep'
 import { Route as LeadershipRouteImport } from './routes/leadership'
 import { Route as LearnRouteImport } from './routes/learn'
 import { Route as McpRouteImport } from './routes/mcp'
@@ -163,6 +164,11 @@ const ForgotPasswordRoute = ForgotPasswordRouteImport.update({
 const GuideRoute = GuideRouteImport.update({
   id: '/guide',
   path: '/guide',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const InterviewPrepRoute = InterviewPrepRouteImport.update({
+  id: '/interview-prep',
+  path: '/interview-prep',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LeadershipRoute = LeadershipRouteImport.update({
@@ -498,6 +504,7 @@ export interface FileRoutesByFullPath {
   '/expertise': typeof ExpertiseRoute
   '/forgot-password': typeof ForgotPasswordRoute
   '/guide': typeof GuideRoute
+  '/interview-prep': typeof InterviewPrepRoute
   '/leadership': typeof LeadershipRoute
   '/learn': typeof LearnRoute
   '/mcp': typeof McpRoute
@@ -575,6 +582,7 @@ export interface FileRoutesByTo {
   '/expertise': typeof ExpertiseRoute
   '/forgot-password': typeof ForgotPasswordRoute
   '/guide': typeof GuideRoute
+  '/interview-prep': typeof InterviewPrepRoute
   '/leadership': typeof LeadershipRoute
   '/learn': typeof LearnRoute
   '/mcp': typeof McpRoute
@@ -654,6 +662,7 @@ export interface FileRoutesById {
   '/expertise': typeof ExpertiseRoute
   '/forgot-password': typeof ForgotPasswordRoute
   '/guide': typeof GuideRoute
+  '/interview-prep': typeof InterviewPrepRoute
   '/leadership': typeof LeadershipRoute
   '/learn': typeof LearnRoute
   '/mcp': typeof McpRoute
@@ -733,6 +742,7 @@ export interface FileRouteTypes {
     | '/expertise'
     | '/forgot-password'
     | '/guide'
+    | '/interview-prep'
     | '/leadership'
     | '/learn'
     | '/mcp'
@@ -810,6 +820,7 @@ export interface FileRouteTypes {
     | '/expertise'
     | '/forgot-password'
     | '/guide'
+    | '/interview-prep'
     | '/leadership'
     | '/learn'
     | '/mcp'
@@ -888,6 +899,7 @@ export interface FileRouteTypes {
     | '/expertise'
     | '/forgot-password'
     | '/guide'
+    | '/interview-prep'
     | '/leadership'
     | '/learn'
     | '/mcp'
@@ -967,6 +979,7 @@ export interface RootRouteChildren {
   ExpertiseRoute: typeof ExpertiseRoute
   ForgotPasswordRoute: typeof ForgotPasswordRoute
   GuideRoute: typeof GuideRoute
+  InterviewPrepRoute: typeof InterviewPrepRoute
   LeadershipRoute: typeof LeadershipRoute
   LearnRoute: typeof LearnRoute
   McpRoute: typeof McpRoute
@@ -1129,6 +1142,13 @@ declare module '@tanstack/react-router' {
       path: '/guide'
       fullPath: '/guide'
       preLoaderRoute: typeof GuideRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/interview-prep': {
+      id: '/interview-prep'
+      path: '/interview-prep'
+      fullPath: '/interview-prep'
+      preLoaderRoute: typeof InterviewPrepRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/leadership': {
@@ -1628,6 +1648,7 @@ const rootRouteChildren: RootRouteChildren = {
   ExpertiseRoute: ExpertiseRoute,
   ForgotPasswordRoute: ForgotPasswordRoute,
   GuideRoute: GuideRoute,
+  InterviewPrepRoute: InterviewPrepRoute,
   LeadershipRoute: LeadershipRoute,
   LearnRoute: LearnRoute,
   McpRoute: McpRoute,

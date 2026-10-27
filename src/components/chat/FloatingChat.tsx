@@ -44,7 +44,7 @@ function loadInitialMessages(): UIMessage[] {
 
 export function FloatingChat() {
   const [open, setOpen] = useState(false);
-  const [initialMessages] = useState<UIMessage[]>(() => loadInitialMessages());
+  const [initialMessages] = useState<UIMessage[]>([]);
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
   const { user } = useAuth();
   const conversationIdRef = useRef<string>(
@@ -54,7 +54,7 @@ export function FloatingChat() {
   );
   const loggedIdsRef = useRef<Set<string>>(new Set());
 
-  const { messages, sendMessage, status, setMessages, stop } = useChat({
+  const { messages, sendMessage, status, setMessages, stop, error } = useChat({
     id: "floating-chat",
     messages: initialMessages,
     transport: new DefaultChatTransport({
@@ -66,6 +66,12 @@ export function FloatingChat() {
       },
     }),
   });
+
+  useEffect(() => {
+    stop();
+    try { const raw = user ? localStorage.getItem(`${STORAGE_KEY}:${user.id}`) : null; setMessages(raw ? JSON.parse(raw) : []); }
+    catch { setMessages([]); }
+  }, [user?.id, setMessages, stop]);
 
   // Log completed messages to the database (auth users only)
   useEffect(() => {
@@ -89,11 +95,11 @@ export function FloatingChat() {
   useEffect(() => {
     if (typeof window === "undefined") return;
     try {
-      window.localStorage.setItem(STORAGE_KEY, JSON.stringify(messages));
+      if (user) window.localStorage.setItem(`${STORAGE_KEY}:${user.id}`, JSON.stringify(messages));
     } catch {
       // ignore quota errors
     }
-  }, [messages]);
+  }, [messages, user]);
 
   // Auto-greet: pop the assistant open shortly after the first visit of a session,
   // and allow any page to open it via the `drm:open-assistant` event.
@@ -158,13 +164,13 @@ export function FloatingChat() {
       ]);
       return;
     }
-    await sendMessage({ text });
+    try { await sendMessage({ text }); } catch { /* useChat exposes the error below */ }
   };
 
   const handleClear = () => {
     setMessages([]);
     try {
-      window.localStorage.removeItem(STORAGE_KEY);
+      if (user) window.localStorage.removeItem(`${STORAGE_KEY}:${user.id}`);
     } catch {
       // ignore
     }
@@ -220,7 +226,7 @@ export function FloatingChat() {
               </motion.span>
               <div className="flex flex-col leading-tight">
                 <p className="text-sm font-semibold text-foreground">Learning Assistant</p>
-                <span className="text-[10px] font-medium uppercase tracking-wider text-primary">Online</span>
+                <span className="text-[10px] font-medium uppercase tracking-wider text-primary">{error ? "Service unavailable" : isBusy ? "Responding" : "AI-powered"}</span>
               </div>
             </div>
             <div className="flex items-center gap-1">
@@ -274,6 +280,7 @@ export function FloatingChat() {
           </Conversation>
 
           <div className="border-t border-border p-2">
+            {error && <p role="alert" className="mb-2 text-sm text-destructive">{error.message || "The assistant could not respond. Please try a fresh request."}</p>}
             <PromptInput onSubmit={handleSubmit}>
               <PromptInputTextarea
                 ref={textareaRef}
@@ -282,7 +289,7 @@ export function FloatingChat() {
               <PromptInputFooter className="justify-end">
                 <PromptInputSubmit
                   status={status}
-                  disabled={isBusy}
+                  disabled={false}
                   onClick={(e) => {
                     if (isBusy) {
                       e.preventDefault();
