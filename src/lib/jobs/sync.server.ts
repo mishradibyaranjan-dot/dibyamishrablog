@@ -88,7 +88,7 @@ const adapters: Record<string, (s: Source) => Promise<NormalizedJob[]>> = {
     if (!id || !key) throw new Error("missing_credentials");
     const country = s.board_token || "in";
     const out: NormalizedJob[] = [];
-    for (let page = 1; page <= 10; page++) {
+    for (let page = 1; page <= 4; page++) {
       const d = (await getJson(`https://api.adzuna.com/v1/api/jobs/${country}/search/${page}?app_id=${encodeURIComponent(id)}&app_key=${encodeURIComponent(key)}&results_per_page=50&max_days_old=7&sort_by=date&content-type=application/json`)) as { results?: any[] };
       const r = d.results ?? [];
       for (const j of r) {
@@ -209,8 +209,8 @@ export async function runJobSync(opts: { sourceSlug?: string; force?: boolean } 
         closed = gone.length;
       }
       await db.from("job_sources").update({ last_synced_at: now.toISOString(), last_error: null, failure_count: 0, retry_after: null, locked_until: null, lock_token: null }).eq("id", s.id).eq("lock_token", token);
-      await db.from("source_sync_runs").update({ finished_at: new Date().toISOString(), status: "completed", fetched, accepted, rejected, closed }).eq("id", run.id);
-      return { source: s.slug, status: "completed", fetched, accepted, rejected, closed };
+      await db.from("source_sync_runs").update({ finished_at: new Date().toISOString(), status: "completed", fetched, accepted, rejected, closed, stale_rejected: staleRejected, link_rejected: linkRejected, india_matched: indiaMatched }).eq("id", run.id);
+      return { source: s.slug, status: "completed", fetched, accepted, rejected, closed, staleRejected, linkRejected, indiaMatched };
     } catch (e) {
       const msg = e instanceof Error ? e.message : String(e);
       console.error(`[jobs:sync] ${s.slug} failed`, msg);
