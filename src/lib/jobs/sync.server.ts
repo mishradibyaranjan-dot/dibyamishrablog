@@ -151,7 +151,7 @@ export async function runJobSync(opts: { sourceSlug?: string } = {}) {
       const { data: open } = await db.from("jobs").select("id,source_job_id").eq("source_id", s.id).eq("application_status", "OPEN");
       const gone = (open ?? []).filter((o) => !seen.includes(o.source_job_id)).map((o) => o.id);
       if (gone.length) {
-        await db.from("jobs").update({ application_status: "CLOSED", updated_at: now.toISOString() }).in("id", gone);
+        for (let i = 0; i < gone.length; i += 100) await db.from("jobs").update({ application_status: "CLOSED", updated_at: now.toISOString() }).in("id", gone.slice(i, i + 100));
         closed = gone.length;
       }
       await db.from("job_sources").update({ last_synced_at: now.toISOString(), last_error: null }).eq("id", s.id);
@@ -184,6 +184,6 @@ async function dedupeAcrossSources() {
     primary.push(g[0].id);
     secondary.push(...g.slice(1).map((x) => x.id));
   }
-  if (secondary.length) await db.from("jobs").update({ is_primary: false }).in("id", secondary);
-  if (primary.length) await db.from("jobs").update({ is_primary: true }).in("id", primary);
+  for (let i = 0; i < secondary.length; i += 100) await db.from("jobs").update({ is_primary: false }).in("id", secondary.slice(i, i + 100));
+  for (let i = 0; i < primary.length; i += 100) await db.from("jobs").update({ is_primary: true }).in("id", primary.slice(i, i + 100));
 }
