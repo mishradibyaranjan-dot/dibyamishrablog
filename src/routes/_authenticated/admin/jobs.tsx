@@ -37,9 +37,13 @@ function AdminJobs() {
   const [data, setData] = useState<Overview | null>(null);
   const [syncing, setSyncing] = useState(false);
   const [statusFilter, setStatusFilter] = useState("");
+  const [sourceFilter, setSourceFilter] = useState("");
+  const [levelFilter, setLevelFilter] = useState("");
+  const [countryFilter, setCountryFilter] = useState("");
+  const [loadError, setLoadError] = useState("");
 
   const refresh = useCallback(async () => {
-    try { const [main, extra] = await Promise.all([load(), loadExtras()]); setData(main); setExtras(extra); } catch (e) { toast.error(e instanceof Error ? e.message : "Failed to load"); }
+    try { setLoadError(""); const [main, extra] = await Promise.all([load(), loadExtras()]); setData(main); setExtras(extra); } catch (e) { setLoadError(e instanceof Error ? e.message : "Failed to load"); }
   }, [load, loadExtras]);
   useEffect(() => { refresh(); }, [refresh]);
 
@@ -63,7 +67,7 @@ function AdminJobs() {
     const a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = `jobs-${new Date().toISOString().slice(0, 10)}.csv`; a.click();
   };
 
-  if (!data) return <Section><Loader2 className="h-6 w-6 animate-spin" aria-label="Loading" /></Section>;
+  if (!data) return <Section>{loadError ? <><p role="alert">{loadError}</p><Button onClick={refresh}>Retry</Button></> : <Loader2 className="h-6 w-6 animate-spin" aria-label="Loading" />}</Section>;
   const s = data.stats;
   const cards: [string, number][] = [
     ["Verified live jobs", s.live], ["Added in last hour", s.lastHour], ["Expiring within 1 hour", s.expiringSoon],
@@ -71,7 +75,7 @@ function AdminJobs() {
     ["Closed by employer", s.closed], ["Open reports", s.reports],
   ];
   const sourceErrors = data.sources.filter((x) => x.last_error).length;
-  const recent = statusFilter ? data.recent.filter((r) => r.verification_status === statusFilter) : data.recent;
+  const recent = data.recent.filter((r) => (!statusFilter || r.verification_status === statusFilter) && (!sourceFilter || r.source_id === sourceFilter) && (!levelFilter || r.career_level === levelFilter) && (!countryFilter || r.country?.toLowerCase().includes(countryFilter.toLowerCase())));
 
   return (
     <Section className="pt-12">
@@ -95,6 +99,11 @@ function AdminJobs() {
         }}><Download className="mr-2 h-4 w-4" />Export Excel</Button>
         <Button variant="outline" disabled={classifying} onClick={async () => { setClassifying(true); try { const r = await classify(); if (r.error) toast.error(r.error); else toast.success(`${r.completed} jobs classified`); await refresh(); } catch (e) { toast.error(e instanceof Error ? e.message : "Classification failed"); } finally { setClassifying(false); } }}>{classifying ? "Classifying…" : "Classify pending jobs"}</Button>
         <Button variant="ghost" onClick={refresh}>Refresh</Button>
+      </div>
+      <div className="mt-4 grid gap-3 sm:grid-cols-3">
+        <select aria-label="Filter jobs by source" className="rounded border border-input bg-background p-2" value={sourceFilter} onChange={(e) => setSourceFilter(e.target.value)}><option value="">All sources</option>{data.sources.map((s) => <option key={s.id} value={s.id}>{s.name}</option>)}</select>
+        <select aria-label="Filter jobs by seniority" className="rounded border border-input bg-background p-2" value={levelFilter} onChange={(e) => setLevelFilter(e.target.value)}><option value="">All levels</option>{[...new Set(data.recent.map((r) => r.career_level))].map((s) => <option key={s}>{s}</option>)}</select>
+        <input aria-label="Filter jobs by geography" placeholder="Country" className="rounded border border-input bg-background p-2" value={countryFilter} onChange={(e) => setCountryFilter(e.target.value)} />
       </div>
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         {cards.map(([k, v]) => (
@@ -165,7 +174,7 @@ function AdminJobs() {
                 <td className="p-3"><div className="flex flex-wrap gap-1">
                   <Button size="sm" variant="outline" onClick={() => doAction(j.id, "quarantine")}>Quarantine</Button>
                   <Button size="sm" variant="outline" onClick={() => doAction(j.id, "reject")}>Reject</Button>
-                  <Button size="sm" variant="outline" onClick={() => doAction(j.id, "republish")}>Republish</Button>
+                  <Button size="sm" variant="outline" onClick={() => doAction(j.id, "republish")}>Release for re-verification</Button>
                 </div></td>
               </tr>
             ))}
