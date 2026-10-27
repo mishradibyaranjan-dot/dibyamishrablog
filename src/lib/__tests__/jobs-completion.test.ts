@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest";
 import { hasJobsAdminAccess } from "../jobs/access";
-import { sourceDue, retryDelayMinutes } from "../jobs/scheduling";
+import { sourceDue, retryDelayMinutes, JOB_REFRESH_CRON_UTC } from "../jobs/scheduling";
 import { validateClassification } from "../jobs/ai/schema";
 import { approvedDestination, safeSnapshot, canonicalApplication } from "../jobs/verification";
 import { CATEGORY_RULES, checkApplyUrl } from "../jobs/rules";
@@ -37,12 +37,18 @@ it("supports all requested functional categories", () => {
   for (const category of ["IT","Delivery Management","Technical Support","BFSI","Supply Chain","Logistics","Shipping","Retail","E-commerce","Consulting","Manufacturing","Healthcare","Education","General Management"]) expect(names).toContain(category);
 });
 describe("Configured polling", () => {
+  it("refreshes exactly four times daily at 7 AM, noon, 4 PM and 9 PM India time", () => {
+    const [minute, hours, day, month, weekday] = JOB_REFRESH_CRON_UTC.split(" ");
+    expect([day, month, weekday]).toEqual(["*", "*", "*"]);
+    const times = hours.split(",").map((hour) => new Intl.DateTimeFormat("en-GB", { timeZone: "Asia/Kolkata", hour: "2-digit", minute: "2-digit", hourCycle: "h23" }).format(new Date(`2026-10-27T${hour.padStart(2, "0")}:${minute}:00Z`)));
+    expect(times).toEqual(["07:00", "12:00", "16:00", "21:00"]);
+  });
   it("honors a 30-minute source interval", () => {
     const start = "2026-10-27T10:00:00Z";
     expect(sourceDue(start, 30, Date.parse("2026-10-27T10:29:59Z"))).toBe(false);
     expect(sourceDue(start, 30, Date.parse("2026-10-27T10:30:00Z"))).toBe(true);
   });
-  it("defaults to the requested 15-minute interval", () => {
+  it("honors a source's 15-minute minimum interval within scheduled runs", () => {
     expect(sourceDue("2026-10-27T10:00:00Z", 15, Date.parse("2026-10-27T10:15:00Z"))).toBe(true);
   });
   it("backs off failed sources with a one-day maximum", () => {

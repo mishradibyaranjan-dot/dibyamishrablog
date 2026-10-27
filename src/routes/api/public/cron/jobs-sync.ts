@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 
 /**
- * Called every 15 minutes by pg_cron. Pulls fresh postings from connected
+ * Called at 07:00, 12:00, 16:00 and 21:00 Asia/Kolkata by pg_cron. Pulls fresh postings from connected
  * public employer feeds, verifies and classifies them, and closes jobs that
  * left the feed. Authenticated with the server-only CRON_SECRET.
  * Public freshness is also enforced by database policy, so a delayed run
