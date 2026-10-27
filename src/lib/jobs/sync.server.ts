@@ -5,6 +5,8 @@ import {
   classifyArrangement, checkApplyUrl, dedupeKey, slugify,
 } from "./rules";
 import { retryDelayMinutes } from "./scheduling";
+import { verifyApplication } from "./verify.server";
+import { safeSnapshot, canonicalApplication } from "./verification";
 
 type Source = { id: string; slug: string; name: string; provider: string; board_token: string | null; failure_count: number };
 
@@ -123,15 +125,24 @@ export async function runJobSync(opts: { sourceSlug?: string; force?: boolean } 
     try {
       const items = await adapter(s);
       fetched = items.length;
+      const { data: existing, error: existingError } = await db.from("jobs").select("id,source_job_id,admin_hold,career_level,categories,skills,last_application_checked_at,verification_status").eq("source_id", s.id).eq("application_status", "OPEN");
+      if (existingError) throw new Error("Could not read prior source snapshot");
+      if (!safeSnapshot(existing?.length ?? 0, items.length)) throw new Error("Incomplete source snapshot: closure processing deferred");
+      const previous = new Map((existing ?? []).map((j) => [j.source_job_id, j]));
       const seen: string[] = [];
       const rows = [];
+      const evidenceRows: { source_job_id: string; status: string; http_status: number | null; final_url: string; evidence: string }[] = [];
       for (const j of items) {
         seen.push(j.source_job_id);
         const posted = parsePostedAt(j.posted_raw);
         if (!posted || !isFresh(posted, now)) { rejected++; continue; } // no credible timestamp or too old
         const link = checkApplyUrl(j.apply_url);
         const src = checkApplyUrl(j.source_url);
-        const verified = link.ok && src.ok;
+        const old = previous.get(j.source_job_id);
+        const due = !old?.last_application_checked_at || now.getTime() - Date.parse(old.last_application_checked_at) >= 30 * 60_000;
+        const check = link.ok && src.ok && due ? await verifyApplication(j.apply_url, s.provider, s.board_token) : null;
+        const verified = link.ok && src.ok && (check ? check.ok : old?.verification_status === "VERIFIED");
+        if (check) evidenceRows.push({ source_job_id: j.source_job_id, status: check.ok ? "VERIFIED" : "QUARANTINED", http_status: check.status, final_url: check.finalUrl, evidence: check.evidence });
         if (!verified) rejected++; else accepted++;
         const text = `${j.title} ${j.location ?? ""}`;
         rows.push({
@@ -139,13 +150,17 @@ export async function runJobSync(opts: { sourceSlug?: string; force?: boolean } 
           slug: slugify(j.company, j.title, j.source_job_id.slice(-8)),
           title: j.title, company: j.company, location: j.location, country: countryOf(j.location),
           work_arrangement: classifyArrangement(text, j.is_remote), employment_type: j.employment_type,
-          categories: classifyCategories(j.title, j.department), career_level: classifyLevel(j.title),
+          categories: old?.categories ?? classifyCategories(j.title, j.department), career_level: old?.career_level ?? classifyLevel(j.title), skills: old?.skills ?? [],
           salary_min: j.salary_min, salary_max: j.salary_max, salary_currency: j.salary_currency,
           summary: j.summary, source_url: j.source_url, apply_url: j.apply_url,
           original_posted_at: posted.toISOString(), expires_at: expiresAt(posted).toISOString(),
           last_verified_at: now.toISOString(),
-          verification_status: verified ? "VERIFIED" : "QUARANTINED",
-          verification_notes: verified ? `Listed in ${s.provider} feed for ${s.name}` : `Rejected link: ${!link.ok ? link.reason : (src as { reason: string }).reason}`,
+          last_application_checked_at: check?.ok ? now.toISOString() : old?.last_application_checked_at ?? null,
+          verification_basis: verified ? "authorized_feed_and_live_link" : null,
+          canonical_apply_url: link.ok ? canonicalApplication(j.apply_url) : null,
+          remote_eligibility: j.is_remote ? j.location : null,
+          verification_status: old?.admin_hold ? "QUARANTINED" : verified ? "VERIFIED" : "QUARANTINED",
+          verification_notes: check?.evidence ?? (verified ? `Listed in ${s.provider} feed for ${s.name}; recent live link check retained` : "Application destination requires review"),
           application_status: "OPEN", source_access_status: "AUTHORIZED",
           dedupe_key: dedupeKey(j.company, j.title, j.location),
           is_primary: true, updated_at: now.toISOString(),
@@ -155,6 +170,10 @@ export async function runJobSync(opts: { sourceSlug?: string; force?: boolean } 
         // original_posted_at is only ever set from the source; re-imports carry the same value.
         const { error: upErr } = await db.from("jobs").upsert(rows, { onConflict: "source_id,source_job_id" });
         if (upErr) throw new Error(upErr.message);
+        const { data: stored } = await db.from("jobs").select("id,source_job_id").eq("source_id", s.id);
+        const ids = new Map((stored ?? []).map((r) => [r.source_job_id, r.id]));
+        const logs = evidenceRows.flatMap(({ source_job_id, ...e }) => { const id = ids.get(source_job_id); return id ? [{ job_id: id, ...e }] : []; });
+        if (logs.length) { const log = await db.from("job_verifications").insert(logs); if (log.error) throw new Error("Could not record verification evidence"); }
       }
       // Jobs no longer in the feed are closed immediately.
       const { data: open } = await db.from("jobs").select("id,source_job_id").eq("source_id", s.id).eq("application_status", "OPEN");
