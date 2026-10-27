@@ -200,6 +200,30 @@ function Hero() {
         </Link>
       </div>
 
+      <div className="rounded-2xl border border-border bg-card p-5">
+        <p className="font-display text-lg font-semibold text-foreground">Dibya Ranjan Mishra</p>
+        <p className="text-sm text-muted-foreground">
+          Vice President &amp; Country Head | Engineering Leadership | AI | Cloud | GCC &amp; Digital Transformation
+        </p>
+        <nav aria-label="Executive portfolio" className="mt-4 flex flex-wrap gap-2">
+          {([
+            ["/about", "Executive Profile"],
+            ["/experience", "Professional Experience"],
+            ["/leadership", "Leadership"],
+            ["/achievements", "Achievements"],
+            ["/certifications", "Certifications"],
+            ["/blog", "Leadership Insights"],
+          ] as const).map(([to, label]) => (
+            <Link key={to} to={to} className="inline-flex min-h-11 items-center rounded-full border border-border px-4 text-sm font-medium text-foreground hover:bg-accent">
+              {label}
+            </Link>
+          ))}
+          <a href="/api/download/pdf?doc=executive-summary" className="inline-flex min-h-11 items-center rounded-full bg-primary px-4 text-sm font-semibold text-primary-foreground">
+            Download Resume
+          </a>
+        </nav>
+      </div>
+
       <div className="mt-2 flex flex-wrap items-center gap-x-6 gap-y-3 text-sm text-muted-foreground">
         {[
           { icon: Bot, label: "Agentic AI · RAG · MCP" },
