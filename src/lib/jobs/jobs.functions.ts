@@ -3,6 +3,7 @@ import { z } from "zod";
 import { createClient } from "@supabase/supabase-js";
 import type { Database } from "@/integrations/supabase/types";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
+import { hasJobsAdminAccess } from "./access";
 
 function publicClient() {
   const key = process.env["SUPABASE_PUBLISHABLE_KEY"]!;
@@ -81,10 +82,10 @@ export const reportJob = createServerFn({ method: "POST" })
   });
 
 // ---------- Admin ----------
-async function assertAdmin(context: { supabase: any; userId: string }) {
+async function assertAdmin(context: { supabase: any; userId: string; claims: Record<string, unknown> }) {
   const { data, error } = await context.supabase.from("user_roles").select("role").eq("user_id", context.userId).eq("role", "admin").maybeSingle();
   if (error) throw new Error("Role check failed");
-  if (!data) throw new Error("Forbidden");
+  if (!hasJobsAdminAccess(data?.role, context.claims.aal)) throw new Error("Administrator two-step verification required");
 }
 
 export const adminJobsOverview = createServerFn({ method: "GET" })
@@ -161,3 +162,20 @@ export const adminResolveReport = createServerFn({ method: "POST" })
     await db.from("job_admin_audit").insert({ actor_id: context.userId, action: "resolve_report", note: data.id });
     return { ok: true };
   });
+
+export const adminClassifyJobs = createServerFn({ method: "POST" }).middleware([requireSupabaseAuth]).handler(async ({ context }) => {
+  await assertAdmin(context);
+  const { getRequest } = await import("@tanstack/react-start/server");
+  const { classifyPendingJobs } = await import("./classify.server");
+  return classifyPendingJobs(getRequest());
+});
+
+export const adminClassificationResults = createServerFn({ method: "GET" }).middleware([requireSupabaseAuth]).handler(async ({ context }) => {
+  await assertAdmin(context);
+  const { supabaseAdmin: db } = await import("@/integrations/supabase/client.server");
+  const [results, vitals] = await Promise.all([
+    db.from("job_classifications").select("job_id,status,result,error,updated_at,jobs(title)").order("updated_at", { ascending: false }).limit(30),
+    db.from("web_vital_samples").select("metric,value,rating,path,device,created_at").gte("created_at", new Date(Date.now() - 7 * 86400_000).toISOString()).order("created_at", { ascending: false }).limit(500),
+  ]);
+  return { classifications: results.data ?? [], vitals: vitals.data ?? [] };
+});
