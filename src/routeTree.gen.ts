@@ -65,6 +65,7 @@ import { Route as ApiPublicTrackVisitRouteImport } from './routes/api/public/tra
 import { Route as ApiPublicTtsRouteImport } from './routes/api/public/tts'
 import { Route as LovableEmailEventsRouteImport } from './routes/lovable/email/events'
 import { Route as ApiPublicCronContactEmailRetryRouteImport } from './routes/api/public/cron/contact-email-retry'
+import { Route as ApiPublicCronJobsSyncRouteImport } from './routes/api/public/cron/jobs-sync'
 import { Route as ApiPublicCronMonthlyNewsletterRouteImport } from './routes/api/public/cron/monthly-newsletter'
 import { Route as ApiPublicCronNewsletterSchedulerRouteImport } from './routes/api/public/cron/newsletter-scheduler'
 import { Route as ApiPublicCronVisitorAuditAlertsRouteImport } from './routes/api/public/cron/visitor-audit-alerts'
@@ -362,6 +363,11 @@ const ApiPublicCronContactEmailRetryRoute =
     path: '/api/public/cron/contact-email-retry',
     getParentRoute: () => rootRouteImport,
   } as any)
+const ApiPublicCronJobsSyncRoute = ApiPublicCronJobsSyncRouteImport.update({
+  id: '/api/public/cron/jobs-sync',
+  path: '/api/public/cron/jobs-sync',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiPublicCronMonthlyNewsletterRoute =
   ApiPublicCronMonthlyNewsletterRouteImport.update({
     id: '/api/public/cron/monthly-newsletter',
@@ -453,6 +459,7 @@ export interface FileRoutesByFullPath {
   '/api/public/tts': typeof ApiPublicTtsRoute
   '/lovable/email/events': typeof LovableEmailEventsRoute
   '/api/public/cron/contact-email-retry': typeof ApiPublicCronContactEmailRetryRoute
+  '/api/public/cron/jobs-sync': typeof ApiPublicCronJobsSyncRoute
   '/api/public/cron/monthly-newsletter': typeof ApiPublicCronMonthlyNewsletterRoute
   '/api/public/cron/newsletter-scheduler': typeof ApiPublicCronNewsletterSchedulerRoute
   '/api/public/cron/visitor-audit-alerts': typeof ApiPublicCronVisitorAuditAlertsRoute
@@ -516,6 +523,7 @@ export interface FileRoutesByTo {
   '/api/public/tts': typeof ApiPublicTtsRoute
   '/lovable/email/events': typeof LovableEmailEventsRoute
   '/api/public/cron/contact-email-retry': typeof ApiPublicCronContactEmailRetryRoute
+  '/api/public/cron/jobs-sync': typeof ApiPublicCronJobsSyncRoute
   '/api/public/cron/monthly-newsletter': typeof ApiPublicCronMonthlyNewsletterRoute
   '/api/public/cron/newsletter-scheduler': typeof ApiPublicCronNewsletterSchedulerRoute
   '/api/public/cron/visitor-audit-alerts': typeof ApiPublicCronVisitorAuditAlertsRoute
@@ -581,6 +589,7 @@ export interface FileRoutesById {
   '/api/public/tts': typeof ApiPublicTtsRoute
   '/lovable/email/events': typeof LovableEmailEventsRoute
   '/api/public/cron/contact-email-retry': typeof ApiPublicCronContactEmailRetryRoute
+  '/api/public/cron/jobs-sync': typeof ApiPublicCronJobsSyncRoute
   '/api/public/cron/monthly-newsletter': typeof ApiPublicCronMonthlyNewsletterRoute
   '/api/public/cron/newsletter-scheduler': typeof ApiPublicCronNewsletterSchedulerRoute
   '/api/public/cron/visitor-audit-alerts': typeof ApiPublicCronVisitorAuditAlertsRoute
@@ -646,6 +655,7 @@ export interface FileRouteTypes {
     | '/api/public/tts'
     | '/lovable/email/events'
     | '/api/public/cron/contact-email-retry'
+    | '/api/public/cron/jobs-sync'
     | '/api/public/cron/monthly-newsletter'
     | '/api/public/cron/newsletter-scheduler'
     | '/api/public/cron/visitor-audit-alerts'
@@ -709,6 +719,7 @@ export interface FileRouteTypes {
     | '/api/public/tts'
     | '/lovable/email/events'
     | '/api/public/cron/contact-email-retry'
+    | '/api/public/cron/jobs-sync'
     | '/api/public/cron/monthly-newsletter'
     | '/api/public/cron/newsletter-scheduler'
     | '/api/public/cron/visitor-audit-alerts'
@@ -773,6 +784,7 @@ export interface FileRouteTypes {
     | '/api/public/tts'
     | '/lovable/email/events'
     | '/api/public/cron/contact-email-retry'
+    | '/api/public/cron/jobs-sync'
     | '/api/public/cron/monthly-newsletter'
     | '/api/public/cron/newsletter-scheduler'
     | '/api/public/cron/visitor-audit-alerts'
@@ -827,6 +839,7 @@ export interface RootRouteChildren {
   ApiPublicTtsRoute: typeof ApiPublicTtsRoute
   LovableEmailEventsRoute: typeof LovableEmailEventsRoute
   ApiPublicCronContactEmailRetryRoute: typeof ApiPublicCronContactEmailRetryRoute
+  ApiPublicCronJobsSyncRoute: typeof ApiPublicCronJobsSyncRoute
   ApiPublicCronMonthlyNewsletterRoute: typeof ApiPublicCronMonthlyNewsletterRoute
   ApiPublicCronNewsletterSchedulerRoute: typeof ApiPublicCronNewsletterSchedulerRoute
   ApiPublicCronVisitorAuditAlertsRoute: typeof ApiPublicCronVisitorAuditAlertsRoute
@@ -1229,6 +1242,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPublicCronContactEmailRetryRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/cron/jobs-sync': {
+      id: '/api/public/cron/jobs-sync'
+      path: '/api/public/cron/jobs-sync'
+      fullPath: '/api/public/cron/jobs-sync'
+      preLoaderRoute: typeof ApiPublicCronJobsSyncRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/public/cron/monthly-newsletter': {
       id: '/api/public/cron/monthly-newsletter'
       path: '/api/public/cron/monthly-newsletter'
@@ -1377,6 +1397,7 @@ const rootRouteChildren: RootRouteChildren = {
   ApiPublicTtsRoute: ApiPublicTtsRoute,
   LovableEmailEventsRoute: LovableEmailEventsRoute,
   ApiPublicCronContactEmailRetryRoute: ApiPublicCronContactEmailRetryRoute,
+  ApiPublicCronJobsSyncRoute: ApiPublicCronJobsSyncRoute,
   ApiPublicCronMonthlyNewsletterRoute: ApiPublicCronMonthlyNewsletterRoute,
   ApiPublicCronNewsletterSchedulerRoute: ApiPublicCronNewsletterSchedulerRoute,
   ApiPublicCronVisitorAuditAlertsRoute: ApiPublicCronVisitorAuditAlertsRoute,
