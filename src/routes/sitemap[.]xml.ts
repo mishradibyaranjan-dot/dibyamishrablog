@@ -1,6 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
 import type {} from "@tanstack/react-start";
 import { posts, caseStudies } from "@/lib/content";
+import { createClient } from "@supabase/supabase-js";
+import type { Database } from "@/integrations/supabase/types";
 
 const BASE_URL = "https://www.dibyamishra.co.in";
 
@@ -42,13 +44,6 @@ const staticEntries: SitemapEntry[] = [
   // Feeds
   { path: "/rss.xml", changefreq: "daily", priority: "0.5" },
   { path: "/atom.xml", changefreq: "daily", priority: "0.5" },
-  // Auth + utility routes (present in code; crawlers may still request them)
-  { path: "/auth", changefreq: "yearly", priority: "0.1" },
-  { path: "/forgot-password", changefreq: "yearly", priority: "0.1" },
-  { path: "/reset-password", changefreq: "yearly", priority: "0.1" },
-  
-  { path: "/mcp", changefreq: "yearly", priority: "0.1" },
-  { path: "/.mcp/list-tools", changefreq: "yearly", priority: "0.1" },
 ];
 
 export const Route = createFileRoute("/sitemap.xml")({
@@ -72,14 +67,17 @@ export const Route = createFileRoute("/sitemap.xml")({
           entries.push({ path: `/case-study/${cs.slug}`, changefreq: "monthly", priority: "0.8" });
         });
 
-        // Published newsletter issues
+        // Public credentials and policies only; never expose private issues or expired jobs.
+        const key = process.env["SUPABASE_PUBLISHABLE_KEY"]!;
+        const db = createClient<Database>(process.env["SUPABASE_URL"]!, key, { auth: { persistSession: false, autoRefreshToken: false }, global: { fetch: (input, init) => { const h = new Headers(init?.headers); if (key.startsWith("sb_") && h.get("authorization") === `Bearer ${key}`) h.delete("authorization"); h.set("apikey", key); return fetch(input, { ...init, headers: h }); } } });
         try {
-          const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-          const { data: issues } = await supabaseAdmin
+          for (let page = 0; ; page++) {
+          const { data: issues, error } = await db
             .from("newsletter_issues")
             .select("slug, published_at, updated_at")
             .eq("status", "published")
-            .order("published_at", { ascending: false });
+            .order("published_at", { ascending: false }).order("slug").range(page * 500, page * 500 + 499);
+          if (error) throw error;
 
           (issues ?? []).forEach((issue) => {
             const lastmod = issue.updated_at ?? issue.published_at;
@@ -90,14 +88,23 @@ export const Route = createFileRoute("/sitemap.xml")({
               priority: "0.7",
             });
           });
+          if ((issues?.length ?? 0) < 500) break;
+          }
+          for (let page = 0; ; page++) {
+            const { data: jobs, error } = await db.from("jobs").select("slug,updated_at").order("slug").range(page * 500, page * 500 + 499);
+            if (error) throw error;
+            for (const job of jobs ?? []) entries.push({ path: `/jobs/${job.slug}`, lastmod: job.updated_at, changefreq: "hourly", priority: "0.6" });
+            if ((jobs?.length ?? 0) < 500) break;
+          }
         } catch (err) {
-          console.error("Failed to fetch newsletter issues for sitemap", err);
+          console.error("Failed to load public sitemap content", err);
+          return new Response("Sitemap temporarily unavailable", { status: 503 });
         }
 
         const urls = entries.map((e) =>
           [
             `  <url>`,
-            `    <loc>${BASE_URL}${e.path}</loc>`,
+            `    <loc>${BASE_URL}${e.path.replace(/&/g, "&amp;").replace(/</g, "&lt;")}</loc>`,
             e.lastmod ? `    <lastmod>${e.lastmod}</lastmod>` : null,
             e.changefreq ? `    <changefreq>${e.changefreq}</changefreq>` : null,
             e.priority ? `    <priority>${e.priority}</priority>` : null,
@@ -117,7 +124,7 @@ export const Route = createFileRoute("/sitemap.xml")({
         return new Response(xml, {
           headers: {
             "Content-Type": "application/xml",
-            "Cache-Control": "public, max-age=3600",
+            "Cache-Control": "public, max-age=60",
           },
         });
       },
