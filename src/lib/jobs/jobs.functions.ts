@@ -78,6 +78,14 @@ export const listJobs = createServerFn({ method: "GET" })
     return { jobs: rows ?? [], total: count ?? 0, pageSize: PAGE, error: null as string | null };
   });
 
+/** Every place with visible jobs, ranked by number of openings (demand). */
+export const listJobLocations = createServerFn({ method: "GET" }).handler(async () => {
+  const { rankLocations } = await import("./locations");
+  const { data, error } = await publicClient().from("jobs").select("location").limit(5000);
+  if (error) { console.error("[jobs:locations]", error.message); return []; }
+  return rankLocations((data ?? []).map((r) => r.location));
+});
+
 export const getJob = createServerFn({ method: "GET" })
   .inputValidator((d: { slug: string }) => z.object({ slug: z.string().min(1).max(120) }).parse(d))
   .handler(async ({ data }) => {
