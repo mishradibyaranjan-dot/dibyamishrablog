@@ -1,0 +1,1 @@
+GRANT UPDATE ON public.saved_jobs TO authenticated;
