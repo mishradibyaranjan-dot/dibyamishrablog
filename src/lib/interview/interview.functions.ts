@@ -4,7 +4,7 @@ import {z} from 'zod';
 import {sanitizeDocument,settingsSchema,analysisSchema,questionSchema,coachSchema} from './schema';
 const uuid=z.string().uuid();
 export const resumeInterviewService=createServerFn({method:'POST'}).middleware([requireSupabaseAuth]).handler(async({context})=>{
- const {data:admin}=await context.supabase.rpc('has_role',{_user_id:context.userId,_role:'admin'});if(!admin)throw new Error('Administrator access required.');
+ const {data:admin}=await context.supabase.from('user_roles').select('role').eq('user_id',context.userId).eq('role','admin').maybeSingle();if(!admin)throw new Error('Administrator access required.');
  const {supabaseAdmin:db}=await import('@/integrations/supabase/client.server');await db.from('interview_engine_state').update({paused:false,reason:null,lease_until:null}).eq('id','interview');return {ok:true};
 });
 export const createInterview=createServerFn({method:'POST'}).middleware([requireSupabaseAuth]).inputValidator(z.object({jd:z.string().max(24000),resume:z.string().max(24000),title:z.string().max(200),employer:z.string().max(200),jobId:uuid.nullable(),settings:settingsSchema})).handler(async({data,context})=>{

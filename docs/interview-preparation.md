@@ -1,0 +1,25 @@
+# AI Interview Preparation — engineering and release notes
+
+## User flow
+`/interview-prep` accepts pasted text or PDF/DOCX (5 MB, 30 PDF pages, 24,000 extracted characters). Files are read on the device; only text is stored privately and sent to Lovable AI. Verified job actions load the current policy-filtered job and snapshot its stored employer excerpt. When the excerpt is incomplete, analysis must identify missing information; no full JD is fabricated. Signed-in users generate 10/25/50/100 questions at Beginner/Intermediate/Advanced/Expert levels, choose Balanced/Technical/Behavioral/Executive style and 1/3/7/14-day plans. Retention choices are 7/30/90 days. Mock interviews show one question at a time with typed answers and saved qualitative feedback. Example model answers never represent the user's achievements.
+
+## Architecture and data
+One structured streaming request orchestrates analysis, question/answer generation, resume evidence matching and planning per batch of at most ten questions. OpenAI Responses uses a server-only key, strict schemas and a request-scoped gateway correlation helper. JSON validation checks exact evidence and duplicate normalized questions. Account-owned caches include sanitized JD/resume and settings. All seven requested tables have explicit grants and owner read policies through an unexpired session. Session deletion cascades to all private question, answer, feedback, plan and resume rows. Usage records retain only counters and operation—not document content—after session deletion.
+
+Queue work acquires a global ten-minute lease and session lease; atomic batch commits prevent partial publication. Enqueue wakes the processor using the existing secret-protected scheduler configuration. Five-minute retry scheduling exists only while work is queued; it is removed after drain. Each invocation makes at most one AI request. Transient 429/5xx failures are parked with bounded attempts; terminal failures are surfaced. Account/credit/provider denials persist a service pause. Administrator recovery requires explicit confirmation after access restoration. Requests are capped at 60 per account per UTC day (one reservation per batch/coach operation). Large packs finish incrementally, not in an unbounded HTTP request.
+
+## Security boundaries
+Private session creation/read/actions require validated authentication. Job-linked creation reads through the existing public freshness policy and copies the database excerpt rather than trusting client content. Interview pages never revive expired job listings; already-created snapshots remain private until retention expiry. Coach requests validate token, ownership, expiry and question/session association before accessing records. Original uploads are never hosted or shared. Exports exclude resume text, personal answers and mock transcripts. Prompt instructions classify uploaded text as untrusted data; evidence validation adds a second boundary but does not guarantee generated technical correctness.
+
+## Verified results — 27 October 2026
+- 44 tests passed: 11 interview requirements and 33 existing jobs rules.
+- A real verified Strategy & Operations Associate job loaded its 600-character employer excerpt into the form.
+- A first generated result failed exact evidence validation, was rejected without saving answers, and showed a failure. After explicit restart and clearer evidence instructions, a real ten-question pack completed and read back through the signed-in UI.
+- Real mock coaching returned criterion-based feedback and an evidence-aware follow-up; feedback persisted and was visible.
+- PDF and DOCX uploads both extracted the test JD correctly in the browser.
+- Actual exports downloaded: nine-page PDF and a 257-paragraph Word document. PDF first-page visual inspection showed readable text with no overlap; complete multilingual font and all-page visual acceptance remain unverified.
+- Mobile layout had no horizontal overflow; desktop generation and coaching rendered with no page errors.
+- Existing assistant returned a real streamed cloud-computing explanation while signed in; safe error display and user-scoped local conversation storage were added. Existing model selection was preserved.
+
+## Release acceptance still pending
+No deployment performed. Production scheduler callback reachability and full 25/50/100-question runs require release testing. Optional voice input and curated knowledge retrieval are not enabled. Generated code/math is not sandbox-tested automatically. PDF multilingual fonts and accessible tagged PDFs are not guaranteed. Full independent cross-account negative testing and complete deep security review remain required before announcing production readiness. The backend scan found one pre-existing informational job-source access-policy warning, outside interview data.
