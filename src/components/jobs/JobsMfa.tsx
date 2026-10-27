@@ -3,6 +3,8 @@ import { ShieldCheck } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 
+const errorMessage = (e: unknown, fallback: string) => e && typeof e === "object" && "message" in e && typeof e.message === "string" && e.message !== "{}" ? e.message : fallback;
+
 export function JobsMfa({ children }: { children: React.ReactNode }) {
   const [ready, setReady] = useState(false);
   const [checked, setChecked] = useState(false);
@@ -32,14 +34,14 @@ export function JobsMfa({ children }: { children: React.ReactNode }) {
         const r = await supabase.auth.mfa.enroll({ factorType: "totp", friendlyName: "Jobs administrator" });
         if (r.error) throw r.error;
         setFactorId(r.data.id); setQr(r.data.totp.qr_code);
-      } catch (e) { setError(e instanceof Error ? e.message : "Could not set up verification"); } finally { setBusy(false); }
+      } catch (e) { setError(errorMessage(e, "Authenticator setup requires a fresh sign-in. Sign out and sign in again, then retry.")); } finally { setBusy(false); }
     }}>Set up authenticator</Button> : <>
       {qr && <><p className="text-muted-foreground">Scan with your authenticator app, then enter its six-digit code.</p><img src={qr} alt="Authenticator setup QR code" className="h-56 w-56" /></>}
       <form className="space-y-4" onSubmit={async (e) => { e.preventDefault(); setBusy(true); setError(""); try {
         const r = await supabase.auth.mfa.challengeAndVerify({ factorId, code });
         if (r.error) throw r.error;
         setQr(""); setCode(""); await check();
-      } catch (e) { setError(e instanceof Error ? e.message : "Verification failed"); } finally { setBusy(false); } }}>
+      } catch (e) { setError(errorMessage(e, "Verification failed. Check the code and try again.")); } finally { setBusy(false); } }}>
         <label className="block space-y-2">Authenticator code<input required inputMode="numeric" autoComplete="one-time-code" pattern="[0-9]{6}" maxLength={6} value={code} onChange={(e) => setCode(e.target.value.replace(/\D/g, ""))} className="w-full rounded border border-input bg-background px-3 py-2" /></label>
         <Button disabled={busy} type="submit">{busy ? "Verifying…" : "Verify"}</Button>
       </form>
