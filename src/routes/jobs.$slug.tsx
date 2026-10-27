@@ -72,7 +72,7 @@ function JobDetail() {
           ["Removed from listings", fmtTime(job.expires_at)],
           ["Last checked", fmtTime(job.last_verified_at)],
         ].map(([k, v]) => (
-          <div key={k}><dt className="text-xs font-medium uppercase tracking-wide text-muted-foreground">{k}</dt><dd className="mt-1 capitalize-first">{v}</dd></div>
+          <div key={k}><dt className="text-xs font-medium uppercase tracking-wide text-muted-foreground">{k}</dt><dd className="mt-1">{v}</dd></div>
         ))}
       </dl>
       <section className="mt-8 max-w-3xl">

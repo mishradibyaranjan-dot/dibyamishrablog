@@ -46,7 +46,12 @@ import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
 import { Route as CaseStudySlugRouteImport } from './routes/case-study.$slug'
 import { Route as EmailUnsubscribeRouteImport } from './routes/email/unsubscribe'
 import { Route as JobsIndexRouteImport } from './routes/jobs.index'
+import { Route as JobsSlugRouteImport } from './routes/jobs.$slug'
+import { Route as JobsAboutVerificationRouteImport } from './routes/jobs.about-verification'
+import { Route as JobsAlertsRouteImport } from './routes/jobs.alerts'
 import { Route as JobsRemoteRouteImport } from './routes/jobs.remote'
+import { Route as JobsSavedRouteImport } from './routes/jobs.saved'
+import { Route as JobsSourcesRouteImport } from './routes/jobs.sources'
 import { Route as NewsletterIndexRouteImport } from './routes/newsletter.index'
 import { Route as NewsletterSlugRouteImport } from './routes/newsletter.$slug'
 import { Route as WhitePaperAgenticAiEnterpriseAutomationRouteImport } from './routes/white-paper.agentic-ai-enterprise-automation'
@@ -264,9 +269,34 @@ const JobsIndexRoute = JobsIndexRouteImport.update({
   path: '/jobs/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const JobsSlugRoute = JobsSlugRouteImport.update({
+  id: '/jobs/$slug',
+  path: '/jobs/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const JobsAboutVerificationRoute = JobsAboutVerificationRouteImport.update({
+  id: '/jobs/about-verification',
+  path: '/jobs/about-verification',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const JobsAlertsRoute = JobsAlertsRouteImport.update({
+  id: '/jobs/alerts',
+  path: '/jobs/alerts',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const JobsRemoteRoute = JobsRemoteRouteImport.update({
   id: '/jobs/remote',
   path: '/jobs/remote',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const JobsSavedRoute = JobsSavedRouteImport.update({
+  id: '/jobs/saved',
+  path: '/jobs/saved',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const JobsSourcesRoute = JobsSourcesRouteImport.update({
+  id: '/jobs/sources',
+  path: '/jobs/sources',
   getParentRoute: () => rootRouteImport,
 } as any)
 const NewsletterIndexRoute = NewsletterIndexRouteImport.update({
@@ -469,7 +499,12 @@ export interface FileRoutesByFullPath {
   '/blog/$slug': typeof BlogSlugRoute
   '/case-study/$slug': typeof CaseStudySlugRoute
   '/email/unsubscribe': typeof EmailUnsubscribeRoute
+  '/jobs/$slug': typeof JobsSlugRoute
+  '/jobs/about-verification': typeof JobsAboutVerificationRoute
+  '/jobs/alerts': typeof JobsAlertsRoute
   '/jobs/remote': typeof JobsRemoteRoute
+  '/jobs/saved': typeof JobsSavedRoute
+  '/jobs/sources': typeof JobsSourcesRoute
   '/newsletter/$slug': typeof NewsletterSlugRoute
   '/white-paper/agentic-ai-enterprise-automation': typeof WhitePaperAgenticAiEnterpriseAutomationRoute
   '/jobs/': typeof JobsIndexRoute
@@ -538,7 +573,12 @@ export interface FileRoutesByTo {
   '/blog/$slug': typeof BlogSlugRoute
   '/case-study/$slug': typeof CaseStudySlugRoute
   '/email/unsubscribe': typeof EmailUnsubscribeRoute
+  '/jobs/$slug': typeof JobsSlugRoute
+  '/jobs/about-verification': typeof JobsAboutVerificationRoute
+  '/jobs/alerts': typeof JobsAlertsRoute
   '/jobs/remote': typeof JobsRemoteRoute
+  '/jobs/saved': typeof JobsSavedRoute
+  '/jobs/sources': typeof JobsSourcesRoute
   '/newsletter/$slug': typeof NewsletterSlugRoute
   '/white-paper/agentic-ai-enterprise-automation': typeof WhitePaperAgenticAiEnterpriseAutomationRoute
   '/jobs': typeof JobsIndexRoute
@@ -609,7 +649,12 @@ export interface FileRoutesById {
   '/blog/$slug': typeof BlogSlugRoute
   '/case-study/$slug': typeof CaseStudySlugRoute
   '/email/unsubscribe': typeof EmailUnsubscribeRoute
+  '/jobs/$slug': typeof JobsSlugRoute
+  '/jobs/about-verification': typeof JobsAboutVerificationRoute
+  '/jobs/alerts': typeof JobsAlertsRoute
   '/jobs/remote': typeof JobsRemoteRoute
+  '/jobs/saved': typeof JobsSavedRoute
+  '/jobs/sources': typeof JobsSourcesRoute
   '/newsletter/$slug': typeof NewsletterSlugRoute
   '/white-paper/agentic-ai-enterprise-automation': typeof WhitePaperAgenticAiEnterpriseAutomationRoute
   '/jobs/': typeof JobsIndexRoute
@@ -680,7 +725,12 @@ export interface FileRouteTypes {
     | '/blog/$slug'
     | '/case-study/$slug'
     | '/email/unsubscribe'
+    | '/jobs/$slug'
+    | '/jobs/about-verification'
+    | '/jobs/alerts'
     | '/jobs/remote'
+    | '/jobs/saved'
+    | '/jobs/sources'
     | '/newsletter/$slug'
     | '/white-paper/agentic-ai-enterprise-automation'
     | '/jobs/'
@@ -749,7 +799,12 @@ export interface FileRouteTypes {
     | '/blog/$slug'
     | '/case-study/$slug'
     | '/email/unsubscribe'
+    | '/jobs/$slug'
+    | '/jobs/about-verification'
+    | '/jobs/alerts'
     | '/jobs/remote'
+    | '/jobs/saved'
+    | '/jobs/sources'
     | '/newsletter/$slug'
     | '/white-paper/agentic-ai-enterprise-automation'
     | '/jobs'
@@ -819,7 +874,12 @@ export interface FileRouteTypes {
     | '/blog/$slug'
     | '/case-study/$slug'
     | '/email/unsubscribe'
+    | '/jobs/$slug'
+    | '/jobs/about-verification'
+    | '/jobs/alerts'
     | '/jobs/remote'
+    | '/jobs/saved'
+    | '/jobs/sources'
     | '/newsletter/$slug'
     | '/white-paper/agentic-ai-enterprise-automation'
     | '/jobs/'
@@ -886,7 +946,12 @@ export interface RootRouteChildren {
   Char91DotwellKnownChar93OauthProtectedResourceRoute: typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   CaseStudySlugRoute: typeof CaseStudySlugRoute
   EmailUnsubscribeRoute: typeof EmailUnsubscribeRoute
+  JobsSlugRoute: typeof JobsSlugRoute
+  JobsAboutVerificationRoute: typeof JobsAboutVerificationRoute
+  JobsAlertsRoute: typeof JobsAlertsRoute
   JobsRemoteRoute: typeof JobsRemoteRoute
+  JobsSavedRoute: typeof JobsSavedRoute
+  JobsSourcesRoute: typeof JobsSourcesRoute
   NewsletterSlugRoute: typeof NewsletterSlugRoute
   WhitePaperAgenticAiEnterpriseAutomationRoute: typeof WhitePaperAgenticAiEnterpriseAutomationRoute
   JobsIndexRoute: typeof JobsIndexRoute
@@ -1174,11 +1239,46 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof JobsIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/jobs/$slug': {
+      id: '/jobs/$slug'
+      path: '/jobs/$slug'
+      fullPath: '/jobs/$slug'
+      preLoaderRoute: typeof JobsSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/jobs/about-verification': {
+      id: '/jobs/about-verification'
+      path: '/jobs/about-verification'
+      fullPath: '/jobs/about-verification'
+      preLoaderRoute: typeof JobsAboutVerificationRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/jobs/alerts': {
+      id: '/jobs/alerts'
+      path: '/jobs/alerts'
+      fullPath: '/jobs/alerts'
+      preLoaderRoute: typeof JobsAlertsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/jobs/remote': {
       id: '/jobs/remote'
       path: '/jobs/remote'
       fullPath: '/jobs/remote'
       preLoaderRoute: typeof JobsRemoteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/jobs/saved': {
+      id: '/jobs/saved'
+      path: '/jobs/saved'
+      fullPath: '/jobs/saved'
+      preLoaderRoute: typeof JobsSavedRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/jobs/sources': {
+      id: '/jobs/sources'
+      path: '/jobs/sources'
+      fullPath: '/jobs/sources'
+      preLoaderRoute: typeof JobsSourcesRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/newsletter/': {
@@ -1483,7 +1583,12 @@ const rootRouteChildren: RootRouteChildren = {
     Char91DotwellKnownChar93OauthProtectedResourceRoute,
   CaseStudySlugRoute: CaseStudySlugRoute,
   EmailUnsubscribeRoute: EmailUnsubscribeRoute,
+  JobsSlugRoute: JobsSlugRoute,
+  JobsAboutVerificationRoute: JobsAboutVerificationRoute,
+  JobsAlertsRoute: JobsAlertsRoute,
   JobsRemoteRoute: JobsRemoteRoute,
+  JobsSavedRoute: JobsSavedRoute,
+  JobsSourcesRoute: JobsSourcesRoute,
   NewsletterSlugRoute: NewsletterSlugRoute,
   WhitePaperAgenticAiEnterpriseAutomationRoute:
     WhitePaperAgenticAiEnterpriseAutomationRoute,
