@@ -334,6 +334,191 @@ export type Database = {
         }
         Relationships: []
       }
+      job_admin_audit: {
+        Row: {
+          action: string
+          actor_id: string | null
+          created_at: string
+          id: string
+          job_id: string | null
+          note: string | null
+        }
+        Insert: {
+          action: string
+          actor_id?: string | null
+          created_at?: string
+          id?: string
+          job_id?: string | null
+          note?: string | null
+        }
+        Update: {
+          action?: string
+          actor_id?: string | null
+          created_at?: string
+          id?: string
+          job_id?: string | null
+          note?: string | null
+        }
+        Relationships: []
+      }
+      job_sources: {
+        Row: {
+          active: boolean
+          board_token: string | null
+          created_at: string
+          id: string
+          last_error: string | null
+          last_synced_at: string | null
+          name: string
+          poll_minutes: number
+          provider: string
+          slug: string
+          status: string
+          terms_note: string | null
+          updated_at: string
+        }
+        Insert: {
+          active?: boolean
+          board_token?: string | null
+          created_at?: string
+          id?: string
+          last_error?: string | null
+          last_synced_at?: string | null
+          name: string
+          poll_minutes?: number
+          provider: string
+          slug: string
+          status?: string
+          terms_note?: string | null
+          updated_at?: string
+        }
+        Update: {
+          active?: boolean
+          board_token?: string | null
+          created_at?: string
+          id?: string
+          last_error?: string | null
+          last_synced_at?: string | null
+          name?: string
+          poll_minutes?: number
+          provider?: string
+          slug?: string
+          status?: string
+          terms_note?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      jobs: {
+        Row: {
+          application_status: string
+          apply_url: string
+          career_level: string
+          categories: string[]
+          company: string
+          country: string | null
+          created_at: string
+          dedupe_key: string
+          employment_type: string | null
+          expires_at: string
+          first_seen_at: string
+          id: string
+          is_primary: boolean
+          last_verified_at: string
+          location: string | null
+          original_posted_at: string
+          salary_currency: string | null
+          salary_max: number | null
+          salary_min: number | null
+          search: unknown
+          slug: string
+          source_access_status: string
+          source_id: string
+          source_job_id: string
+          source_url: string
+          summary: string | null
+          title: string
+          updated_at: string
+          verification_notes: string | null
+          verification_status: string
+          work_arrangement: string
+        }
+        Insert: {
+          application_status?: string
+          apply_url: string
+          career_level?: string
+          categories?: string[]
+          company: string
+          country?: string | null
+          created_at?: string
+          dedupe_key: string
+          employment_type?: string | null
+          expires_at: string
+          first_seen_at?: string
+          id?: string
+          is_primary?: boolean
+          last_verified_at?: string
+          location?: string | null
+          original_posted_at: string
+          salary_currency?: string | null
+          salary_max?: number | null
+          salary_min?: number | null
+          search?: unknown
+          slug: string
+          source_access_status?: string
+          source_id: string
+          source_job_id: string
+          source_url: string
+          summary?: string | null
+          title: string
+          updated_at?: string
+          verification_notes?: string | null
+          verification_status?: string
+          work_arrangement?: string
+        }
+        Update: {
+          application_status?: string
+          apply_url?: string
+          career_level?: string
+          categories?: string[]
+          company?: string
+          country?: string | null
+          created_at?: string
+          dedupe_key?: string
+          employment_type?: string | null
+          expires_at?: string
+          first_seen_at?: string
+          id?: string
+          is_primary?: boolean
+          last_verified_at?: string
+          location?: string | null
+          original_posted_at?: string
+          salary_currency?: string | null
+          salary_max?: number | null
+          salary_min?: number | null
+          search?: unknown
+          slug?: string
+          source_access_status?: string
+          source_id?: string
+          source_job_id?: string
+          source_url?: string
+          summary?: string | null
+          title?: string
+          updated_at?: string
+          verification_notes?: string | null
+          verification_status?: string
+          work_arrangement?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "jobs_source_id_fkey"
+            columns: ["source_id"]
+            isOneToOne: false
+            referencedRelation: "job_sources"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       login_sessions: {
         Row: {
           duration_seconds: number | null
@@ -713,6 +898,41 @@ export type Database = {
         }
         Relationships: []
       }
+      reported_jobs: {
+        Row: {
+          created_at: string
+          details: string | null
+          id: string
+          job_id: string
+          reason: string
+          status: string
+        }
+        Insert: {
+          created_at?: string
+          details?: string | null
+          id?: string
+          job_id: string
+          reason: string
+          status?: string
+        }
+        Update: {
+          created_at?: string
+          details?: string | null
+          id?: string
+          job_id?: string
+          reason?: string
+          status?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "reported_jobs_job_id_fkey"
+            columns: ["job_id"]
+            isOneToOne: false
+            referencedRelation: "jobs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       resource_access: {
         Row: {
           accessed_at: string
@@ -802,6 +1022,53 @@ export type Database = {
           user_id?: string | null
         }
         Relationships: []
+      }
+      source_sync_runs: {
+        Row: {
+          accepted: number
+          closed: number
+          error: string | null
+          fetched: number
+          finished_at: string | null
+          id: string
+          rejected: number
+          source_id: string | null
+          started_at: string
+          status: string
+        }
+        Insert: {
+          accepted?: number
+          closed?: number
+          error?: string | null
+          fetched?: number
+          finished_at?: string | null
+          id?: string
+          rejected?: number
+          source_id?: string | null
+          started_at?: string
+          status?: string
+        }
+        Update: {
+          accepted?: number
+          closed?: number
+          error?: string | null
+          fetched?: number
+          finished_at?: string | null
+          id?: string
+          rejected?: number
+          source_id?: string | null
+          started_at?: string
+          status?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "source_sync_runs_source_id_fkey"
+            columns: ["source_id"]
+            isOneToOne: false
+            referencedRelation: "job_sources"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       spam_audit_log: {
         Row: {
