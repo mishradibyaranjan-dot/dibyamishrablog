@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import { queryOptions, useQuery } from "@tanstack/react-query";
+import { keepPreviousData, queryOptions, useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -32,8 +32,11 @@ export function JobsHero({ title, subtitle }: { title?: string; subtitle?: strin
   );
 }
 
-export function JobsDirectory({ filters, onChange, lockedKeys = [] }: { filters: JobFilters; onChange: (f: JobFilters) => void; lockedKeys?: (keyof JobFilters)[] }) {
-  const { data, isFetching } = useQuery(jobsQuery(filters));
+type JobsResult = Awaited<ReturnType<typeof listJobs>>;
+export function JobsDirectory({ filters, onChange, lockedKeys = [], initial }: { filters: JobFilters; onChange: (f: JobFilters) => void; lockedKeys?: (keyof JobFilters)[]; initial?: { filters: JobFilters; data: JobsResult } }) {
+  // Loader data seeds the first render so server and browser HTML match.
+  const seeded = initial && JSON.stringify(initial.filters) === JSON.stringify(filters) ? initial.data : undefined;
+  const { data, isFetching } = useQuery({ ...jobsQuery(filters), initialData: seeded, placeholderData: keepPreviousData });
   const [q, setQ] = useState(filters.q);
   const set = (patch: Partial<JobFilters>) => onChange({ ...filters, ...patch, page: patch.page ?? 1 });
   const show = (k: keyof JobFilters) => !lockedKeys.includes(k);

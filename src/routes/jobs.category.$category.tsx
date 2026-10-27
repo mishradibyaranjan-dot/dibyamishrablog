@@ -10,7 +10,8 @@ export const Route = createFileRoute("/jobs/category/$category")({
   loader: ({ params, context }) => {
     const category = find(params.category);
     if (!category) throw notFound();
-    return context.queryClient.prefetchQuery(jobsQuery({ ...DEFAULT_FILTERS, category })).then(() => ({ category }));
+    const filters = { ...DEFAULT_FILTERS, category };
+    return context.queryClient.ensureQueryData(jobsQuery(filters)).then((data) => ({ category, initial: { filters, data } }));
   },
   head: ({ params, loaderData }) => loaderData
     ? jobsHead(`/jobs/category/${params.category}`, `${loaderData.category} Jobs — Verified, Last 24 Hours`, `Fresh ${loaderData.category} job openings from official employer career sites, posted within the last 24 hours.`, [{ name: loaderData.category, path: `/jobs/category/${params.category}` }])
@@ -19,12 +20,12 @@ export const Route = createFileRoute("/jobs/category/$category")({
   component: Page,
 });
 function Page() {
-  const { category } = Route.useLoaderData();
+  const { category, initial } = Route.useLoaderData();
   const [f, setF] = useState({ ...DEFAULT_FILTERS, category });
   return (
     <Section className="pt-14">
       <JobsHero title={`${category} Jobs`} subtitle={`Verified ${category} roles posted within the last 24 hours, from intern to executive level.`} />
-      <JobsDirectory filters={f} onChange={(n) => setF({ ...n, category })} lockedKeys={["category"]} />
+      <JobsDirectory initial={initial} filters={f} onChange={(n) => setF({ ...n, category })} lockedKeys={["category"]} />
     </Section>
   );
 }

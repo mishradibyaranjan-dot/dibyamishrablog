@@ -7,18 +7,19 @@ import { jobsHead } from "@/components/jobs/jobs-head";
 export const Route = createFileRoute("/jobs/company/$company")({
   loader: ({ params, context }) => {
     const company = decodeURIComponent(params.company).replace(/-/g, " ").slice(0, 80);
-    return context.queryClient.prefetchQuery(jobsQuery({ ...DEFAULT_FILTERS, company })).then(() => ({ company }));
+    const filters = { ...DEFAULT_FILTERS, company };
+    return context.queryClient.ensureQueryData(jobsQuery(filters)).then((data) => ({ company, initial: { filters, data } }));
   },
   head: ({ params, loaderData }) => jobsHead(`/jobs/company/${params.company}`, `${loaderData?.company ?? "Company"} Jobs — Verified, Last 24 Hours`, `Verified openings at ${loaderData?.company ?? "this company"} posted in the last 24 hours, linked directly to the employer's application page.`, [{ name: loaderData?.company ?? "Company", path: `/jobs/company/${params.company}` }], true),
   component: Page,
 });
 function Page() {
-  const { company } = Route.useLoaderData();
+  const { company, initial } = Route.useLoaderData();
   const [f, setF] = useState({ ...DEFAULT_FILTERS, company });
   return (
     <Section className="pt-14">
       <JobsHero title={`Jobs at ${company}`} subtitle="Openings posted in the last 24 hours on this employer's official careers feed." />
-      <JobsDirectory filters={f} onChange={(n) => setF({ ...n, company })} lockedKeys={["company"]} />
+      <JobsDirectory initial={initial} filters={f} onChange={(n) => setF({ ...n, company })} lockedKeys={["company"]} />
     </Section>
   );
 }

@@ -10,7 +10,8 @@ export const Route = createFileRoute("/jobs/level/$level")({
   loader: ({ params, context }) => {
     const level = find(params.level);
     if (!level) throw notFound();
-    return context.queryClient.prefetchQuery(jobsQuery({ ...DEFAULT_FILTERS, level })).then(() => ({ level }));
+    const filters = { ...DEFAULT_FILTERS, level };
+    return context.queryClient.ensureQueryData(jobsQuery(filters)).then((data) => ({ level, initial: { filters, data } }));
   },
   head: ({ params, loaderData }) => loaderData
     ? jobsHead(`/jobs/level/${params.level}`, `${loaderData.level} Jobs — Verified, Last 24 Hours`, `Verified ${loaderData.level} openings posted by employers in the last 24 hours, classified from the employer's original job title.`, [{ name: loaderData.level, path: `/jobs/level/${params.level}` }])
@@ -19,12 +20,12 @@ export const Route = createFileRoute("/jobs/level/$level")({
   component: Page,
 });
 function Page() {
-  const { level } = Route.useLoaderData();
+  const { level, initial } = Route.useLoaderData();
   const [f, setF] = useState({ ...DEFAULT_FILTERS, level });
   return (
     <Section className="pt-14">
       <JobsHero title={`${level} Jobs`} subtitle={`Openings posted in the last 24 hours, classified as ${level} from the employer's own job title. Original titles are always shown unchanged.`} />
-      <JobsDirectory filters={f} onChange={(n) => setF({ ...n, level })} lockedKeys={["level"]} />
+      <JobsDirectory initial={initial} filters={f} onChange={(n) => setF({ ...n, level })} lockedKeys={["level"]} />
     </Section>
   );
 }
