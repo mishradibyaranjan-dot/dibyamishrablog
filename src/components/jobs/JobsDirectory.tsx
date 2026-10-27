@@ -79,6 +79,7 @@ export function JobsDirectory({ filters, onChange, lockedKeys = [], initial }: {
         <label><span className="sr-only">Posted within</span>
           <select className={sel + " w-full"} value={filters.hours} onChange={(e) => set({ hours: Number(e.target.value) })}>
             {[1, 3, 6, 12, 24].map((h) => <option key={h} value={h}>Posted within {h}h</option>)}
+            <option value={168}>Posted within 7 days</option>
           </select>
         </label>
         <Button type="submit">Search</Button>
