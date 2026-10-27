@@ -68,6 +68,7 @@ import { Route as AuthenticatedAdminVisitorAuditRouteImport } from './routes/_au
 import { Route as ApiDownloadPdfRouteImport } from './routes/api/download.pdf'
 import { Route as ApiPublicChatRouteImport } from './routes/api/public/chat'
 import { Route as ApiPublicContactRouteImport } from './routes/api/public/contact'
+import { Route as ApiPublicInterviewCoachRouteImport } from './routes/api/public/interview-coach'
 import { Route as ApiPublicNewsletterRouteImport } from './routes/api/public/newsletter'
 import { Route as ApiPublicTrackVisitRouteImport } from './routes/api/public/track-visit'
 import { Route as ApiPublicTtsRouteImport } from './routes/api/public/tts'
@@ -76,6 +77,7 @@ import { Route as JobsCompanyCompanyRouteImport } from './routes/jobs.company.$c
 import { Route as JobsLevelLevelRouteImport } from './routes/jobs.level.$level'
 import { Route as LovableEmailEventsRouteImport } from './routes/lovable/email/events'
 import { Route as ApiPublicCronContactEmailRetryRouteImport } from './routes/api/public/cron/contact-email-retry'
+import { Route as ApiPublicCronInterviewWorkerRouteImport } from './routes/api/public/cron/interview-worker'
 import { Route as ApiPublicCronJobsSyncRouteImport } from './routes/api/public/cron/jobs-sync'
 import { Route as ApiPublicCronMonthlyNewsletterRouteImport } from './routes/api/public/cron/monthly-newsletter'
 import { Route as ApiPublicCronNewsletterSchedulerRouteImport } from './routes/api/public/cron/newsletter-scheduler'
@@ -388,6 +390,11 @@ const ApiPublicContactRoute = ApiPublicContactRouteImport.update({
   path: '/api/public/contact',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiPublicInterviewCoachRoute = ApiPublicInterviewCoachRouteImport.update({
+  id: '/api/public/interview-coach',
+  path: '/api/public/interview-coach',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiPublicNewsletterRoute = ApiPublicNewsletterRouteImport.update({
   id: '/api/public/newsletter',
   path: '/api/public/newsletter',
@@ -427,6 +434,12 @@ const ApiPublicCronContactEmailRetryRoute =
   ApiPublicCronContactEmailRetryRouteImport.update({
     id: '/api/public/cron/contact-email-retry',
     path: '/api/public/cron/contact-email-retry',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const ApiPublicCronInterviewWorkerRoute =
+  ApiPublicCronInterviewWorkerRouteImport.update({
+    id: '/api/public/cron/interview-worker',
+    path: '/api/public/cron/interview-worker',
     getParentRoute: () => rootRouteImport,
   } as any)
 const ApiPublicCronJobsSyncRoute = ApiPublicCronJobsSyncRouteImport.update({
@@ -528,6 +541,7 @@ export interface FileRoutesByFullPath {
   '/api/download/pdf': typeof ApiDownloadPdfRoute
   '/api/public/chat': typeof ApiPublicChatRoute
   '/api/public/contact': typeof ApiPublicContactRoute
+  '/api/public/interview-coach': typeof ApiPublicInterviewCoachRoute
   '/api/public/newsletter': typeof ApiPublicNewsletterRoute
   '/api/public/track-visit': typeof ApiPublicTrackVisitRoute
   '/api/public/tts': typeof ApiPublicTtsRoute
@@ -536,6 +550,7 @@ export interface FileRoutesByFullPath {
   '/jobs/level/$level': typeof JobsLevelLevelRoute
   '/lovable/email/events': typeof LovableEmailEventsRoute
   '/api/public/cron/contact-email-retry': typeof ApiPublicCronContactEmailRetryRoute
+  '/api/public/cron/interview-worker': typeof ApiPublicCronInterviewWorkerRoute
   '/api/public/cron/jobs-sync': typeof ApiPublicCronJobsSyncRoute
   '/api/public/cron/monthly-newsletter': typeof ApiPublicCronMonthlyNewsletterRoute
   '/api/public/cron/newsletter-scheduler': typeof ApiPublicCronNewsletterSchedulerRoute
@@ -603,6 +618,7 @@ export interface FileRoutesByTo {
   '/api/download/pdf': typeof ApiDownloadPdfRoute
   '/api/public/chat': typeof ApiPublicChatRoute
   '/api/public/contact': typeof ApiPublicContactRoute
+  '/api/public/interview-coach': typeof ApiPublicInterviewCoachRoute
   '/api/public/newsletter': typeof ApiPublicNewsletterRoute
   '/api/public/track-visit': typeof ApiPublicTrackVisitRoute
   '/api/public/tts': typeof ApiPublicTtsRoute
@@ -611,6 +627,7 @@ export interface FileRoutesByTo {
   '/jobs/level/$level': typeof JobsLevelLevelRoute
   '/lovable/email/events': typeof LovableEmailEventsRoute
   '/api/public/cron/contact-email-retry': typeof ApiPublicCronContactEmailRetryRoute
+  '/api/public/cron/interview-worker': typeof ApiPublicCronInterviewWorkerRoute
   '/api/public/cron/jobs-sync': typeof ApiPublicCronJobsSyncRoute
   '/api/public/cron/monthly-newsletter': typeof ApiPublicCronMonthlyNewsletterRoute
   '/api/public/cron/newsletter-scheduler': typeof ApiPublicCronNewsletterSchedulerRoute
@@ -680,6 +697,7 @@ export interface FileRoutesById {
   '/api/download/pdf': typeof ApiDownloadPdfRoute
   '/api/public/chat': typeof ApiPublicChatRoute
   '/api/public/contact': typeof ApiPublicContactRoute
+  '/api/public/interview-coach': typeof ApiPublicInterviewCoachRoute
   '/api/public/newsletter': typeof ApiPublicNewsletterRoute
   '/api/public/track-visit': typeof ApiPublicTrackVisitRoute
   '/api/public/tts': typeof ApiPublicTtsRoute
@@ -688,6 +706,7 @@ export interface FileRoutesById {
   '/jobs/level/$level': typeof JobsLevelLevelRoute
   '/lovable/email/events': typeof LovableEmailEventsRoute
   '/api/public/cron/contact-email-retry': typeof ApiPublicCronContactEmailRetryRoute
+  '/api/public/cron/interview-worker': typeof ApiPublicCronInterviewWorkerRoute
   '/api/public/cron/jobs-sync': typeof ApiPublicCronJobsSyncRoute
   '/api/public/cron/monthly-newsletter': typeof ApiPublicCronMonthlyNewsletterRoute
   '/api/public/cron/newsletter-scheduler': typeof ApiPublicCronNewsletterSchedulerRoute
@@ -757,6 +776,7 @@ export interface FileRouteTypes {
     | '/api/download/pdf'
     | '/api/public/chat'
     | '/api/public/contact'
+    | '/api/public/interview-coach'
     | '/api/public/newsletter'
     | '/api/public/track-visit'
     | '/api/public/tts'
@@ -765,6 +785,7 @@ export interface FileRouteTypes {
     | '/jobs/level/$level'
     | '/lovable/email/events'
     | '/api/public/cron/contact-email-retry'
+    | '/api/public/cron/interview-worker'
     | '/api/public/cron/jobs-sync'
     | '/api/public/cron/monthly-newsletter'
     | '/api/public/cron/newsletter-scheduler'
@@ -832,6 +853,7 @@ export interface FileRouteTypes {
     | '/api/download/pdf'
     | '/api/public/chat'
     | '/api/public/contact'
+    | '/api/public/interview-coach'
     | '/api/public/newsletter'
     | '/api/public/track-visit'
     | '/api/public/tts'
@@ -840,6 +862,7 @@ export interface FileRouteTypes {
     | '/jobs/level/$level'
     | '/lovable/email/events'
     | '/api/public/cron/contact-email-retry'
+    | '/api/public/cron/interview-worker'
     | '/api/public/cron/jobs-sync'
     | '/api/public/cron/monthly-newsletter'
     | '/api/public/cron/newsletter-scheduler'
@@ -908,6 +931,7 @@ export interface FileRouteTypes {
     | '/api/download/pdf'
     | '/api/public/chat'
     | '/api/public/contact'
+    | '/api/public/interview-coach'
     | '/api/public/newsletter'
     | '/api/public/track-visit'
     | '/api/public/tts'
@@ -916,6 +940,7 @@ export interface FileRouteTypes {
     | '/jobs/level/$level'
     | '/lovable/email/events'
     | '/api/public/cron/contact-email-retry'
+    | '/api/public/cron/interview-worker'
     | '/api/public/cron/jobs-sync'
     | '/api/public/cron/monthly-newsletter'
     | '/api/public/cron/newsletter-scheduler'
@@ -973,6 +998,7 @@ export interface RootRouteChildren {
   ApiDownloadPdfRoute: typeof ApiDownloadPdfRoute
   ApiPublicChatRoute: typeof ApiPublicChatRoute
   ApiPublicContactRoute: typeof ApiPublicContactRoute
+  ApiPublicInterviewCoachRoute: typeof ApiPublicInterviewCoachRoute
   ApiPublicNewsletterRoute: typeof ApiPublicNewsletterRoute
   ApiPublicTrackVisitRoute: typeof ApiPublicTrackVisitRoute
   ApiPublicTtsRoute: typeof ApiPublicTtsRoute
@@ -981,6 +1007,7 @@ export interface RootRouteChildren {
   JobsLevelLevelRoute: typeof JobsLevelLevelRoute
   LovableEmailEventsRoute: typeof LovableEmailEventsRoute
   ApiPublicCronContactEmailRetryRoute: typeof ApiPublicCronContactEmailRetryRoute
+  ApiPublicCronInterviewWorkerRoute: typeof ApiPublicCronInterviewWorkerRoute
   ApiPublicCronJobsSyncRoute: typeof ApiPublicCronJobsSyncRoute
   ApiPublicCronMonthlyNewsletterRoute: typeof ApiPublicCronMonthlyNewsletterRoute
   ApiPublicCronNewsletterSchedulerRoute: typeof ApiPublicCronNewsletterSchedulerRoute
@@ -1405,6 +1432,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPublicContactRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/interview-coach': {
+      id: '/api/public/interview-coach'
+      path: '/api/public/interview-coach'
+      fullPath: '/api/public/interview-coach'
+      preLoaderRoute: typeof ApiPublicInterviewCoachRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/public/newsletter': {
       id: '/api/public/newsletter'
       path: '/api/public/newsletter'
@@ -1459,6 +1493,13 @@ declare module '@tanstack/react-router' {
       path: '/api/public/cron/contact-email-retry'
       fullPath: '/api/public/cron/contact-email-retry'
       preLoaderRoute: typeof ApiPublicCronContactEmailRetryRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/cron/interview-worker': {
+      id: '/api/public/cron/interview-worker'
+      path: '/api/public/cron/interview-worker'
+      fullPath: '/api/public/cron/interview-worker'
+      preLoaderRoute: typeof ApiPublicCronInterviewWorkerRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/public/cron/jobs-sync': {
@@ -1620,6 +1661,7 @@ const rootRouteChildren: RootRouteChildren = {
   ApiDownloadPdfRoute: ApiDownloadPdfRoute,
   ApiPublicChatRoute: ApiPublicChatRoute,
   ApiPublicContactRoute: ApiPublicContactRoute,
+  ApiPublicInterviewCoachRoute: ApiPublicInterviewCoachRoute,
   ApiPublicNewsletterRoute: ApiPublicNewsletterRoute,
   ApiPublicTrackVisitRoute: ApiPublicTrackVisitRoute,
   ApiPublicTtsRoute: ApiPublicTtsRoute,
@@ -1628,6 +1670,7 @@ const rootRouteChildren: RootRouteChildren = {
   JobsLevelLevelRoute: JobsLevelLevelRoute,
   LovableEmailEventsRoute: LovableEmailEventsRoute,
   ApiPublicCronContactEmailRetryRoute: ApiPublicCronContactEmailRetryRoute,
+  ApiPublicCronInterviewWorkerRoute: ApiPublicCronInterviewWorkerRoute,
   ApiPublicCronJobsSyncRoute: ApiPublicCronJobsSyncRoute,
   ApiPublicCronMonthlyNewsletterRoute: ApiPublicCronMonthlyNewsletterRoute,
   ApiPublicCronNewsletterSchedulerRoute: ApiPublicCronNewsletterSchedulerRoute,
