@@ -1,4 +1,5 @@
 # Roadmap
+- [ ] Marketing master prompt Phases 3–6: demand generation (scroll-depth research CTA, newsletter positioning on research/learn/case studies), discoverability (8 SEO landing pages + sitemap), optimization (consent-gated GA4/GTM-ready event tracking), QA pass (tests, build, browser checks); do not publish
 - [x] Reduce jobs refresh to 07:00, 12:00, 16:00 and 21:00 Asia/Kolkata; disable five-minute jobs maintenance; verify live schedules; retain strict public freshness
 - [x] Add private AI interview packs, JD/resume uploads, typed mock coaching, study plans, exports and job entry points; real ten-question/coach/upload/export checks and 44 tests; existing assistant reply verified
 - [ ] Interview release acceptance — production callback, full large-pack runs, optional curated retrieval/voice, technical-answer sandbox validation and independent privacy/security checks remain pending; not published
