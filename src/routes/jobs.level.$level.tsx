@@ -14,7 +14,7 @@ export const Route = createFileRoute("/jobs/level/$level")({
     return context.queryClient.ensureQueryData(jobsQuery(filters)).then((data) => ({ level, initial: { filters, data } }));
   },
   head: ({ params, loaderData }) => loaderData
-    ? jobsHead(`/jobs/level/${params.level}`, `${loaderData.level} Jobs — Verified, Last 24 Hours`, `Verified ${loaderData.level} openings posted by employers in the last 24 hours, classified from the employer's original job title.`, [{ name: loaderData.level, path: `/jobs/level/${params.level}` }])
+    ? jobsHead(`/jobs/level/${params.level}`, `${loaderData.level} Jobs — Verified, Last 7 Days`, `Verified ${loaderData.level} openings posted by employers in the last 7 days, classified from the employer's original job title.`, [{ name: loaderData.level, path: `/jobs/level/${params.level}` }])
     : { meta: [{ title: "Level not found" }, { name: "robots", content: "noindex" }] },
   notFoundComponent: () => <Section>Unknown career level.</Section>,
   component: Page,
@@ -24,7 +24,7 @@ function Page() {
   const [f, setF] = useState({ ...DEFAULT_FILTERS, level });
   return (
     <Section className="pt-14">
-      <JobsHero title={`${level} Jobs`} subtitle={`Openings posted in the last 24 hours, classified as ${level} from the employer's own job title. Original titles are always shown unchanged.`} />
+      <JobsHero title={`${level} Jobs`} subtitle={`Openings posted in the last 7 days, classified as ${level} from the employer's own job title. Original titles are always shown unchanged.`} />
       <JobsDirectory initial={initial} filters={f} onChange={(n) => setF({ ...n, level })} lockedKeys={["level"]} />
     </Section>
   );

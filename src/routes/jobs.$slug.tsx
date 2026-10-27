@@ -44,7 +44,7 @@ export const Route = createFileRoute("/jobs/$slug")({
   notFoundComponent: () => (
     <Section className="pt-16">
       <h1 className="font-display text-3xl font-bold">This job is no longer listed</h1>
-      <p className="mt-3 text-muted-foreground">Jobs are removed once they are more than 24 hours old, closed by the employer, or fail verification.</p>
+      <p className="mt-3 text-muted-foreground">Jobs are removed once they are more than 7 days old, closed by the employer, or fail verification.</p>
       <Link to="/jobs" className="mt-6 inline-block text-primary underline">Browse current verified jobs</Link>
     </Section>
   ),

@@ -7,7 +7,7 @@ import { jobsHead } from "@/components/jobs/jobs-head";
 const preset = { ...DEFAULT_FILTERS, arrangement: "remote" as const };
 export const Route = createFileRoute("/jobs/remote")({
   loader: async ({ context }) => ({ initial: { filters: preset, data: await context.queryClient.ensureQueryData(jobsQuery(preset)) } }),
-  head: () => jobsHead("/jobs/remote", "Remote Jobs Posted in the Last 24 Hours — Verified", "Verified remote openings posted in the last 24 hours. Each listing states whether remote work is worldwide or limited to specific countries.", [{ name: "Remote", path: "/jobs/remote" }]),
+  head: () => jobsHead("/jobs/remote", "Remote Jobs Posted in the Last 7 Days — Verified", "Verified remote openings posted in the last 7 days. Each listing states whether remote work is worldwide or limited to specific countries.", [{ name: "Remote", path: "/jobs/remote" }]),
   component: Page,
 });
 function Page() {

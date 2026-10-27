@@ -6,7 +6,7 @@ import { jobsHead } from "@/components/jobs/jobs-head";
 const steps = [
   ["Official sources only", "Jobs come from employers' own applicant tracking feeds (Greenhouse, Lever, Ashby) or approved providers with public APIs. We never scrape sites that forbid it or bypass logins."],
   ["Exact original posting time", "We use the employer's original publication timestamp — never the time we found the job. Listings without a reliable timestamp, or with a date but no time, are not shown."],
-  ["Strict 24-hour window", "A job is visible only while it is less than 24 hours old. The database itself enforces this on every request, so jobs disappear on time even if a background task is delayed."],
+  ["Strict 7-day window", "A job is visible only while it is less than 7 days old. The database itself enforces this on every request, so jobs disappear on time even if a background task is delayed."],
   ["Still open", "The job must appear in an authorized feed and pass a recent live application-link check. Listings with inconclusive checks are quarantined. Sources follow their configured polling interval; a complete feed snapshot removes missing jobs."],
   ["Safe application links", "Application checks follow only approved provider and board addresses. Redirects outside those addresses, shorteners, messaging apps, internal addresses and payment pages are quarantined."],
   ["One card per job", "When the same role appears on several sources, we show one card and prefer the employer's own careers link."],
@@ -15,7 +15,7 @@ const steps = [
 ];
 
 export const Route = createFileRoute("/jobs/about-verification")({
-  head: () => jobsHead("/jobs/about-verification", "How We Verify Jobs — 24-Hour Freshness Rules", "How listings are sourced, time-stamped, checked for safety and removed after 24 hours.", [{ name: "How we verify", path: "/jobs/about-verification" }]),
+  head: () => jobsHead("/jobs/about-verification", "How We Verify Jobs — 7-Day Freshness Rules", "How listings are sourced, time-stamped, checked for safety and removed after 7 days.", [{ name: "How we verify", path: "/jobs/about-verification" }]),
   component: () => (
     <Section className="pt-14">
       <JobsHero title="How We Verify Jobs" subtitle="Plain-language rules every listing must pass before it appears." />
