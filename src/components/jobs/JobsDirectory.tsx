@@ -1,10 +1,11 @@
 import { Link } from "@tanstack/react-router";
 import { keepPreviousData, queryOptions, useQuery } from "@tanstack/react-query";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { CAREER_LEVELS, CATEGORY_RULES } from "@/lib/jobs/rules";
-import { listJobs, jobFilters, type JobFilters } from "@/lib/jobs/jobs.functions";
+import { listJobs, listJobLocations, jobFilters, type JobFilters } from "@/lib/jobs/jobs.functions";
+import { nearestLocation } from "@/lib/jobs/locations";
 import { AdvancedJobFilters } from "./AdvancedJobFilters";
 import { JobCard, type PublicJob } from "./JobCard";
 
@@ -41,6 +42,16 @@ export function JobsDirectory({ filters, onChange, lockedKeys = [], initial }: {
   const [q, setQ] = useState(filters.q);
   const set = (patch: Partial<JobFilters>) => onChange({ ...filters, ...patch, page: patch.page ?? 1 });
   const show = (k: keyof JobFilters) => !lockedKeys.includes(k);
+  const { data: locations } = useQuery({ queryKey: ["job-locations"], queryFn: () => listJobLocations(), staleTime: 300_000 });
+  const [auto, setAuto] = useState(false);
+  // Once per browser session, default to the visitor's region (from their time zone) when it has openings.
+  useEffect(() => {
+    if (!locations?.length || filters.city || !show("city") || sessionStorage.getItem("jobs-near-me")) return;
+    sessionStorage.setItem("jobs-near-me", "1");
+    const near = nearestLocation(Intl.DateTimeFormat().resolvedOptions().timeZone, locations);
+    if (near) { setAuto(true); set({ city: near }); }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [locations]);
   const totalPages = data ? Math.max(1, Math.ceil(data.total / data.pageSize)) : 1;
 
   return (
@@ -73,9 +84,15 @@ export function JobsDirectory({ filters, onChange, lockedKeys = [], initial }: {
             </select>
           </label>
         )}
-        <label><span className="sr-only">Country</span>
-          <Input value={filters.country} onChange={(e) => set({ country: e.target.value })} placeholder="Country (e.g. India)" />
-        </label>
+        {show("city") && (
+          <label><span className="sr-only">Location</span>
+            <select className={sel + " w-full"} value={filters.city} onChange={(e) => { setAuto(false); set({ city: e.target.value }); }}>
+              <option value="">All locations ({locations?.length ?? 0})</option>
+              {filters.city && !locations?.some((l) => l.name === filters.city) && <option value={filters.city}>{filters.city}</option>}
+              {locations?.map((l) => <option key={l.name} value={l.name}>{l.name} — {l.count} job{l.count === 1 ? "" : "s"}</option>)}
+            </select>
+          </label>
+        )}
         <label><span className="sr-only">Posted within</span>
           <select className={sel + " w-full"} value={filters.hours} onChange={(e) => set({ hours: Number(e.target.value) })}>
             {[1, 3, 6, 12, 24].map((h) => <option key={h} value={h}>Posted within {h}h</option>)}
@@ -86,6 +103,12 @@ export function JobsDirectory({ filters, onChange, lockedKeys = [], initial }: {
         <AdvancedJobFilters filters={filters} onChange={set} />
       </form>
 
+      {auto && filters.city && (
+        <p className="mt-4 flex flex-wrap items-center gap-2 text-sm">
+          <span>Showing jobs near you in <strong>{filters.city}</strong>.</span>
+          <Button size="sm" variant="outline" onClick={() => { setAuto(false); set({ city: "" }); }}>Show all locations</Button>
+        </p>
+      )}
       <p className="mt-4 text-sm text-muted-foreground" aria-live="polite">
         {data ? `${data.total} verified job${data.total === 1 ? "" : "s"} posted in the last ${filters.hours === 168 ? "7 days" : `${filters.hours} hour${filters.hours === 1 ? "" : "s"}`}` : "Loading jobs…"}
         {isFetching && data ? " · updating…" : ""}
