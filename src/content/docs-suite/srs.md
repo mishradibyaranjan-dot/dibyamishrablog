@@ -133,3 +133,12 @@ analytics pipeline and the administrative suite.
 | BR-8 | FR-12, NFR-7 |
 | BR-9 | NFR-5 |
 | BR-10 | FR-9 |
+
+
+## Career assistant requirements
+- `/resume-analyzer?jobId=...` and `/interview-prep?jobId=...` resolve the same policy-filtered employer excerpt; never put document text in URLs or fabricate missing JD data.
+- PDF/DOCX/TXT inputs require size/integrity checks; resume processing requires consent. Limits: 5 MB, 30 PDF pages, 24,000 extracted characters.
+- Every demonstrated requirement cites exact resume/JD evidence. Missing evidence is not proof of missing ability. No scores or predictions.
+- Recommendations support accept/reject/edit, bulk verified acceptance, preview, drafts and restoration. Conservative automatic application only removes redundant tokens in order; broader suggestions require evidence and cannot auto-apply.
+- Immutable versions, 7/30/90-day retention, owner-only access and deletion. Latest approved version alone authorizes editable DOCX/PPTX exports and interview transfer.
+- Original binaries have no read policy until an actual scanner is integrated. Optional PDF is not implemented.

@@ -117,3 +117,26 @@ Diagrams are Mermaid sources; paste any block into a Mermaid renderer.
       B --> PV[Preview verification]
       PV --> PB[Publish]
       PB --> V[Post-release checks: SEO, feeds, downloads]
+
+
+## Career review and approval flow
+```mermaid
+flowchart TD
+ J[Public verified job ID] --> C[Policy-filtered JD resolver]
+ C --> R[Account-private original and JD]
+ U[Consent and validated local extraction] --> R
+ R --> A[Authenticated streaming analysis]
+ A --> E[Exact evidence validation]
+ E --> D[Accept reject edit and preview]
+ D --> V[Atomic immutable approved version]
+ V --> W[Editable DOCX and PPTX]
+ V --> I[Private interview preparation]
+ Q[No-read original quarantine] --> P[Expiry or explicit deletion]
+ R --> P
+```
+```mermaid
+erDiagram
+ CAREER_RESUMES ||--o{ CAREER_RESUME_VERSIONS : owns
+ CAREER_RESUMES ||--o{ CAREER_RESUME_APPROVALS : records
+ CAREER_RESUME_VERSIONS ||--o{ CAREER_GENERATED_DOCUMENTS : authorizes
+```

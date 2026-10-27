@@ -116,3 +116,8 @@ Never throws; all failures are caught and logged.
 Adding a document requires three steps: add the Markdown file, register it in the
 server registry with metadata, and nothing else — the admin page renders from the
 registry, so no UI change is needed.
+
+
+## Career assistant modules, data and API
+`src/lib/career/schema.ts`: qualitative review schema, exact evidence validation and conservative factual replacement guard. `files.ts`: local integrity/size checks. `career.functions.ts`: authenticated create/list/save/approved-read/download-metadata/delete operations. `/api/public/resume-analysis`: validates bearer, owner, expiry, usage and processing lease; streams NDJSON status/error and commits validated output. `analysis.server.ts`: private server-only Responses generation. `exports.ts`: editable DOCX/PPTX creation and ZIP/XML validation. `retention.server.ts`: bounded expiry cleanup.
+Data: career_resumes stores sanitized original/JD, analysis and recommendations, consent/expiry and lease; career_resume_versions stores immutable content/decisions/template/approval; career_resume_approvals records each decision; career_generated_documents stores generation metadata, not public files. save_career_version locks revision and commits atomically. All public tables have explicit grants and RLS; privileged RPCs are service-only. Original bucket supports owner upload/delete but no read. Versions are inaccessible when parent expires.

@@ -77,3 +77,8 @@ not break the running version.
 - Downloads are Markdown; no in-app PDF rendering of these documents.
 - Rate limits are per-isolate, so limits are approximate under heavy scaling.
 - The apex host redirects to the canonical www host at the hosting edge.
+
+
+## Career assistant preview release — 27 October 2026
+Added job-ID transfer, private resume analysis, qualitative requirement evidence, conservative recommendation decisions, immutable drafts/approvals, approved editable Word/PowerPoint exports, approved-resume interview transfer and private deletion/retention. Seven-day jobs defaults and existing refresh schedules are unchanged. No publishing performed.
+Original malware scanning is unavailable; originals remain no-read quarantined. Optional PDF, independent cross-account/security acceptance, production callbacks and unattended retention execution remain unverified. Do not call this production-ready. The additive career schema remains in place on code rollback; do not delete user records or weaken private policies.

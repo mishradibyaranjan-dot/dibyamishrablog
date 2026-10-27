@@ -23,3 +23,6 @@ Private session creation/read/actions require validated authentication. Job-link
 
 ## Release acceptance still pending
 No deployment performed. Production scheduler callback reachability and full 25/50/100-question runs require release testing. Optional voice input and curated knowledge retrieval are not enabled. Generated code/math is not sandbox-tested automatically. PDF multilingual fonts and accessible tagged PDFs are not guaranteed. Full independent cross-account negative testing and complete deep security review remain required before announcing production readiness. The backend scan found one pre-existing informational job-source access-policy warning, outside interview data.
+
+## Approved-resume integration
+Job actions pass a unique jobId and resolve policy-filtered excerpts. `/interview-prep` accepts resumeId/versionId for the latest owner-approved version; document text never enters URLs. TXT extraction joins PDF/DOCX support. The career assistant uses the same evidence-only safeguards and private retention model. Original career binaries are stored separately in no-read quarantine (no scanner connected); interview uploads remain local extraction only. See the Career Assistant engineering guide for approval and export contracts.

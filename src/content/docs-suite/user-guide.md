@@ -102,3 +102,8 @@ monitor delivery. Unsubscribes are honoured immediately.
 | No analytics data | Analytics cookie category accepted? |
 | Email not received | Check the enquiry's send state and the retry job |
 | Audio will not play | Press the play control directly; autoplay is blocked |
+
+
+## Career assistant walkthrough
+From a job card or details choose Analyze My Resume or Interview Prep. A permitted employer excerpt loads automatically; missing descriptions require a permitted pasted/uploaded JD. Jobs never require sign-in; private reviews do.
+Consent, upload PDF/DOCX/TXT or paste text, choose retention and analyze. Read exact evidence and limitations, then accept/reject/edit suggestions. Unsupported suggestions cannot be applied. Preview and save drafts; explicitly approve final content before generating Word or PowerPoint. Download appears only after successful creation. Any edit requires renewed approval. Restore a version as a draft or revert to original. Use Prepare with approved resume for interview practice. Choose a saved private review to recover it after reloading; Delete removes original upload and all versions. Quarantined binaries cannot be downloaded because no scanner is connected.
