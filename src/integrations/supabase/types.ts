@@ -423,6 +423,65 @@ export type Database = {
           },
         ]
       }
+      job_operational_summaries: {
+        Row: {
+          created_at: string
+          day: string
+          expired: number
+          id: string
+          live: number
+          open_reports: number
+          source_failures: number
+        }
+        Insert: {
+          created_at?: string
+          day: string
+          expired?: number
+          id?: string
+          live?: number
+          open_reports?: number
+          source_failures?: number
+        }
+        Update: {
+          created_at?: string
+          day?: string
+          expired?: number
+          id?: string
+          live?: number
+          open_reports?: number
+          source_failures?: number
+        }
+        Relationships: []
+      }
+      job_publication_events: {
+        Row: {
+          created_at: string
+          event: string
+          id: string
+          job_id: string
+        }
+        Insert: {
+          created_at?: string
+          event: string
+          id?: string
+          job_id: string
+        }
+        Update: {
+          created_at?: string
+          event?: string
+          id?: string
+          job_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "job_publication_events_job_id_fkey"
+            columns: ["job_id"]
+            isOneToOne: false
+            referencedRelation: "jobs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       job_sources: {
         Row: {
           active: boolean
@@ -483,28 +542,76 @@ export type Database = {
         }
         Relationships: []
       }
+      job_verifications: {
+        Row: {
+          checked_at: string
+          evidence: string
+          final_url: string | null
+          http_status: number | null
+          id: string
+          job_id: string
+          status: string
+        }
+        Insert: {
+          checked_at?: string
+          evidence: string
+          final_url?: string | null
+          http_status?: number | null
+          id?: string
+          job_id: string
+          status: string
+        }
+        Update: {
+          checked_at?: string
+          evidence?: string
+          final_url?: string | null
+          http_status?: number | null
+          id?: string
+          job_id?: string
+          status?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "job_verifications_job_id_fkey"
+            columns: ["job_id"]
+            isOneToOne: false
+            referencedRelation: "jobs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       jobs: {
         Row: {
+          admin_hold: boolean
           application_status: string
           apply_url: string
+          canonical_apply_url: string | null
           career_level: string
           categories: string[]
+          city: string | null
           company: string
           country: string | null
           created_at: string
           dedupe_key: string
           employment_type: string | null
+          experience_max: number | null
+          experience_min: number | null
           expires_at: string
           first_seen_at: string
           id: string
+          industry: string | null
           is_primary: boolean
+          last_application_checked_at: string | null
           last_verified_at: string
           location: string | null
           original_posted_at: string
+          region: string | null
+          remote_eligibility: string | null
           salary_currency: string | null
           salary_max: number | null
           salary_min: number | null
           search: unknown
+          skills: string[]
           slug: string
           source_access_status: string
           source_id: string
@@ -513,31 +620,42 @@ export type Database = {
           summary: string | null
           title: string
           updated_at: string
+          verification_basis: string | null
           verification_notes: string | null
           verification_status: string
           work_arrangement: string
         }
         Insert: {
+          admin_hold?: boolean
           application_status?: string
           apply_url: string
+          canonical_apply_url?: string | null
           career_level?: string
           categories?: string[]
+          city?: string | null
           company: string
           country?: string | null
           created_at?: string
           dedupe_key: string
           employment_type?: string | null
+          experience_max?: number | null
+          experience_min?: number | null
           expires_at: string
           first_seen_at?: string
           id?: string
+          industry?: string | null
           is_primary?: boolean
+          last_application_checked_at?: string | null
           last_verified_at?: string
           location?: string | null
           original_posted_at: string
+          region?: string | null
+          remote_eligibility?: string | null
           salary_currency?: string | null
           salary_max?: number | null
           salary_min?: number | null
           search?: unknown
+          skills?: string[]
           slug: string
           source_access_status?: string
           source_id: string
@@ -546,31 +664,42 @@ export type Database = {
           summary?: string | null
           title: string
           updated_at?: string
+          verification_basis?: string | null
           verification_notes?: string | null
           verification_status?: string
           work_arrangement?: string
         }
         Update: {
+          admin_hold?: boolean
           application_status?: string
           apply_url?: string
+          canonical_apply_url?: string | null
           career_level?: string
           categories?: string[]
+          city?: string | null
           company?: string
           country?: string | null
           created_at?: string
           dedupe_key?: string
           employment_type?: string | null
+          experience_max?: number | null
+          experience_min?: number | null
           expires_at?: string
           first_seen_at?: string
           id?: string
+          industry?: string | null
           is_primary?: boolean
+          last_application_checked_at?: string | null
           last_verified_at?: string
           location?: string | null
           original_posted_at?: string
+          region?: string | null
+          remote_eligibility?: string | null
           salary_currency?: string | null
           salary_max?: number | null
           salary_min?: number | null
           search?: unknown
+          skills?: string[]
           slug?: string
           source_access_status?: string
           source_id?: string
@@ -579,6 +708,7 @@ export type Database = {
           summary?: string | null
           title?: string
           updated_at?: string
+          verification_basis?: string | null
           verification_notes?: string | null
           verification_status?: string
           work_arrangement?: string
@@ -1636,6 +1766,8 @@ export type Database = {
       is_blocked_email: { Args: { _email: string }; Returns: boolean }
       is_disposable_email: { Args: { _email: string }; Returns: boolean }
       is_ip_blocked: { Args: { _ip: string }; Returns: boolean }
+      jobs_daily_summary: { Args: never; Returns: undefined }
+      jobs_expiry_maintenance: { Args: never; Returns: number }
       purge_expired_ip_blocks: { Args: never; Returns: number }
       purge_visitor_tracking_audit: { Args: never; Returns: number }
     }
