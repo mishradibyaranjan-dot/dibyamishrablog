@@ -16,7 +16,7 @@ export const Route = createFileRoute("/jobs/$slug")({
     const j = loaderData.job;
     const url = `https://www.dibyamishra.co.in/jobs/${params.slug}`;
     const title = `${j.title} at ${j.company} — Verified Job`;
-    const desc = `${j.title} at ${j.company}${j.location ? ` in ${j.location}` : ""}. Posted ${fmtTime(j.original_posted_at)} UTC; apply directly at the source.`;
+    const desc = `${j.title} at ${j.company}${j.location ? ` in ${j.location}` : ""}. Posted ${fmtTime(j.original_posted_at)}; apply directly at the source.`;
     return {
       meta: [
         { title }, { name: "description", content: desc }, { property: "og:title", content: title },
@@ -72,7 +72,7 @@ function JobDetail() {
           ["Removed from listings", fmtTime(job.expires_at)],
           ["Last checked", fmtTime(job.last_verified_at)],
         ].map(([k, v]) => (
-          <div key={k}><dt className="text-xs font-medium uppercase tracking-wide text-muted-foreground">{k}</dt><dd className="mt-1">{v}</dd></div>
+          <div key={k}><dt className="text-xs font-medium uppercase tracking-wide text-muted-foreground">{k}</dt><dd className="mt-1" suppressHydrationWarning>{v}</dd></div>
         ))}
       </dl>
       <section className="mt-8 max-w-3xl">

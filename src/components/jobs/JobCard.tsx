@@ -21,7 +21,8 @@ export function readSaved(): string[] {
 }
 function writeSaved(v: string[]) { localStorage.setItem(SAVED_KEY, JSON.stringify(v)); }
 
-export const fmtTime = (s: string) => new Date(s).toLocaleString(undefined, { dateStyle: "medium", timeStyle: "short" });
+// Fixed locale + UTC so server and browser render identical text.
+export const fmtTime = (s: string) => new Date(s).toLocaleString("en-GB", { dateStyle: "medium", timeStyle: "short", timeZone: "UTC" }) + " UTC";
 
 export function sourceLabel(j: PublicJob) {
   const p = j.job_sources?.provider;
@@ -93,7 +94,7 @@ export function JobCard({ job }: { job: PublicJob }) {
       </div>
       <dl className="mt-3 grid gap-1 text-xs text-muted-foreground sm:grid-cols-2">
         <div><dt className="inline font-medium">Source: </dt><dd className="inline">{sourceLabel(job)}</dd></div>
-        <div><dt className="inline font-medium">Original posted: </dt><dd className="inline">{fmtTime(job.original_posted_at)} ({ageLabel(new Date(job.original_posted_at))})</dd></div>
+        <div><dt className="inline font-medium">Original posted: </dt><dd className="inline" suppressHydrationWarning>{fmtTime(job.original_posted_at)} ({ageLabel(new Date(job.original_posted_at))})</dd></div>
         <div><dt className="inline font-medium">Last checked: </dt><dd className="inline">{fmtTime(job.last_verified_at)}</dd></div>
         <div className="flex items-center gap-1 text-primary"><ShieldCheck className="h-3.5 w-3.5" aria-hidden /> Verified</div>
       </dl>
