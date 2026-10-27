@@ -14,6 +14,7 @@ export const createResumeReview=createServerFn({method:'POST'}).middleware([requ
  const {error}=await db.from('career_resumes').insert({id,user_id:context.userId,job_id:data.jobId,title:title||'Standalone resume review',jd,original_text:original,original_filename:data.filename,original_type:data.extension,original_path:path,expires_at:new Date(Date.now()+data.retention*86400000).toISOString()});if(error)throw new Error('Could not save private resume review.');return {id,path};
 });
 export const getResumeReviews=createServerFn({method:'POST'}).middleware([requireSupabaseAuth]).inputValidator(z.object({id:uuid.nullable()})).handler(async({data,context})=>{
+ const {purgeExpiredCareerReviews}=await import('./retention.server');await purgeExpiredCareerReviews(context.userId);
  const {data:list,error}=await context.supabase.from('career_resumes').select('id,title,status,created_at,expires_at').order('created_at',{ascending:false}).limit(20);if(error)throw new Error('Could not load private reviews.');
  if(!data.id)return {list:list??[],review:null,versions:[]};
  const {data:review,error:readError}=await context.supabase.from('career_resumes').select('*').eq('id',data.id).maybeSingle();if(readError||!review)throw new Error('Review unavailable or retention ended.');
@@ -38,7 +39,7 @@ export const recordResumeDownload=createServerFn({method:'POST'}).middleware([re
  const {supabaseAdmin:db}=await import('@/integrations/supabase/client.server');const {error}=await db.from('career_generated_documents').insert({resume_id:r.id,version_id:v.id,format:data.format,bytes:data.bytes});if(error)throw new Error('Could not record generated document.');return {ok:true};
 });
 export const deleteResumeReview=createServerFn({method:'POST'}).middleware([requireSupabaseAuth]).inputValidator(z.object({id:uuid})).handler(async({data,context})=>{
- const {data:r}=await context.supabase.from('career_resumes').select('id,original_path').eq('id',data.id).maybeSingle();if(!r)throw new Error('Review unavailable.');
- const {supabaseAdmin:db}=await import('@/integrations/supabase/client.server');if(r.original_path){const {error}=await db.storage.from('career-resume-quarantine').remove([r.original_path]);if(error)throw new Error('Could not remove the original file; review retained so you can retry deletion.');}
+ const {supabaseAdmin:db}=await import('@/integrations/supabase/client.server');const {data:r}=await db.from('career_resumes').select('id,original_path').eq('id',data.id).eq('user_id',context.userId).maybeSingle();if(!r)throw new Error('Review unavailable.');
+ if(r.original_path){const {error}=await db.storage.from('career-resume-quarantine').remove([r.original_path]);if(error)throw new Error('Could not remove the original file; review retained so you can retry deletion.');}
  const {error}=await context.supabase.from('career_resumes').delete().eq('id',r.id);if(error)throw new Error('Could not delete private review.');return {ok:true};
 });

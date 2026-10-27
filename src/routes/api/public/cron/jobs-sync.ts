@@ -21,6 +21,8 @@ export const Route = createFileRoute("/api/public/cron/jobs-sync")({
         for (let i = 0; i < b.length; i++) ok = ok && a[i % a.length] === b[i];
         if (!ok) return new Response("Unauthorized", { status: 401 });
         try {
+          const { purgeExpiredCareerReviews } = await import("@/lib/career/retention.server");
+          await purgeExpiredCareerReviews();
           const { runJobSync } = await import("@/lib/jobs/sync.server");
           const results = await runJobSync();
           const { classifyPendingJobs } = await import("@/lib/jobs/classify.server");

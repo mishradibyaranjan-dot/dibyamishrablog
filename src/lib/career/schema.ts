@@ -16,6 +16,11 @@ export function supportedReplacement(original: string, current: string, replacem
   if (!current.trim() || !replacement.trim() || !original.includes(current)) return false;
   const vocabulary = new Set(words(current));
   if (words(replacement).some(w => !vocabulary.has(w))) return false;
+  // Never drop unique facts/negations. Only remove redundant tokens in original order.
+  const before=words(current),after=words(replacement);
+  if ([...vocabulary].some(w=>!after.includes(w))) return false;
+  let position=0;
+  for(const token of after){while(position<before.length&&before[position]!==token)position++;if(position===before.length)return false;position++;}
   const immutable = current.match(/\b\d[\d.,%+/-]*\b|\b[A-Z][\p{L}\p{N}+#.-]*\b/gu) ?? [];
   return immutable.every(value => replacement.includes(value));
 }
@@ -44,7 +49,7 @@ export function applyDecisions(original: string, recommendations: Recommendation
     const r = recommendations.find(r => r.id === d.id);
     if (!r) throw new Error('Unknown recommendation.');
     if (d.status !== 'accepted') continue;
-    if (r.confidence !== 'verified' || !supportedReplacement(original, r.current, d.replacement)) throw new Error('Only evidence-supported wording changes can be accepted.');
+    if (r.confidence !== 'verified' || !r.resume_evidence || !original.includes(r.resume_evidence) || !r.jd_evidence || !supportedReplacement(original, r.current, d.replacement)) throw new Error('Only evidence-supported wording changes can be accepted.');
     const start = original.indexOf(r.current);
     if (original.indexOf(r.current, start + 1) !== -1) throw new Error('Repeated text is ambiguous; reject this change.');
     replacements.push({ start, end: start + r.current.length, value: d.replacement });
