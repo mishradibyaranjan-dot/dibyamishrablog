@@ -4,7 +4,15 @@ import { breadcrumbScript } from "@/lib/breadcrumbs";
 
 const str = (v: unknown, max = 80) => (typeof v === "string" ? v.slice(0, max) : "");
 
-export function parseJobSearch(s: Record<string, unknown>): JobFilters {
+/** Returns only non-default params so links to /jobs need no search object. */
+export function parseJobSearch(s: Record<string, unknown>): Partial<JobFilters> {
+  const full = parseFull(s);
+  const out: Partial<JobFilters> = {};
+  for (const k of Object.keys(full) as (keyof JobFilters)[]) if (full[k] !== DEFAULT_FILTERS[k]) (out as any)[k] = full[k];
+  return out;
+}
+
+function parseFull(s: Record<string, unknown>): JobFilters {
   const hours = Number(s.hours);
   const arr = str(s.arrangement);
   return {
