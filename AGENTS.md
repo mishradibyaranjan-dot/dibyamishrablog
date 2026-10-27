@@ -6,4 +6,8 @@
 - Full-page automatic translation is opt-in, lazy-loaded for non-English selections, and must preserve English as the authored source.
 - Custom brand colours override only semantic brand tokens, persist locally, and always calculate a readable primary-button foreground.- Keep verified resume facts (roles, achievements, certifications) in `src/lib/profile.ts` and render portfolio pages from it, so no page invents or diverges on figures.
 - Jobs platform: public job visibility (verified, open, primary, posted <24h, recently checked) is enforced by the `jobs` table's database policy, not only by the sync worker, so expired jobs vanish even if cron stalls.
-- Job sources are adapters in `src/lib/jobs/sync.server.ts` keyed by `job_sources.provider`; only official public feeds are used and a job's original posting time is always taken from the source, never the import time.
+- Job sources are adapters keyed by provider; official feeds only, durable source locks enforce polling/backoff, and a database trigger preserves original publication times to prevent refreshes from renewing expired jobs.
+- Jobs personal saves/searches use owner-scoped policies and the same public freshness policy for matches; in-app alerts do not imply email delivery.
+- Jobs admin RPCs require both the protected admin role and authenticated aal2; the authenticator UI is not the security boundary.
+- AI job classification uses server-only streaming Responses calls, verbatim employer evidence, cached outputs and durable pause state; factual job fields are never rewritten by AI.
+- Page-speed samples require analytics consent and store only coarse path/device, metric/value/rating; no identifiers or query parameters.

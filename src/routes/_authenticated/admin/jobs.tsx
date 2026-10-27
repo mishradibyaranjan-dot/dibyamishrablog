@@ -5,11 +5,12 @@ import { toast } from "sonner";
 import { Loader2, RefreshCw, Download } from "lucide-react";
 import { Section, SectionHeader } from "@/components/layout/Section";
 import { Button } from "@/components/ui/button";
-import { adminJobsOverview, adminJobAction, adminRunSync, adminSourceUpdate, adminResolveReport } from "@/lib/jobs/jobs.functions";
+import { adminJobsOverview, adminJobAction, adminRunSync, adminSourceUpdate, adminResolveReport, adminClassifyJobs, adminClassificationResults, adminResumeClassification } from "@/lib/jobs/jobs.functions";
+import { JobsMfa } from "@/components/jobs/JobsMfa";
 
 export const Route = createFileRoute("/_authenticated/admin/jobs")({
-  head: () => ({ meta: [{ title: "Jobs platform — Admin" }, { name: "description", content: "Verified jobs operations dashboard." }, { name: "robots", content: "noindex, nofollow" }] }),
-  component: AdminJobs,
+  head: () => ({ meta: [{ title: "Verified Jobs Operations — Dibya Mishra Admin" }, { name: "description", content: "Private source health, AI classification and verified jobs operations." }, { property: "og:title", content: "Verified Jobs Operations — Dibya Mishra Admin" }, { property: "og:description", content: "Private verified jobs operations." }, { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary" }, { name: "robots", content: "noindex, nofollow" }] }),
+  component: () => <JobsMfa><AdminJobs /></JobsMfa>,
 });
 
 type Overview = Awaited<ReturnType<typeof adminJobsOverview>>;
@@ -23,6 +24,11 @@ function toCsv(rows: Record<string, unknown>[]) {
 }
 
 function AdminJobs() {
+  const classify = useServerFn(adminClassifyJobs);
+  const resumeAI = useServerFn(adminResumeClassification);
+  const loadExtras = useServerFn(adminClassificationResults);
+  const [extras, setExtras] = useState<Awaited<ReturnType<typeof adminClassificationResults>> | null>(null);
+  const [classifying, setClassifying] = useState(false);
   const load = useServerFn(adminJobsOverview);
   const act = useServerFn(adminJobAction);
   const sync = useServerFn(adminRunSync);
@@ -33,8 +39,8 @@ function AdminJobs() {
   const [statusFilter, setStatusFilter] = useState("");
 
   const refresh = useCallback(async () => {
-    try { setData(await load()); } catch (e) { toast.error(e instanceof Error ? e.message : "Failed to load"); }
-  }, [load]);
+    try { const [main, extra] = await Promise.all([load(), loadExtras()]); setData(main); setExtras(extra); } catch (e) { toast.error(e instanceof Error ? e.message : "Failed to load"); }
+  }, [load, loadExtras]);
   useEffect(() => { refresh(); }, [refresh]);
 
   const runSync = async () => {
@@ -73,6 +79,21 @@ function AdminJobs() {
       <div className="mb-6 flex flex-wrap gap-2">
         <Button onClick={runSync} disabled={syncing}>{syncing ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <RefreshCw className="mr-2 h-4 w-4" />}Sync all sources now</Button>
         <Button variant="outline" onClick={exportCsv}><Download className="mr-2 h-4 w-4" />Export CSV</Button>
+        <Button variant="outline" onClick={async () => {
+          if (!data) return;
+          try {
+            const { default: ExcelJS } = await import("exceljs");
+            const workbook = new ExcelJS.Workbook();
+            const sheet = workbook.addWorksheet("Jobs");
+            const keys = Object.keys(data.recent[0] ?? {});
+            sheet.columns = keys.map((key) => ({ header: key, key, width: 24 }));
+            data.recent.forEach((row) => sheet.addRow(Object.fromEntries(keys.map((key) => [key, String((row as Record<string, unknown>)[key] ?? "")]))));
+            const buffer = await workbook.xlsx.writeBuffer();
+            const url = URL.createObjectURL(new Blob([new Uint8Array(buffer)], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" }));
+            const a = document.createElement("a"); a.href = url; a.download = "verified-jobs.xlsx"; a.click(); setTimeout(() => URL.revokeObjectURL(url), 1000);
+          } catch { toast.error("Could not export Excel workbook"); }
+        }}><Download className="mr-2 h-4 w-4" />Export Excel</Button>
+        <Button variant="outline" disabled={classifying} onClick={async () => { setClassifying(true); try { const r = await classify(); if (r.error) toast.error(r.error); else toast.success(`${r.completed} jobs classified`); await refresh(); } catch (e) { toast.error(e instanceof Error ? e.message : "Classification failed"); } finally { setClassifying(false); } }}>{classifying ? "Classifying…" : "Classify pending jobs"}</Button>
         <Button variant="ghost" onClick={refresh}>Refresh</Button>
       </div>
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
@@ -82,6 +103,11 @@ function AdminJobs() {
         <div className="rounded-2xl border border-border bg-card p-5"><p className="text-sm text-muted-foreground">Source errors</p><p className="mt-1 font-display text-3xl font-bold">{sourceErrors}</p></div>
       </div>
 
+      <h2 className="mt-12 font-display text-2xl font-semibold">AI classification</h2>
+      <Button className="mt-3" variant="outline" onClick={async () => { if (!window.confirm("Resume AI processing after correcting the reported account or configuration issue?")) return; try { await resumeAI(); toast.success("AI processing resumed"); } catch (e) { toast.error(e instanceof Error ? e.message : "Could not resume"); } }}>Resume paused AI processing</Button>
+      <ul className="mt-4 space-y-3 text-sm">{extras?.classifications.map((c) => <li key={c.job_id} className="border-b border-border pb-3"><strong>{c.jobs?.title}</strong> · {c.status}<p className="text-muted-foreground">{c.error ?? JSON.stringify(c.result)}</p></li>)}{extras?.classifications.length === 0 && <li>No classifications yet.</li>}</ul>
+      <h2 className="mt-12 font-display text-2xl font-semibold">Page speed · last 7 days</h2>
+      <div className="mt-4 flex flex-wrap gap-6">{["LCP", "INP", "CLS"].map((metric) => { const samples = extras?.vitals.filter((v) => v.metric === metric).map((v) => v.value).sort((a,b) => a-b) ?? []; const p75 = samples[Math.max(0, Math.ceil(samples.length * .75) - 1)]; return <div key={metric}><h3 className="font-semibold">{metric}</h3><p>{p75 === undefined ? "No consented measurements yet" : `${p75.toFixed(metric === "CLS" ? 3 : 0)}${metric === "CLS" ? "" : " ms"} · p75 · ${samples.length} samples`}</p></div>; })}</div>
       <h2 className="mt-12 font-display text-2xl font-semibold">Sources</h2>
       <div className="mt-4 overflow-x-auto rounded-2xl border border-border">
         <table className="w-full text-left text-sm">

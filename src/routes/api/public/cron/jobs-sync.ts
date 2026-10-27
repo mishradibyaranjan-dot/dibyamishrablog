@@ -23,7 +23,9 @@ export const Route = createFileRoute("/api/public/cron/jobs-sync")({
         try {
           const { runJobSync } = await import("@/lib/jobs/sync.server");
           const results = await runJobSync();
-          return Response.json({ ok: true, results });
+          const { classifyPendingJobs } = await import("@/lib/jobs/classify.server");
+          const classification = await classifyPendingJobs(request);
+          return Response.json({ ok: true, results, classification });
         } catch (err) {
           console.error("[cron:jobs-sync]", err);
           return Response.json({ ok: false, error: "sync_failed" }, { status: 500 });
