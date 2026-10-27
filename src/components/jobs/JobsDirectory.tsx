@@ -49,7 +49,7 @@ export function JobsDirectory({ filters, onChange, lockedKeys = [], initial }: {
     if (!locations?.length || filters.city || !show("city") || sessionStorage.getItem("jobs-near-me")) return;
     sessionStorage.setItem("jobs-near-me", "1");
     const near = nearestLocation(Intl.DateTimeFormat().resolvedOptions().timeZone, locations);
-    if (near) { setAuto(true); set({ city: near }); }
+    if (near) { setAuto(true); set({ city: near, hours: 168 }); }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [locations]);
   const totalPages = data ? Math.max(1, Math.ceil(data.total / data.pageSize)) : 1;
