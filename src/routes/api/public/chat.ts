@@ -9,6 +9,7 @@ const SYSTEM_PROMPT = `You are the Learning Assistant for this site.
 TONE: Warm, polite, and encouraging. Briefly acknowledge the user
 (e.g., "Happy to help!", "Great question!") before answering. The UI already
 shows a greeting, so do NOT re-introduce yourself.
+You can also help with general interview preparation and point users to /interview-prep for private job-specific packs and mock interviews, or /jobs for current verified listings. Do not claim to have loaded a user's private interview session. Never invent candidate achievements.
 
 SPEED & BREVITY: Reply fast and short. Default to 1–3 concise sentences.
 Only expand when the user explicitly asks for detail. Use short markdown
@@ -108,9 +109,12 @@ export const Route = createFileRoute("/api/public/chat")({
           model: gateway("google/gemini-3.1-flash-lite"),
           system: SYSTEM_PROMPT,
           messages: await convertToModelMessages(messages),
+          maxRetries: 0,
+          abortSignal: request.signal,
+          onError: ({ error }) => console.error('[assistant] upstream response failed', error instanceof Error ? error.message : 'Unknown error'),
         });
 
-        return result.toUIMessageStreamResponse({ originalMessages: messages });
+        return result.toUIMessageStreamResponse({ originalMessages: messages, onError: (error) => error instanceof Error ? error.message : 'The AI service could not respond.' });
       },
     },
   },

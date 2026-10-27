@@ -1,4 +1,6 @@
 # Roadmap
+- [x] Add private AI interview packs, JD/resume uploads, typed mock coaching, study plans, exports and job entry points; real ten-question/coach/upload/export checks and 44 tests; existing assistant reply verified
+- [ ] Interview release acceptance — production callback, full large-pack runs, optional curated retrieval/voice, technical-answer sandbox validation and independent privacy/security checks remain pending; not published
 - [x] Audited uploaded brief; expanded categories/filters, live-link evidence, moderation safeguards, operations schedules, sitemap and private documentation
 - [ ] Rich provider facts / full descriptions / visa requirements — blocked on reliable source evidence and redistribution permission
 - [ ] Google Rich Results / Indexing API and production performance acceptance — blocked on deployed eligible pages and Google authorization/field measurements

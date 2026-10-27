@@ -14,6 +14,47 @@ export type Database = {
   }
   public: {
     Tables: {
+      ai_usage_metrics: {
+        Row: {
+          created_at: string
+          id: string
+          input_tokens: number
+          operation: string
+          output_tokens: number
+          session_id: string | null
+          status: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          input_tokens?: number
+          operation: string
+          output_tokens?: number
+          session_id?: string | null
+          status?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          input_tokens?: number
+          operation?: string
+          output_tokens?: number
+          session_id?: string | null
+          status?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ai_usage_metrics_session_id_fkey"
+            columns: ["session_id"]
+            isOneToOne: false
+            referencedRelation: "interview_sessions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       blocked_email_domains: {
         Row: {
           created_at: string
@@ -301,6 +342,238 @@ export type Database = {
           id?: string
           ip?: string | null
           reason?: string | null
+        }
+        Relationships: []
+      }
+      interview_answers: {
+        Row: {
+          content: Json
+          id: string
+          question_id: string
+          session_id: string
+        }
+        Insert: {
+          content: Json
+          id?: string
+          question_id: string
+          session_id: string
+        }
+        Update: {
+          content?: Json
+          id?: string
+          question_id?: string
+          session_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "interview_answers_question_id_fkey"
+            columns: ["question_id"]
+            isOneToOne: true
+            referencedRelation: "interview_questions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "interview_answers_session_id_fkey"
+            columns: ["session_id"]
+            isOneToOne: false
+            referencedRelation: "interview_sessions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      interview_engine_state: {
+        Row: {
+          id: string
+          lease_until: string | null
+          paused: boolean
+          reason: string | null
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          lease_until?: string | null
+          paused?: boolean
+          reason?: string | null
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          lease_until?: string | null
+          paused?: boolean
+          reason?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      interview_feedback: {
+        Row: {
+          candidate_answer: string
+          content: Json | null
+          created_at: string
+          error: string | null
+          id: string
+          question_id: string
+          session_id: string
+          status: string
+        }
+        Insert: {
+          candidate_answer: string
+          content?: Json | null
+          created_at?: string
+          error?: string | null
+          id?: string
+          question_id: string
+          session_id: string
+          status?: string
+        }
+        Update: {
+          candidate_answer?: string
+          content?: Json | null
+          created_at?: string
+          error?: string | null
+          id?: string
+          question_id?: string
+          session_id?: string
+          status?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "interview_feedback_question_id_fkey"
+            columns: ["question_id"]
+            isOneToOne: false
+            referencedRelation: "interview_questions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "interview_feedback_session_id_fkey"
+            columns: ["session_id"]
+            isOneToOne: false
+            referencedRelation: "interview_sessions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      interview_preparation_plans: {
+        Row: {
+          content: Json
+          id: string
+          session_id: string
+        }
+        Insert: {
+          content: Json
+          id?: string
+          session_id: string
+        }
+        Update: {
+          content?: Json
+          id?: string
+          session_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "interview_preparation_plans_session_id_fkey"
+            columns: ["session_id"]
+            isOneToOne: true
+            referencedRelation: "interview_sessions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      interview_questions: {
+        Row: {
+          category: string
+          id: string
+          position: number
+          question: string
+          session_id: string
+        }
+        Insert: {
+          category: string
+          id?: string
+          position: number
+          question: string
+          session_id: string
+        }
+        Update: {
+          category?: string
+          id?: string
+          position?: number
+          question?: string
+          session_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "interview_questions_session_id_fkey"
+            columns: ["session_id"]
+            isOneToOne: false
+            referencedRelation: "interview_sessions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      interview_sessions: {
+        Row: {
+          analysis: Json | null
+          attempts: number
+          cache_key: string
+          created_at: string
+          current_question: number
+          employer: string | null
+          error: string | null
+          expires_at: string
+          id: string
+          jd: string
+          job_id: string | null
+          lease_until: string | null
+          resume_text: string | null
+          retry_at: string | null
+          settings: Json
+          status: string
+          title: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          analysis?: Json | null
+          attempts?: number
+          cache_key: string
+          created_at?: string
+          current_question?: number
+          employer?: string | null
+          error?: string | null
+          expires_at?: string
+          id?: string
+          jd: string
+          job_id?: string | null
+          lease_until?: string | null
+          resume_text?: string | null
+          retry_at?: string | null
+          settings?: Json
+          status?: string
+          title?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          analysis?: Json | null
+          attempts?: number
+          cache_key?: string
+          created_at?: string
+          current_question?: number
+          employer?: string | null
+          error?: string | null
+          expires_at?: string
+          id?: string
+          jd?: string
+          job_id?: string | null
+          lease_until?: string | null
+          resume_text?: string | null
+          retry_at?: string | null
+          settings?: Json
+          status?: string
+          title?: string
+          updated_at?: string
+          user_id?: string
         }
         Relationships: []
       }
@@ -1182,6 +1455,32 @@ export type Database = {
         }
         Relationships: []
       }
+      resume_analysis: {
+        Row: {
+          content: Json
+          id: string
+          session_id: string
+        }
+        Insert: {
+          content: Json
+          id?: string
+          session_id: string
+        }
+        Update: {
+          content?: Json
+          id?: string
+          session_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "resume_analysis_session_id_fkey"
+            columns: ["session_id"]
+            isOneToOne: true
+            referencedRelation: "interview_sessions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       saved_jobs: {
         Row: {
           created_at: string
@@ -1737,9 +2036,20 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      claim_interview_work: { Args: never; Returns: string }
       claim_job_source: {
         Args: { p_force?: boolean; p_id: string; p_token: string }
         Returns: boolean
+      }
+      commit_interview_batch: {
+        Args: {
+          p_analysis: Json
+          p_plan: Json
+          p_questions: Json
+          p_resume: Json
+          p_session: string
+        }
+        Returns: undefined
       }
       contact_enquiries_due_for_retry: {
         Args: { _limit?: number; _max_retries?: number }
@@ -1763,6 +2073,7 @@ export type Database = {
         Args: { _ip: string; _minutes?: number }
         Returns: number
       }
+      drain_interview_queue: { Args: never; Returns: undefined }
       is_blocked_email: { Args: { _email: string }; Returns: boolean }
       is_disposable_email: { Args: { _email: string }; Returns: boolean }
       is_ip_blocked: { Args: { _ip: string }; Returns: boolean }
@@ -1770,6 +2081,10 @@ export type Database = {
       jobs_expiry_maintenance: { Args: never; Returns: number }
       purge_expired_ip_blocks: { Args: never; Returns: number }
       purge_visitor_tracking_audit: { Args: never; Returns: number }
+      reserve_interview_usage: {
+        Args: { p_operation: string; p_session: string; p_user: string }
+        Returns: string
+      }
     }
     Enums: {
       app_role: "admin" | "user"
