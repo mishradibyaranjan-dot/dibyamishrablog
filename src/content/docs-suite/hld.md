@@ -118,3 +118,7 @@ excluded from middleware and routing.
 | AD-3 | Client-side bundle assembly for downloads | No extra privileged endpoint |
 | AD-4 | Restrictive RLS on audit tables | Immutability by construction |
 | AD-5 | Email-scoped gate on the docs suite | Owner-only requirement beyond role |
+
+
+## Career assistant architecture
+Public jobs → policy-filtered context resolver → private resume snapshot → authenticated streaming AI → strict evidence validation → immutable approval version → browser-generated editable documents / approved-resume interview transfer. Server-only generation reuses the existing Responses helper and durable service pause/usage counters. Original uploads use private no-read quarantine. Owner RLS derives version/approval access from the unexpired parent. Existing jobs callbacks and owner reads purge expired quarantine objects before deleting metadata; no new polling schedule.

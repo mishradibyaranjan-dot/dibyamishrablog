@@ -126,3 +126,8 @@ then TC-D1..TC-D10, TC-P1..TC-P7, TC-S1..TC-S3.
 
 Severity 1 (authorization, data exposure) blocks release. Severity 2 (broken
 primary journey) blocks release. Severity 3/4 are scheduled.
+
+
+## Career assistant validation and release gates
+Automated tests cover verbatim evidence, unsupported claims, negation/case/token preservation, ambiguous/overlapping changes, original preservation, file signature/integrity, macros/embedded objects and expanded archive limits. Browser checks exercised real AI assessment, approval, editable DOCX/PPTX downloads, saved review readback, approved-resume interview transfer, template-change/draft export blocking, signed-out analysis 401 and mobile overflow. Synthetic private fixture is deleted after checks.
+Release gates still pending: independent cross-account negative testing, full deep security review, published callbacks and unattended expiry cleanup, large-document/all-slide inspection. No malware-scanning acceptance is claimed. Optional final PDF is not implemented.

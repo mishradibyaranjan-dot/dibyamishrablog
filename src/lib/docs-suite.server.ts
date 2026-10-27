@@ -12,6 +12,7 @@ import releaseNotes from "@/content/docs-suite/release-notes.md?raw";
 import jobsSuite from "../../docs/jobs-engineering-suite.md?raw";
 import jobsOperations from "../../docs/jobs-operations.md?raw";
 import interviewGuide from "../../docs/interview-preparation.md?raw";
+import careerGuide from "../../docs/career-assistant.md?raw";
 
 import type { DocCategory, DocMeta } from "@/lib/docs-suite.types";
 
@@ -20,6 +21,7 @@ export type { DocCategory, DocMeta };
 type DocEntry = Omit<DocMeta, "bytes"> & { content: string };
 
 const ENTRIES: readonly DocEntry[] = [
+  { id: "career-assistant", title: "Career Assistant — Engineering & Acceptance", category: "Quality", summary: "Private resume review, evidence-based decisions, immutable approvals, editable exports and release limitations.", filename: "Career-Assistant.md", content: careerGuide },
   { id: "interview-preparation", title: "AI Interview Preparation — Engineering & Testing", category: "Quality", summary: "Private interview flow, architecture, safeguards, real test results and remaining release checks.", filename: "AI-Interview-Preparation.md", content: interviewGuide },
   { id: "jobs-engineering", title: "Verified Jobs — Engineering & Validation Suite", category: "Design", summary: "Jobs BRD/SRS, architecture, database, agents, source matrix, APIs, test evidence and release blockers.", filename: "Verified-Jobs-Engineering.md", content: jobsSuite },
   { id: "jobs-operations", title: "Verified Jobs — Operations & Release Guide", category: "Operations", summary: "Verification evidence, refresh schedules, privacy, administrator access and integration limitations.", filename: "Verified-Jobs-Operations.md", content: jobsOperations },

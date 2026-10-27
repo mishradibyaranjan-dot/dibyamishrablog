@@ -112,3 +112,7 @@ leader. It has three commercial jobs to do:
 The release is accepted when: all Must requirements are demonstrated, the
 security scan reports zero critical or high findings, SEO checks pass, and the
 Super Admin can download the full documentation suite from within the app.
+
+
+## Career assistant extension — 27 October 2026
+Job browsing stays public, with seven-day default visibility and 24/48/72/168-hour filters. Career analysis is private and requires processing consent. Match observations are qualitative and evidence-only: no ATS/readiness score or hiring prediction. Users review recommendations, retain originals and immutable versions, and explicitly approve the latest version before editable Word/PowerPoint generation. No malware scanner is connected; originals remain quarantined and unavailable for download. Production acceptance remains pending.

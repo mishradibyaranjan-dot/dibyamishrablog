@@ -1,6 +1,7 @@
 # Project engineering rules
 - Interview preparation uses account-private sanitized text snapshots and server-only streaming generation; browser-only document extraction avoids public upload URLs. Generation commits bounded batches atomically and uses a durable queue lease with drain-based retry removal.
 - Career resume reviews use a shared policy-filtered job-context resolver, private originals in no-read quarantine, server-validated evidence-only wording changes, atomic immutable approval versions and latest-version export authorization; this prevents fact invention, accidental original overwrite and stale approved downloads. Browser-generated editable documents use only the authorized approved text, while original binaries remain unavailable until a real scanner is integrated.
+- Career retention cleanup reuses existing jobs refresh callbacks and owner reads, deleting quarantine objects before metadata so storage failures remain retryable without extra polling.
 
 - Send bulk newsletter email with bounded concurrency and never sleep inside request handlers; managed delivery and explicit retries handle rate limits.
 - Newsletter sends must include a stable per-recipient unsubscribe token and retain the public `/email/unsubscribe` compatibility route.
