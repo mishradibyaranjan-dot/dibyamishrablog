@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { CAREER_LEVELS, CATEGORY_RULES } from "@/lib/jobs/rules";
 import { listJobs, listJobLocations, jobFilters, type JobFilters } from "@/lib/jobs/jobs.functions";
-import { nearestLocation } from "@/lib/jobs/locations";
+import { nearestLocation, splitLocations } from "@/lib/jobs/locations";
 import { AdvancedJobFilters } from "./AdvancedJobFilters";
 import { JobCard, type PublicJob } from "./JobCard";
 
@@ -44,6 +44,9 @@ export function JobsDirectory({ filters, onChange, lockedKeys = [], initial }: {
   const show = (k: keyof JobFilters) => !lockedKeys.includes(k);
   const { data: locations } = useQuery({ queryKey: ["job-locations"], queryFn: () => listJobLocations(), staleTime: 300_000 });
   const [auto, setAuto] = useState(false);
+  const split = splitLocations(locations ?? []);
+  const [intl, setIntl] = useState(false);
+  useEffect(() => { if (filters.city && split.international.some((l) => l.name === filters.city)) setIntl(true); }, [filters.city, locations]);
   // Once per browser session, default to the visitor's region (from their time zone) when it has openings.
   useEffect(() => {
     if (!locations?.length || filters.city || !show("city") || sessionStorage.getItem("jobs-near-me")) return;
@@ -85,13 +88,26 @@ export function JobsDirectory({ filters, onChange, lockedKeys = [], initial }: {
           </label>
         )}
         {show("city") && (
-          <label><span className="sr-only">Location</span>
-            <select className={sel + " w-full"} value={filters.city} onChange={(e) => { setAuto(false); set({ city: e.target.value }); }}>
-              <option value="">All locations ({locations?.length ?? 0})</option>
-              {filters.city && !locations?.some((l) => l.name === filters.city) && <option value={filters.city}>{filters.city}</option>}
-              {locations?.map((l) => <option key={l.name} value={l.name}>{l.name} — {l.count} job{l.count === 1 ? "" : "s"}</option>)}
-            </select>
-          </label>
+          <div className="grid gap-1">
+            <label><span className="sr-only">Location</span>
+              <select className={sel + " w-full"} value={filters.city} onChange={(e) => { setAuto(false); set({ city: e.target.value }); }}>
+                <option value="">All locations</option>
+                {filters.city && ![...split.india, ...split.international].some((l) => l.name === filters.city) && <option value={filters.city}>{filters.city}</option>}
+                <optgroup label="India">
+                  {split.india.map((l) => <option key={l.name} value={l.name}>{l.name} — {l.count} job{l.count === 1 ? "" : "s"}</option>)}
+                </optgroup>
+                {intl && split.international.length > 0 && (
+                  <optgroup label="International (by demand)">
+                    {split.international.map((l) => <option key={l.name} value={l.name}>{l.name} — {l.count} job{l.count === 1 ? "" : "s"}</option>)}
+                  </optgroup>
+                )}
+              </select>
+            </label>
+            <label className="flex items-center gap-2 text-xs text-muted-foreground">
+              <input type="checkbox" className="h-4 w-4 accent-primary" checked={intl} onChange={(e) => setIntl(e.target.checked)} />
+              Show international locations ({split.international.length})
+            </label>
+          </div>
         )}
         <label><span className="sr-only">Posted within</span>
           <select className={sel + " w-full"} value={filters.hours} onChange={(e) => set({ hours: Number(e.target.value) })}>

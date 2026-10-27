@@ -46,3 +46,20 @@ export function nearestLocation(timeZone: string, ranked: LocationCount[]): stri
   const wanted = [...(region ? REGION_PLACES[region] : []), ...(tzCity ? [tzCity] : [])].map((s) => s.toLowerCase());
   return ranked.find((l) => wanted.some((w) => l.name.toLowerCase().includes(w)))?.name ?? null;
 }
+
+/** Major Indian job hubs, always listed so visitors can pick any India location. */
+export const INDIA_LOCATIONS = ["India", "Remote India", "Bengaluru", "Mumbai", "Delhi", "New Delhi", "Gurugram", "Noida", "Hyderabad", "Pune", "Chennai", "Kolkata", "Ahmedabad", "Jaipur", "Chandigarh", "Kochi", "Thiruvananthapuram", "Coimbatore", "Indore", "Bhubaneswar", "Nagpur", "Lucknow", "Mysuru", "Visakhapatnam", "Vadodara", "Surat", "Goa"];
+const INDIA_ALIASES = [...INDIA_LOCATIONS, ...REGION_PLACES.India, "Bangalore", "Gurgaon", "Bombay", "Madras", "Calcutta", "Cochin", "Mysore"].map((s) => s.toLowerCase());
+
+export function isIndianPlace(name: string): boolean {
+  const n = name.toLowerCase();
+  return INDIA_ALIASES.some((a) => n === a || n.includes(a));
+}
+
+/** Split ranked places into all India hubs (zero-count included) and demand-ranked international places. */
+export function splitLocations(ranked: LocationCount[]): { india: LocationCount[]; international: LocationCount[] } {
+  const india = ranked.filter((l) => isIndianPlace(l.name));
+  for (const name of INDIA_LOCATIONS) if (!india.some((l) => l.name.toLowerCase() === name.toLowerCase())) india.push({ name, count: 0 });
+  india.sort((a, b) => b.count - a.count || a.name.localeCompare(b.name));
+  return { india, international: ranked.filter((l) => !isIndianPlace(l.name)) };
+}

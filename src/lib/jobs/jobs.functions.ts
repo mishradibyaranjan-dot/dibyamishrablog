@@ -40,7 +40,7 @@ export const jobFilters = z.object({
   salary: z.number().min(0).max(1e9).optional().default(0),
   experience: z.number().min(0).max(80).optional().default(0),
   checked: z.number().refine((n) => [0,15,30].includes(n)).optional().default(0),
-  hours: z.number().int().refine((h) => [1, 3, 6, 12, 24, 168].includes(h)).optional().default(24),
+  hours: z.number().int().refine((h) => [1, 3, 6, 12, 24, 168].includes(h)).optional().default(168),
   page: z.number().int().min(1).max(200).optional().default(1),
 });
 export type JobFilters = z.infer<typeof jobFilters>;
