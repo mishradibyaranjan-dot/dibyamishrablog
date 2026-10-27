@@ -202,7 +202,7 @@ export async function runJobSync(opts: { sourceSlug?: string; force?: boolean } 
 /** Keep one primary card per duplicate group, preferring employer ATS over aggregators. */
 async function dedupeAcrossSources() {
   const { supabaseAdmin: db } = await import("@/integrations/supabase/client.server");
-  const since = new Date(Date.now() - 24 * 3600_000).toISOString();
+  const since = new Date(Date.now() - 7 * 24 * 3600_000).toISOString();
   const { data } = await db.from("jobs").select("id,dedupe_key,canonical_apply_url,source_id,original_posted_at,job_sources(provider)").gt("original_posted_at", since).eq("application_status", "OPEN").eq("verification_status", "VERIFIED").eq("source_access_status", "AUTHORIZED").eq("admin_hold", false).gt("expires_at", new Date().toISOString());
   const groups = new Map<string, any[]>();
   const canonicalGroups = new Map<string,string>();

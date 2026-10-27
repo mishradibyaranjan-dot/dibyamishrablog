@@ -78,6 +78,13 @@
       "when": 1793103813912,
       "tag": "0010_interview_queue_pause_retention",
       "breakpoints": true
+    },
+    {
+      "idx": 11,
+      "version": "7",
+      "when": 1793113011518,
+      "tag": "0011_jobs_publication_seven_days",
+      "breakpoints": true
     }
   ]
 }
