@@ -6,6 +6,9 @@ import { Bookmark, BookmarkCheck, ExternalLink, Flag, Share2, ShieldCheck } from
 import { Button } from "@/components/ui/button";
 import { ageLabel } from "@/lib/jobs/rules";
 import { reportJob } from "@/lib/jobs/jobs.functions";
+import { useAuth } from "@/lib/auth";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { personalJobs, saveJobToAccount } from "@/lib/jobs/personal.functions";
 
 export type PublicJob = {
   id: string; slug: string; title: string; company: string; location: string | null; country: string | null;
@@ -36,11 +39,25 @@ export function salaryLabel(j: PublicJob) {
 }
 
 export function JobActions({ job, showDetails = true }: { job: PublicJob; showDetails?: boolean }) {
+  const { user } = useAuth();
+  const loadPersonal = useServerFn(personalJobs);
+  const accountSave = useServerFn(saveJobToAccount);
+  const cache = useQueryClient();
+  const personal = useQuery({ queryKey: ["personal-jobs", user?.id], queryFn: () => loadPersonal(), enabled: Boolean(user) });
+  const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
   const [reporting, setReporting] = useState(false);
   const report = useServerFn(reportJob);
   useEffect(() => setSaved(readSaved().includes(job.slug)), [job.slug]);
-  const toggle = () => {
+  const isSaved = user ? Boolean(personal.data?.saves.some((s) => s.job_id === job.id)) : saved;
+  const toggle = async () => {
+    if (user) {
+      setSaving(true);
+      try { await accountSave({ data: { jobId: job.id, saved: !isSaved } }); await cache.invalidateQueries({ queryKey: ["personal-jobs"] }); }
+      catch { toast.error("Could not save job to your account"); }
+      finally { setSaving(false); }
+      return;
+    }
     const cur = readSaved();
     const next = cur.includes(job.slug) ? cur.filter((s) => s !== job.slug) : [...cur, job.slug];
     writeSaved(next); setSaved(next.includes(job.slug));
@@ -61,8 +78,8 @@ export function JobActions({ job, showDetails = true }: { job: PublicJob; showDe
       <Button asChild size="sm">
         <a href={job.apply_url} target="_blank" rel="noopener noreferrer nofollow">Apply at Source <ExternalLink className="ml-1 h-3.5 w-3.5" aria-hidden /></a>
       </Button>
-      <Button size="sm" variant="ghost" onClick={toggle} aria-pressed={saved} aria-label={saved ? "Remove from saved jobs" : "Save job"}>
-        {saved ? <BookmarkCheck className="h-4 w-4" /> : <Bookmark className="h-4 w-4" />}<span className="ml-1">{saved ? "Saved" : "Save Job"}</span>
+      <Button size="sm" variant="ghost" onClick={toggle} disabled={saving || Boolean(user && personal.isPending)} aria-pressed={isSaved} aria-label={isSaved ? "Remove from saved jobs" : "Save job"}>
+        {isSaved ? <BookmarkCheck className="h-4 w-4" /> : <Bookmark className="h-4 w-4" />}<span className="ml-1">{isSaved ? "Saved" : "Save Job"}</span>
       </Button>
       <Button size="sm" variant="ghost" onClick={share}><Share2 className="h-4 w-4" /><span className="ml-1">Share</span></Button>
       {reporting ? (
