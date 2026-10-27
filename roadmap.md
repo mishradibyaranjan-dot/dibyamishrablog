@@ -1,11 +1,12 @@
 # Roadmap
+- [x] Reduce jobs refresh to 07:00, 12:00, 16:00 and 21:00 Asia/Kolkata; disable five-minute jobs maintenance; verify live schedules; retain strict public freshness
 - [x] Add private AI interview packs, JD/resume uploads, typed mock coaching, study plans, exports and job entry points; real ten-question/coach/upload/export checks and 44 tests; existing assistant reply verified
 - [ ] Interview release acceptance — production callback, full large-pack runs, optional curated retrieval/voice, technical-answer sandbox validation and independent privacy/security checks remain pending; not published
 - [x] Audited uploaded brief; expanded categories/filters, live-link evidence, moderation safeguards, operations schedules, sitemap and private documentation
 - [ ] Rich provider facts / full descriptions / visa requirements — blocked on reliable source evidence and redistribution permission
 - [ ] Google Rich Results / Indexing API and production performance acceptance — blocked on deployed eligible pages and Google authorization/field measurements
 - [x] Portfolio pages (Experience, Leadership, Achievements, Certifications) + homepage executive buttons
-- [x] Verified jobs: database, 21 free employer/provider feeds, 24h rule, verification, de-duplication, 15-min sync
+- [x] Verified jobs: database, 21 free employer/provider feeds, 24h rule, verification, de-duplication, four daily India-time refreshes
 - [x] Jobs pages: /jobs, detail, remote, level, category, company, saved, sources, about-verification
 - [x] /admin/jobs dashboard with source management, quarantine/reject/republish, reports, CSV export, sync history
 - [x] Account-synced saved jobs, saved searches, in-app matching alerts and per-search on/off preferences
