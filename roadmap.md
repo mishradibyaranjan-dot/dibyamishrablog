@@ -1,4 +1,5 @@
 # Roadmap
+- [ ] Add private AI interview packs, JD/resume uploads, mock coaching, study plans, exports and job entry points; diagnose existing assistant responses; validate without publishing
 - [x] Audited uploaded brief; expanded categories/filters, live-link evidence, moderation safeguards, operations schedules, sitemap and private documentation
 - [ ] Rich provider facts / full descriptions / visa requirements — blocked on reliable source evidence and redistribution permission
 - [ ] Google Rich Results / Indexing API and production performance acceptance — blocked on deployed eligible pages and Google authorization/field measurements
