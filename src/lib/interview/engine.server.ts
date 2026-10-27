@@ -6,7 +6,7 @@ const SYSTEM=`You are an evidence-based interview preparation team: JD analyzer,
 export async function generateBatch(request:Request,jd:string,resume:string,settings:unknown,previous:string[]) {
  const opts=settingsSchema.parse(settings);const count=Math.min(10,opts.count-previous.length);
  const key=process.env['LOVABLE_API_KEY'];if(!key) throw new Error('AI service is not configured.');
- const {result}=createResponsesCall(request,{apiKey:key,baseURL:'https://ai.gateway.lovable.dev/v1',model:'openai/gpt-6-astra'},[{role:'user',content:JSON.stringify({jd,resume,settings:opts,generate_exactly:count,already_generated:previous})}],SYSTEM,packSchema);
+ const {result}=createResponsesCall(request,{apiKey:key,baseURL:'https://ai.gateway.lovable.dev/v1',model:'openai/gpt-6-astra'},[{role:'user',content:JSON.stringify({jd,resume,settings:opts,generate_exactly:count,already_generated:previous})}],SYSTEM+' Evidence arrays contain ONLY exact copied text, without labels, quotation marks, ellipses, or normalization. If uncertain return an empty evidence array and mark the fact as an assumption. Generate exactly '+count+' new unique questions and a '+opts.days+' day plan.',packSchema);
  const output=validatePack(await result.output,jd,resume,count,previous);return {output,usage:await result.usage};
 }
 export async function runInterviewWorker(request:Request) {
