@@ -79,6 +79,7 @@ import { Route as ApiPublicChatRouteImport } from './routes/api/public/chat'
 import { Route as ApiPublicContactRouteImport } from './routes/api/public/contact'
 import { Route as ApiPublicInterviewCoachRouteImport } from './routes/api/public/interview-coach'
 import { Route as ApiPublicNewsletterRouteImport } from './routes/api/public/newsletter'
+import { Route as ApiPublicResumeAnalysisRouteImport } from './routes/api/public/resume-analysis'
 import { Route as ApiPublicTrackVisitRouteImport } from './routes/api/public/track-visit'
 import { Route as ApiPublicTtsRouteImport } from './routes/api/public/tts'
 import { Route as JobsCategoryCategoryRouteImport } from './routes/jobs.category.$category'
@@ -455,6 +456,11 @@ const ApiPublicNewsletterRoute = ApiPublicNewsletterRouteImport.update({
   path: '/api/public/newsletter',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiPublicResumeAnalysisRoute = ApiPublicResumeAnalysisRouteImport.update({
+  id: '/api/public/resume-analysis',
+  path: '/api/public/resume-analysis',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiPublicTrackVisitRoute = ApiPublicTrackVisitRouteImport.update({
   id: '/api/public/track-visit',
   path: '/api/public/track-visit',
@@ -607,6 +613,7 @@ export interface FileRoutesByFullPath {
   '/api/public/contact': typeof ApiPublicContactRoute
   '/api/public/interview-coach': typeof ApiPublicInterviewCoachRoute
   '/api/public/newsletter': typeof ApiPublicNewsletterRoute
+  '/api/public/resume-analysis': typeof ApiPublicResumeAnalysisRoute
   '/api/public/track-visit': typeof ApiPublicTrackVisitRoute
   '/api/public/tts': typeof ApiPublicTtsRoute
   '/jobs/category/$category': typeof JobsCategoryCategoryRoute
@@ -693,6 +700,7 @@ export interface FileRoutesByTo {
   '/api/public/contact': typeof ApiPublicContactRoute
   '/api/public/interview-coach': typeof ApiPublicInterviewCoachRoute
   '/api/public/newsletter': typeof ApiPublicNewsletterRoute
+  '/api/public/resume-analysis': typeof ApiPublicResumeAnalysisRoute
   '/api/public/track-visit': typeof ApiPublicTrackVisitRoute
   '/api/public/tts': typeof ApiPublicTtsRoute
   '/jobs/category/$category': typeof JobsCategoryCategoryRoute
@@ -781,6 +789,7 @@ export interface FileRoutesById {
   '/api/public/contact': typeof ApiPublicContactRoute
   '/api/public/interview-coach': typeof ApiPublicInterviewCoachRoute
   '/api/public/newsletter': typeof ApiPublicNewsletterRoute
+  '/api/public/resume-analysis': typeof ApiPublicResumeAnalysisRoute
   '/api/public/track-visit': typeof ApiPublicTrackVisitRoute
   '/api/public/tts': typeof ApiPublicTtsRoute
   '/jobs/category/$category': typeof JobsCategoryCategoryRoute
@@ -869,6 +878,7 @@ export interface FileRouteTypes {
     | '/api/public/contact'
     | '/api/public/interview-coach'
     | '/api/public/newsletter'
+    | '/api/public/resume-analysis'
     | '/api/public/track-visit'
     | '/api/public/tts'
     | '/jobs/category/$category'
@@ -955,6 +965,7 @@ export interface FileRouteTypes {
     | '/api/public/contact'
     | '/api/public/interview-coach'
     | '/api/public/newsletter'
+    | '/api/public/resume-analysis'
     | '/api/public/track-visit'
     | '/api/public/tts'
     | '/jobs/category/$category'
@@ -1042,6 +1053,7 @@ export interface FileRouteTypes {
     | '/api/public/contact'
     | '/api/public/interview-coach'
     | '/api/public/newsletter'
+    | '/api/public/resume-analysis'
     | '/api/public/track-visit'
     | '/api/public/tts'
     | '/jobs/category/$category'
@@ -1118,6 +1130,7 @@ export interface RootRouteChildren {
   ApiPublicContactRoute: typeof ApiPublicContactRoute
   ApiPublicInterviewCoachRoute: typeof ApiPublicInterviewCoachRoute
   ApiPublicNewsletterRoute: typeof ApiPublicNewsletterRoute
+  ApiPublicResumeAnalysisRoute: typeof ApiPublicResumeAnalysisRoute
   ApiPublicTrackVisitRoute: typeof ApiPublicTrackVisitRoute
   ApiPublicTtsRoute: typeof ApiPublicTtsRoute
   JobsCategoryCategoryRoute: typeof JobsCategoryCategoryRoute
@@ -1627,6 +1640,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPublicNewsletterRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/resume-analysis': {
+      id: '/api/public/resume-analysis'
+      path: '/api/public/resume-analysis'
+      fullPath: '/api/public/resume-analysis'
+      preLoaderRoute: typeof ApiPublicResumeAnalysisRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/public/track-visit': {
       id: '/api/public/track-visit'
       path: '/api/public/track-visit'
@@ -1853,6 +1873,7 @@ const rootRouteChildren: RootRouteChildren = {
   ApiPublicContactRoute: ApiPublicContactRoute,
   ApiPublicInterviewCoachRoute: ApiPublicInterviewCoachRoute,
   ApiPublicNewsletterRoute: ApiPublicNewsletterRoute,
+  ApiPublicResumeAnalysisRoute: ApiPublicResumeAnalysisRoute,
   ApiPublicTrackVisitRoute: ApiPublicTrackVisitRoute,
   ApiPublicTtsRoute: ApiPublicTtsRoute,
   JobsCategoryCategoryRoute: JobsCategoryCategoryRoute,
