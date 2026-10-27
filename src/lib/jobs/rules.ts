@@ -107,6 +107,20 @@ export const CATEGORY_RULES: [string, RegExp][] = [
   ["Compliance", /\b(compliance|risk|regulatory|audit)\b/i],
   ["Operations", /\b(operations|ops)\b/i],
   ["Executive Leadership", /\b(chief|vice president|vp|head of|director|general manager)\b/i],
+  ["IT", /\b(information technology|it support|systems administrator)\b/i],
+  ["Delivery Management", /\bdelivery (manager|management|director|head)\b/i],
+  ["Technical Support", /\b(technical support|helpdesk|support engineer)\b/i],
+  ["BFSI", /\b(banking|insurance|bfsi|financial services)\b/i],
+  ["Supply Chain", /\bsupply chain\b/i],
+  ["Logistics", /\blogistics\b/i],
+  ["Shipping", /\b(shipping|maritime|freight)\b/i],
+  ["Retail", /\bretail\b/i],
+  ["E-commerce", /\b(e-commerce|ecommerce)\b/i],
+  ["Consulting", /\b(consultant|consulting)\b/i],
+  ["Manufacturing", /\b(manufacturing|production engineer)\b/i],
+  ["Healthcare", /\b(healthcare|nurse|physician|clinical)\b/i],
+  ["Education", /\b(education|teacher|professor|instructor)\b/i],
+  ["General Management", /\b(general manager|managing director)\b/i],
 ];
 
 export function classifyCategories(title: string, department?: string | null): string[] {
@@ -130,6 +144,8 @@ export function checkApplyUrl(url: string): { ok: true } | { ok: false; reason: 
   let u: URL;
   try { u = new URL(url); } catch { return { ok: false, reason: "invalid_url" }; }
   if (u.protocol !== "https:") return { ok: false, reason: "not_https" };
+  if (u.username || u.password || (u.port && u.port !== "443")) return { ok: false, reason: "unsafe_authority" };
+  if (u.hostname.includes(":") || /^\d+\.\d+\.\d+\.\d+$/.test(u.hostname)) return { ok: false, reason: "ip_literal" };
   if (PRIVATE_HOST.test(u.hostname)) return { ok: false, reason: "private_host" };
   if (SUSPICIOUS.test(u.hostname)) return { ok: false, reason: "suspicious_domain" };
   if (/\b(payment|pay-fee|registration-fee|deposit)\b/i.test(u.pathname)) return { ok: false, reason: "payment_page" };
