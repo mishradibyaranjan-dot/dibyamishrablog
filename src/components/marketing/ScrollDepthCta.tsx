@@ -31,9 +31,11 @@ export function ScrollDepthCta() {
     return () => window.removeEventListener("scroll", onScroll);
   }, [dismissed]);
 
-  if (!visible || dismissed) return null;
+  // Portaled to <body>: page-transition wrappers use transforms, which would
+  // otherwise trap `position: fixed` inside the page container.
+  if (!mounted || !visible || dismissed) return null;
 
-  return (
+  return createPortal(
     <div
       role="complementary"
       aria-label="Related services"
