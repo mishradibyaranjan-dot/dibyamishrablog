@@ -1,4 +1,5 @@
 # Roadmap
+- [ ] Reduce jobs refresh to 07:00, 12:00, 16:00 and 21:00 Asia/Kolkata; disable frequent jobs maintenance and verify schedules
 - [x] Add private AI interview packs, JD/resume uploads, typed mock coaching, study plans, exports and job entry points; real ten-question/coach/upload/export checks and 44 tests; existing assistant reply verified
 - [ ] Interview release acceptance — production callback, full large-pack runs, optional curated retrieval/voice, technical-answer sandbox validation and independent privacy/security checks remain pending; not published
 - [x] Audited uploaded brief; expanded categories/filters, live-link evidence, moderation safeguards, operations schedules, sitemap and private documentation
