@@ -207,7 +207,6 @@ export const Route = createFileRoute("/about")({
   component: About,
 });
 
-// shared data { timeline, skillGroups, education, keyAchievements, categories, certifications, summaryCert, languages, type Category } from "@/lib/profile";
 
 function About() {
   const [open, setOpen] = React.useState(false);
