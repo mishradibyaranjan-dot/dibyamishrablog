@@ -1,7 +1,7 @@
 // Pure job-platform rules: freshness, timestamps, seniority, categories, URL safety.
 // Shared by the sync worker, server functions and tests.
 
-export const MAX_AGE_MS = 24 * 60 * 60 * 1000;
+export const MAX_AGE_MS = 7 * 24 * 60 * 60 * 1000;
 
 /** Parse an original posting time. Returns null when missing, unparseable or lacking a timezone. */
 export function parsePostedAt(input: unknown): Date | null {
@@ -13,7 +13,7 @@ export function parsePostedAt(input: unknown): Date | null {
   }
   if (typeof input !== "string") return null;
   const s = input.trim();
-  // Date-only values cannot prove the posting fell inside the 24h window.
+  // Date-only values cannot prove the posting fell inside the freshness window.
   if (/^\d{4}-\d{2}-\d{2}$/.test(s)) return null;
   // Require an explicit timezone (Z or ±hh:mm) so we never guess.
   if (!/(Z|[+-]\d{2}:?\d{2})$/i.test(s)) return null;
@@ -21,7 +21,7 @@ export function parsePostedAt(input: unknown): Date | null {
   return Number.isNaN(d.getTime()) ? null : d;
 }
 
-/** True when posted within the last 24 hours (exclusive at exactly 24h) and not in the future. */
+/** True when posted within the last 7 days (exclusive at exactly 7 days) and not in the future. */
 export function isFresh(postedAt: Date, now: Date = new Date()): boolean {
   const age = now.getTime() - postedAt.getTime();
   return age >= 0 && age < MAX_AGE_MS;
@@ -165,5 +165,7 @@ export function ageLabel(postedAt: Date, now: Date = new Date()): string {
   const mins = Math.max(0, Math.floor((now.getTime() - postedAt.getTime()) / 60000));
   if (mins < 60) return `${mins} min ago`;
   const h = Math.floor(mins / 60);
-  return `${h} hour${h === 1 ? "" : "s"} ago`;
+  if (h < 48) return `${h} hour${h === 1 ? "" : "s"} ago`;
+  const d = Math.floor(h / 24);
+  return `${d} day${d === 1 ? "" : "s"} ago`;
 }
