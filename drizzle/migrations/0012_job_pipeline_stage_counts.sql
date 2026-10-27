@@ -1,0 +1,1 @@
+alter table public.source_sync_runs add column if not exists stale_rejected integer not null default 0, add column if not exists link_rejected integer not null default 0, add column if not exists india_matched integer not null default 0;
