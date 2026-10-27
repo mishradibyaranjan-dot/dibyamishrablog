@@ -1,4 +1,5 @@
 # Roadmap
+- [ ] Validate the reuploaded executive brief and fill remaining search, verification, scheduling, administration and documentation gaps
 - [x] Portfolio pages (Experience, Leadership, Achievements, Certifications) + homepage executive buttons
 - [x] Verified jobs: database, 21 free employer/provider feeds, 24h rule, verification, de-duplication, 15-min sync
 - [x] Jobs pages: /jobs, detail, remote, level, category, company, saved, sources, about-verification
