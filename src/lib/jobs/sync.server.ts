@@ -145,7 +145,7 @@ export async function runJobSync(opts: { sourceSlug?: string; force?: boolean } 
       return { source: s.slug, status: "failed", error: "Could not start source audit" };
     }
     const now = new Date();
-    let fetched = 0, accepted = 0, rejected = 0, closed = 0;
+    let fetched = 0, accepted = 0, rejected = 0, closed = 0, staleRejected = 0, linkRejected = 0, indiaMatched = 0;
     try {
       const items = await adapter(s);
       fetched = items.length;
