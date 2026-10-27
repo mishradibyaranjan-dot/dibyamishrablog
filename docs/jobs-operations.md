@@ -22,10 +22,17 @@ LCP, INP and CLS collection loads only after analytics consent. Each document em
 Google Search Console was checked on 27 October 2026: its stored homepage inspection reported Submitted and indexed and selected the www domain as canonical. This is not a live test or verification of new Jobs indexing.
 
 ## Verification
-- 28 tests passed for freshness/URL/classification rules, MFA role+assurance, and source interval/backoff behavior.
+- 33 tests passed for freshness/URL/classification rules, MFA role+assurance, source interval/backoff, approved provider/board redirects, incomplete snapshots and all requested categories.
 - Signed-in browser checks saved and reloaded a search, and saved/read a real job through `/jobs/saved`; test saves/searches were removed.
 - A real AI request returned a schema-valid Senior Individual Contributor / Software Engineering classification with verbatim evidence.
 - All 21 official connected sources completed a real refresh.
 - Jobs admin with an aal1 session showed the verification screen, not private job operations.
 - Full aal2 dashboard/export UI verification remains blocked on owner enrollment; do not report it as tested.
 - No production publish was requested or performed.
+
+## Validation follow-up
+The 27 October audit found that earlier “verified” rows only had feed/URL checks. Public policy now also requires a live approved application check within 30 minutes. The stricter forced run completed all 21 source configurations across four adapters: Greenhouse, Lever, Ashby and Remote OK. It accepted 44 fresh rows and quarantined 21 at the time of inspection; counts are transient and not proof of current eligibility. Employer-custom destinations require explicit approved configuration and are quarantined rather than trusted from a feed-provided URL.
+
+Maintenance schedules: `jobs-expiry-5min` every five minutes, `jobs-summary-daily` at 18:37 UTC. The first maintains persisted history, not public eligibility. The second records live/expired/failing-source/report counts. Five-minute maintenance performs 288 database-only runs daily.
+
+Advanced filters now cover employer, city/state text, explicit skills, employment type, source, salary/currency, experience and last application check. Industry and experience filters return only explicitly populated employer data; adapters do not invent missing facts. Structured state/city extraction, visa sponsorship and full descriptions remain limited by source evidence.

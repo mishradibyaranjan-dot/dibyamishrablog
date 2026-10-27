@@ -91,7 +91,7 @@ function AdminJobs() {
             const sheet = workbook.addWorksheet("Jobs");
             const keys = Object.keys(data.recent[0] ?? {});
             sheet.columns = keys.map((key) => ({ header: key, key, width: 24 }));
-            data.recent.forEach((row) => sheet.addRow(Object.fromEntries(keys.map((key) => [key, String((row as Record<string, unknown>)[key] ?? "")]))));
+            data.recent.filter((r) => (!statusFilter || r.verification_status === statusFilter) && (!sourceFilter || r.source_id === sourceFilter) && (!levelFilter || r.career_level === levelFilter) && (!countryFilter || r.country?.toLowerCase().includes(countryFilter.toLowerCase()))).forEach((row) => sheet.addRow(Object.fromEntries(keys.map((key) => [key, String((row as Record<string, unknown>)[key] ?? "")]))));
             const buffer = await workbook.xlsx.writeBuffer();
             const url = URL.createObjectURL(new Blob([new Uint8Array(buffer)], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" }));
             const a = document.createElement("a"); a.href = url; a.download = "verified-jobs.xlsx"; a.click(); setTimeout(() => URL.revokeObjectURL(url), 1000);
@@ -118,6 +118,10 @@ function AdminJobs() {
       <h2 className="mt-12 font-display text-2xl font-semibold">Page speed · last 7 days</h2>
       <div className="mt-4 flex flex-wrap gap-6">{["LCP", "INP", "CLS"].map((metric) => { const samples = extras?.vitals.filter((v) => v.metric === metric).map((v) => v.value).sort((a,b) => a-b) ?? []; const p75 = samples[Math.max(0, Math.ceil(samples.length * .75) - 1)]; return <div key={metric}><h3 className="font-semibold">{metric}</h3><p>{p75 === undefined ? "No consented measurements yet" : `${p75.toFixed(metric === "CLS" ? 3 : 0)}${metric === "CLS" ? "" : " ms"} · p75 · ${samples.length} samples`}</p></div>; })}</div>
       <h2 className="mt-12 font-display text-2xl font-semibold">Sources</h2>
+      <h3 className="mt-4 font-semibold">Recent application checks</h3>
+      <ul className="mt-3 space-y-2 text-sm">{extras?.verification.map((v) => <li key={v.id} className="border-b border-border pb-2"><strong>{v.jobs?.title}</strong> · {v.status} · {v.http_status ?? "No response"}<p className="text-muted-foreground">{v.evidence} · {fmt(v.checked_at)}</p></li>)}</ul>
+      <h3 className="mt-6 font-semibold">Daily operations</h3>
+      <ul className="mt-3 space-y-2 text-sm">{extras?.summaries.map((s) => <li key={s.id}>{s.day} · {s.live} live · {s.expired} expired · {s.source_failures} source failures · {s.open_reports} open reports</li>)}{extras?.summaries.length === 0 && <li>No daily summary yet.</li>}</ul>
       <div className="mt-4 overflow-x-auto rounded-2xl border border-border">
         <table className="w-full text-left text-sm">
           <thead className="bg-muted text-xs uppercase"><tr><th className="p-3">Source</th><th className="p-3">Status</th><th className="p-3">Interval</th><th className="p-3">Last sync</th><th className="p-3">Last error</th><th className="p-3">Active</th></tr></thead>
