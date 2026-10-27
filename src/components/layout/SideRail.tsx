@@ -61,6 +61,7 @@ const ADMIN: RailItem[] = [
   { to: "/admin/security-events", label: "Security Events", icon: Bug },
   { to: "/admin/visitor-audit", label: "Visitor Audit", icon: Radar },
   { to: "/admin/newsletter-jobs", label: "Newsletter Jobs", icon: CalendarClock },
+  { to: "/admin/jobs", label: "Jobs Platform", icon: Radar },
   { to: "/admin/docs", label: "Engineering Docs", icon: FileText },
 ];
 
