@@ -93,6 +93,17 @@ export const getJob = createServerFn({ method: "GET" })
     return row ?? null;
   });
 
+/** Shared public context: the policy filters expired/unverified jobs for both entry points. */
+export const getCareerJob = createServerFn({ method: "GET" })
+  .inputValidator(z.object({ jobId: z.string().uuid().optional(), slug: z.string().max(120).optional() }).refine(d => Boolean(d.jobId || d.slug)))
+  .handler(async ({ data }) => {
+    let query = publicClient().from("jobs").select(PUBLIC_COLS);
+    query = data.jobId ? query.eq("id", data.jobId) : query.eq("slug", data.slug ?? "");
+    const { data: row, error } = await query.maybeSingle();
+    if (error) throw new Error("Could not retrieve the verified job description.");
+    return row ?? null;
+  });
+
 export const listSources = createServerFn({ method: "GET" }).handler(async () => {
   const { data } = await publicClient().from("job_sources").select("name,provider,status,poll_minutes,terms_note,last_synced_at").order("status").order("name");
   return data ?? [];

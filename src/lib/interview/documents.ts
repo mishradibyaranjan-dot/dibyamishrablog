@@ -1,9 +1,11 @@
+import {validatePrivateFile} from '@/lib/career/files';
 export async function readPrivateDocument(file:File){
- if(file.size>5*1024*1024)throw new Error('Choose a document smaller than 5 MB.');
+ await validatePrivateFile(file);
  const buffer=await file.arrayBuffer();let text='';
  if(file.name.toLowerCase().endsWith('.docx')){const mammoth=await import('mammoth/mammoth.browser');text=(await mammoth.extractRawText({arrayBuffer:buffer})).value;}
  else if(file.name.toLowerCase().endsWith('.pdf')){const pdf=await import('pdfjs-dist');const worker=await import('pdfjs-dist/build/pdf.worker.min.mjs?url');pdf.GlobalWorkerOptions.workerSrc=worker.default;const task=pdf.getDocument({data:buffer});const doc=await task.promise;if(doc.numPages>30){await task.destroy();throw new Error('Choose a PDF of 30 pages or fewer.');}for(let n=1;n<=doc.numPages;n++){const page=await doc.getPage(n);const content=await page.getTextContent();text+=content.items.map(item=>'str'in item?item.str:'').join(' ')+'\n';}await task.destroy();}
- else throw new Error('Choose a PDF or DOCX document.');
+ else if(file.name.toLowerCase().endsWith('.txt'))text=new TextDecoder().decode(buffer);
+ else throw new Error('Choose a PDF, DOCX or TXT document.');
  if(text.trim().length<40)throw new Error('No readable text found. Paste the text from a scanned document.');
  if(text.length>24000)throw new Error('Document is too long; paste the relevant sections (up to 24,000 characters).');return text.trim();
 }

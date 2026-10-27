@@ -1,0 +1,24 @@
+import {createFileRoute} from '@tanstack/react-router';
+import {z} from 'zod';
+export const Route=createFileRoute('/api/public/resume-analysis')({server:{handlers:{POST:async({request})=>{
+ const token=request.headers.get('authorization')?.replace(/^Bearer /i,'');if(!token)return new Response('Sign in to review your resume.',{status:401});
+ const {supabaseAdmin:db}=await import('@/integrations/supabase/client.server');const {data:auth,error:authError}=await db.auth.getUser(token);if(authError||!auth.user)return new Response('Sign in to review your resume.',{status:401});
+ const raw=await request.text();if(raw.length>500)return new Response('Request too large.',{status:413});let input;try{input=z.object({id:z.string().uuid()}).parse(JSON.parse(raw));}catch{return new Response('Invalid request.',{status:400});}
+ const {data:r}=await db.from('career_resumes').select('*').eq('id',input.id).eq('user_id',auth.user.id).gt('expires_at',new Date().toISOString()).maybeSingle();if(!r)return new Response('Resume unavailable or retention ended.',{status:404});
+ if(r.analysis)return Response.json({cached:true,id:r.id});
+ const {data:state,error:stateError}=await db.from('interview_engine_state').select('paused,reason').eq('id','interview').maybeSingle();if(stateError)return new Response('Could not verify AI service availability.',{status:503});if(state?.paused)return new Response(state.reason??'AI service paused.',{status:403});
+ const key=process.env['LOVABLE_API_KEY'];if(!key)return new Response('AI service is not configured.',{status:401});
+ const now=new Date().toISOString();const {data:claimed,error:claimError}=await db.from('career_resumes').update({status:'processing',analysis_lease_until:new Date(Date.now()+600000).toISOString(),error:null}).eq('id',r.id).eq('user_id',auth.user.id).or(`status.neq.processing,analysis_lease_until.lt.${now}`).select('id').maybeSingle();if(claimError||!claimed)return new Response('Analysis already running; reload this review shortly.',{status:409});
+ const reserved=await db.rpc('reserve_career_usage',{p_user:auth.user.id});if(reserved.error||!reserved.data){await db.from('career_resumes').update({status:'failed',analysis_lease_until:null,error:'Daily AI request limit reached.'}).eq('id',r.id);return new Response('Daily AI request limit reached; try tomorrow.',{status:429});}
+ const resumeId=r.id,usageId=reserved.data;
+ const {startResumeAnalysis}=await import('@/lib/career/analysis.server');const call=startResumeAnalysis(request,key,r.jd,r.original_text);
+ // Await only upstream headers: preserve access-denial status before opening the browser stream.
+ const iterator=call.result.fullStream[Symbol.asyncIterator]();try{while(true){const first=await iterator.next();if(first.done)throw new Error('AI returned no assessment.');if(first.value.type==='error')throw first.value.error;if(first.value.type==='reasoning-start'||first.value.type==='text-start')break;}}catch(e){return fail(e);}
+ async function fail(e:unknown){const code=e&&typeof e==='object'&&'statusCode'in e?Number(e.statusCode):0;const aborted=request.signal.aborted;const message=aborted?'Analysis stopped.':e instanceof Error?e.message.slice(0,600):'Resume analysis unavailable.';await db.from('career_resumes').update({status:'failed',error:message,analysis_lease_until:null}).eq('id',resumeId);await db.from('ai_usage_metrics').update({status:'failed'}).eq('id',usageId);if([401,402,403,404].includes(code))await db.from('interview_engine_state').upsert({id:'interview',paused:true,reason:message});return new Response(message,{status:aborted?499:code>=400&&code<=599?code:422});}
+ const encoder=new TextEncoder();return new Response(new ReadableStream({async start(controller){
+  const send=(value:unknown)=>controller.enqueue(encoder.encode(JSON.stringify(value)+'\n'));
+  try{send({status:'Reviewing resume evidence…'});while(true){const part=await iterator.next();if(part.done)break;if(part.value.type==='error')throw part.value.error;if(part.value.type==='reasoning-delta'||part.value.type==='text-delta')send({status:'Checking requirements and recommendations…'});}
+   const output=await call.validated();const saved=await db.rpc('commit_career_analysis',{p_id:r.id,p_user:auth.user.id,p_analysis:JSON.parse(JSON.stringify(output)),p_recommendations:JSON.parse(JSON.stringify(output.recommendations))});if(saved.error)throw new Error('Could not save the completed review.');const usage=await call.result.usage;await db.from('ai_usage_metrics').update({status:'completed',input_tokens:usage.inputTokens??0,output_tokens:usage.outputTokens??0}).eq('id',reserved.data);send({completed:true,id:r.id});
+  }catch(e){const response=await fail(e);send({error:await response.text(),statusCode:response.status});}finally{controller.close();}
+ },async cancel(){await iterator.return?.();}}),{headers:{'content-type':'application/x-ndjson','cache-control':'no-store'}});
+}}}});

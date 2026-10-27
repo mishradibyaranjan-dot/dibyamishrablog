@@ -41,6 +41,7 @@ import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as ProjectsRouteImport } from './routes/projects'
 import { Route as ResearchRouteImport } from './routes/research'
 import { Route as ResetPasswordRouteImport } from './routes/reset-password'
+import { Route as ResumeAnalyzerRouteImport } from './routes/resume-analyzer'
 import { Route as RssDotxmlRouteImport } from './routes/rss[.]xml'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as SupplyChainAiRouteImport } from './routes/supply-chain-ai'
@@ -79,6 +80,7 @@ import { Route as ApiPublicChatRouteImport } from './routes/api/public/chat'
 import { Route as ApiPublicContactRouteImport } from './routes/api/public/contact'
 import { Route as ApiPublicInterviewCoachRouteImport } from './routes/api/public/interview-coach'
 import { Route as ApiPublicNewsletterRouteImport } from './routes/api/public/newsletter'
+import { Route as ApiPublicResumeAnalysisRouteImport } from './routes/api/public/resume-analysis'
 import { Route as ApiPublicTrackVisitRouteImport } from './routes/api/public/track-visit'
 import { Route as ApiPublicTtsRouteImport } from './routes/api/public/tts'
 import { Route as JobsCategoryCategoryRouteImport } from './routes/jobs.category.$category'
@@ -253,6 +255,11 @@ const ResearchRoute = ResearchRouteImport.update({
 const ResetPasswordRoute = ResetPasswordRouteImport.update({
   id: '/reset-password',
   path: '/reset-password',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ResumeAnalyzerRoute = ResumeAnalyzerRouteImport.update({
+  id: '/resume-analyzer',
+  path: '/resume-analyzer',
   getParentRoute: () => rootRouteImport,
 } as any)
 const RssDotxmlRoute = RssDotxmlRouteImport.update({
@@ -455,6 +462,11 @@ const ApiPublicNewsletterRoute = ApiPublicNewsletterRouteImport.update({
   path: '/api/public/newsletter',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiPublicResumeAnalysisRoute = ApiPublicResumeAnalysisRouteImport.update({
+  id: '/api/public/resume-analysis',
+  path: '/api/public/resume-analysis',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiPublicTrackVisitRoute = ApiPublicTrackVisitRouteImport.update({
   id: '/api/public/track-visit',
   path: '/api/public/track-visit',
@@ -569,6 +581,7 @@ export interface FileRoutesByFullPath {
   '/projects': typeof ProjectsRoute
   '/research': typeof ResearchRoute
   '/reset-password': typeof ResetPasswordRoute
+  '/resume-analyzer': typeof ResumeAnalyzerRoute
   '/rss.xml': typeof RssDotxmlRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/supply-chain-ai': typeof SupplyChainAiRoute
@@ -607,6 +620,7 @@ export interface FileRoutesByFullPath {
   '/api/public/contact': typeof ApiPublicContactRoute
   '/api/public/interview-coach': typeof ApiPublicInterviewCoachRoute
   '/api/public/newsletter': typeof ApiPublicNewsletterRoute
+  '/api/public/resume-analysis': typeof ApiPublicResumeAnalysisRoute
   '/api/public/track-visit': typeof ApiPublicTrackVisitRoute
   '/api/public/tts': typeof ApiPublicTtsRoute
   '/jobs/category/$category': typeof JobsCategoryCategoryRoute
@@ -655,6 +669,7 @@ export interface FileRoutesByTo {
   '/projects': typeof ProjectsRoute
   '/research': typeof ResearchRoute
   '/reset-password': typeof ResetPasswordRoute
+  '/resume-analyzer': typeof ResumeAnalyzerRoute
   '/rss.xml': typeof RssDotxmlRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/supply-chain-ai': typeof SupplyChainAiRoute
@@ -693,6 +708,7 @@ export interface FileRoutesByTo {
   '/api/public/contact': typeof ApiPublicContactRoute
   '/api/public/interview-coach': typeof ApiPublicInterviewCoachRoute
   '/api/public/newsletter': typeof ApiPublicNewsletterRoute
+  '/api/public/resume-analysis': typeof ApiPublicResumeAnalysisRoute
   '/api/public/track-visit': typeof ApiPublicTrackVisitRoute
   '/api/public/tts': typeof ApiPublicTtsRoute
   '/jobs/category/$category': typeof JobsCategoryCategoryRoute
@@ -743,6 +759,7 @@ export interface FileRoutesById {
   '/projects': typeof ProjectsRoute
   '/research': typeof ResearchRoute
   '/reset-password': typeof ResetPasswordRoute
+  '/resume-analyzer': typeof ResumeAnalyzerRoute
   '/rss.xml': typeof RssDotxmlRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/supply-chain-ai': typeof SupplyChainAiRoute
@@ -781,6 +798,7 @@ export interface FileRoutesById {
   '/api/public/contact': typeof ApiPublicContactRoute
   '/api/public/interview-coach': typeof ApiPublicInterviewCoachRoute
   '/api/public/newsletter': typeof ApiPublicNewsletterRoute
+  '/api/public/resume-analysis': typeof ApiPublicResumeAnalysisRoute
   '/api/public/track-visit': typeof ApiPublicTrackVisitRoute
   '/api/public/tts': typeof ApiPublicTtsRoute
   '/jobs/category/$category': typeof JobsCategoryCategoryRoute
@@ -831,6 +849,7 @@ export interface FileRouteTypes {
     | '/projects'
     | '/research'
     | '/reset-password'
+    | '/resume-analyzer'
     | '/rss.xml'
     | '/sitemap.xml'
     | '/supply-chain-ai'
@@ -869,6 +888,7 @@ export interface FileRouteTypes {
     | '/api/public/contact'
     | '/api/public/interview-coach'
     | '/api/public/newsletter'
+    | '/api/public/resume-analysis'
     | '/api/public/track-visit'
     | '/api/public/tts'
     | '/jobs/category/$category'
@@ -917,6 +937,7 @@ export interface FileRouteTypes {
     | '/projects'
     | '/research'
     | '/reset-password'
+    | '/resume-analyzer'
     | '/rss.xml'
     | '/sitemap.xml'
     | '/supply-chain-ai'
@@ -955,6 +976,7 @@ export interface FileRouteTypes {
     | '/api/public/contact'
     | '/api/public/interview-coach'
     | '/api/public/newsletter'
+    | '/api/public/resume-analysis'
     | '/api/public/track-visit'
     | '/api/public/tts'
     | '/jobs/category/$category'
@@ -1004,6 +1026,7 @@ export interface FileRouteTypes {
     | '/projects'
     | '/research'
     | '/reset-password'
+    | '/resume-analyzer'
     | '/rss.xml'
     | '/sitemap.xml'
     | '/supply-chain-ai'
@@ -1042,6 +1065,7 @@ export interface FileRouteTypes {
     | '/api/public/contact'
     | '/api/public/interview-coach'
     | '/api/public/newsletter'
+    | '/api/public/resume-analysis'
     | '/api/public/track-visit'
     | '/api/public/tts'
     | '/jobs/category/$category'
@@ -1092,6 +1116,7 @@ export interface RootRouteChildren {
   ProjectsRoute: typeof ProjectsRoute
   ResearchRoute: typeof ResearchRoute
   ResetPasswordRoute: typeof ResetPasswordRoute
+  ResumeAnalyzerRoute: typeof ResumeAnalyzerRoute
   RssDotxmlRoute: typeof RssDotxmlRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   SupplyChainAiRoute: typeof SupplyChainAiRoute
@@ -1118,6 +1143,7 @@ export interface RootRouteChildren {
   ApiPublicContactRoute: typeof ApiPublicContactRoute
   ApiPublicInterviewCoachRoute: typeof ApiPublicInterviewCoachRoute
   ApiPublicNewsletterRoute: typeof ApiPublicNewsletterRoute
+  ApiPublicResumeAnalysisRoute: typeof ApiPublicResumeAnalysisRoute
   ApiPublicTrackVisitRoute: typeof ApiPublicTrackVisitRoute
   ApiPublicTtsRoute: typeof ApiPublicTtsRoute
   JobsCategoryCategoryRoute: typeof JobsCategoryCategoryRoute
@@ -1359,6 +1385,13 @@ declare module '@tanstack/react-router' {
       path: '/reset-password'
       fullPath: '/reset-password'
       preLoaderRoute: typeof ResetPasswordRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/resume-analyzer': {
+      id: '/resume-analyzer'
+      path: '/resume-analyzer'
+      fullPath: '/resume-analyzer'
+      preLoaderRoute: typeof ResumeAnalyzerRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/rss.xml': {
@@ -1627,6 +1660,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPublicNewsletterRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/resume-analysis': {
+      id: '/api/public/resume-analysis'
+      path: '/api/public/resume-analysis'
+      fullPath: '/api/public/resume-analysis'
+      preLoaderRoute: typeof ApiPublicResumeAnalysisRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/public/track-visit': {
       id: '/api/public/track-visit'
       path: '/api/public/track-visit'
@@ -1825,6 +1865,7 @@ const rootRouteChildren: RootRouteChildren = {
   ProjectsRoute: ProjectsRoute,
   ResearchRoute: ResearchRoute,
   ResetPasswordRoute: ResetPasswordRoute,
+  ResumeAnalyzerRoute: ResumeAnalyzerRoute,
   RssDotxmlRoute: RssDotxmlRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   SupplyChainAiRoute: SupplyChainAiRoute,
@@ -1853,6 +1894,7 @@ const rootRouteChildren: RootRouteChildren = {
   ApiPublicContactRoute: ApiPublicContactRoute,
   ApiPublicInterviewCoachRoute: ApiPublicInterviewCoachRoute,
   ApiPublicNewsletterRoute: ApiPublicNewsletterRoute,
+  ApiPublicResumeAnalysisRoute: ApiPublicResumeAnalysisRoute,
   ApiPublicTrackVisitRoute: ApiPublicTrackVisitRoute,
   ApiPublicTtsRoute: ApiPublicTtsRoute,
   JobsCategoryCategoryRoute: JobsCategoryCategoryRoute,
