@@ -44,7 +44,7 @@ export interface Certification {
   year?: string;
 }
 
-const certifications: Certification[] = [
+export const certifications: Certification[] = [
   { name: "Model Context Protocol (MCP): Hands-On with Agentic AI", category: "AI", year: "2026" },
   { name: "Agentic AI Fundamentals: Architectures, Frameworks & Applications — LinkedIn", category: "AI", year: "2026" },
   { name: "Getting Started with Generative AI in Azure — Microsoft", category: "AI", year: "2026" },
