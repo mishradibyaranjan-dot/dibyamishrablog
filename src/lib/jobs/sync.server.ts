@@ -4,8 +4,9 @@ import {
   parsePostedAt, isFresh, expiresAt, classifyLevel, classifyCategories,
   classifyArrangement, checkApplyUrl, dedupeKey, slugify,
 } from "./rules";
+import { retryDelayMinutes } from "./scheduling";
 
-type Source = { id: string; slug: string; name: string; provider: string; board_token: string | null };
+type Source = { id: string; slug: string; name: string; provider: string; board_token: string | null; failure_count: number };
 
 export type NormalizedJob = {
   source_job_id: string;
@@ -98,9 +99,9 @@ async function mapLimit<T, R>(items: T[], limit: number, fn: (t: T) => Promise<R
   return out;
 }
 
-export async function runJobSync(opts: { sourceSlug?: string } = {}) {
+export async function runJobSync(opts: { sourceSlug?: string; force?: boolean } = {}) {
   const { supabaseAdmin: db } = await import("@/integrations/supabase/client.server");
-  let q = db.from("job_sources").select("id,slug,name,provider,board_token").eq("active", true).eq("status", "connected");
+  let q = db.from("job_sources").select("id,slug,name,provider,board_token,failure_count").eq("active", true).eq("status", "connected");
   if (opts.sourceSlug) q = q.eq("slug", opts.sourceSlug);
   const { data: sources, error } = await q;
   if (error) throw new Error(error.message);
@@ -108,7 +109,15 @@ export async function runJobSync(opts: { sourceSlug?: string } = {}) {
   const results = await mapLimit((sources ?? []) as Source[], 4, async (s) => {
     const adapter = adapters[s.provider];
     if (!adapter) return { source: s.slug, status: "skipped" };
-    const { data: run } = await db.from("source_sync_runs").insert({ source_id: s.id }).select("id").single();
+    const token = crypto.randomUUID();
+    const claim = await db.rpc("claim_job_source", { p_id: s.id, p_token: token, p_force: Boolean(opts.force) });
+    if (claim.error) throw new Error("Could not lock source");
+    if (!claim.data) return { source: s.slug, status: "skipped" };
+    const { data: run, error: runError } = await db.from("source_sync_runs").insert({ source_id: s.id }).select("id").single();
+    if (!run || runError) {
+      await db.from("job_sources").update({ locked_until: null, lock_token: null }).eq("id", s.id).eq("lock_token", token);
+      return { source: s.slug, status: "failed", error: "Could not start source audit" };
+    }
     const now = new Date();
     let fetched = 0, accepted = 0, rejected = 0, closed = 0;
     try {
@@ -154,14 +163,15 @@ export async function runJobSync(opts: { sourceSlug?: string } = {}) {
         for (let i = 0; i < gone.length; i += 100) await db.from("jobs").update({ application_status: "CLOSED", updated_at: now.toISOString() }).in("id", gone.slice(i, i + 100));
         closed = gone.length;
       }
-      await db.from("job_sources").update({ last_synced_at: now.toISOString(), last_error: null }).eq("id", s.id);
-      await db.from("source_sync_runs").update({ finished_at: new Date().toISOString(), status: "completed", fetched, accepted, rejected, closed }).eq("id", run!.id);
+      await db.from("job_sources").update({ last_synced_at: now.toISOString(), last_error: null, failure_count: 0, retry_after: null, locked_until: null, lock_token: null }).eq("id", s.id).eq("lock_token", token);
+      await db.from("source_sync_runs").update({ finished_at: new Date().toISOString(), status: "completed", fetched, accepted, rejected, closed }).eq("id", run.id);
       return { source: s.slug, status: "completed", fetched, accepted, rejected, closed };
     } catch (e) {
       const msg = e instanceof Error ? e.message : String(e);
       console.error(`[jobs:sync] ${s.slug} failed`, msg);
-      await db.from("job_sources").update({ last_error: msg }).eq("id", s.id);
-      await db.from("source_sync_runs").update({ finished_at: new Date().toISOString(), status: "failed", fetched, error: msg }).eq("id", run!.id);
+      const failures = s.failure_count + 1;
+      await db.from("job_sources").update({ last_error: msg, failure_count: failures, retry_after: new Date(Date.now() + retryDelayMinutes(failures) * 60_000).toISOString(), locked_until: null, lock_token: null }).eq("id", s.id).eq("lock_token", token);
+      await db.from("source_sync_runs").update({ finished_at: new Date().toISOString(), status: "failed", fetched, error: msg }).eq("id", run.id);
       return { source: s.slug, status: "failed", error: msg };
     }
   });
@@ -174,7 +184,7 @@ export async function runJobSync(opts: { sourceSlug?: string } = {}) {
 async function dedupeAcrossSources() {
   const { supabaseAdmin: db } = await import("@/integrations/supabase/client.server");
   const since = new Date(Date.now() - 24 * 3600_000).toISOString();
-  const { data } = await db.from("jobs").select("id,dedupe_key,source_id,original_posted_at,job_sources(provider)").gt("original_posted_at", since);
+  const { data } = await db.from("jobs").select("id,dedupe_key,source_id,original_posted_at,job_sources(provider)").gt("original_posted_at", since).eq("application_status", "OPEN").eq("verification_status", "VERIFIED").eq("source_access_status", "AUTHORIZED").gt("expires_at", new Date().toISOString());
   const groups = new Map<string, any[]>();
   for (const r of data ?? []) groups.set(r.dedupe_key, [...(groups.get(r.dedupe_key) ?? []), r]);
   const secondary: string[] = [];

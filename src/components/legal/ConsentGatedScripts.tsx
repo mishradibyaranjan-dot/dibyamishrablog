@@ -1,5 +1,8 @@
 import { useEffect } from "react";
 import { useCookieConsent } from "@/lib/cookie-consent";
+import { hasConsent } from "@/lib/cookie-consent";
+import { useServerFn } from "@tanstack/react-start";
+import { recordWebVital } from "@/lib/web-vitals.functions";
 
 declare global {
   interface Window {
@@ -29,7 +32,25 @@ function loadOnce(id: string, src: string) {
  * withdrawal disables collection immediately (full teardown on next load).
  */
 export function ConsentGatedScripts() {
+  const recordVital = useServerFn(recordWebVital);
   const { hydrated, prefs } = useCookieConsent();
+
+  useEffect(() => {
+    if (!hydrated || !prefs.analytics) return;
+    let active = true;
+    const path = window.location.pathname;
+    const sent = new Set<string>();
+    void import("web-vitals").then(({ onLCP, onINP, onCLS }) => {
+      if (!active) return;
+      const report = (m: { name: string; value: number; rating: string }) => {
+        if (!active || !hasConsent("analytics") || sent.has(m.name)) return;
+        sent.add(m.name);
+        void recordVital({ data: { consent: true, metric: m.name as "LCP" | "INP" | "CLS", value: m.value, rating: m.rating as "good" | "needs-improvement" | "poor", path, device: matchMedia("(max-width: 767px)").matches ? "mobile" : "desktop" } }).catch(() => {});
+      };
+      onLCP(report); onINP(report); onCLS(report);
+    });
+    return () => { active = false; };
+  }, [hydrated, prefs.analytics, recordVital]);
 
   useEffect(() => {
     if (!hydrated || typeof window === "undefined") return;
@@ -44,7 +65,7 @@ export function ConsentGatedScripts() {
       window[`ga-disable-${GA_ID}`] = false;
       loadOnce("ga4", `https://www.googletagmanager.com/gtag/js?id=${GA_ID}`);
       window.dataLayer = window.dataLayer ?? [];
-      const gtag = (...args: unknown[]) => window.dataLayer!.push(args);
+      const gtag = (...args: unknown[]) => window.dataLayer?.push(args);
       gtag("js", new Date());
       gtag("config", GA_ID, { anonymize_ip: true });
     }
