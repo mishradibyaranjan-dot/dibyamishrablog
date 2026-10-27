@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Loader2, Mail } from "lucide-react";
+import { trackEvent } from "@/lib/analytics";
 
 /**
  * Compact newsletter capture used on marketing pages. Posts to the same public
@@ -18,11 +19,12 @@ export function NewsletterCta() {
             Executive Briefing
           </div>
           <h2 className="mt-4 font-display text-2xl font-bold tracking-tight text-foreground sm:text-3xl">
-            Monthly notes on AI, Cloud &amp; Engineering Leadership
+            AI, Cloud &amp; Engineering — Without the Hype
           </h2>
           <p className="mt-3 max-w-xl text-sm text-muted-foreground sm:text-base">
-            Field-tested architecture patterns, delivery playbooks, and what is
-            actually working in enterprise GenAI programs. No fluff, no spam.
+            Practical perspectives on Agentic AI, enterprise architecture, cloud
+            platforms, engineering leadership and digital transformation. No
+            fluff, no spam.
           </p>
         </div>
 
@@ -46,6 +48,7 @@ export function NewsletterCta() {
                 throw new Error(b?.error ?? `Failed (${res.status})`);
               }
               setStatus("ok");
+              trackEvent("newsletter_signup", { source: "newsletter_cta" });
               input.value = "";
             } catch (err) {
               setStatus("error");
@@ -75,7 +78,7 @@ export function NewsletterCta() {
                 <Loader2 className="h-4 w-4 animate-spin" /> Subscribing…
               </>
             ) : (
-              "Get the briefing"
+              "Get the Insights"
             )}
           </button>
           {status === "ok" && (

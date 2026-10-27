@@ -24,6 +24,7 @@ import { Reveal } from "@/components/cinematic/Reveal";
 import { MetricStat } from "@/components/marketing/MetricStat";
 import { NewsletterCta } from "@/components/marketing/NewsletterCta";
 import { LeadMagnet } from "@/components/marketing/LeadMagnet";
+import { trackEvent } from "@/lib/analytics";
 import cardNewsletter from "@/assets/card-newsletter.jpg";
 import cardLearn from "@/assets/card-learn.jpg";
 import cardCaseStudy from "@/assets/card-case-study.jpg";
@@ -178,6 +179,7 @@ function Hero() {
       <div className="mt-2 flex flex-wrap items-center gap-3">
         <Link
           to="/contact"
+          onClick={() => trackEvent("hero_cta_click", { cta: "discuss_transformation" })}
           className="inline-flex min-h-11 items-center gap-2 rounded-xl bg-brand-gradient px-6 py-3.5 text-sm font-semibold text-white transition-transform hover:-translate-y-0.5"
         >
           Discuss a Transformation

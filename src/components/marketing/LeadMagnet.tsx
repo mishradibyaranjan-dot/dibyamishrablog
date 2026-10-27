@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Download, Loader2, Lock, Sparkles } from "lucide-react";
+import { trackEvent } from "@/lib/analytics";
 
 interface LeadMagnetProps {
   /** Short eyebrow label above the headline. */
@@ -91,6 +92,7 @@ export function LeadMagnet({
                   throw new Error(body?.error ?? `Failed (${res.status})`);
                 }
                 setStatus("unlocked");
+                trackEvent("playbook_download", { source });
               } catch (err) {
                 setStatus("error");
                 setError(err instanceof Error ? err.message : "Something went wrong.");

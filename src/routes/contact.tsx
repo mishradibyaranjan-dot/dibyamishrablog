@@ -7,6 +7,7 @@ import heroContact from "@/assets/hero-contact.jpg";
 import { breadcrumbScript } from "@/lib/breadcrumbs";
 import { FormPrivacyNotice } from "@/components/legal/FormPrivacyNotice";
 import { MathCaptcha, useCaptchaGate } from "@/components/security/CaptchaChallenge";
+import { trackEvent } from "@/lib/analytics";
 
 
 export const Route = createFileRoute("/contact")({
@@ -69,6 +70,7 @@ function Contact() {
         throw new Error(body?.error ?? `Request failed (${res.status})`);
       }
       setSent(true);
+      trackEvent("contact_submit", { area });
       captcha.reset();
       form.reset();
     } catch (err) {
