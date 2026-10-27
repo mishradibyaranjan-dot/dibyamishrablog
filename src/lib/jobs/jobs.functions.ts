@@ -170,6 +170,15 @@ export const adminClassifyJobs = createServerFn({ method: "POST" }).middleware([
   return classifyPendingJobs(getRequest());
 });
 
+export const adminResumeClassification = createServerFn({ method: "POST" }).middleware([requireSupabaseAuth]).handler(async ({ context }) => {
+  await assertAdmin(context);
+  const { supabaseAdmin: db } = await import("@/integrations/supabase/client.server");
+  const { error } = await db.from("jobs_ai_state").upsert({ id: "classification", paused: false, reason: null, updated_at: new Date().toISOString() });
+  if (error) throw new Error("Could not resume AI classification");
+  await db.from("job_admin_audit").insert({ actor_id: context.userId, action: "resume_ai_classification" });
+  return { ok: true };
+});
+
 export const adminClassificationResults = createServerFn({ method: "GET" }).middleware([requireSupabaseAuth]).handler(async ({ context }) => {
   await assertAdmin(context);
   const { supabaseAdmin: db } = await import("@/integrations/supabase/client.server");

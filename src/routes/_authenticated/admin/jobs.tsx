@@ -5,7 +5,7 @@ import { toast } from "sonner";
 import { Loader2, RefreshCw, Download } from "lucide-react";
 import { Section, SectionHeader } from "@/components/layout/Section";
 import { Button } from "@/components/ui/button";
-import { adminJobsOverview, adminJobAction, adminRunSync, adminSourceUpdate, adminResolveReport, adminClassifyJobs, adminClassificationResults } from "@/lib/jobs/jobs.functions";
+import { adminJobsOverview, adminJobAction, adminRunSync, adminSourceUpdate, adminResolveReport, adminClassifyJobs, adminClassificationResults, adminResumeClassification } from "@/lib/jobs/jobs.functions";
 import { JobsMfa } from "@/components/jobs/JobsMfa";
 
 export const Route = createFileRoute("/_authenticated/admin/jobs")({
@@ -25,6 +25,7 @@ function toCsv(rows: Record<string, unknown>[]) {
 
 function AdminJobs() {
   const classify = useServerFn(adminClassifyJobs);
+  const resumeAI = useServerFn(adminResumeClassification);
   const loadExtras = useServerFn(adminClassificationResults);
   const [extras, setExtras] = useState<Awaited<ReturnType<typeof adminClassificationResults>> | null>(null);
   const [classifying, setClassifying] = useState(false);
@@ -103,6 +104,7 @@ function AdminJobs() {
       </div>
 
       <h2 className="mt-12 font-display text-2xl font-semibold">AI classification</h2>
+      <Button className="mt-3" variant="outline" onClick={async () => { if (!window.confirm("Resume AI processing after correcting the reported account or configuration issue?")) return; try { await resumeAI(); toast.success("AI processing resumed"); } catch (e) { toast.error(e instanceof Error ? e.message : "Could not resume"); } }}>Resume paused AI processing</Button>
       <ul className="mt-4 space-y-3 text-sm">{extras?.classifications.map((c) => <li key={c.job_id} className="border-b border-border pb-3"><strong>{c.jobs?.title}</strong> · {c.status}<p className="text-muted-foreground">{c.error ?? JSON.stringify(c.result)}</p></li>)}{extras?.classifications.length === 0 && <li>No classifications yet.</li>}</ul>
       <h2 className="mt-12 font-display text-2xl font-semibold">Page speed · last 7 days</h2>
       <div className="mt-4 flex flex-wrap gap-6">{["LCP", "INP", "CLS"].map((metric) => { const samples = extras?.vitals.filter((v) => v.metric === metric).map((v) => v.value).sort((a,b) => a-b) ?? []; const p75 = samples[Math.max(0, Math.ceil(samples.length * .75) - 1)]; return <div key={metric}><h3 className="font-semibold">{metric}</h3><p>{p75 === undefined ? "No consented measurements yet" : `${p75.toFixed(metric === "CLS" ? 3 : 0)}${metric === "CLS" ? "" : " ms"} · p75 · ${samples.length} samples`}</p></div>; })}</div>
