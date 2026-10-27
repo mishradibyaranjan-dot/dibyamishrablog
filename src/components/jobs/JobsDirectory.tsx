@@ -1,0 +1,107 @@
+import { Link } from "@tanstack/react-router";
+import { queryOptions, useQuery } from "@tanstack/react-query";
+import { useState } from "react";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { CAREER_LEVELS, CATEGORY_RULES } from "@/lib/jobs/rules";
+import { listJobs, type JobFilters } from "@/lib/jobs/jobs.functions";
+import { JobCard, type PublicJob } from "./JobCard";
+
+export const DEFAULT_FILTERS: JobFilters = { q: "", level: "", category: "", country: "", arrangement: "", company: "", hours: 24, page: 1 };
+export const jobsQuery = (f: JobFilters) => queryOptions({ queryKey: ["jobs", f], queryFn: () => listJobs({ data: f }), staleTime: 60_000 });
+
+const CATEGORIES = CATEGORY_RULES.map(([c]) => c);
+const sel = "h-10 rounded-md border border-input bg-background px-3 text-sm text-foreground";
+
+export function JobsHero({ title, subtitle }: { title?: string; subtitle?: string }) {
+  return (
+    <header className="mb-8">
+      <h1 className="font-display text-3xl font-bold tracking-tight sm:text-5xl">{title ?? "Verified Jobs — Fresh Opportunities Posted Within the Last 24 Hours"}</h1>
+      <p className="mt-4 max-w-3xl text-lg text-muted-foreground">
+        {subtitle ?? "Discover current career opportunities from entry-level to executive leadership, with verified original sources and direct application links."}
+      </p>
+      <nav aria-label="Jobs sections" className="mt-5 flex flex-wrap gap-3 text-sm">
+        <Link to="/jobs" className="text-primary underline-offset-4 hover:underline">All jobs</Link>
+        <Link to="/jobs/remote" className="text-primary underline-offset-4 hover:underline">Remote</Link>
+        <Link to="/jobs/saved" className="text-primary underline-offset-4 hover:underline">Saved</Link>
+        <Link to="/jobs/alerts" className="text-primary underline-offset-4 hover:underline">Alerts</Link>
+        <Link to="/jobs/sources" className="text-primary underline-offset-4 hover:underline">Sources</Link>
+        <Link to="/jobs/about-verification" className="text-primary underline-offset-4 hover:underline">How we verify</Link>
+      </nav>
+    </header>
+  );
+}
+
+export function JobsDirectory({ filters, onChange, lockedKeys = [] }: { filters: JobFilters; onChange: (f: JobFilters) => void; lockedKeys?: (keyof JobFilters)[] }) {
+  const { data, isFetching } = useQuery(jobsQuery(filters));
+  const [q, setQ] = useState(filters.q);
+  const set = (patch: Partial<JobFilters>) => onChange({ ...filters, ...patch, page: patch.page ?? 1 });
+  const show = (k: keyof JobFilters) => !lockedKeys.includes(k);
+  const totalPages = data ? Math.max(1, Math.ceil(data.total / data.pageSize)) : 1;
+
+  return (
+    <div>
+      <form role="search" className="grid gap-3 rounded-2xl border border-border bg-card p-4 md:grid-cols-4" onSubmit={(e) => { e.preventDefault(); set({ q }); }}>
+        <label className="md:col-span-2"><span className="sr-only">Search jobs</span>
+          <Input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Title, company, skill or city" />
+        </label>
+        {show("level") && (
+          <label><span className="sr-only">Seniority</span>
+            <select className={sel + " w-full"} value={filters.level} onChange={(e) => set({ level: e.target.value })}>
+              <option value="">All seniority levels</option>
+              {CAREER_LEVELS.map((l) => <option key={l}>{l}</option>)}
+            </select>
+          </label>
+        )}
+        {show("category") && (
+          <label><span className="sr-only">Category</span>
+            <select className={sel + " w-full"} value={filters.category} onChange={(e) => set({ category: e.target.value })}>
+              <option value="">All categories</option>
+              {CATEGORIES.map((c) => <option key={c}>{c}</option>)}
+            </select>
+          </label>
+        )}
+        {show("arrangement") && (
+          <label><span className="sr-only">Work arrangement</span>
+            <select className={sel + " w-full"} value={filters.arrangement} onChange={(e) => set({ arrangement: e.target.value as JobFilters["arrangement"] })}>
+              <option value="">Remote, hybrid or on-site</option>
+              <option value="remote">Remote</option><option value="hybrid">Hybrid</option><option value="onsite">On-site</option>
+            </select>
+          </label>
+        )}
+        <label><span className="sr-only">Country</span>
+          <Input value={filters.country} onChange={(e) => set({ country: e.target.value })} placeholder="Country (e.g. India)" />
+        </label>
+        <label><span className="sr-only">Posted within</span>
+          <select className={sel + " w-full"} value={filters.hours} onChange={(e) => set({ hours: Number(e.target.value) })}>
+            {[1, 3, 6, 12, 24].map((h) => <option key={h} value={h}>Posted within {h}h</option>)}
+          </select>
+        </label>
+        <Button type="submit">Search</Button>
+      </form>
+
+      <p className="mt-4 text-sm text-muted-foreground" aria-live="polite">
+        {data ? `${data.total} verified job${data.total === 1 ? "" : "s"} posted in the last ${filters.hours} hour${filters.hours === 1 ? "" : "s"}` : "Loading jobs…"}
+        {isFetching && data ? " · updating…" : ""}
+      </p>
+      {data?.error && <p role="alert" className="mt-2 text-sm text-destructive">Jobs are temporarily unavailable. Please try again shortly.</p>}
+
+      <div className="mt-4 grid gap-4">
+        {(data?.jobs as PublicJob[] | undefined)?.map((j) => <JobCard key={j.id} job={j} />)}
+        {data && data.jobs.length === 0 && !data.error && (
+          <div className="rounded-2xl border border-dashed border-border p-8 text-center text-muted-foreground">
+            No verified jobs match these filters right now. Jobs only appear here for 24 hours after the employer posts them.
+          </div>
+        )}
+      </div>
+
+      {totalPages > 1 && (
+        <nav aria-label="Pagination" className="mt-6 flex items-center justify-center gap-3">
+          <Button variant="outline" disabled={filters.page <= 1} onClick={() => set({ page: filters.page - 1 })}>Previous</Button>
+          <span className="text-sm">Page {filters.page} of {totalPages}</span>
+          <Button variant="outline" disabled={filters.page >= totalPages} onClick={() => set({ page: filters.page + 1 })}>Next</Button>
+        </nav>
+      )}
+    </div>
+  );
+}
