@@ -125,7 +125,7 @@ export async function runJobSync(opts: { sourceSlug?: string; force?: boolean } 
     try {
       const items = await adapter(s);
       fetched = items.length;
-      const { data: existing, error: existingError } = await db.from("jobs").select("id,source_job_id,admin_hold,career_level,categories,skills,last_application_checked_at,verification_status").eq("source_id", s.id).eq("application_status", "OPEN");
+      const { data: existing, error: existingError } = await db.from("jobs").select("id,source_job_id,slug,admin_hold,career_level,categories,skills,last_application_checked_at,verification_status").eq("source_id", s.id).gt("original_posted_at", new Date(now.getTime()-86400_000).toISOString());
       if (existingError) throw new Error("Could not read prior source snapshot");
       if (!safeSnapshot(existing?.length ?? 0, items.length)) throw new Error("Incomplete source snapshot: closure processing deferred");
       const previous = new Map((existing ?? []).map((j) => [j.source_job_id, j]));
@@ -147,7 +147,7 @@ export async function runJobSync(opts: { sourceSlug?: string; force?: boolean } 
         const text = `${j.title} ${j.location ?? ""}`;
         rows.push({
           source_id: s.id, source_job_id: j.source_job_id,
-          slug: slugify(j.company, j.title, j.source_job_id.slice(-8)),
+          slug: old?.slug ?? slugify(j.company, j.title, j.source_job_id.slice(-8)),
           title: j.title, company: j.company, location: j.location, country: countryOf(j.location),
           work_arrangement: classifyArrangement(text, j.is_remote), employment_type: j.employment_type,
           categories: old?.categories ?? classifyCategories(j.title, j.department), career_level: old?.career_level ?? classifyLevel(j.title), skills: old?.skills ?? [],
@@ -203,9 +203,14 @@ export async function runJobSync(opts: { sourceSlug?: string; force?: boolean } 
 async function dedupeAcrossSources() {
   const { supabaseAdmin: db } = await import("@/integrations/supabase/client.server");
   const since = new Date(Date.now() - 24 * 3600_000).toISOString();
-  const { data } = await db.from("jobs").select("id,dedupe_key,source_id,original_posted_at,job_sources(provider)").gt("original_posted_at", since).eq("application_status", "OPEN").eq("verification_status", "VERIFIED").eq("source_access_status", "AUTHORIZED").gt("expires_at", new Date().toISOString());
+  const { data } = await db.from("jobs").select("id,dedupe_key,canonical_apply_url,source_id,original_posted_at,job_sources(provider)").gt("original_posted_at", since).eq("application_status", "OPEN").eq("verification_status", "VERIFIED").eq("source_access_status", "AUTHORIZED").eq("admin_hold", false).gt("expires_at", new Date().toISOString());
   const groups = new Map<string, any[]>();
-  for (const r of data ?? []) groups.set(r.dedupe_key, [...(groups.get(r.dedupe_key) ?? []), r]);
+  const canonicalGroups = new Map<string,string>();
+  for (const r of data ?? []) {
+    const key = r.canonical_apply_url ? canonicalGroups.get(r.canonical_apply_url) ?? r.dedupe_key : r.dedupe_key;
+    if (r.canonical_apply_url) canonicalGroups.set(r.canonical_apply_url,key);
+    groups.set(key, [...(groups.get(key) ?? []),r]);
+  }
   const secondary: string[] = [];
   const primary: string[] = [];
   for (const g of groups.values()) {

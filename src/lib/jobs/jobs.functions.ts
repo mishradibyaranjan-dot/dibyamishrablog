@@ -120,7 +120,7 @@ export const adminJobsOverview = createServerFn({ method: "GET" })
     const c = async (f: (q: any) => any) => (await f(db.from("jobs").select("id", { count: "exact", head: true }))).count ?? 0;
     const startOfDay = new Date(); startOfDay.setUTCHours(0, 0, 0, 0);
     const [live, lastHour, expiringSoon, expiredToday, quarantined, duplicates, closed, reports] = await Promise.all([
-      c((q) => q.eq("verification_status", "VERIFIED").eq("application_status", "OPEN").eq("is_primary", true).gt("original_posted_at", iso(86_400_000))),
+      c((q) => q.eq("verification_status", "VERIFIED").eq("application_status", "OPEN").eq("is_primary", true).eq("admin_hold", false).eq("source_access_status", "AUTHORIZED").eq("verification_basis", "authorized_feed_and_live_link").gt("last_application_checked_at", iso(1800_000)).gt("expires_at", new Date(now).toISOString()).lte("original_posted_at", new Date(now).toISOString()).gt("original_posted_at", iso(86_400_000))),
       c((q) => q.gt("first_seen_at", iso(3_600_000))),
       c((q) => q.eq("application_status", "OPEN").gt("original_posted_at", iso(86_400_000)).lt("original_posted_at", iso(82_800_000))),
       c((q) => q.lt("expires_at", new Date(now).toISOString()).gt("expires_at", startOfDay.toISOString())),
@@ -147,6 +147,10 @@ export const adminJobAction = createServerFn({ method: "POST" })
     const { error } = await db.from("jobs").update({ verification_status: status, admin_hold: data.action !== "republish", last_application_checked_at: data.action === "republish" ? null : undefined, verification_notes: `Admin ${data.action}${data.note ? `: ${data.note}` : ""}`, updated_at: new Date().toISOString() }).eq("id", data.jobId);
     if (error) throw new Error(error.message);
     await db.from("job_admin_audit").insert({ actor_id: context.userId, job_id: data.jobId, action: data.action, note: data.note ?? null });
+    if (data.action === "republish") {
+      const { data: job } = await db.from("jobs").select("job_sources(slug)").eq("id", data.jobId).maybeSingle();
+      if (job?.job_sources?.slug) { const { runJobSync } = await import("./sync.server"); await runJobSync({ sourceSlug: job.job_sources.slug, force: true }); }
+    }
     return { ok: true };
   });
 
@@ -204,9 +208,11 @@ export const adminResumeClassification = createServerFn({ method: "POST" }).midd
 export const adminClassificationResults = createServerFn({ method: "GET" }).middleware([requireSupabaseAuth]).handler(async ({ context }) => {
   await assertAdmin(context);
   const { supabaseAdmin: db } = await import("@/integrations/supabase/client.server");
-  const [results, vitals] = await Promise.all([
+  const [results, vitals, verification, summaries] = await Promise.all([
     db.from("job_classifications").select("job_id,status,result,error,updated_at,jobs(title)").order("updated_at", { ascending: false }).limit(30),
     db.from("web_vital_samples").select("metric,value,rating,path,device,created_at").gte("created_at", new Date(Date.now() - 7 * 86400_000).toISOString()).order("created_at", { ascending: false }).limit(500),
+    db.from("job_verifications").select("id,status,http_status,evidence,checked_at,jobs(title)").order("checked_at", { ascending: false }).limit(30),
+    db.from("job_operational_summaries").select("*").order("day", { ascending: false }).limit(14),
   ]);
-  return { classifications: results.data ?? [], vitals: vitals.data ?? [] };
+  return { classifications: results.data ?? [], vitals: vitals.data ?? [], verification: verification.data ?? [], summaries: summaries.data ?? [] };
 });
