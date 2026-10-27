@@ -72,6 +72,7 @@ export function ScrollDepthCta() {
           </Button>
         </div>
       </div>
-    </div>
+    </div>,
+    document.body,
   );
 }
