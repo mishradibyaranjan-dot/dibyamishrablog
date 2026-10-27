@@ -1584,8 +1584,11 @@ export type Database = {
           fetched: number
           finished_at: string | null
           id: string
+          india_matched: number
+          link_rejected: number
           rejected: number
           source_id: string | null
+          stale_rejected: number
           started_at: string
           status: string
         }
@@ -1596,8 +1599,11 @@ export type Database = {
           fetched?: number
           finished_at?: string | null
           id?: string
+          india_matched?: number
+          link_rejected?: number
           rejected?: number
           source_id?: string | null
+          stale_rejected?: number
           started_at?: string
           status?: string
         }
@@ -1608,8 +1614,11 @@ export type Database = {
           fetched?: number
           finished_at?: string | null
           id?: string
+          india_matched?: number
+          link_rejected?: number
           rejected?: number
           source_id?: string | null
+          stale_rejected?: number
           started_at?: string
           status?: string
         }

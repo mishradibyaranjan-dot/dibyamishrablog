@@ -82,12 +82,36 @@ const adapters: Record<string, (s: Source) => Promise<NormalizedJob[]>> = {
       salary_min: j.salary_min || null, salary_max: j.salary_max || null, salary_currency: j.salary_min ? "USD" : null,
     }));
   },
+  // Adzuna official job search API (developer.adzuna.com). Credentials are server-only secrets.
+  async adzuna(s) {
+    const id = process.env.ADZUNA_APP_ID, key = process.env.ADZUNA_APP_KEY;
+    if (!id || !key) throw new Error("missing_credentials");
+    const country = s.board_token || "in";
+    const out: NormalizedJob[] = [];
+    for (let page = 1; page <= 4; page++) {
+      const d = (await getJson(`https://api.adzuna.com/v1/api/jobs/${country}/search/${page}?app_id=${encodeURIComponent(id)}&app_key=${encodeURIComponent(key)}&results_per_page=50&max_days_old=7&sort_by=date&content-type=application/json`)) as { results?: any[] };
+      const r = d.results ?? [];
+      for (const j of r) {
+        if (!j?.id || !j.redirect_url || !j.created) continue;
+        out.push({
+          source_job_id: String(j.id), title: String(j.title ?? "").replace(/<[^>]+>/g, "").trim(), company: j.company?.display_name ?? "Employer via Adzuna",
+          location: j.location?.display_name ? `${j.location.display_name}${country === "in" && !/india/i.test(j.location.display_name) ? ", India" : ""}` : country === "in" ? "India" : null,
+          department: j.category?.label ?? null, employment_type: j.contract_time ?? null, is_remote: null, posted_raw: j.created,
+          source_url: j.redirect_url, apply_url: j.redirect_url, summary: stripHtml(j.description),
+          salary_min: j.salary_min ?? null, salary_max: j.salary_max ?? null, salary_currency: j.salary_min ? (country === "in" ? "INR" : null) : null,
+        });
+      }
+      if (r.length < 50) break;
+    }
+    return out;
+  },
 };
 
-const INDIA = /\b(india|bengaluru|bangalore|mumbai|delhi|gurugram|gurgaon|noida|hyderabad|pune|chennai|kolkata|ahmedabad|kochi|jaipur|chandigarh|bhubaneswar|indore|coimbatore)\b/i;
+export { countryOf };
+const INDIA = /\b(india|ind|bengaluru|bangalore|mumbai|bombay|delhi|ncr|gurugram|gurgaon|noida|hyderabad|secunderabad|pune|chennai|madras|kolkata|calcutta|ahmedabad|kochi|cochin|jaipur|chandigarh|bhubaneswar|indore|coimbatore|lucknow|nagpur|surat|vadodara|visakhapatnam|vizag|mysuru|mysore|thiruvananthapuram|goa|patna|ludhiana|karnataka|maharashtra|tamil nadu|telangana|kerala|gujarat|haryana|punjab|rajasthan|uttar pradesh|andhra pradesh|west bengal|odisha|bihar|madhya pradesh)\b/i;
 function countryOf(loc: string | null): string | null {
   if (!loc) return null;
-  if (INDIA.test(loc)) return "India";
+  if (INDIA.test(loc) || /(^|[,\s(-])IN$/.test(loc.trim())) return "India";
   if (/\b(remote|worldwide|anywhere)\b/i.test(loc) && !/,/.test(loc)) return null;
   const parts = loc.split(",").map((p) => p.trim()).filter(Boolean);
   return parts.length > 1 ? parts[parts.length - 1] : null;
@@ -121,11 +145,12 @@ export async function runJobSync(opts: { sourceSlug?: string; force?: boolean } 
       return { source: s.slug, status: "failed", error: "Could not start source audit" };
     }
     const now = new Date();
-    let fetched = 0, accepted = 0, rejected = 0, closed = 0;
+    let fetched = 0, accepted = 0, rejected = 0, closed = 0, staleRejected = 0, linkRejected = 0, indiaMatched = 0;
     try {
       const items = await adapter(s);
       fetched = items.length;
-      const { data: existing, error: existingError } = await db.from("jobs").select("id,source_job_id,slug,admin_hold,career_level,categories,skills,last_application_checked_at,verification_status").eq("source_id", s.id).gt("original_posted_at", new Date(now.getTime()-86400_000).toISOString());
+      // Match the 7-day public window so prior checks, slugs and holds are reused for every visible job.
+      const { data: existing, error: existingError } = await db.from("jobs").select("id,source_job_id,slug,admin_hold,career_level,categories,skills,last_application_checked_at,verification_status").eq("source_id", s.id).gt("original_posted_at", new Date(now.getTime()-7*86400_000).toISOString());
       if (existingError) throw new Error("Could not read prior source snapshot");
       if (!safeSnapshot(existing?.length ?? 0, items.length)) throw new Error("Incomplete source snapshot: closure processing deferred");
       const previous = new Map((existing ?? []).map((j) => [j.source_job_id, j]));
@@ -135,7 +160,8 @@ export async function runJobSync(opts: { sourceSlug?: string; force?: boolean } 
       for (const j of items) {
         seen.push(j.source_job_id);
         const posted = parsePostedAt(j.posted_raw);
-        if (!posted || !isFresh(posted, now)) { rejected++; continue; } // no credible timestamp or too old
+        if (!posted || !isFresh(posted, now)) { rejected++; staleRejected++; continue; } // no credible timestamp or too old
+        if (countryOf(j.location) === "India") indiaMatched++;
         const link = checkApplyUrl(j.apply_url);
         const src = checkApplyUrl(j.source_url);
         const old = previous.get(j.source_job_id);
@@ -143,7 +169,7 @@ export async function runJobSync(opts: { sourceSlug?: string; force?: boolean } 
         const check = link.ok && src.ok && due ? await verifyApplication(j.apply_url, s.provider, s.board_token) : null;
         const verified = link.ok && src.ok && (check ? check.ok : old?.verification_status === "VERIFIED");
         if (check) evidenceRows.push({ source_job_id: j.source_job_id, status: check.ok ? "VERIFIED" : "QUARANTINED", http_status: check.status, final_url: check.finalUrl, evidence: check.evidence });
-        if (!verified) rejected++; else accepted++;
+        if (!verified) { rejected++; linkRejected++; } else accepted++;
         const text = `${j.title} ${j.location ?? ""}`;
         rows.push({
           source_id: s.id, source_job_id: j.source_job_id,
@@ -183,8 +209,8 @@ export async function runJobSync(opts: { sourceSlug?: string; force?: boolean } 
         closed = gone.length;
       }
       await db.from("job_sources").update({ last_synced_at: now.toISOString(), last_error: null, failure_count: 0, retry_after: null, locked_until: null, lock_token: null }).eq("id", s.id).eq("lock_token", token);
-      await db.from("source_sync_runs").update({ finished_at: new Date().toISOString(), status: "completed", fetched, accepted, rejected, closed }).eq("id", run.id);
-      return { source: s.slug, status: "completed", fetched, accepted, rejected, closed };
+      await db.from("source_sync_runs").update({ finished_at: new Date().toISOString(), status: "completed", fetched, accepted, rejected, closed, stale_rejected: staleRejected, link_rejected: linkRejected, india_matched: indiaMatched }).eq("id", run.id);
+      return { source: s.slug, status: "completed", fetched, accepted, rejected, closed, staleRejected, linkRejected, indiaMatched };
     } catch (e) {
       const msg = e instanceof Error ? e.message : String(e);
       console.error(`[jobs:sync] ${s.slug} failed`, msg);

@@ -138,7 +138,7 @@ export const adminJobsOverview = createServerFn({ method: "GET" })
       (await db.from("reported_jobs").select("id", { count: "exact", head: true }).eq("status", "open")).count ?? 0,
     ]);
     const { data: sources } = await db.from("job_sources").select("id,slug,name,provider,status,poll_minutes,last_synced_at,last_error,active").order("name");
-    const { data: runs } = await db.from("source_sync_runs").select("id,started_at,finished_at,status,fetched,accepted,rejected,closed,error,job_sources(name)").order("started_at", { ascending: false }).limit(40);
+    const { data: runs } = await db.from("source_sync_runs").select("id,started_at,finished_at,status,fetched,accepted,rejected,closed,stale_rejected,link_rejected,india_matched,error,job_sources(name)").order("started_at", { ascending: false }).limit(40);
     const { data: recent } = await db.from("jobs").select("id,slug,title,company,career_level,country,source_id,categories,verification_status,application_status,is_primary,original_posted_at,verification_notes").order("original_posted_at", { ascending: false }).limit(100);
     const { data: reported } = await db.from("reported_jobs").select("id,reason,details,created_at,status,jobs(title,company)").eq("status", "open").order("created_at", { ascending: false }).limit(50);
     return { stats: { live, lastHour, expiringSoon, expiredToday, quarantined, duplicates, closed, reports }, sources: sources ?? [], runs: runs ?? [], recent: recent ?? [], reported: reported ?? [] };
