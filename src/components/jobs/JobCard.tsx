@@ -16,6 +16,7 @@ export type PublicJob = {
   salary_min: number | null; salary_max: number | null; salary_currency: string | null; summary: string | null;
   source_url: string; apply_url: string; original_posted_at: string; expires_at: string; last_verified_at: string;
   verification_status: string; job_sources: { name: string; provider: string } | null;
+  last_application_checked_at?: string | null; remote_eligibility?: string | null; skills?: string[];
 };
 
 const SAVED_KEY = "drm-saved-jobs";
@@ -112,9 +113,10 @@ export function JobCard({ job }: { job: PublicJob }) {
       <dl className="mt-3 grid gap-1 text-xs text-muted-foreground sm:grid-cols-2">
         <div><dt className="inline font-medium">Source: </dt><dd className="inline">{sourceLabel(job)}</dd></div>
         <div><dt className="inline font-medium">Original posted: </dt><dd className="inline" suppressHydrationWarning>{fmtTime(job.original_posted_at)} ({ageLabel(new Date(job.original_posted_at))})</dd></div>
-        <div><dt className="inline font-medium">Last checked: </dt><dd className="inline">{fmtTime(job.last_verified_at)}</dd></div>
+        <div><dt className="inline font-medium">Application checked: </dt><dd className="inline">{job.last_application_checked_at ? fmtTime(job.last_application_checked_at) : "Not independently checked"}</dd></div>
         <div className="flex items-center gap-1 text-primary"><ShieldCheck className="h-3.5 w-3.5" aria-hidden /> Verified</div>
       </dl>
+      {job.work_arrangement === "remote" && <p className="mt-2 text-xs text-muted-foreground">Remote eligibility: {job.remote_eligibility ?? job.location ?? "Not specified by employer; confirm at source"}</p>}
       <div className="mt-4"><JobActions job={job} /></div>
     </article>
   );

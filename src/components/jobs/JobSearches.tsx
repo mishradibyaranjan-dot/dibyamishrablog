@@ -10,6 +10,8 @@ import { CAREER_LEVELS, CATEGORY_RULES } from "@/lib/jobs/rules";
 import { jobFilters, listJobs } from "@/lib/jobs/jobs.functions";
 import { personalJobs, saveJobSearch, removeJobSearch } from "@/lib/jobs/personal.functions";
 import { JobCard } from "./JobCard";
+import { AdvancedJobFilters } from "./AdvancedJobFilters";
+import type { JobFilters } from "@/lib/jobs/jobs.functions";
 
 const inputClass = "w-full rounded border border-input bg-background px-3 py-2 text-foreground";
 
@@ -38,11 +40,12 @@ export function JobSearches() {
   const [country, setCountry] = useState("");
   const [company, setCompany] = useState("");
   const [arrangement, setArrangement] = useState<"" | "remote" | "hybrid" | "onsite">("");
+  const [advanced, setAdvanced] = useState<JobFilters>(() => jobFilters.parse({}));
   const refresh = () => cache.invalidateQueries({ queryKey: ["personal-jobs"] });
   if (loading) return <p role="status">Loading account…</p>;
   if (!user) return <Button asChild><Link to="/auth" search={{ mode: "login", redirect: "/jobs/alerts" }}>Sign in to save searches</Link></Button>;
   return <div className="space-y-8">
-    <form className="max-w-3xl space-y-4" onSubmit={async (e) => { e.preventDefault(); setBusy(true); try { await save({ data: { name, enabled: true, filters: jobFilters.parse({ q, level, category, country, company, arrangement }) } }); setName(""); await refresh(); toast.success("Search saved"); } catch (e) { toast.error(e instanceof Error ? e.message : "Could not save"); } finally { setBusy(false); } }}>
+    <form className="max-w-3xl space-y-4" onSubmit={async (e) => { e.preventDefault(); setBusy(true); try { await save({ data: { name, enabled: true, filters: jobFilters.parse({ ...advanced, q, level, category, country, company: advanced.company || company, arrangement }) } }); setName(""); await refresh(); toast.success("Search saved"); } catch (e) { toast.error(e instanceof Error ? e.message : "Could not save"); } finally { setBusy(false); } }}>
       <h2 className="font-display text-2xl font-semibold">New saved search</h2>
       <div className="grid gap-4 sm:grid-cols-2">
         <label className="space-y-1">Search name<input className={inputClass} required maxLength={80} value={name} onChange={(e) => setName(e.target.value)} /></label>
@@ -53,6 +56,7 @@ export function JobSearches() {
         <label className="space-y-1">Employer<input className={inputClass} value={company} maxLength={80} onChange={(e) => setCompany(e.target.value)} /></label>
         <label className="space-y-1">Work arrangement<select className={inputClass} value={arrangement} onChange={(e) => setArrangement(e.target.value as typeof arrangement)}><option value="">Any arrangement</option><option value="remote">Remote</option><option value="hybrid">Hybrid</option><option value="onsite">On-site</option></select></label>
       </div>
+      <AdvancedJobFilters filters={advanced} onChange={(patch) => setAdvanced((f) => ({ ...f, ...patch }))} />
       <Button type="submit" disabled={busy}><Bell className="mr-2 h-4 w-4" />{busy ? "Saving…" : "Save search"}</Button>
     </form>
     <section className="space-y-6"><h2 className="font-display text-2xl font-semibold">Your matching alerts</h2>

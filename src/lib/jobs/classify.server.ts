@@ -30,7 +30,7 @@ export async function classifyPendingJobs(request: Request) {
       const output = validateClassification(await result.output, text);
       const saved = await db.from("job_classifications").update({ status: "completed", result: output, error: null, updated_at: new Date().toISOString() }).eq("job_id", job.id);
       if (saved.error) throw new Error("Could not store classification");
-      await db.from("jobs").update({ career_level: output.career_level, categories: output.categories }).eq("id", job.id);
+      await db.from("jobs").update({ career_level: output.career_level, categories: output.categories, skills: output.skills }).eq("id", job.id);
       completed++;
     } catch (e) {
       const status = e && typeof e === "object" && "statusCode" in e ? Number(e.statusCode) : 0;

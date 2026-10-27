@@ -12,7 +12,7 @@ export const Route = createFileRoute("/jobs/$slug")({
     return { job };
   },
   head: ({ params, loaderData }) => {
-    if (!loaderData) return { meta: [{ title: "Job no longer available" }, { name: "robots", content: "noindex" }] };
+    if (!loaderData) return { meta: [{ title: "Job unavailable — Dibya Mishra Jobs" }, { name: "description", content: "This opportunity is not currently available." }, { property: "og:title", content: "Job unavailable — Dibya Mishra Jobs" }, { property: "og:description", content: "This opportunity is not currently available." }, { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary" }, { name: "robots", content: "noindex" }] };
     const j = loaderData.job;
     const url = `https://www.dibyamishra.co.in/jobs/${params.slug}`;
     const title = `${j.title} at ${j.company} — Verified Job`;
@@ -71,6 +71,9 @@ function JobDetail() {
           ["Original posted", `${fmtTime(job.original_posted_at)} (${ageLabel(new Date(job.original_posted_at))})`],
           ["Removed from listings", fmtTime(job.expires_at)],
           ["Last checked", fmtTime(job.last_verified_at)],
+          ["Application link checked", job.last_application_checked_at ? fmtTime(job.last_application_checked_at) : "Not checked"],
+          ["Remote eligibility", job.remote_eligibility ?? "Not specified; confirm at source"],
+          ["Explicit skills", job.skills?.join(", ") || "Not stated"],
         ].map(([k, v]) => (
           <div key={k}><dt className="text-xs font-medium uppercase tracking-wide text-muted-foreground">{k}</dt><dd className="mt-1" suppressHydrationWarning>{v}</dd></div>
         ))}

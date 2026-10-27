@@ -11,3 +11,6 @@
 - Jobs admin RPCs require both the protected admin role and authenticated aal2; the authenticator UI is not the security boundary.
 - AI job classification uses server-only streaming Responses calls, verbatim employer evidence, cached outputs and durable pause state; factual job fields are never rewritten by AI.
 - Page-speed samples require analytics consent and store only coarse path/device, metric/value/rating; no identifiers or query parameters.
+- Public jobs additionally require authorized-feed evidence and an approved live application check within 30 minutes; redirects are manually validated against provider/board allowlists before fetching.
+- Source refreshes preserve stable slugs, AI classifications and moderation holds; publication and verification transitions have durable audit records.
+- Sitemap dynamic content uses public credentials, paginated policy-filtered rows and an explicit unavailable response on errors; private utility routes are excluded.

@@ -4,10 +4,11 @@ import { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { CAREER_LEVELS, CATEGORY_RULES } from "@/lib/jobs/rules";
-import { listJobs, type JobFilters } from "@/lib/jobs/jobs.functions";
+import { listJobs, jobFilters, type JobFilters } from "@/lib/jobs/jobs.functions";
+import { AdvancedJobFilters } from "./AdvancedJobFilters";
 import { JobCard, type PublicJob } from "./JobCard";
 
-export const DEFAULT_FILTERS: JobFilters = { q: "", level: "", category: "", country: "", arrangement: "", company: "", hours: 24, page: 1 };
+export const DEFAULT_FILTERS: JobFilters = jobFilters.parse({});
 export const jobsQuery = (f: JobFilters) => queryOptions({ queryKey: ["jobs", f], queryFn: () => listJobs({ data: f }), staleTime: 60_000 });
 
 const CATEGORIES = CATEGORY_RULES.map(([c]) => c);
@@ -44,7 +45,7 @@ export function JobsDirectory({ filters, onChange, lockedKeys = [], initial }: {
 
   return (
     <div>
-      <form role="search" className="grid gap-3 rounded-2xl border border-border bg-card p-4 md:grid-cols-4" onSubmit={(e) => { e.preventDefault(); set({ q }); }}>
+      <form role="search" className="grid gap-3 rounded-lg border border-border bg-card p-4 md:grid-cols-4" onSubmit={(e) => { e.preventDefault(); set({ q }); }}>
         <label className="md:col-span-2"><span className="sr-only">Search jobs</span>
           <Input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Title, company, skill or city" />
         </label>
@@ -81,6 +82,7 @@ export function JobsDirectory({ filters, onChange, lockedKeys = [], initial }: {
           </select>
         </label>
         <Button type="submit">Search</Button>
+        <AdvancedJobFilters filters={filters} onChange={set} />
       </form>
 
       <p className="mt-4 text-sm text-muted-foreground" aria-live="polite">

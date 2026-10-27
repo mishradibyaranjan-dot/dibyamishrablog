@@ -1,5 +1,7 @@
 # Roadmap
-- [ ] Validate the reuploaded executive brief and fill remaining search, verification, scheduling, administration and documentation gaps
+- [x] Audited uploaded brief; expanded categories/filters, live-link evidence, moderation safeguards, operations schedules, sitemap and private documentation
+- [ ] Rich provider facts / full descriptions / visa requirements — blocked on reliable source evidence and redistribution permission
+- [ ] Google Rich Results / Indexing API and production performance acceptance — blocked on deployed eligible pages and Google authorization/field measurements
 - [x] Portfolio pages (Experience, Leadership, Achievements, Certifications) + homepage executive buttons
 - [x] Verified jobs: database, 21 free employer/provider feeds, 24h rule, verification, de-duplication, 15-min sync
 - [x] Jobs pages: /jobs, detail, remote, level, category, company, saved, sources, about-verification
@@ -12,4 +14,4 @@
 - [x] Jobs-admin MFA UI and server enforcement implemented
 - [ ] Full MFA/admin export browser verification — blocked on owner's fresh sign-in and authenticator enrollment; minted preview session cannot enroll
 - [x] Preserve original timestamps, honor source intervals, durable locks and retry state
-- [x] Account save/search browser checks, 28 rule tests, real AI and source refresh checks; operations guide
+- [x] Account filter/save browser checks on desktop/mobile, 33 rule tests, real-source live checks; engineering and operations guides

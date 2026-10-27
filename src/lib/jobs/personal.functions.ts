@@ -5,7 +5,7 @@ import { jobFilters } from "./jobs.functions";
 
 export const personalJobs = createServerFn({ method: "GET" }).middleware([requireSupabaseAuth]).handler(async ({ context }) => {
   const [saves, searches] = await Promise.all([
-    context.supabase.from("saved_jobs").select("job_id,jobs(id,slug,title,company,location,country,work_arrangement,employment_type,categories,career_level,salary_min,salary_max,salary_currency,summary,source_url,apply_url,original_posted_at,expires_at,last_verified_at,verification_status,job_sources(name,provider))").eq("user_id", context.userId),
+    context.supabase.from("saved_jobs").select("job_id,jobs(id,slug,title,company,location,country,work_arrangement,employment_type,categories,career_level,salary_min,salary_max,salary_currency,summary,source_url,apply_url,original_posted_at,expires_at,last_verified_at,last_application_checked_at,remote_eligibility,skills,verification_status,job_sources(name,provider))").eq("user_id", context.userId),
     context.supabase.from("job_alerts").select("*").eq("user_id", context.userId).order("created_at", { ascending: false }),
   ]);
   if (saves.error || searches.error) throw new Error("Could not load your saved jobs and searches");

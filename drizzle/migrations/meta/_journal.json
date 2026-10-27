@@ -57,6 +57,13 @@
       "when": 1793100771747,
       "tag": "0007_saved_jobs_upsert_access",
       "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1793102124040,
+      "tag": "0008_jobs_verification_search_operations",
+      "breakpoints": true
     }
   ]
 }

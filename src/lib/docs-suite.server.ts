@@ -9,6 +9,8 @@ import diagrams from "@/content/docs-suite/diagrams.md?raw";
 import testPlan from "@/content/docs-suite/test-plan.md?raw";
 import userGuide from "@/content/docs-suite/user-guide.md?raw";
 import releaseNotes from "@/content/docs-suite/release-notes.md?raw";
+import jobsSuite from "../../docs/jobs-engineering-suite.md?raw";
+import jobsOperations from "../../docs/jobs-operations.md?raw";
 
 import type { DocCategory, DocMeta } from "@/lib/docs-suite.types";
 
@@ -17,6 +19,8 @@ export type { DocCategory, DocMeta };
 type DocEntry = Omit<DocMeta, "bytes"> & { content: string };
 
 const ENTRIES: readonly DocEntry[] = [
+  { id: "jobs-engineering", title: "Verified Jobs — Engineering & Validation Suite", category: "Design", summary: "Jobs BRD/SRS, architecture, database, agents, source matrix, APIs, test evidence and release blockers.", filename: "Verified-Jobs-Engineering.md", content: jobsSuite },
+  { id: "jobs-operations", title: "Verified Jobs — Operations & Release Guide", category: "Operations", summary: "Verification evidence, refresh schedules, privacy, administrator access and integration limitations.", filename: "Verified-Jobs-Operations.md", content: jobsOperations },
   {
     id: "brd",
     title: "Business Requirements Document",
