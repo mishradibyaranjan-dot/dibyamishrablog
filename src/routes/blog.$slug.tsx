@@ -6,6 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { posts } from "@/lib/content";
 import { LeadMagnet } from "@/components/marketing/LeadMagnet";
+import { ScrollDepthCta } from "@/components/marketing/ScrollDepthCta";
 import { postOgImages, pageOgImages, SITE_ORIGIN } from "@/lib/og-images";
 import { breadcrumbScript } from "@/lib/breadcrumbs";
 
@@ -207,6 +208,7 @@ function BlogPost() {
           </div>
         </aside>
       </Section>
+      <ScrollDepthCta />
     </article>
   );
 }

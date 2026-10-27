@@ -4,6 +4,7 @@ import { Section, SectionHeader } from "@/components/layout/Section";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { caseStudies, categories } from "@/lib/content";
+import { NewsletterCta } from "@/components/marketing/NewsletterCta";
 import { cn } from "@/lib/utils";
 import { ArrowRight, CheckCircle2 } from "lucide-react";
 import { pageOgImages, SITE_ORIGIN } from "@/lib/og-images";
@@ -184,6 +185,10 @@ function CaseStudies() {
             <Link to="/contact">Discuss a Similar Transformation</Link>
           </Button>
         </div>
+      </Section>
+
+      <Section className="pt-0">
+        <NewsletterCta />
       </Section>
     </div>
   );

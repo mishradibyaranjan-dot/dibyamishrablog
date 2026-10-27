@@ -14,21 +14,28 @@ import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as AchievementsRouteImport } from './routes/achievements'
 import { Route as AdvisoryRouteImport } from './routes/advisory'
+import { Route as AiTransformationRouteImport } from './routes/ai-transformation'
 import { Route as AtomDotxmlRouteImport } from './routes/atom[.]xml'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as BlogRouteImport } from './routes/blog'
 import { Route as CaseStudiesRouteImport } from './routes/case-studies'
 import { Route as CertificationsRouteImport } from './routes/certifications'
+import { Route as CloudModernizationRouteImport } from './routes/cloud-modernization'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as CopyrightRouteImport } from './routes/copyright'
+import { Route as EngineeringTransformationRouteImport } from './routes/engineering-transformation'
+import { Route as EnterpriseAgenticAiRouteImport } from './routes/enterprise-agentic-ai'
+import { Route as EnterpriseRagRouteImport } from './routes/enterprise-rag'
 import { Route as ExperienceRouteImport } from './routes/experience'
 import { Route as ExpertiseRouteImport } from './routes/expertise'
 import { Route as ForgotPasswordRouteImport } from './routes/forgot-password'
+import { Route as GccTechnologyStrategyRouteImport } from './routes/gcc-technology-strategy'
 import { Route as GuideRouteImport } from './routes/guide'
 import { Route as InterviewPrepRouteImport } from './routes/interview-prep'
 import { Route as LeadershipRouteImport } from './routes/leadership'
 import { Route as LearnRouteImport } from './routes/learn'
 import { Route as McpRouteImport } from './routes/mcp'
+import { Route as MultiTenantSaasRouteImport } from './routes/multi-tenant-saas'
 import { Route as PlaybookRouteImport } from './routes/playbook'
 import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as ProjectsRouteImport } from './routes/projects'
@@ -36,6 +43,7 @@ import { Route as ResearchRouteImport } from './routes/research'
 import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as RssDotxmlRouteImport } from './routes/rss[.]xml'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
+import { Route as SupplyChainAiRouteImport } from './routes/supply-chain-ai'
 import { Route as TermsRouteImport } from './routes/terms'
 import { Route as TrustRouteImport } from './routes/trust'
 import { Route as Char91DotmcpChar93ListToolsRouteImport } from './routes/[.mcp]/list-tools'
@@ -111,6 +119,11 @@ const AdvisoryRoute = AdvisoryRouteImport.update({
   path: '/advisory',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AiTransformationRoute = AiTransformationRouteImport.update({
+  id: '/ai-transformation',
+  path: '/ai-transformation',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AtomDotxmlRoute = AtomDotxmlRouteImport.update({
   id: '/atom.xml',
   path: '/atom.xml',
@@ -136,6 +149,11 @@ const CertificationsRoute = CertificationsRouteImport.update({
   path: '/certifications',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CloudModernizationRoute = CloudModernizationRouteImport.update({
+  id: '/cloud-modernization',
+  path: '/cloud-modernization',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ContactRoute = ContactRouteImport.update({
   id: '/contact',
   path: '/contact',
@@ -144,6 +162,22 @@ const ContactRoute = ContactRouteImport.update({
 const CopyrightRoute = CopyrightRouteImport.update({
   id: '/copyright',
   path: '/copyright',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const EngineeringTransformationRoute =
+  EngineeringTransformationRouteImport.update({
+    id: '/engineering-transformation',
+    path: '/engineering-transformation',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const EnterpriseAgenticAiRoute = EnterpriseAgenticAiRouteImport.update({
+  id: '/enterprise-agentic-ai',
+  path: '/enterprise-agentic-ai',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const EnterpriseRagRoute = EnterpriseRagRouteImport.update({
+  id: '/enterprise-rag',
+  path: '/enterprise-rag',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ExperienceRoute = ExperienceRouteImport.update({
@@ -159,6 +193,11 @@ const ExpertiseRoute = ExpertiseRouteImport.update({
 const ForgotPasswordRoute = ForgotPasswordRouteImport.update({
   id: '/forgot-password',
   path: '/forgot-password',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const GccTechnologyStrategyRoute = GccTechnologyStrategyRouteImport.update({
+  id: '/gcc-technology-strategy',
+  path: '/gcc-technology-strategy',
   getParentRoute: () => rootRouteImport,
 } as any)
 const GuideRoute = GuideRouteImport.update({
@@ -184,6 +223,11 @@ const LearnRoute = LearnRouteImport.update({
 const McpRoute = McpRouteImport.update({
   id: '/mcp',
   path: '/mcp',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MultiTenantSaasRoute = MultiTenantSaasRouteImport.update({
+  id: '/multi-tenant-saas',
+  path: '/multi-tenant-saas',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PlaybookRoute = PlaybookRouteImport.update({
@@ -219,6 +263,11 @@ const RssDotxmlRoute = RssDotxmlRouteImport.update({
 const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
   id: '/sitemap.xml',
   path: '/sitemap.xml',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SupplyChainAiRoute = SupplyChainAiRouteImport.update({
+  id: '/supply-chain-ai',
+  path: '/supply-chain-ai',
   getParentRoute: () => rootRouteImport,
 } as any)
 const TermsRoute = TermsRouteImport.update({
@@ -493,21 +542,28 @@ export interface FileRoutesByFullPath {
   '/about': typeof AboutRoute
   '/achievements': typeof AchievementsRoute
   '/advisory': typeof AdvisoryRoute
+  '/ai-transformation': typeof AiTransformationRoute
   '/atom.xml': typeof AtomDotxmlRoute
   '/auth': typeof AuthRoute
   '/blog': typeof BlogRouteWithChildren
   '/case-studies': typeof CaseStudiesRoute
   '/certifications': typeof CertificationsRoute
+  '/cloud-modernization': typeof CloudModernizationRoute
   '/contact': typeof ContactRoute
   '/copyright': typeof CopyrightRoute
+  '/engineering-transformation': typeof EngineeringTransformationRoute
+  '/enterprise-agentic-ai': typeof EnterpriseAgenticAiRoute
+  '/enterprise-rag': typeof EnterpriseRagRoute
   '/experience': typeof ExperienceRoute
   '/expertise': typeof ExpertiseRoute
   '/forgot-password': typeof ForgotPasswordRoute
+  '/gcc-technology-strategy': typeof GccTechnologyStrategyRoute
   '/guide': typeof GuideRoute
   '/interview-prep': typeof InterviewPrepRoute
   '/leadership': typeof LeadershipRoute
   '/learn': typeof LearnRoute
   '/mcp': typeof McpRoute
+  '/multi-tenant-saas': typeof MultiTenantSaasRoute
   '/playbook': typeof PlaybookRoute
   '/privacy': typeof PrivacyRoute
   '/projects': typeof ProjectsRoute
@@ -515,6 +571,7 @@ export interface FileRoutesByFullPath {
   '/reset-password': typeof ResetPasswordRoute
   '/rss.xml': typeof RssDotxmlRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/supply-chain-ai': typeof SupplyChainAiRoute
   '/terms': typeof TermsRoute
   '/trust': typeof TrustRoute
   '/admin': typeof AuthenticatedAdminRouteRouteWithChildren
@@ -571,21 +628,28 @@ export interface FileRoutesByTo {
   '/about': typeof AboutRoute
   '/achievements': typeof AchievementsRoute
   '/advisory': typeof AdvisoryRoute
+  '/ai-transformation': typeof AiTransformationRoute
   '/atom.xml': typeof AtomDotxmlRoute
   '/auth': typeof AuthRoute
   '/blog': typeof BlogRouteWithChildren
   '/case-studies': typeof CaseStudiesRoute
   '/certifications': typeof CertificationsRoute
+  '/cloud-modernization': typeof CloudModernizationRoute
   '/contact': typeof ContactRoute
   '/copyright': typeof CopyrightRoute
+  '/engineering-transformation': typeof EngineeringTransformationRoute
+  '/enterprise-agentic-ai': typeof EnterpriseAgenticAiRoute
+  '/enterprise-rag': typeof EnterpriseRagRoute
   '/experience': typeof ExperienceRoute
   '/expertise': typeof ExpertiseRoute
   '/forgot-password': typeof ForgotPasswordRoute
+  '/gcc-technology-strategy': typeof GccTechnologyStrategyRoute
   '/guide': typeof GuideRoute
   '/interview-prep': typeof InterviewPrepRoute
   '/leadership': typeof LeadershipRoute
   '/learn': typeof LearnRoute
   '/mcp': typeof McpRoute
+  '/multi-tenant-saas': typeof MultiTenantSaasRoute
   '/playbook': typeof PlaybookRoute
   '/privacy': typeof PrivacyRoute
   '/projects': typeof ProjectsRoute
@@ -593,6 +657,7 @@ export interface FileRoutesByTo {
   '/reset-password': typeof ResetPasswordRoute
   '/rss.xml': typeof RssDotxmlRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/supply-chain-ai': typeof SupplyChainAiRoute
   '/terms': typeof TermsRoute
   '/trust': typeof TrustRoute
   '/admin': typeof AuthenticatedAdminRouteRouteWithChildren
@@ -651,21 +716,28 @@ export interface FileRoutesById {
   '/about': typeof AboutRoute
   '/achievements': typeof AchievementsRoute
   '/advisory': typeof AdvisoryRoute
+  '/ai-transformation': typeof AiTransformationRoute
   '/atom.xml': typeof AtomDotxmlRoute
   '/auth': typeof AuthRoute
   '/blog': typeof BlogRouteWithChildren
   '/case-studies': typeof CaseStudiesRoute
   '/certifications': typeof CertificationsRoute
+  '/cloud-modernization': typeof CloudModernizationRoute
   '/contact': typeof ContactRoute
   '/copyright': typeof CopyrightRoute
+  '/engineering-transformation': typeof EngineeringTransformationRoute
+  '/enterprise-agentic-ai': typeof EnterpriseAgenticAiRoute
+  '/enterprise-rag': typeof EnterpriseRagRoute
   '/experience': typeof ExperienceRoute
   '/expertise': typeof ExpertiseRoute
   '/forgot-password': typeof ForgotPasswordRoute
+  '/gcc-technology-strategy': typeof GccTechnologyStrategyRoute
   '/guide': typeof GuideRoute
   '/interview-prep': typeof InterviewPrepRoute
   '/leadership': typeof LeadershipRoute
   '/learn': typeof LearnRoute
   '/mcp': typeof McpRoute
+  '/multi-tenant-saas': typeof MultiTenantSaasRoute
   '/playbook': typeof PlaybookRoute
   '/privacy': typeof PrivacyRoute
   '/projects': typeof ProjectsRoute
@@ -673,6 +745,7 @@ export interface FileRoutesById {
   '/reset-password': typeof ResetPasswordRoute
   '/rss.xml': typeof RssDotxmlRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/supply-chain-ai': typeof SupplyChainAiRoute
   '/terms': typeof TermsRoute
   '/trust': typeof TrustRoute
   '/_authenticated/admin': typeof AuthenticatedAdminRouteRouteWithChildren
@@ -731,21 +804,28 @@ export interface FileRouteTypes {
     | '/about'
     | '/achievements'
     | '/advisory'
+    | '/ai-transformation'
     | '/atom.xml'
     | '/auth'
     | '/blog'
     | '/case-studies'
     | '/certifications'
+    | '/cloud-modernization'
     | '/contact'
     | '/copyright'
+    | '/engineering-transformation'
+    | '/enterprise-agentic-ai'
+    | '/enterprise-rag'
     | '/experience'
     | '/expertise'
     | '/forgot-password'
+    | '/gcc-technology-strategy'
     | '/guide'
     | '/interview-prep'
     | '/leadership'
     | '/learn'
     | '/mcp'
+    | '/multi-tenant-saas'
     | '/playbook'
     | '/privacy'
     | '/projects'
@@ -753,6 +833,7 @@ export interface FileRouteTypes {
     | '/reset-password'
     | '/rss.xml'
     | '/sitemap.xml'
+    | '/supply-chain-ai'
     | '/terms'
     | '/trust'
     | '/admin'
@@ -809,21 +890,28 @@ export interface FileRouteTypes {
     | '/about'
     | '/achievements'
     | '/advisory'
+    | '/ai-transformation'
     | '/atom.xml'
     | '/auth'
     | '/blog'
     | '/case-studies'
     | '/certifications'
+    | '/cloud-modernization'
     | '/contact'
     | '/copyright'
+    | '/engineering-transformation'
+    | '/enterprise-agentic-ai'
+    | '/enterprise-rag'
     | '/experience'
     | '/expertise'
     | '/forgot-password'
+    | '/gcc-technology-strategy'
     | '/guide'
     | '/interview-prep'
     | '/leadership'
     | '/learn'
     | '/mcp'
+    | '/multi-tenant-saas'
     | '/playbook'
     | '/privacy'
     | '/projects'
@@ -831,6 +919,7 @@ export interface FileRouteTypes {
     | '/reset-password'
     | '/rss.xml'
     | '/sitemap.xml'
+    | '/supply-chain-ai'
     | '/terms'
     | '/trust'
     | '/admin'
@@ -888,21 +977,28 @@ export interface FileRouteTypes {
     | '/about'
     | '/achievements'
     | '/advisory'
+    | '/ai-transformation'
     | '/atom.xml'
     | '/auth'
     | '/blog'
     | '/case-studies'
     | '/certifications'
+    | '/cloud-modernization'
     | '/contact'
     | '/copyright'
+    | '/engineering-transformation'
+    | '/enterprise-agentic-ai'
+    | '/enterprise-rag'
     | '/experience'
     | '/expertise'
     | '/forgot-password'
+    | '/gcc-technology-strategy'
     | '/guide'
     | '/interview-prep'
     | '/leadership'
     | '/learn'
     | '/mcp'
+    | '/multi-tenant-saas'
     | '/playbook'
     | '/privacy'
     | '/projects'
@@ -910,6 +1006,7 @@ export interface FileRouteTypes {
     | '/reset-password'
     | '/rss.xml'
     | '/sitemap.xml'
+    | '/supply-chain-ai'
     | '/terms'
     | '/trust'
     | '/_authenticated/admin'
@@ -968,21 +1065,28 @@ export interface RootRouteChildren {
   AboutRoute: typeof AboutRoute
   AchievementsRoute: typeof AchievementsRoute
   AdvisoryRoute: typeof AdvisoryRoute
+  AiTransformationRoute: typeof AiTransformationRoute
   AtomDotxmlRoute: typeof AtomDotxmlRoute
   AuthRoute: typeof AuthRoute
   BlogRoute: typeof BlogRouteWithChildren
   CaseStudiesRoute: typeof CaseStudiesRoute
   CertificationsRoute: typeof CertificationsRoute
+  CloudModernizationRoute: typeof CloudModernizationRoute
   ContactRoute: typeof ContactRoute
   CopyrightRoute: typeof CopyrightRoute
+  EngineeringTransformationRoute: typeof EngineeringTransformationRoute
+  EnterpriseAgenticAiRoute: typeof EnterpriseAgenticAiRoute
+  EnterpriseRagRoute: typeof EnterpriseRagRoute
   ExperienceRoute: typeof ExperienceRoute
   ExpertiseRoute: typeof ExpertiseRoute
   ForgotPasswordRoute: typeof ForgotPasswordRoute
+  GccTechnologyStrategyRoute: typeof GccTechnologyStrategyRoute
   GuideRoute: typeof GuideRoute
   InterviewPrepRoute: typeof InterviewPrepRoute
   LeadershipRoute: typeof LeadershipRoute
   LearnRoute: typeof LearnRoute
   McpRoute: typeof McpRoute
+  MultiTenantSaasRoute: typeof MultiTenantSaasRoute
   PlaybookRoute: typeof PlaybookRoute
   PrivacyRoute: typeof PrivacyRoute
   ProjectsRoute: typeof ProjectsRoute
@@ -990,6 +1094,7 @@ export interface RootRouteChildren {
   ResetPasswordRoute: typeof ResetPasswordRoute
   RssDotxmlRoute: typeof RssDotxmlRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
+  SupplyChainAiRoute: typeof SupplyChainAiRoute
   TermsRoute: typeof TermsRoute
   TrustRoute: typeof TrustRoute
   Char91DotmcpChar93ListToolsRoute: typeof Char91DotmcpChar93ListToolsRoute
@@ -1067,6 +1172,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdvisoryRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/ai-transformation': {
+      id: '/ai-transformation'
+      path: '/ai-transformation'
+      fullPath: '/ai-transformation'
+      preLoaderRoute: typeof AiTransformationRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/atom.xml': {
       id: '/atom.xml'
       path: '/atom.xml'
@@ -1102,6 +1214,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CertificationsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/cloud-modernization': {
+      id: '/cloud-modernization'
+      path: '/cloud-modernization'
+      fullPath: '/cloud-modernization'
+      preLoaderRoute: typeof CloudModernizationRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/contact': {
       id: '/contact'
       path: '/contact'
@@ -1114,6 +1233,27 @@ declare module '@tanstack/react-router' {
       path: '/copyright'
       fullPath: '/copyright'
       preLoaderRoute: typeof CopyrightRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/engineering-transformation': {
+      id: '/engineering-transformation'
+      path: '/engineering-transformation'
+      fullPath: '/engineering-transformation'
+      preLoaderRoute: typeof EngineeringTransformationRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/enterprise-agentic-ai': {
+      id: '/enterprise-agentic-ai'
+      path: '/enterprise-agentic-ai'
+      fullPath: '/enterprise-agentic-ai'
+      preLoaderRoute: typeof EnterpriseAgenticAiRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/enterprise-rag': {
+      id: '/enterprise-rag'
+      path: '/enterprise-rag'
+      fullPath: '/enterprise-rag'
+      preLoaderRoute: typeof EnterpriseRagRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/experience': {
@@ -1135,6 +1275,13 @@ declare module '@tanstack/react-router' {
       path: '/forgot-password'
       fullPath: '/forgot-password'
       preLoaderRoute: typeof ForgotPasswordRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/gcc-technology-strategy': {
+      id: '/gcc-technology-strategy'
+      path: '/gcc-technology-strategy'
+      fullPath: '/gcc-technology-strategy'
+      preLoaderRoute: typeof GccTechnologyStrategyRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/guide': {
@@ -1170,6 +1317,13 @@ declare module '@tanstack/react-router' {
       path: '/mcp'
       fullPath: '/mcp'
       preLoaderRoute: typeof McpRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/multi-tenant-saas': {
+      id: '/multi-tenant-saas'
+      path: '/multi-tenant-saas'
+      fullPath: '/multi-tenant-saas'
+      preLoaderRoute: typeof MultiTenantSaasRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/playbook': {
@@ -1219,6 +1373,13 @@ declare module '@tanstack/react-router' {
       path: '/sitemap.xml'
       fullPath: '/sitemap.xml'
       preLoaderRoute: typeof SitemapDotxmlRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/supply-chain-ai': {
+      id: '/supply-chain-ai'
+      path: '/supply-chain-ai'
+      fullPath: '/supply-chain-ai'
+      preLoaderRoute: typeof SupplyChainAiRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/terms': {
@@ -1637,21 +1798,28 @@ const rootRouteChildren: RootRouteChildren = {
   AboutRoute: AboutRoute,
   AchievementsRoute: AchievementsRoute,
   AdvisoryRoute: AdvisoryRoute,
+  AiTransformationRoute: AiTransformationRoute,
   AtomDotxmlRoute: AtomDotxmlRoute,
   AuthRoute: AuthRoute,
   BlogRoute: BlogRouteWithChildren,
   CaseStudiesRoute: CaseStudiesRoute,
   CertificationsRoute: CertificationsRoute,
+  CloudModernizationRoute: CloudModernizationRoute,
   ContactRoute: ContactRoute,
   CopyrightRoute: CopyrightRoute,
+  EngineeringTransformationRoute: EngineeringTransformationRoute,
+  EnterpriseAgenticAiRoute: EnterpriseAgenticAiRoute,
+  EnterpriseRagRoute: EnterpriseRagRoute,
   ExperienceRoute: ExperienceRoute,
   ExpertiseRoute: ExpertiseRoute,
   ForgotPasswordRoute: ForgotPasswordRoute,
+  GccTechnologyStrategyRoute: GccTechnologyStrategyRoute,
   GuideRoute: GuideRoute,
   InterviewPrepRoute: InterviewPrepRoute,
   LeadershipRoute: LeadershipRoute,
   LearnRoute: LearnRoute,
   McpRoute: McpRoute,
+  MultiTenantSaasRoute: MultiTenantSaasRoute,
   PlaybookRoute: PlaybookRoute,
   PrivacyRoute: PrivacyRoute,
   ProjectsRoute: ProjectsRoute,
@@ -1659,6 +1827,7 @@ const rootRouteChildren: RootRouteChildren = {
   ResetPasswordRoute: ResetPasswordRoute,
   RssDotxmlRoute: RssDotxmlRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
+  SupplyChainAiRoute: SupplyChainAiRoute,
   TermsRoute: TermsRoute,
   TrustRoute: TrustRoute,
   Char91DotmcpChar93ListToolsRoute: Char91DotmcpChar93ListToolsRoute,

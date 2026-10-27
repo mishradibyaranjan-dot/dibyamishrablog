@@ -6,6 +6,7 @@ import { allTags, readingStats, tagsFor } from "@/lib/post-meta";
 import { Section, SectionHeader } from "@/components/layout/Section";
 import { Badge } from "@/components/ui/badge";
 import { posts, categories } from "@/lib/content";
+import { NewsletterCta } from "@/components/marketing/NewsletterCta";
 import { cn } from "@/lib/utils";
 import { pageOgImages, SITE_ORIGIN } from "@/lib/og-images";
 import { breadcrumbScript } from "@/lib/breadcrumbs";
@@ -320,6 +321,10 @@ function Research() {
             </button>
           </nav>
         )}
+      </Section>
+
+      <Section className="pt-0">
+        <NewsletterCta />
       </Section>
     </>
   );

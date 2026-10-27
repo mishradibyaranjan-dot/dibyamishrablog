@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
 import { cn } from "@/lib/utils";
+import { NewsletterCta } from "@/components/marketing/NewsletterCta";
 import lessonVideo from "@/assets/video/learn-multi-agent.mp4.asset.json";
 import lessonPoster from "@/assets/video/learn-multi-agent-poster.jpg.asset.json";
 import vectorVideo from "@/assets/video/learn-vector-search.mp4.asset.json";
@@ -1003,6 +1004,12 @@ function IntroITIL() {
             </ul>
           </div>
         </SubSection>
+      </Reveal>
+
+      <Reveal>
+        <div className="mx-auto w-full max-w-5xl px-4 pb-16">
+          <NewsletterCta />
+        </div>
       </Reveal>
     </div>
   );

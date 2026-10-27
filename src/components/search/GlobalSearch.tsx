@@ -4,6 +4,7 @@ import { Search, CornerDownLeft } from "lucide-react";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { searchAll, SEARCH_SECTIONS, type GlobalHit, type SearchSection } from "@/lib/search-index";
+import { trackEvent } from "@/lib/analytics";
 import { cn } from "@/lib/utils";
 
 /**
@@ -43,6 +44,7 @@ export function GlobalSearch({ compact = false }: { compact?: boolean }) {
   }, [hits]);
 
   const go = (hit: GlobalHit) => {
+    trackEvent("search_query", { section: hit.section, results: hits.length });
     setOpen(false);
     setQuery("");
     navigate({

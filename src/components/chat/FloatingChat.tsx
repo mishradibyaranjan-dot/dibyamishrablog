@@ -26,6 +26,7 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth";
+import { trackEvent } from "@/lib/analytics";
 
 const STORAGE_KEY = "drm-floating-chat:v1";
 const AUTO_GREET_KEY = "drm-floating-chat-autogreet:v1";
@@ -134,6 +135,7 @@ export function FloatingChat() {
   // Focus textarea when opening + seed a friendly greeting on first open
   useEffect(() => {
     if (open) {
+      trackEvent("ai_assistant_open");
       if (messages.length === 0) {
         setMessages([
           {
