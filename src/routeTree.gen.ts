@@ -41,6 +41,7 @@ import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as ProjectsRouteImport } from './routes/projects'
 import { Route as ResearchRouteImport } from './routes/research'
 import { Route as ResetPasswordRouteImport } from './routes/reset-password'
+import { Route as ResumeAnalyzerRouteImport } from './routes/resume-analyzer'
 import { Route as RssDotxmlRouteImport } from './routes/rss[.]xml'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as SupplyChainAiRouteImport } from './routes/supply-chain-ai'
@@ -254,6 +255,11 @@ const ResearchRoute = ResearchRouteImport.update({
 const ResetPasswordRoute = ResetPasswordRouteImport.update({
   id: '/reset-password',
   path: '/reset-password',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ResumeAnalyzerRoute = ResumeAnalyzerRouteImport.update({
+  id: '/resume-analyzer',
+  path: '/resume-analyzer',
   getParentRoute: () => rootRouteImport,
 } as any)
 const RssDotxmlRoute = RssDotxmlRouteImport.update({
@@ -575,6 +581,7 @@ export interface FileRoutesByFullPath {
   '/projects': typeof ProjectsRoute
   '/research': typeof ResearchRoute
   '/reset-password': typeof ResetPasswordRoute
+  '/resume-analyzer': typeof ResumeAnalyzerRoute
   '/rss.xml': typeof RssDotxmlRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/supply-chain-ai': typeof SupplyChainAiRoute
@@ -662,6 +669,7 @@ export interface FileRoutesByTo {
   '/projects': typeof ProjectsRoute
   '/research': typeof ResearchRoute
   '/reset-password': typeof ResetPasswordRoute
+  '/resume-analyzer': typeof ResumeAnalyzerRoute
   '/rss.xml': typeof RssDotxmlRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/supply-chain-ai': typeof SupplyChainAiRoute
@@ -751,6 +759,7 @@ export interface FileRoutesById {
   '/projects': typeof ProjectsRoute
   '/research': typeof ResearchRoute
   '/reset-password': typeof ResetPasswordRoute
+  '/resume-analyzer': typeof ResumeAnalyzerRoute
   '/rss.xml': typeof RssDotxmlRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/supply-chain-ai': typeof SupplyChainAiRoute
@@ -840,6 +849,7 @@ export interface FileRouteTypes {
     | '/projects'
     | '/research'
     | '/reset-password'
+    | '/resume-analyzer'
     | '/rss.xml'
     | '/sitemap.xml'
     | '/supply-chain-ai'
@@ -927,6 +937,7 @@ export interface FileRouteTypes {
     | '/projects'
     | '/research'
     | '/reset-password'
+    | '/resume-analyzer'
     | '/rss.xml'
     | '/sitemap.xml'
     | '/supply-chain-ai'
@@ -1015,6 +1026,7 @@ export interface FileRouteTypes {
     | '/projects'
     | '/research'
     | '/reset-password'
+    | '/resume-analyzer'
     | '/rss.xml'
     | '/sitemap.xml'
     | '/supply-chain-ai'
@@ -1104,6 +1116,7 @@ export interface RootRouteChildren {
   ProjectsRoute: typeof ProjectsRoute
   ResearchRoute: typeof ResearchRoute
   ResetPasswordRoute: typeof ResetPasswordRoute
+  ResumeAnalyzerRoute: typeof ResumeAnalyzerRoute
   RssDotxmlRoute: typeof RssDotxmlRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   SupplyChainAiRoute: typeof SupplyChainAiRoute
@@ -1372,6 +1385,13 @@ declare module '@tanstack/react-router' {
       path: '/reset-password'
       fullPath: '/reset-password'
       preLoaderRoute: typeof ResetPasswordRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/resume-analyzer': {
+      id: '/resume-analyzer'
+      path: '/resume-analyzer'
+      fullPath: '/resume-analyzer'
+      preLoaderRoute: typeof ResumeAnalyzerRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/rss.xml': {
@@ -1845,6 +1865,7 @@ const rootRouteChildren: RootRouteChildren = {
   ProjectsRoute: ProjectsRoute,
   ResearchRoute: ResearchRoute,
   ResetPasswordRoute: ResetPasswordRoute,
+  ResumeAnalyzerRoute: ResumeAnalyzerRoute,
   RssDotxmlRoute: RssDotxmlRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   SupplyChainAiRoute: SupplyChainAiRoute,
