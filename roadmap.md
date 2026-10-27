@@ -1,4 +1,5 @@
 # Roadmap
+- [ ] Career assistant extension: automatic job-ID transfer; private PDF/DOCX/TXT resume analysis; evidence-only requirement matching and formatting review; supported recommendations, approvals/version history; approved DOCX/PPTX exports; security/testing and updated engineering suite. Keep seven-day public jobs visibility. Awaiting plan approval.
 - [x] Marketing master prompt Phases 3–6: scroll-depth research CTA (body-portaled, dismissible), newsletter repositioned "Without the Hype" on research/learn/case studies, 8 SEO landing pages with shared renderer + sitemap entries, consent-gated GA4/GTM-ready event tracking (hero/advisory/newsletter/playbook/contact/search/assistant), QA pass — 76 tests, build OK, browser checks on all 8 pages + mobile 390px; not published
 - [x] Reduce jobs refresh to 07:00, 12:00, 16:00 and 21:00 Asia/Kolkata; disable five-minute jobs maintenance; verify live schedules; retain strict public freshness
 - [x] Add private AI interview packs, JD/resume uploads, typed mock coaching, study plans, exports and job entry points; real ten-question/coach/upload/export checks and 44 tests; existing assistant reply verified
