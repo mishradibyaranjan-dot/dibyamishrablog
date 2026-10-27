@@ -14,7 +14,7 @@ export const Route = createFileRoute("/jobs/category/$category")({
     return context.queryClient.ensureQueryData(jobsQuery(filters)).then((data) => ({ category, initial: { filters, data } }));
   },
   head: ({ params, loaderData }) => loaderData
-    ? jobsHead(`/jobs/category/${params.category}`, `${loaderData.category} Jobs — Verified, Last 24 Hours`, `Fresh ${loaderData.category} job openings from official employer career sites, posted within the last 24 hours.`, [{ name: loaderData.category, path: `/jobs/category/${params.category}` }])
+    ? jobsHead(`/jobs/category/${params.category}`, `${loaderData.category} Jobs — Verified, Last 7 Days`, `Fresh ${loaderData.category} job openings from official employer career sites, posted within the last 7 days.`, [{ name: loaderData.category, path: `/jobs/category/${params.category}` }])
     : { meta: [{ title: "Category not found" }, { name: "robots", content: "noindex" }] },
   notFoundComponent: () => <Section>Unknown job category.</Section>,
   component: Page,
@@ -24,7 +24,7 @@ function Page() {
   const [f, setF] = useState({ ...DEFAULT_FILTERS, category });
   return (
     <Section className="pt-14">
-      <JobsHero title={`${category} Jobs`} subtitle={`Verified ${category} roles posted within the last 24 hours, from intern to executive level.`} />
+      <JobsHero title={`${category} Jobs`} subtitle={`Verified ${category} roles posted within the last 7 days, from intern to executive level.`} />
       <JobsDirectory initial={initial} filters={f} onChange={(n) => setF({ ...n, category })} lockedKeys={["category"]} />
     </Section>
   );

@@ -42,6 +42,9 @@ const PRIMARY: RailItem[] = [
   { to: "/projects", label: "Projects", icon: FolderKanban },
   { to: "/learn", label: "Learn", icon: GraduationCap },
   { to: "/research", label: "Research", icon: FlaskConical },
+  { to: "/jobs", label: "Jobs", icon: BriefcaseBusiness },
+  { to: "/jobs/remote", label: "Remote Jobs", icon: Compass },
+  { to: "/jobs/saved", label: "Saved Jobs", icon: BookOpen },
   { to: "/contact", label: "Contact", icon: Mail },
 ];
 

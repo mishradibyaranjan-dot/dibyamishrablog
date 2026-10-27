@@ -40,7 +40,7 @@ export const jobFilters = z.object({
   salary: z.number().min(0).max(1e9).optional().default(0),
   experience: z.number().min(0).max(80).optional().default(0),
   checked: z.number().refine((n) => [0,15,30].includes(n)).optional().default(0),
-  hours: z.number().int().refine((h) => [1, 3, 6, 12, 24].includes(h)).optional().default(24),
+  hours: z.number().int().refine((h) => [1, 3, 6, 12, 24, 168].includes(h)).optional().default(24),
   page: z.number().int().min(1).max(200).optional().default(1),
 });
 export type JobFilters = z.infer<typeof jobFilters>;
@@ -50,7 +50,7 @@ export const listJobs = createServerFn({ method: "GET" })
   .inputValidator((d: unknown) => jobFilters.parse(d ?? {}))
   .handler(async ({ data }) => {
     const db = publicClient();
-    // Database policy already restricts to verified, open jobs < 24h old; the window filter narrows further.
+    // Database policy already restricts to verified, open jobs < 7 days old; the window filter narrows further.
     let q = db.from("jobs").select(PUBLIC_COLS, { count: "exact" })
       .gt("original_posted_at", new Date(Date.now() - data.hours * 3600_000).toISOString())
       .order("original_posted_at", { ascending: false })

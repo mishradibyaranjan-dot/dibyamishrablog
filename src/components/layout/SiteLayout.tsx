@@ -127,6 +127,7 @@ const NAV = [
   { to: "/projects", label: "Projects" },
   { to: "/learn", label: "Learn" },
   { to: "/research", label: "Research" },
+  { to: "/jobs", label: "Jobs" },
   { to: "/contact", label: "Contact" },
 ] as const;
 
@@ -175,7 +176,13 @@ function Header() {
           />
           <span className="truncate text-foreground">Dibya Ranjan Mishra</span>
         </Link>
-        <div className="order-2 flex shrink-0 lg:order-3">
+        <div className="order-2 flex shrink-0 items-center gap-2 lg:order-3">
+          <Link
+            to="/jobs"
+            className="rounded-full border border-border bg-card/70 px-3.5 py-1.5 text-sm font-medium text-foreground transition-colors hover:border-primary/50 hover:text-primary"
+          >
+            Jobs
+          </Link>
           <UserMenu />
         </div>
         <div

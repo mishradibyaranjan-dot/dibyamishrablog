@@ -14,15 +14,16 @@ describe("posting timestamps", () => {
   it("rejects unknown", () => { expect(parsePostedAt(null)).toBeNull(); expect(parsePostedAt("soon")).toBeNull(); });
 });
 
-describe("24-hour freshness", () => {
+describe("7-day freshness", () => {
   it("1 hour old is fresh", () => expect(isFresh(new Date(now.getTime() - 3600_000), now)).toBe(true));
-  it("exactly 24 hours old is not fresh", () => expect(isFresh(new Date(now.getTime() - 86_400_000), now)).toBe(false));
-  it("24h + 1s old is not fresh", () => expect(isFresh(new Date(now.getTime() - 86_401_000), now)).toBe(false));
+  it("3 days old is fresh", () => expect(isFresh(new Date(now.getTime() - 3 * 86_400_000), now)).toBe(true));
+  it("exactly 7 days old is not fresh", () => expect(isFresh(new Date(now.getTime() - 7 * 86_400_000), now)).toBe(false));
+  it("7 days + 1s old is not fresh", () => expect(isFresh(new Date(now.getTime() - 7 * 86_400_000 - 1000), now)).toBe(false));
   it("future-dated is not fresh", () => expect(isFresh(new Date(now.getTime() + 60_000), now)).toBe(false));
-  it("expiry is the earlier of 24h and closing time", () => {
+  it("expiry is the earlier of 7 days and closing time", () => {
     const p = new Date("2026-10-27T00:00:00Z");
-    expect(expiresAt(p).toISOString()).toBe("2026-10-28T00:00:00.000Z");
-    expect(expiresAt(p, new Date("2026-10-27T06:00:00Z")).toISOString()).toBe("2026-10-27T06:00:00.000Z");
+    expect(expiresAt(p).toISOString()).toBe("2026-11-03T00:00:00.000Z");
+    expect(expiresAt(p, new Date("2026-10-28T06:00:00Z")).toISOString()).toBe("2026-10-28T06:00:00.000Z");
   });
 });
 

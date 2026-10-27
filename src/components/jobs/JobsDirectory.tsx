@@ -17,7 +17,7 @@ const sel = "h-10 rounded-md border border-input bg-background px-3 text-sm text
 export function JobsHero({ title, subtitle }: { title?: string; subtitle?: string }) {
   return (
     <header className="mb-8">
-      <h1 className="font-display text-3xl font-bold tracking-tight sm:text-5xl">{title ?? "Verified Jobs — Fresh Opportunities Posted Within the Last 24 Hours"}</h1>
+      <h1 className="font-display text-3xl font-bold tracking-tight sm:text-5xl">{title ?? "Verified Jobs — Fresh Opportunities Posted Within the Last 7 Days"}</h1>
       <p className="mt-4 max-w-3xl text-lg text-muted-foreground">
         {subtitle ?? "Discover current career opportunities from entry-level to executive leadership, with verified original sources and direct application links."}
       </p>
@@ -79,6 +79,7 @@ export function JobsDirectory({ filters, onChange, lockedKeys = [], initial }: {
         <label><span className="sr-only">Posted within</span>
           <select className={sel + " w-full"} value={filters.hours} onChange={(e) => set({ hours: Number(e.target.value) })}>
             {[1, 3, 6, 12, 24].map((h) => <option key={h} value={h}>Posted within {h}h</option>)}
+            <option value={168}>Posted within 7 days</option>
           </select>
         </label>
         <Button type="submit">Search</Button>
@@ -86,7 +87,7 @@ export function JobsDirectory({ filters, onChange, lockedKeys = [], initial }: {
       </form>
 
       <p className="mt-4 text-sm text-muted-foreground" aria-live="polite">
-        {data ? `${data.total} verified job${data.total === 1 ? "" : "s"} posted in the last ${filters.hours} hour${filters.hours === 1 ? "" : "s"}` : "Loading jobs…"}
+        {data ? `${data.total} verified job${data.total === 1 ? "" : "s"} posted in the last ${filters.hours === 168 ? "7 days" : `${filters.hours} hour${filters.hours === 1 ? "" : "s"}`}` : "Loading jobs…"}
         {isFetching && data ? " · updating…" : ""}
       </p>
       {data?.error && <p role="alert" className="mt-2 text-sm text-destructive">Jobs are temporarily unavailable. Please try again shortly.</p>}
@@ -95,7 +96,7 @@ export function JobsDirectory({ filters, onChange, lockedKeys = [], initial }: {
         {(data?.jobs as PublicJob[] | undefined)?.map((j) => <JobCard key={j.id} job={j} />)}
         {data && data.jobs.length === 0 && !data.error && (
           <div className="rounded-2xl border border-dashed border-border p-8 text-center text-muted-foreground">
-            No verified jobs match these filters right now. Jobs only appear here for 24 hours after the employer posts them.
+            No verified jobs match these filters right now. Jobs only appear here for 7 days after the employer posts them.
           </div>
         )}
       </div>

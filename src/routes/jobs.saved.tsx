@@ -32,7 +32,7 @@ function Page() {
   const visible = user ? (personal.data ? { live: accountLive, gone: personal.data.saves.length - accountLive.length } : null) : state;
   return (
     <Section className="pt-14">
-      <JobsHero title="Saved Jobs" subtitle={user ? "Saved to your account. Only open opportunities from the last 24 hours appear." : "Saved on this device. Sign in to save jobs across devices."} />
+      <JobsHero title="Saved Jobs" subtitle={user ? "Saved to your account. Only open opportunities from the last 7 days appear." : "Saved on this device. Sign in to save jobs across devices."} />
       {personal.error ? <p role="alert">Could not load saved jobs.</p> : loading || !visible ? <p>Loading…</p> : (
         <>
           {visible.gone > 0 && <p className="mb-4 text-sm text-muted-foreground">{visible.gone} saved job{visible.gone === 1 ? " has" : "s have"} expired or closed.</p>}
