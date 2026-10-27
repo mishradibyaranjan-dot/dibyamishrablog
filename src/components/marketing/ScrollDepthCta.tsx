@@ -33,7 +33,7 @@ export function ScrollDepthCta() {
     <div
       role="complementary"
       aria-label="Related services"
-      className="motion-safe:animate-in motion-safe:fade-in motion-safe:slide-in-from-bottom-4 fixed inset-x-4 bottom-4 z-40 mx-auto max-w-lg"
+      className="fixed inset-x-4 bottom-4 z-40 mx-auto max-w-lg transition-all duration-300"
     >
       <div className="card-flashy rounded-2xl glass-strong p-5 shadow-lg">
         <button
