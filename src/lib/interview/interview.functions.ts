@@ -3,14 +3,19 @@ import {requireSupabaseAuth} from '@/integrations/supabase/auth-middleware';
 import {z} from 'zod';
 import {sanitizeDocument,settingsSchema,analysisSchema,questionSchema,coachSchema} from './schema';
 const uuid=z.string().uuid();
+export const resumeInterviewService=createServerFn({method:'POST'}).middleware([requireSupabaseAuth]).handler(async({context})=>{
+ const {data:admin}=await context.supabase.rpc('has_role',{_user_id:context.userId,_role:'admin'});if(!admin)throw new Error('Administrator access required.');
+ const {supabaseAdmin:db}=await import('@/integrations/supabase/client.server');await db.from('interview_engine_state').update({paused:false,reason:null,lease_until:null}).eq('id','interview');return {ok:true};
+});
 export const createInterview=createServerFn({method:'POST'}).middleware([requireSupabaseAuth]).inputValidator(z.object({jd:z.string().max(24000),resume:z.string().max(24000),title:z.string().max(200),employer:z.string().max(200),jobId:uuid.nullable(),settings:settingsSchema})).handler(async({data,context})=>{
  const {supabaseAdmin:db}=await import('@/integrations/supabase/client.server');
- const jd=sanitizeDocument(data.jd);if(jd.length<80)throw new Error('Provide at least 80 characters of job responsibilities and requirements.');
- if(data.jobId){const {data:j}=await context.supabase.from('jobs').select('id').eq('id',data.jobId).maybeSingle();if(!j)throw new Error('This job is no longer publicly verified. Paste your own JD to start a separate preparation session.');}
+ let jd=sanitizeDocument(data.jd);let title=data.title,employer=data.employer;
+ if(data.jobId){const {data:j}=await context.supabase.from('jobs').select('id,title,company,summary').eq('id',data.jobId).maybeSingle();if(!j)throw new Error('This job is no longer publicly verified. Paste your own JD to start a separate preparation session.');jd=sanitizeDocument(j.summary??'');title=j.title;employer=j.company;}
+ if(jd.length<80)throw new Error('Provide at least 80 characters of job responsibilities and requirements.');
  const resume=sanitizeDocument(data.resume);const hash=Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',new TextEncoder().encode(JSON.stringify({jd,resume,settings:data.settings}))))).map(b=>b.toString(16).padStart(2,'0')).join('');
  const {data:cached}=await db.from('interview_sessions').select('id').eq('user_id',context.userId).eq('cache_key',hash).in('status',['queued','processing','completed']).gt('expires_at',new Date().toISOString()).limit(1).maybeSingle();if(cached)return cached.id;
  const {data:active}=await db.from('interview_sessions').select('id',{count:'exact'}).eq('user_id',context.userId).in('status',['queued','processing']);if((active?.length??0)>=2)throw new Error('Finish or cancel an active pack before starting another.');
- const {data:s,error}=await db.from('interview_sessions').insert({user_id:context.userId,jd,resume_text:resume||null,title:data.title||'Interview preparation',employer:data.employer||null,job_id:data.jobId,settings:data.settings,cache_key:hash,expires_at:new Date(Date.now()+data.settings.retention*86400000).toISOString()}).select('id').single();if(error||!s)throw new Error('Could not create interview preparation.');return s.id;
+ const {data:s,error}=await db.from('interview_sessions').insert({user_id:context.userId,jd,resume_text:resume||null,title:title||'Interview preparation',employer:employer||null,job_id:data.jobId,settings:data.settings,cache_key:hash,expires_at:new Date(Date.now()+data.settings.retention*86400000).toISOString()}).select('id').single();if(error||!s)throw new Error('Could not create interview preparation.');return s.id;
 });
 export const getInterview=createServerFn({method:'POST'}).middleware([requireSupabaseAuth]).inputValidator(z.object({id:uuid.nullable()})).handler(async({data,context})=>{
  const db=context.supabase;
