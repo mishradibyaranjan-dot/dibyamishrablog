@@ -361,17 +361,83 @@ export type Database = {
         }
         Relationships: []
       }
+      job_alerts: {
+        Row: {
+          created_at: string
+          enabled: boolean
+          filters: Json
+          id: string
+          name: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          enabled?: boolean
+          filters?: Json
+          id?: string
+          name: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          enabled?: boolean
+          filters?: Json
+          id?: string
+          name?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      job_classifications: {
+        Row: {
+          error: string | null
+          input_hash: string
+          job_id: string
+          result: Json | null
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          error?: string | null
+          input_hash: string
+          job_id: string
+          result?: Json | null
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          error?: string | null
+          input_hash?: string
+          job_id?: string
+          result?: Json | null
+          status?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "job_classifications_job_id_fkey"
+            columns: ["job_id"]
+            isOneToOne: true
+            referencedRelation: "jobs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       job_sources: {
         Row: {
           active: boolean
           board_token: string | null
           created_at: string
+          failure_count: number
           id: string
           last_error: string | null
           last_synced_at: string | null
+          lock_token: string | null
+          locked_until: string | null
           name: string
           poll_minutes: number
           provider: string
+          retry_after: string | null
           slug: string
           status: string
           terms_note: string | null
@@ -381,12 +447,16 @@ export type Database = {
           active?: boolean
           board_token?: string | null
           created_at?: string
+          failure_count?: number
           id?: string
           last_error?: string | null
           last_synced_at?: string | null
+          lock_token?: string | null
+          locked_until?: string | null
           name: string
           poll_minutes?: number
           provider: string
+          retry_after?: string | null
           slug: string
           status?: string
           terms_note?: string | null
@@ -396,12 +466,16 @@ export type Database = {
           active?: boolean
           board_token?: string | null
           created_at?: string
+          failure_count?: number
           id?: string
           last_error?: string | null
           last_synced_at?: string | null
+          lock_token?: string | null
+          locked_until?: string | null
           name?: string
           poll_minutes?: number
           provider?: string
+          retry_after?: string | null
           slug?: string
           status?: string
           terms_note?: string | null
@@ -518,6 +592,27 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      jobs_ai_state: {
+        Row: {
+          id: string
+          paused: boolean
+          reason: string | null
+          updated_at: string
+        }
+        Insert: {
+          id: string
+          paused?: boolean
+          reason?: string | null
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          paused?: boolean
+          reason?: string | null
+          updated_at?: string
+        }
+        Relationships: []
       }
       login_sessions: {
         Row: {
@@ -956,6 +1051,35 @@ export type Database = {
           user_id?: string
         }
         Relationships: []
+      }
+      saved_jobs: {
+        Row: {
+          created_at: string
+          id: string
+          job_id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          job_id: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          job_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "saved_jobs_job_id_fkey"
+            columns: ["job_id"]
+            isOneToOne: false
+            referencedRelation: "jobs"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       search_queries: {
         Row: {
@@ -1448,11 +1572,45 @@ export type Database = {
         }
         Relationships: []
       }
+      web_vital_samples: {
+        Row: {
+          created_at: string
+          device: string
+          id: string
+          metric: string
+          path: string
+          rating: string
+          value: number
+        }
+        Insert: {
+          created_at?: string
+          device: string
+          id?: string
+          metric: string
+          path: string
+          rating: string
+          value: number
+        }
+        Update: {
+          created_at?: string
+          device?: string
+          id?: string
+          metric?: string
+          path?: string
+          rating?: string
+          value?: number
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
+      claim_job_source: {
+        Args: { p_force?: boolean; p_id: string; p_token: string }
+        Returns: boolean
+      }
       contact_enquiries_due_for_retry: {
         Args: { _limit?: number; _max_retries?: number }
         Returns: {
