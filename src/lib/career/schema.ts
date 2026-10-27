@@ -9,7 +9,7 @@ export const decisionSchema = z.object({ id: z.string().max(100), status: z.enum
 export type Decision = z.infer<typeof decisionSchema>;
 export const templateSchema = z.enum(['Professional ATS', 'Modern Professional', 'Executive Leadership']);
 export type ResumeTemplate = z.infer<typeof templateSchema>;
-const words = (s: string) => s.toLocaleLowerCase().match(/[\p{L}\p{N}+#@./%-]+/gu) ?? [];
+const words = (s: string): string[] => s.toLocaleLowerCase().match(/[\p{L}\p{N}+#@./%-]+/gu) ?? [];
 
 // Conservative wording-only guard: retain numbers/names and add no factual vocabulary.
 export function supportedReplacement(original: string, current: string, replacement: string) {
