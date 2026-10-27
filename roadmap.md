@@ -9,6 +9,7 @@
 - [x] Portfolio pages (Experience, Leadership, Achievements, Certifications) + homepage executive buttons
 - [x] Verified jobs: database, 21 free employer/provider feeds, 7-day freshness rule (policy + ingest), verification, de-duplication, four daily India-time refreshes
 - [x] Jobs navigation: header Jobs link, side rail Jobs/Remote/Saved entries, footer Explore link; "Posted within 7 days" filter option; 233 jobs verified live in 7-day view
+- [x] Fix empty jobs portal: application-check window widened from 30 minutes to 12 hours to match four daily refreshes, so listings no longer vanish between syncs
 - [x] Jobs pages: /jobs, detail, remote, level, category, company, saved, sources, about-verification
 - [x] /admin/jobs dashboard with source management, quarantine/reject/republish, reports, CSV export, sync history
 - [x] Account-synced saved jobs, saved searches, in-app matching alerts and per-search on/off preferences

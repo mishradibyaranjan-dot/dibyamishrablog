@@ -120,7 +120,7 @@ export const adminJobsOverview = createServerFn({ method: "GET" })
     const c = async (f: (q: any) => any) => (await f(db.from("jobs").select("id", { count: "exact", head: true }))).count ?? 0;
     const startOfDay = new Date(); startOfDay.setUTCHours(0, 0, 0, 0);
     const [live, lastHour, expiringSoon, expiredToday, quarantined, duplicates, closed, reports] = await Promise.all([
-      c((q) => q.eq("verification_status", "VERIFIED").eq("application_status", "OPEN").eq("is_primary", true).eq("admin_hold", false).eq("source_access_status", "AUTHORIZED").eq("verification_basis", "authorized_feed_and_live_link").gt("last_application_checked_at", iso(1800_000)).gt("expires_at", new Date(now).toISOString()).lte("original_posted_at", new Date(now).toISOString()).gt("original_posted_at", iso(86_400_000))),
+      c((q) => q.eq("verification_status", "VERIFIED").eq("application_status", "OPEN").eq("is_primary", true).eq("admin_hold", false).eq("source_access_status", "AUTHORIZED").eq("verification_basis", "authorized_feed_and_live_link").gt("last_application_checked_at", iso(43_200_000)).gt("expires_at", new Date(now).toISOString()).lte("original_posted_at", new Date(now).toISOString()).gt("original_posted_at", iso(7 * 86_400_000))),
       c((q) => q.gt("first_seen_at", iso(3_600_000))),
       c((q) => q.eq("application_status", "OPEN").gt("original_posted_at", iso(86_400_000)).lt("original_posted_at", iso(82_800_000))),
       c((q) => q.lt("expires_at", new Date(now).toISOString()).gt("expires_at", startOfDay.toISOString())),
