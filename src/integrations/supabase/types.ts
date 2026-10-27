@@ -79,6 +79,197 @@ export type Database = {
         }
         Relationships: []
       }
+      career_generated_documents: {
+        Row: {
+          bytes: number
+          created_at: string
+          format: string
+          id: string
+          resume_id: string
+          version_id: string
+        }
+        Insert: {
+          bytes: number
+          created_at?: string
+          format: string
+          id?: string
+          resume_id: string
+          version_id: string
+        }
+        Update: {
+          bytes?: number
+          created_at?: string
+          format?: string
+          id?: string
+          resume_id?: string
+          version_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "career_generated_documents_resume_id_fkey"
+            columns: ["resume_id"]
+            isOneToOne: false
+            referencedRelation: "career_resumes"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "career_generated_documents_version_id_fkey"
+            columns: ["version_id"]
+            isOneToOne: false
+            referencedRelation: "career_resume_versions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      career_resume_approvals: {
+        Row: {
+          created_at: string
+          decision: string
+          id: string
+          proposed_text: string
+          recommendation_id: string
+          resume_id: string
+          version_id: string
+        }
+        Insert: {
+          created_at?: string
+          decision: string
+          id?: string
+          proposed_text: string
+          recommendation_id: string
+          resume_id: string
+          version_id: string
+        }
+        Update: {
+          created_at?: string
+          decision?: string
+          id?: string
+          proposed_text?: string
+          recommendation_id?: string
+          resume_id?: string
+          version_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "career_resume_approvals_resume_id_fkey"
+            columns: ["resume_id"]
+            isOneToOne: false
+            referencedRelation: "career_resumes"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "career_resume_approvals_version_id_fkey"
+            columns: ["version_id"]
+            isOneToOne: false
+            referencedRelation: "career_resume_versions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      career_resume_versions: {
+        Row: {
+          approved_at: string | null
+          content: string
+          created_at: string
+          decisions: Json
+          id: string
+          resume_id: string
+          template: string
+          version: number
+        }
+        Insert: {
+          approved_at?: string | null
+          content: string
+          created_at?: string
+          decisions: Json
+          id?: string
+          resume_id: string
+          template: string
+          version: number
+        }
+        Update: {
+          approved_at?: string | null
+          content?: string
+          created_at?: string
+          decisions?: Json
+          id?: string
+          resume_id?: string
+          template?: string
+          version?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "career_resume_versions_resume_id_fkey"
+            columns: ["resume_id"]
+            isOneToOne: false
+            referencedRelation: "career_resumes"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      career_resumes: {
+        Row: {
+          analysis: Json | null
+          analysis_lease_until: string | null
+          consent_at: string
+          created_at: string
+          error: string | null
+          expires_at: string
+          id: string
+          jd: string
+          job_id: string | null
+          original_filename: string | null
+          original_path: string | null
+          original_text: string
+          original_type: string | null
+          recommendations: Json
+          revision: number
+          status: string
+          title: string
+          user_id: string
+        }
+        Insert: {
+          analysis?: Json | null
+          analysis_lease_until?: string | null
+          consent_at?: string
+          created_at?: string
+          error?: string | null
+          expires_at: string
+          id?: string
+          jd: string
+          job_id?: string | null
+          original_filename?: string | null
+          original_path?: string | null
+          original_text: string
+          original_type?: string | null
+          recommendations?: Json
+          revision?: number
+          status?: string
+          title?: string
+          user_id: string
+        }
+        Update: {
+          analysis?: Json | null
+          analysis_lease_until?: string | null
+          consent_at?: string
+          created_at?: string
+          error?: string | null
+          expires_at?: string
+          id?: string
+          jd?: string
+          job_id?: string | null
+          original_filename?: string | null
+          original_path?: string | null
+          original_text?: string
+          original_type?: string | null
+          recommendations?: Json
+          revision?: number
+          status?: string
+          title?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       chatbot_messages: {
         Row: {
           content: string
@@ -2050,6 +2241,15 @@ export type Database = {
         Args: { p_force?: boolean; p_id: string; p_token: string }
         Returns: boolean
       }
+      commit_career_analysis: {
+        Args: {
+          p_analysis: Json
+          p_id: string
+          p_recommendations: Json
+          p_user: string
+        }
+        Returns: undefined
+      }
       commit_interview_batch: {
         Args: {
           p_analysis: Json
@@ -2092,6 +2292,18 @@ export type Database = {
       purge_visitor_tracking_audit: { Args: never; Returns: number }
       reserve_interview_usage: {
         Args: { p_operation: string; p_session: string; p_user: string }
+        Returns: string
+      }
+      save_career_version: {
+        Args: {
+          p_approve: boolean
+          p_content: string
+          p_decisions: Json
+          p_id: string
+          p_revision: number
+          p_template: string
+          p_user: string
+        }
         Returns: string
       }
     }
