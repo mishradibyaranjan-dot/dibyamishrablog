@@ -9,7 +9,7 @@ export const decisionSchema = z.object({ id: z.string().max(100), status: z.enum
 export type Decision = z.infer<typeof decisionSchema>;
 export const templateSchema = z.enum(['Professional ATS', 'Modern Professional', 'Executive Leadership']);
 export type ResumeTemplate = z.infer<typeof templateSchema>;
-const words = (s: string): string[] => s.toLocaleLowerCase().match(/[\p{L}\p{N}+#@./%-]+/gu) ?? [];
+const words = (s: string): string[] => s.match(/[\p{L}\p{N}+#@./%-]+/gu) ?? [];
 
 // Conservative wording-only guard: retain numbers/names and add no factual vocabulary.
 export function supportedReplacement(original: string, current: string, replacement: string) {
@@ -18,6 +18,7 @@ export function supportedReplacement(original: string, current: string, replacem
   if (words(replacement).some(w => !vocabulary.has(w))) return false;
   // Never drop unique facts/negations. Only remove redundant tokens in original order.
   const before=words(current),after=words(replacement);
+  if (current.replace(/[\p{L}\p{N}\s]/gu,'') !== replacement.replace(/[\p{L}\p{N}\s]/gu,'')) return false;
   if ([...vocabulary].some(w=>!after.includes(w))) return false;
   let position=0;
   for(const token of after){while(position<before.length&&before[position]!==token)position++;if(position===before.length)return false;position++;}
