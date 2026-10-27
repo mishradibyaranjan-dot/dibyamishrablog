@@ -50,7 +50,7 @@ export const listJobs = createServerFn({ method: "GET" })
   .inputValidator((d: unknown) => jobFilters.parse(d ?? {}))
   .handler(async ({ data }) => {
     const db = publicClient();
-    // Database policy already restricts to verified, open jobs < 24h old; the window filter narrows further.
+    // Database policy already restricts to verified, open jobs < 7 days old; the window filter narrows further.
     let q = db.from("jobs").select(PUBLIC_COLS, { count: "exact" })
       .gt("original_posted_at", new Date(Date.now() - data.hours * 3600_000).toISOString())
       .order("original_posted_at", { ascending: false })
