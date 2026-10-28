@@ -1,0 +1,2 @@
+DROP POLICY IF EXISTS "Public can view source registry" ON public.job_sources;
+CREATE POLICY "Public can view active source registry" ON public.job_sources FOR SELECT TO anon, authenticated USING (active = true);
