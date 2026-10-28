@@ -20,6 +20,9 @@ describe('Bounded employer feed parsing',()=>{
  it('rejects truncated JSON instead of returning a partial closure snapshot',async()=>{
   await expect(readFeed(response('{"jobs":[{"id":1},'), '$.jobs.*',j=>j)).rejects.toThrow();
  });
+ it('rejects an unexpected empty response before closure',async()=>{
+  await expect(readFeed(response('{"error":"unavailable"}'),'$.jobs.*',j=>j)).rejects.toThrow('unrecognized');
+ });
  it('rejects a giant record even when the HTTP body is below its overall limit',async()=>{
   await expect(readFeed(response(JSON.stringify([{text:'x'.repeat(FEED_LIMITS.recordBytes+4096)}])),'$.*',j=>j)).rejects.toThrow('item limit');
  });

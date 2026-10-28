@@ -36,6 +36,7 @@ export async function readFeed<T>(response: Response, path: string, normalize: (
     }
     if (!ended) parser.end();
     if (!ended) throw new Error('Incomplete feed; closure deferred');
+    if (!count) throw new Error('Empty or unrecognized feed; closure deferred');
     return output;
   } finally { await reader.cancel().catch(() => {}); }
 }

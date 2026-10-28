@@ -171,6 +171,7 @@ export async function runJobSync(opts: { sourceSlug?: string; force?: boolean } 
       };
       let renewed = Date.now();
       for (const j of items) {
+        if (Date.now() - now.getTime() > 240000) throw new Error('Source time budget exceeded; closure deferred');
         if (Date.now()-renewed > 60000) {
           const lease=await db.from("job_sources").update({locked_until:new Date(Date.now()+300000).toISOString()}).eq("id",s.id).eq("lock_token",token).select("id");
           if (lease.error || !lease.data?.length) throw new Error("Source lease lost");
@@ -214,7 +215,7 @@ export async function runJobSync(opts: { sourceSlug?: string; force?: boolean } 
       await flush();
       // Stable keyset pagination: updates must not shift the next page.
       let cursor = "";
-      while (true) {
+      while (s.provider !== 'adzuna') {
         let query = db.from("jobs").select("id,source_job_id").eq("source_id",s.id).eq("application_status","OPEN").order("id").limit(200);
         if(cursor) query=query.gt("id",cursor);
         const page=await query;
