@@ -14,6 +14,7 @@ import jobsOperations from "../../docs/jobs-operations.md?raw";
 import interviewGuide from "../../docs/interview-preparation.md?raw";
 import careerGuide from "../../docs/career-assistant.md?raw";
 import masterAudit from "../../docs/master-audit.md?raw";
+import futureReport from "../../docs/future-experience-report.md?raw";
 
 import type { DocCategory, DocMeta } from "@/lib/docs-suite.types";
 
@@ -22,6 +23,7 @@ export type { DocCategory, DocMeta };
 type DocEntry = Omit<DocMeta, "bytes"> & { content: string };
 
 const ENTRIES: readonly DocEntry[] = [
+  { id: "future-experience", title: "Future Experience — Delivery & Acceptance", category: "Quality", summary: "Optional theme rollout, preservation checks, measured development performance, accessibility results and release limitations.", filename: "Future-Experience-Report.md", content: futureReport },
   { id: "master-audit", title: "Master Audit — Evidence & Release Gates", category: "Quality", summary: "Verified fixes, live jobs policy and schedules, career workflow checks, source limitations and external acceptance gates.", filename: "Master-Audit.md", content: masterAudit },
   { id: "career-assistant", title: "Career Assistant — Engineering & Acceptance", category: "Quality", summary: "Private resume review, evidence-based decisions, immutable approvals, editable exports and release limitations.", filename: "Career-Assistant.md", content: careerGuide },
   { id: "interview-preparation", title: "AI Interview Preparation — Engineering & Testing", category: "Quality", summary: "Private interview flow, architecture, safeguards, real test results and remaining release checks.", filename: "AI-Interview-Preparation.md", content: interviewGuide },
