@@ -1,11 +1,11 @@
 import { Link, useRouterState } from '@tanstack/react-router';
 import { ChevronRight, Home } from 'lucide-react';
 
-const labels: Record<string, string> = { jobs:'Jobs', research:'Research', about:'About', expertise:'Expertise', contact:'Contact', 'resume-analyzer':'Resume Comparison', 'interview-prep':'Interview Preparation', 'my-career':'My Career', 'case-studies':'Case Studies', saved:'Saved Jobs', alerts:'Job Alerts', sources:'Sources', remote:'Remote Jobs', learn:'Learn', newsletter:'Newsletter', guide:'Guided Tour', trust:'Trust & Privacy', leadership:'Leadership', experience:'Experience', certifications:'Certifications', achievements:'Achievements' };
+const labels: Record<string, string> = { projects:'Projects', auth:'Account', reports:'Reports', admin:'Administration', jobs:'Jobs', research:'Research', about:'About', expertise:'Expertise', contact:'Contact', 'resume-analyzer':'Resume Comparison', 'interview-prep':'Interview Preparation', 'my-career':'My Career', 'case-studies':'Case Studies', saved:'Saved Jobs', alerts:'Job Alerts', sources:'Sources', remote:'Remote Jobs', learn:'Learn', newsletter:'Newsletter', guide:'Guided Tour', trust:'Trust & Privacy', leadership:'Leadership', experience:'Experience', certifications:'Certifications', achievements:'Achievements' };
 const linkedParents = new Set(['/jobs','/research','/newsletter','/learn']);
 export function ContextNavigation() {
   const location = useRouterState({ select:s => s.location });
-  if (location.pathname === '/' || location.pathname.startsWith('/admin') || ['/auth','/reports'].includes(location.pathname)) return null;
+  if (location.pathname === '/') return null;
   const segments = location.pathname.split('/').filter(Boolean);
   return <nav aria-label="Page breadcrumbs" className="experience-breadcrumbs mx-auto max-w-7xl px-4 pt-5 text-sm sm:px-6 lg:pl-24">
     <ol className="flex min-w-0 flex-wrap items-center gap-2 text-muted-foreground">
