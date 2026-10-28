@@ -10,7 +10,7 @@ export function calculateCompatibility(review: ResumeReview, jd: string, origina
   const factor = (key: Factor['key'], label: string, pattern: RegExp): Factor => {
     const rows = valid.filter(r => pattern.test(`${r.requirement} ${r.jd_evidence}`));
     const assessed = rows.filter(r => r.assessment !== 'Unable to assess');
-    const points = assessed.map(r => !r.resume_evidence ? 0 : r.assessment === 'Clearly demonstrated' ? 1 : r.assessment === 'Partially demonstrated' ? 0.5 : 0);
+    const points: number[] = assessed.map(r => !r.resume_evidence ? 0 : r.assessment === 'Clearly demonstrated' ? 1 : r.assessment === 'Partially demonstrated' ? 0.5 : 0);
     return { key, label, weight: COMPATIBILITY_WEIGHTS[key], value: points.length ? points.reduce((a,b) => a+b,0)/points.length : null,
       rationale: points.length ? `${points.length} assessed requirements; clearly demonstrated = 1, partial = 0.5, missing evidence = 0. Requirements may contribute to more than one factor.` : 'No assessable requirements for this factor in the supplied job description.',
       evidence: assessed.map(r => `${r.jd_evidence} → ${r.resume_evidence || 'No resume evidence'}`) };
