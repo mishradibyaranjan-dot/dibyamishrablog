@@ -79,6 +79,7 @@
     "mammoth": "^1.13.0",
     "motion": "^12.40.0",
     "nanoid": "^5.1.11",
+    "pdf-lib": "^1.17.1",
     "pdfjs-dist": "^6.1.200",
     "pptxgenjs": "^4.0.1",
     "react": "^19.2.0",
