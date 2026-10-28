@@ -1,4 +1,6 @@
 # Roadmap
+- [ ] Monitoring: verify scheduled job-refresh memory failures and prepare bounded recovery changes; retain four refreshes and strict visibility.
+- [ ] Monitoring: repair PDF safety false rejections and verify normal initial-view PDFs plus active-content rejection.
 - [x] SEO corrections: brand icon and matching homepage share photo verified in preview; all seven reported heading paths already render one H1. All three findings marked fixed awaiting scanner verification; stale heading finding resolved after fresh seven-path browser/source checks. Rescan HTTP/lint pass; metadata/content confirmation pending. Not published.
 - [x] Future Experience 2.0 core preview: default for unsaved visitors; rebuilt header/home/projects/jobs/workspace/reports/auth/shared presentation; saved-theme rollback; 107 tests, eight-page Axe checks, real filters/private reads, five-width checks and before/after report. Not published.
 - [ ] V2 exhaustive every-page acceptance: remaining content/admin inner compositions retain existing structure; production performance, external workflows, cross-account and independent assistive-tech checks await authorized release/acceptance environment.
