@@ -13,5 +13,5 @@ export function DeferredAssistant() {
     return () => { window.clearTimeout(timer); window.removeEventListener('drm:open-assistant',open); };
   }, []);
   const launcher = <Button variant="outline" size="icon" aria-label="Open chat" onClick={() => {setRequested(true);setReady(true);}} className="fixed bottom-5 right-5 z-[60] h-14 w-14 rounded-full bg-card shadow-card-soft"><MessageCircle className="h-6 w-6"/></Button>;
-  return ready ? <Suspense fallback={launcher}><Assistant initiallyOpen={requested}/></Suspense> : launcher;
+  return ready ? <Suspense fallback={launcher}><Assistant initiallyOpen={requested} autoGreetDelay={500}/></Suspense> : launcher;
 }
