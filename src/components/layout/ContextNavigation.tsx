@@ -7,7 +7,7 @@ export function ContextNavigation() {
   const location = useRouterState({ select:s => s.location });
   if (location.pathname === '/') return null;
   const segments = location.pathname.split('/').filter(Boolean);
-  return <nav aria-label="Page breadcrumbs" className="experience-breadcrumbs mx-auto max-w-7xl px-4 pt-5 text-sm sm:px-6 lg:pl-24">
+  return <nav aria-label="Page breadcrumbs" className="experience-breadcrumbs mx-auto max-w-7xl px-4 pt-5 text-sm sm:px-6">
     <ol className="flex min-w-0 flex-wrap items-center gap-2 text-muted-foreground">
       <li><Link to="/" aria-label="Home"><Home className="h-4 w-4"/></Link></li>
       {segments.map((segment,i) => {

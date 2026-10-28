@@ -1884,3 +1884,7 @@ html[data-a11y-contrast="high"] :is(.studio-hero-mesh, .studio-hero-grid) { disp
   :is(.studio-spin, .studio-pulse, .studio-core-glow, .studio-chip, .studio-hero-mesh span, .studio-live-dot, .studio-marquee-track, .studio-hero-line) { animation: none !important; }
 }
 html[data-a11y-motion="reduce"] :is(.studio-spin, .studio-pulse, .studio-core-glow, .studio-chip, .studio-hero-mesh span, .studio-live-dot, .studio-marquee-track, .studio-hero-line) { animation: none !important; }
+html[data-experience="future"] .experience-announcement { margin-left: 0; }
+.studio-mega-tools { display: grid; grid-template-columns: repeat(2, minmax(0, max-content)); }
+.studio-mega-tools > * { justify-content: flex-start; }
+.studio-explore, .studio-explore:hover { color: var(--ink-foreground) !important; }
