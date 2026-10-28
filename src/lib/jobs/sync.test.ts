@@ -21,7 +21,7 @@ vi.mock('./verify.server',()=>({verifyApplication:vi.fn(async()=>({ok:true,statu
 import { runJobSync } from './sync.server';
 beforeEach(()=>{
  state.batches=[];state.closed=[];state.failedFeed=false;state.liveLease=false;state.recovered=0;
- vi.stubGlobal('fetch',vi.fn(async()=>new Response(state.failedFeed?'{"jobs":[{"id":"1"},':JSON.stringify({jobs:Array.from({length:121},(_,id)=>({id:String(id),title:'Engineer',location:'Bengaluru, India',publishedAt:new Date().toISOString(),jobUrl:`https://jobs.ashbyhq.com/test/${id}`,applyUrl:`https://jobs.ashbyhq.com/test/${id}`}))}))));
+ vi.stubGlobal('fetch',vi.fn(async()=>new Response(state.failedFeed?'{"jobs":[{"id":"1"},':JSON.stringify({jobs:Array.from({length:121},(_,id)=>({id:String(id),title:'Engineer',location:'Bengaluru, India',publishedAt:new Date(Date.now()-3600000).toISOString(),jobUrl:`https://jobs.ashbyhq.com/test/${id}`,applyUrl:`https://jobs.ashbyhq.com/test/${id}`}))}))));
 });
 describe('Isolated source refresh',()=>{
  it('writes at most fifty jobs per batch and finishes a complete source',async()=>{
