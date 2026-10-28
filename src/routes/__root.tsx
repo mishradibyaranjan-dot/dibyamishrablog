@@ -96,6 +96,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
 
     links: [
       { rel: "stylesheet", href: appCss },
+      { rel: "icon", type: "image/png", href: "/favicon.png" },
       // Dyslexia-friendly face, only fetched when a visitor picks that option's
       // family (the stylesheet is tiny and cached; the font itself is lazy).
       { rel: "preconnect", href: "https://fonts.googleapis.com" },

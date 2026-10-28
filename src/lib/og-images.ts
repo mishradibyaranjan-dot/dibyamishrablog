@@ -14,6 +14,7 @@ import learnOg from "@/assets/og/og-learn.png";
 import trustOg from "@/assets/og/og-trust.png";
 import whitePaperAgenticOg from "@/assets/og/og-white-paper-agentic-ai.png";
 import newsletterOg from "@/assets/og/og-newsletter.png";
+import homeEnterprise from "@/assets/og/home-enterprise.jpg.asset.json";
 
 export const SITE_ORIGIN = "https://www.dibyamishra.co.in";
 
@@ -30,6 +31,7 @@ export const postOgImages: Record<string, string> = {
 };
 
 export const pageOgImages = {
+  home: abs(homeEnterprise.url),
   projects: abs(projectsOg.url),
   caseStudies: abs(caseStudiesOg.url),
   research: abs(researchOg.url),

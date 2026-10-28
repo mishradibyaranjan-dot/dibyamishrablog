@@ -3,12 +3,12 @@ import { ArrowRight, ArrowUpRight, Bot, Cloud, BriefcaseBusiness, FileSearch, Gr
 import { Button } from '@/components/ui/button';
 import { Reveal } from '@/components/cinematic/Reveal';
 import { trackEvent } from '@/lib/analytics';
-import enterpriseImage from '@/assets/future-enterprise.jpg';
+import { pageOgImages } from '@/lib/og-images';
 
 export function FutureHomeHero() {
   return <>
     <section className="future-home-hero" aria-labelledby="future-home-title">
-      <img src={enterpriseImage} width={1920} height={1024} fetchPriority="high" loading="eager" decoding="async" alt="Glass cloud infrastructure connected to intelligent enterprise platforms" className="future-hero-image"/>
+      <img src={pageOgImages.home} width={1200} height={630} fetchPriority="high" loading="eager" decoding="async" alt="Glass cloud infrastructure connected to intelligent enterprise platforms" className="future-hero-image"/>
       <div className="future-hero-copy">
         <p className="future-kicker"><span/>Vice President &amp; Country Head · Crystal Tech Ventures</p>
         <h1 id="future-home-title">Dibya Ranjan<br/>Mishra<span className="hero-accent">Intelligence.<br/>Built for impact.</span></h1>
