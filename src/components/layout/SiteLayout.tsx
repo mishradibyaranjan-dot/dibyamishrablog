@@ -1,19 +1,14 @@
-import { Link, Outlet } from "@tanstack/react-router";
+import { Link, useRouterState } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { ExternalLink, Menu } from "lucide-react";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
-import { NAVIGATION_ITEMS } from '@/lib/navigation-items';
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { DeferredAssistant } from "@/components/chat/DeferredAssistant";
 import { ContextNavigation } from './ContextNavigation';
 import { Sheet, SheetContent, SheetTitle, SheetDescription, SheetTrigger, SheetClose } from '@/components/ui/sheet';
-import { useTheme } from '@/components/theme/ThemeProvider';
-import { isFutureTheme } from '@/components/theme/experience';
 import { FloatingConnectCta } from "@/components/marketing/FloatingConnectCta";
 import { SiteBanner } from "@/components/layout/SiteBanner";
-import { SideRail } from "@/components/layout/SideRail";
 import { AuroraBackground } from "@/components/cinematic/AuroraBackground";
 import { PageTransition } from "@/components/cinematic/PageTransition";
 import { ThemeProvider } from "@/components/theme/ThemeProvider";
@@ -217,12 +212,13 @@ function Header() {
             ))}
           </nav>
 
-          <div role="group" aria-label="Site controls" className="studio-tools studio-tools-desktop">
+          <div role="group" aria-label="Site controls" className="studio-tools">
             <GlobalSearch compact />
             <ReadAloudButton compact />
             <ThemeToggle compact />
             <LanguageToggle compact />
             <AccessibilityMenu compact />
+            <Link to="/jobs" className="studio-mobile-jobs">Jobs</Link>
           </div>
 
           <div className="studio-actions">
@@ -272,14 +268,6 @@ function Header() {
               <Link to="/contact">Let’s talk</Link>
             </Button>
           </div>
-        </div>
-        <div role="group" aria-label="Site controls" className="studio-tools studio-tools-mobile">
-          <GlobalSearch compact />
-          <ReadAloudButton compact />
-          <ThemeToggle compact />
-          <LanguageToggle compact />
-          <AccessibilityMenu compact />
-          <Link to="/jobs" className="studio-mobile-jobs">Jobs</Link>
         </div>
       </div>
     </header>
@@ -375,6 +363,12 @@ function Footer() {
 
 
 
+/** The home hero carries its own guided-tour link, so the announcement strip starts on inner pages. */
+function HomeAwareBanner() {
+  const pathname = useRouterState({ select: (s) => s.location.pathname });
+  return pathname === "/" ? null : <SiteBanner />;
+}
+
 function TrackerMount() {
   const { prefs } = useCookieConsent();
   useActivityTracker();
@@ -401,12 +395,11 @@ export function SiteLayout() {
               <div className="relative flex min-h-dvh flex-col">
                 <SkipToContent />
                 <Header />
-                <SideRail />
                 <div data-a11y-filter-surface className="relative flex flex-1 flex-col">
                   <AuroraBackground />
-                  <SiteBanner />
+                  <HomeAwareBanner />
                   <ContextNavigation />
-                  <main id="main-content" className="experience-main relative flex-1 lg:pl-20">
+                  <main id="main-content" className="experience-main studio-main relative flex-1">
                     <PageTransition />
                   </main>
                   <Footer />
