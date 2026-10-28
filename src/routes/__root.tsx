@@ -103,7 +103,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
       {
         rel: "stylesheet",
-        href: "https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&display=swap",
+        href: "https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Fraunces:ital,opsz,wght@0,9..144,300..700;1,9..144,300..700&display=swap",
       },
       // Fonts are self-hosted (see src/styles.css @font-face). Preload only the
       // two faces used above the fold so the hero heading paints immediately.
@@ -198,6 +198,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
  */
 const THEME_BOOTSTRAP = `(function(){try{
 var t=localStorage.getItem('drm-theme');
+if(localStorage.getItem('drm-design-version')!=='3'){if(t){localStorage.removeItem('drm-theme');localStorage.setItem('drm-design-version','3');}t=null;}
 var all=['future-v2','original','future','future-light','future-dark','comfort','system','glacier','cinematic','midnight','aurora','sunset','noir','emerald','light','paper','sand','arctic'];
 if(all.indexOf(t)<0)t='future-v2';
 var future=['future-v2','future','future-light','future-dark','comfort','system'];

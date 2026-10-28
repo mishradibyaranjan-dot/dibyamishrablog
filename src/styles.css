@@ -86,7 +86,14 @@
   --color-special-soft: var(--special-soft);
   --color-special-border: var(--special-border);
 
-  --font-display: "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Fraunces", "Space Grotesk", ui-serif, Georgia, serif;
+  --color-ink: var(--ink);
+  --color-ink-2: var(--ink-2);
+  --color-ink-foreground: var(--ink-foreground);
+  --color-ink-muted: var(--ink-muted);
+  --color-signal: var(--signal);
+  --color-signal-foreground: var(--signal-foreground);
+  --color-ember: var(--ember);
   --font-sans: "DM Sans", ui-sans-serif, system-ui, sans-serif;
 }
 
