@@ -27,6 +27,8 @@ export const Route = createFileRoute("/expertise")({
       { property: "og:title", content: TITLE },
       { property: "og:description", content: DESCRIPTION },
       { property: "og:url", content: "https://www.dibyamishra.co.in/expertise" },
+      { property: 'og:type', content: 'website' },
+      { name: 'twitter:card', content: 'summary' },
     ],
     links: [{ rel: "canonical", href: "https://www.dibyamishra.co.in/expertise" }],
     scripts: [breadcrumbScript([{ name: "Expertise", path: "/expertise" }])],

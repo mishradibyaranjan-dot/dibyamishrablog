@@ -138,15 +138,15 @@ function Projects() {
                 <h2 className="mt-3 text-xl font-bold">{p.name}</h2>
                 <div className="mt-4 space-y-3 text-sm">
                   <div>
-                    <div className="text-xs font-semibold uppercase tracking-wider text-gradient">Problem</div>
+                    <div className="text-xs font-semibold uppercase text-primary">Problem</div>
                     <p className="mt-1 text-muted-foreground">{p.problem}</p>
                   </div>
                   <div>
-                    <div className="text-xs font-semibold uppercase tracking-wider text-gradient">Solution</div>
+                    <div className="text-xs font-semibold uppercase text-primary">Solution</div>
                     <p className="mt-1 text-muted-foreground">{p.solution}</p>
                   </div>
                   <div>
-                    <div className="text-xs font-semibold uppercase tracking-wider text-gradient">Impact</div>
+                    <div className="text-xs font-semibold uppercase text-primary">Impact</div>
                     <p className="mt-1 text-muted-foreground">{p.impact}</p>
                   </div>
                 </div>
