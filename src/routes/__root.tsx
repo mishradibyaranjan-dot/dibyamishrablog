@@ -197,11 +197,14 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
  */
 const THEME_BOOTSTRAP = `(function(){try{
 var t=localStorage.getItem('drm-theme');
-var all=['glacier','cinematic','midnight','aurora','sunset','noir','emerald','light','paper','sand','arctic'];
+var all=['original','future','future-light','future-dark','comfort','system','glacier','cinematic','midnight','aurora','sunset','noir','emerald','light','paper','sand','arctic'];
 if(all.indexOf(t)<0)t='glacier';
-var light=['glacier','light','paper','sand','arctic'];
+var future=['future','future-light','future-dark','comfort','system'];
+var r=document.documentElement;r.dataset.experience=future.indexOf(t)>=0?'future':'original';
+if(t==='system')t=matchMedia('(prefers-color-scheme: dark)').matches?'future-dark':'future-light';
+var light=['original','future','future-light','comfort','glacier','light','paper','sand','arctic'];
 var m=light.indexOf(t)>=0?'light':'dark';
-var r=document.documentElement;
+try{r.dataset.density=localStorage.getItem('drm-density')==='compact'?'compact':'comfortable'}catch(e){}
 r.dataset.theme=t;r.classList.toggle('dark',m==='dark');r.style.colorScheme=m;
 var c=JSON.parse(localStorage.getItem('drm-custom-brand-colors')||'null');
 if(c&&/^#[0-9a-f]{6}$/i.test(c.primary)&&/^#[0-9a-f]{6}$/i.test(c.accent)){

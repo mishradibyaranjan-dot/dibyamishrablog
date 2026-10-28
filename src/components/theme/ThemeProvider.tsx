@@ -1,7 +1,9 @@
 import { createContext, useCallback, useContext, useEffect, useRef, useState, type ReactNode } from "react";
 import { supabase } from "@/integrations/supabase/client";
+import { FUTURE_THEMES, readDensity, resolveAppearance, type Density } from './experience';
 
 export const THEMES = [
+  ...FUTURE_THEMES,
   {
     id: "glacier",
     label: "Light Blue Glassmorphic Future",
@@ -34,6 +36,8 @@ export function themeMode(theme: ThemeId): ThemeMode {
 }
 
 type Ctx = {
+  density: Density;
+  setDensity: (density: Density) => void;
   theme: ThemeId;
   setTheme: (t: ThemeId) => void;
   customColors: CustomBrandColors | null;
@@ -41,6 +45,8 @@ type Ctx = {
   resetCustomColors: () => void;
 };
 const ThemeContext = createContext<Ctx>({
+  density: 'comfortable',
+  setDensity: () => {},
   theme: DEFAULT_THEME,
   setTheme: () => {},
   customColors: null,
@@ -68,6 +74,7 @@ function readCustomColors(): CustomBrandColors | null {
 }
 
 export function ThemeProvider({ children }: { children: ReactNode }) {
+  const [density, setDensityState] = useState<Density>('comfortable');
   const [theme, setThemeState] = useState<ThemeId>(DEFAULT_THEME);
   const [customColors, setCustomColorsState] = useState<CustomBrandColors | null>(null);
   const userIdRef = useRef<string | null>(null);
@@ -81,6 +88,7 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     const storedColors = readCustomColors();
     setCustomColorsState(storedColors);
     applyCustomColors(storedColors);
+    try { const d = readDensity(localStorage.getItem('drm-density')); setDensityState(d); document.documentElement.dataset.density = d; } catch { /* session defaults */ }
   }, []);
 
   // Cross-device restore + sync: signed-in users carry their theme in their profile.
@@ -97,7 +105,8 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
         .maybeSingle();
       if (!active) return;
       const remote = data?.theme_preference;
-      if (isThemeId(remote)) {
+      const local = window.localStorage.getItem(STORAGE_KEY);
+      if (isThemeId(remote) && !FUTURE_THEMES.some(t => t.id === local)) {
         setThemeState(remote);
         applyTheme(remote, true);
         try {
@@ -119,6 +128,13 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     };
   }, []);
 
+  useEffect(() => {
+    const media = window.matchMedia('(prefers-color-scheme: dark)');
+    const update = () => { if (theme === 'system') applyTheme(theme, false); };
+    media.addEventListener('change', update);
+    return () => media.removeEventListener('change', update);
+  }, [theme]);
+
   // Cross-tab sync in the same browser.
   useEffect(() => {
     const onStorage = (e: StorageEvent) => {
@@ -139,9 +155,14 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
       /* ignore */
     }
     const userId = userIdRef.current;
-    if (userId) {
+    if (userId && !FUTURE_THEMES.some(t => t.id === next)) {
       void supabase.from("profiles").update({ theme_preference: next }).eq("id", userId);
     }
+  }, []);
+
+  const setDensity = useCallback((next: Density) => {
+    setDensityState(next); document.documentElement.dataset.density = next;
+    try { localStorage.setItem('drm-density', next); } catch { /* session preference */ }
   }, []);
 
   const setCustomColors = useCallback((colors: CustomBrandColors) => {
@@ -167,7 +188,7 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
   }, []);
 
   return (
-    <ThemeContext.Provider value={{ theme, setTheme, customColors, setCustomColors, resetCustomColors }}>
+    <ThemeContext.Provider value={{ theme, setTheme, density, setDensity, customColors, setCustomColors, resetCustomColors }}>
       {children}
     </ThemeContext.Provider>
   );
@@ -208,8 +229,10 @@ function applyTheme(theme: ThemeId, enableTransition: boolean) {
     root.classList.add("theme-transition");
   }
 
-  const mode = themeMode(theme);
-  root.dataset.theme = theme;
+  const appearance = resolveAppearance(theme, window.matchMedia('(prefers-color-scheme: dark)').matches);
+  const mode = themeMode(appearance.theme as ThemeId);
+  root.dataset.theme = appearance.theme;
+  root.dataset.experience = appearance.future ? 'future' : 'original';
   root.classList.toggle("dark", mode === "dark");
   root.style.colorScheme = mode;
 

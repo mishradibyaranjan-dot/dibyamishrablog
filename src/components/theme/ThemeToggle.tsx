@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
-import { Check, Moon, Palette, RotateCcw, Sun } from "lucide-react";
+import { Check, Moon, Palette, RotateCcw, Sun, List, LayoutList } from "lucide-react";
+import { FUTURE_THEMES } from './experience';
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -31,14 +32,21 @@ function Swatches({ colors }: { colors: readonly string[] }) {
 }
 
 export function ThemeToggle({ compact = false }: { compact?: boolean }) {
-  const { theme, setTheme, customColors, setCustomColors, resetCustomColors } = useTheme();
+  const { theme, setTheme, density, setDensity, customColors, setCustomColors, resetCustomColors } = useTheme();
   const [primary, setPrimary] = useState(customColors?.primary ?? DEFAULT_CUSTOM_COLORS.primary);
   const [accent, setAccent] = useState(customColors?.accent ?? DEFAULT_CUSTOM_COLORS.accent);
-  const isDark = themeMode(theme) === "dark";
+  const [systemDark, setSystemDark] = useState(false);
+  useEffect(() => {
+    const media = window.matchMedia('(prefers-color-scheme: dark)');
+    const update = () => setSystemDark(media.matches); update();
+    media.addEventListener('change', update);
+    return () => media.removeEventListener('change', update);
+  }, []);
+  const isDark = theme === 'system' ? systemDark : themeMode(theme) === "dark";
   const quickNext = isDark ? LIGHT_THEME : DARK_THEME;
 
-  const dark = THEMES.filter((t) => t.mode === "dark");
-  const light = THEMES.filter((t) => t.mode === "light");
+  const dark = THEMES.filter((t) => t.mode === "dark" && !FUTURE_THEMES.some(f => f.id === t.id));
+  const light = THEMES.filter((t) => t.mode === "light" && !FUTURE_THEMES.some(f => f.id === t.id));
 
   useEffect(() => {
     setPrimary(customColors?.primary ?? DEFAULT_CUSTOM_COLORS.primary);
@@ -110,11 +118,18 @@ export function ThemeToggle({ compact = false }: { compact?: boolean }) {
             <span className={cn("text-xs font-medium", compact && "sr-only")}>Themes</span>
           </Button>
         </DropdownMenuTrigger>
-         <DropdownMenuContent align="end" className="z-[120] w-[min(19rem,calc(100vw-1rem))]">
+         <DropdownMenuContent align="end" className="z-[120] max-h-[min(44rem,80dvh)] overflow-y-auto w-[min(19rem,calc(100vw-1rem))]">
+          {group("Experience", FUTURE_THEMES)}
+          <DropdownMenuSeparator />
           {group("Dark themes", dark)}
           <DropdownMenuSeparator />
           {group("Light themes", light)}
            <DropdownMenuSeparator />
+           <DropdownMenuLabel>Density</DropdownMenuLabel>
+           <div role="group" aria-label="Reading density" className="flex gap-2 px-2 pb-3">
+             <Button variant={density === 'comfortable' ? 'secondary' : 'ghost'} size="sm" aria-pressed={density === 'comfortable'} onClick={() => setDensity('comfortable')}><LayoutList className="mr-1 h-4 w-4"/>Comfortable</Button>
+             <Button variant={density === 'compact' ? 'secondary' : 'ghost'} size="sm" aria-pressed={density === 'compact'} onClick={() => setDensity('compact')}><List className="mr-1 h-4 w-4"/>Compact</Button>
+           </div>
            <DropdownMenuLabel className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
              Custom brand colours
            </DropdownMenuLabel>

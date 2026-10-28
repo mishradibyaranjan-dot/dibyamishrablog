@@ -9,7 +9,7 @@ export function AuroraBackground({ className }: { className?: string }) {
     <div
       aria-hidden
       className={cn(
-        "pointer-events-none fixed inset-0 -z-10 overflow-hidden bg-background",
+        "legacy-ambient pointer-events-none fixed inset-0 -z-10 overflow-hidden bg-background",
         className,
       )}
     >

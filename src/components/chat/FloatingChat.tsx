@@ -1,7 +1,9 @@
 import { useEffect, useRef, useState } from "react";
 import { X, Trash2 } from "lucide-react";
 import mascot from "@/assets/assistant-mascot.png";
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
+import { useTheme } from '@/components/theme/ThemeProvider';
+import { isFutureTheme } from '@/components/theme/experience';
 import { useChat } from "@ai-sdk/react";
 import { DefaultChatTransport, type UIMessage } from "ai";
 import {
@@ -43,8 +45,12 @@ function loadInitialMessages(): UIMessage[] {
   }
 }
 
-export function FloatingChat() {
-  const [open, setOpen] = useState(false);
+export function FloatingChat({ initiallyOpen = false, autoGreetDelay = 6000 }: { initiallyOpen?: boolean; autoGreetDelay?: number }) {
+  const [open, setOpen] = useState(initiallyOpen);
+  const launcherRef = useRef<HTMLButtonElement>(null);
+  const { theme } = useTheme();
+  const reduceMotion = useReducedMotion();
+  const animateMascot = !reduceMotion && !isFutureTheme(theme);
   const [initialMessages] = useState<UIMessage[]>([]);
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
   const { user } = useAuth();
@@ -123,14 +129,21 @@ export function FloatingChat() {
           // ignore
         }
         setOpen(true);
-      }, 6000);
+      }, autoGreetDelay);
     }
 
     return () => {
       window.removeEventListener("drm:open-assistant", openIt as EventListener);
       if (timer) window.clearTimeout(timer);
     };
-  }, []);
+  }, [autoGreetDelay]);
+
+  useEffect(() => {
+    if (!open) return;
+    const close = (event: KeyboardEvent) => { if (event.key === 'Escape') {setOpen(false);launcherRef.current?.focus();} };
+    window.addEventListener('keydown', close);
+    return () => window.removeEventListener('keydown', close);
+  }, [open]);
 
   // Focus textarea when opening + seed a friendly greeting on first open
   useEffect(() => {
@@ -181,13 +194,13 @@ export function FloatingChat() {
   return (
     <>
       {/* Launcher */}
-      <button
+      <Button variant="outline" size="icon" ref={launcherRef}
         type="button"
         onClick={() => setOpen((o) => !o)}
         aria-label={open ? "Close chat" : "Open chat"}
         className={cn(
           "group fixed bottom-5 right-5 z-[60] flex h-14 w-14 items-center justify-center rounded-full",
-          "border border-border bg-card text-primary shadow-[0_12px_30px_-10px_rgba(59,130,246,0.55)] transition-all",
+          "border border-border bg-card text-primary shadow-card-soft transition-all",
           "hover:scale-105 hover:border-border hover:text-primary active:scale-95",
         )}
       >
@@ -196,15 +209,15 @@ export function FloatingChat() {
         ) : (
           <motion.span
             aria-hidden
-            animate={{ y: [0, -5, 0], rotate: [-6, 6, -6] }}
+            animate={animateMascot ? { y: [0, -5, 0], rotate: [-6, 6, -6] } : { y:0,rotate:0 }}
             transition={{ duration: 2.6, repeat: Infinity, ease: "easeInOut" }}
             className="relative inline-flex"
           >
-            <img src={mascot} alt="" width={44} height={44} className="h-11 w-11 drop-shadow-[0_6px_10px_rgba(59,130,246,0.35)]" />
+            <img src={mascot} alt="" width={44} height={44} className="h-11 w-11" />
             <span className="absolute -bottom-1 left-1/2 h-1.5 w-6 -translate-x-1/2 rounded-full bg-primary/60 blur-md" />
           </motion.span>
         )}
-      </button>
+      </Button>
 
       {/* Panel */}
       {open && (
@@ -220,7 +233,7 @@ export function FloatingChat() {
             <div className="flex items-center gap-2">
               <motion.span
                 aria-hidden
-                animate={{ y: [0, -3, 0] }}
+                animate={animateMascot ? { y: [0, -3, 0] } : { y:0 }}
                 transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
                 className="inline-flex"
               >
