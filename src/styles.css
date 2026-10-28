@@ -1827,7 +1827,7 @@ html[data-experience="future"] .experience-main.studio-main { padding-left: 0; }
 
 /* Portfolio links + marquee */
 .studio-profile-links { margin-inline: auto; display: flex; max-width: 1360px; flex-wrap: wrap; gap: 6px 22px; padding: 0 20px 26px; font-size: 13px; }
-.studio-profile-links a { display: inline-flex; align-items: center; gap: 4px; color: var(--ink-muted); transition: color 160ms ease; }
+.studio-hero .studio-profile-links a { display: inline-flex; align-items: center; gap: 4px; color: var(--ink-muted); transition: color 160ms ease; }
 .studio-profile-links a:hover { color: var(--signal); }
 .studio-marquee { overflow: hidden; border-top: 1px solid var(--ink-border); padding: 18px 0; mask-image: linear-gradient(90deg, transparent, black 8%, black 92%, transparent); }
 .studio-marquee-track { display: flex; width: max-content; gap: 0; animation: studio-marquee 40s linear infinite; }
