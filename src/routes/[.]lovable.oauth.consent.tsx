@@ -22,6 +22,11 @@ export const Route = createFileRoute("/.lovable/oauth/consent")({
     meta: [
       { title: "Authorize app — Dibya Ranjan Mishra" },
       { name: "robots", content: "noindex" },
+      { name: 'description', content: 'Review an app connection request for your Dibya Mishra account.' },
+      { property: 'og:title', content: 'Authorize App — Dibya Ranjan Mishra' },
+      { property: 'og:description', content: 'Review an app connection request for your account.' },
+      { property: 'og:type', content: 'website' },
+      { name: 'twitter:card', content: 'summary' },
     ],
   }),
   validateSearch: (s: Record<string, unknown>) => ({
