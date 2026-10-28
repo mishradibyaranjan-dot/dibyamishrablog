@@ -11,7 +11,7 @@ export function Section({
   id?: string;
 }) {
   return (
-    <section id={id} className={cn("mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:py-24", className)}>
+    <section id={id} className={cn("page-section mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:py-24", className)}>
       {children}
     </section>
   );
@@ -32,7 +32,7 @@ export function SectionHeader({
 }) {
   const Heading = as;
   return (
-    <div className={cn("mb-10 max-w-3xl", align === "center" && "mx-auto text-center")}>
+    <div className={cn("page-heading mb-10 max-w-3xl", align === "center" && "mx-auto text-center")}>
       {eyebrow && (
         <div className="mb-3 inline-flex items-center gap-2 rounded-full border border-border bg-accent/50 px-3 py-1 text-xs font-medium text-muted-foreground">
           <span className="h-1.5 w-1.5 rounded-full bg-brand-gradient" />

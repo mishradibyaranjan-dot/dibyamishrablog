@@ -1,6 +1,6 @@
 import { createContext, useCallback, useContext, useEffect, useRef, useState, type ReactNode } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { FUTURE_THEMES, readDensity, resolveAppearance, type Density } from './experience';
+import { DEFAULT_EXPERIENCE, FUTURE_THEMES, readDensity, resolveAppearance, type Density } from './experience';
 
 export const THEMES = [
   ...FUTURE_THEMES,
@@ -28,7 +28,7 @@ export type CustomBrandColors = { primary: string; accent: string };
 
 const STORAGE_KEY = "drm-theme";
 const CUSTOM_COLORS_KEY = "drm-custom-brand-colors";
-const DEFAULT_THEME: ThemeId = "glacier";
+const DEFAULT_THEME: ThemeId = DEFAULT_EXPERIENCE;
 export const DEFAULT_CUSTOM_COLORS: CustomBrandColors = { primary: "#1267D6", accent: "#16A394" };
 
 export function themeMode(theme: ThemeId): ThemeMode {

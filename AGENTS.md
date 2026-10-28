@@ -22,6 +22,6 @@
 - Career compatibility arithmetic stays in a pure evidence-validating module with transparent factor exclusions and limitations; this keeps estimates reproducible without changing factual recommendations or implying employer ATS validation.
 - My Career aggregates owner-policy reads through one authenticated server function; approved document history links back to a fresh authorization check rather than reusable original-file URLs.
 - Public job source reads have column-level grants only for registry display fields; configuration, lock tokens and operational errors stay service-only to prevent metadata exposure.
-- Future Experience is an additive CSS-token rollout keyed by the existing theme selection; old theme IDs/defaults and backend contracts remain unchanged, while new appearance/density choices stay local to avoid schema changes.
+- Future Experience 2.0 renders redesigned frontend layouts keyed by the theme selection, defaulting only unsaved visitors to the new experience; legacy themes/layout rollback and all backend contracts remain unchanged so visual changes cannot alter business behavior.
 - Deferred assistant loading retains the existing transport, account-scoped persistence and first-session greeting; the lightweight launcher is available immediately so optional chat code does not block first paint.
 - Shared contextual navigation uses only existing public destinations and never links guessed or role-restricted parents; this preserves bookmarked routes and authorization boundaries.
