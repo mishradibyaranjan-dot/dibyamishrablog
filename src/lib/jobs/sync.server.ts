@@ -5,6 +5,7 @@ import {
   classifyArrangement, checkApplyUrl, dedupeKey, slugify,
 } from "./rules";
 import { readFeed } from "./feed-stream";
+import type { Database } from '@/integrations/supabase/types';
 import { retryDelayMinutes } from "./scheduling";
 import { verifyApplication } from "./verify.server";
 import { safeSnapshot, canonicalApplication } from "./verification";
@@ -156,7 +157,7 @@ export async function runJobSync(opts: { sourceSlug?: string; force?: boolean } 
       if (!safeSnapshot(existing?.length ?? 0, items.length)) throw new Error("Incomplete source snapshot: closure processing deferred");
       const previous = new Map((existing ?? []).map((j) => [j.source_job_id, j]));
       const seen = new Set<string>();
-      const rows = [];
+      const rows: Database['public']['Tables']['jobs']['Insert'][] = [];
       const evidenceRows: { source_job_id: string; status: string; http_status: number | null; final_url: string; evidence: string }[] = [];
       const flush = async () => {
         if (!rows.length) return;

@@ -12,6 +12,7 @@
 - Custom brand colours override only semantic brand tokens, persist locally, and always calculate a readable primary-button foreground.- Keep verified resume facts (roles, achievements, certifications) in `src/lib/profile.ts` and render portfolio pages from it, so no page invents or diverges on figures.
 - Jobs platform: public job visibility (verified, open, primary, posted within 7 days, recently checked) is enforced by the `jobs` table's database policy, not only by the sync worker, so expired jobs vanish even if cron stalls.
 - Job sources are adapters keyed by provider; official feeds only, durable source locks enforce polling/backoff, and a database trigger preserves original publication times to prevent refreshes from renewing expired jobs.
+- Scheduled and bulk manual refreshes dispatch authenticated single-source requests through the existing database HTTP queue; streaming feed limits fail before closure, writes are batched, and database-side deduplication avoids worker-wide allocation.
 - Jobs personal saves/searches use owner-scoped policies and the same public freshness policy for matches; in-app alerts do not imply email delivery.
 - Jobs admin RPCs require both the protected admin role and authenticated aal2; the authenticator UI is not the security boundary.
 - AI job classification uses server-only streaming Responses calls, verbatim employer evidence, cached outputs and durable pause state; factual job fields are never rewritten by AI.
