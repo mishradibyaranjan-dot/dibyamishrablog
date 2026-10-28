@@ -5,6 +5,7 @@ export async function validatePdfStructure(bytes: Uint8Array) {
   let document: PDFDocument;
   try {
     document = await PDFDocument.load(bytes, { updateMetadata: false, throwOnInvalidObject: true });
+    if (document.getPageCount() === 0) throw new Error('Missing PDF pages');
   } catch {
     throw new Error('The PDF is corrupt, encrypted or unreadable.');
   }
