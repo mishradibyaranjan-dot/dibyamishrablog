@@ -1877,4 +1877,4 @@ html[data-a11y-contrast="high"] :is(.studio-hero-mesh, .studio-hero-grid) { disp
 @media (prefers-reduced-motion: reduce) {
   :is(.studio-spin, .studio-pulse, .studio-core-glow, .studio-chip, .studio-hero-mesh span, .studio-live-dot, .studio-marquee-track, .studio-hero-line) { animation: none !important; }
 }
-html[data-a11y-motion="reduced"] :is(.studio-spin, .studio-pulse, .studio-core-glow, .studio-chip, .studio-hero-mesh span, .studio-live-dot, .studio-marquee-track, .studio-hero-line) { animation: none !important; }
+html[data-a11y-motion="reduce"] :is(.studio-spin, .studio-pulse, .studio-core-glow, .studio-chip, .studio-hero-mesh span, .studio-live-dot, .studio-marquee-track, .studio-hero-line) { animation: none !important; }
