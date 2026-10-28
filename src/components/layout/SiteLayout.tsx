@@ -1,6 +1,8 @@
 import { Link, Outlet } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { ExternalLink } from "lucide-react";
+import { ExternalLink, Menu } from "lucide-react";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
+import { NAVIGATION_ITEMS } from '@/lib/navigation-items';
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -180,6 +182,12 @@ function Header() {
           <span className="truncate text-foreground">Dibya Ranjan Mishra</span>
         </Link>
         <div className="order-2 flex shrink-0 items-center gap-2 lg:order-3">
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild><Button variant="ghost" size="icon" aria-label="Open site navigation"><Menu className="h-5 w-5"/></Button></DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="max-h-[70dvh] w-56 overflow-y-auto">
+              {NAVIGATION_ITEMS.map(item => <DropdownMenuItem key={item.to} asChild><Link to={item.to} activeProps={{'aria-current':'page',className:'bg-accent font-semibold'}}>{item.title}</Link></DropdownMenuItem>)}
+            </DropdownMenuContent>
+          </DropdownMenu>
           <Link
             to="/jobs"
             className="rounded-full border border-border bg-card/70 px-3.5 py-1.5 text-sm font-medium text-foreground transition-colors hover:border-primary/50 hover:text-primary"
