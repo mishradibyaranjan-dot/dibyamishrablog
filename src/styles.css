@@ -1581,3 +1581,15 @@ html[data-experience="future"] .future-hero-copy h1 .hero-accent { letter-spacin
  .future-home-hero::before { background: color-mix(in oklab, var(--hero-ink) 85%, transparent); }
  html[data-experience="future"] .experience-announcement > div:last-child { gap: 8px; }
 }
+@media (max-width: 767px) {
+ html[data-experience="future"] .experience-announcement .announcement-preview { flex-basis: 55%; }
+ html[data-experience="future"] .experience-announcement .announcement-preview > a { display: none; }
+ html[data-experience="future"] .experience-announcement .announcement-preview p { white-space: normal; font-size: 11px; }
+ .future-hero-copy { padding-top: 30px; padding-bottom: 58px; }
+ .future-home-hero h1 { font-size: 40px; margin-top: 18px; }
+ .hero-accent { font-size: 26px; margin-top: 14px; }
+ .future-hero-description { margin-block: 18px; }
+ .future-profile-links { margin-top: 20px; gap: 10px 14px; font-size: 11px; }
+ .future-home-hero { min-height: 590px; }
+ .projects-hero { min-height: 390px; }
+}

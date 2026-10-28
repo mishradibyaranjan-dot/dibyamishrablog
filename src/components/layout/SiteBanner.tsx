@@ -141,7 +141,7 @@ export function SiteBanner() {
             </span>
 
             {/* Highlighted headline with the silent video preview beside it */}
-            <div className="flex min-w-0 flex-1 items-center gap-3">
+            <div className="announcement-preview flex min-w-0 flex-1 items-center gap-3">
               <BannerVideo />
               <div className="min-w-0 flex-1 overflow-hidden">
                 <AnimatePresence mode="wait">
