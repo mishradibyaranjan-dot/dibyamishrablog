@@ -2282,6 +2282,11 @@ export type Database = {
         Args: { _ip: string; _minutes?: number }
         Returns: number
       }
+      dedupe_job_refresh: { Args: never; Returns: undefined }
+      dispatch_job_refresh: {
+        Args: { p_force?: boolean; p_secret: string; p_url: string }
+        Returns: Json
+      }
       drain_interview_queue: { Args: never; Returns: undefined }
       is_blocked_email: { Args: { _email: string }; Returns: boolean }
       is_disposable_email: { Args: { _email: string }; Returns: boolean }
@@ -2291,6 +2296,10 @@ export type Database = {
       purge_career_text: { Args: { p_user: string }; Returns: undefined }
       purge_expired_ip_blocks: { Args: never; Returns: number }
       purge_visitor_tracking_audit: { Args: never; Returns: number }
+      recover_job_source_runs: {
+        Args: { p_source: string }
+        Returns: undefined
+      }
       reserve_career_usage: { Args: { p_user: string }; Returns: string }
       reserve_interview_usage: {
         Args: { p_operation: string; p_session: string; p_user: string }

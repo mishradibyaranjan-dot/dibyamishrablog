@@ -1,5 +1,6 @@
 # Roadmap
-- [ ] Monitoring: refresh memory-risk code confirmed against supplied production errors; recovery needs approved source-isolation plan before changing refresh/closure orchestration.
+- [x] Monitoring: isolated authenticated source dispatch, bounded streaming feeds and batched writes, database dedupe and interrupted-lease recovery implemented; 57 targeted tests passed. Real OpenAI refresh fetched 808/accepted 76/closed 3 with released lease; 76 jobs read back publicly. Preview build OK.
+- [ ] Monitoring production acceptance: database HTTP fan-out and scheduled memory recovery require authorized publication and an observed complete scheduled run; nothing published.
 - [x] Monitoring: parsed PDF safety replaces raw-byte checks; local destinations and compressed content accepted, active actions/attachments rejected; 13 tests and real upload/extraction passed, build OK. Not published.
 - [x] SEO corrections: brand icon and matching homepage share photo verified in preview; all seven reported heading paths already render one H1. All three findings marked fixed awaiting scanner verification; stale heading finding resolved after fresh seven-path browser/source checks. Rescan HTTP/lint pass; metadata/content confirmation pending. Not published.
 - [x] Future Experience 2.0 core preview: default for unsaved visitors; rebuilt header/home/projects/jobs/workspace/reports/auth/shared presentation; saved-theme rollback; 107 tests, eight-page Axe checks, real filters/private reads, five-width checks and before/after report. Not published.

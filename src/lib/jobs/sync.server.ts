@@ -4,6 +4,8 @@ import {
   parsePostedAt, isFresh, expiresAt, classifyLevel, classifyCategories,
   classifyArrangement, checkApplyUrl, dedupeKey, slugify,
 } from "./rules";
+import { readFeed } from "./feed-stream";
+import type { Database } from '@/integrations/supabase/types';
 import { retryDelayMinutes } from "./scheduling";
 import { verifyApplication } from "./verify.server";
 import { safeSnapshot, canonicalApplication } from "./verification";
@@ -35,17 +37,13 @@ function stripHtml(s: string | null | undefined): string | null {
   return t ? t.slice(0, 600) : null;
 }
 
-async function getJson(url: string): Promise<unknown> {
-  const res = await fetch(url, { headers: UA, signal: AbortSignal.timeout(20_000) });
-  if (res.status === 429) throw new Error("rate_limited");
-  if (!res.ok) throw new Error(`HTTP ${res.status}`);
-  return res.json();
+async function getFeed(url: string, path: string, normalize: (j: any) => NormalizedJob | null) {
+  return readFeed(await fetch(url, { headers: UA, signal: AbortSignal.timeout(20_000) }), path, normalize);
 }
 
 const adapters: Record<string, (s: Source) => Promise<NormalizedJob[]>> = {
   async greenhouse(s) {
-    const d = (await getJson(`https://boards-api.greenhouse.io/v1/boards/${s.board_token}/jobs`)) as { jobs: any[] };
-    return d.jobs.map((j) => ({
+    return getFeed(`https://boards-api.greenhouse.io/v1/boards/${s.board_token}/jobs`, "$.jobs.*", (j) => ({
       source_job_id: String(j.id), title: j.title, company: s.name, location: j.location?.name ?? null,
       department: null, employment_type: null, is_remote: null,
       posted_raw: j.first_published ?? null, // original publication, never updated_at
@@ -54,8 +52,7 @@ const adapters: Record<string, (s: Source) => Promise<NormalizedJob[]>> = {
     }));
   },
   async lever(s) {
-    const d = (await getJson(`https://api.lever.co/v0/postings/${s.board_token}?mode=json`)) as any[];
-    return d.map((j) => ({
+    return getFeed(`https://api.lever.co/v0/postings/${s.board_token}?mode=json`, "$.*", (j) => ({
       source_job_id: j.id, title: j.text, company: s.name, location: j.categories?.location ?? null,
       department: j.categories?.team ?? null, employment_type: j.categories?.commitment ?? null,
       is_remote: j.workplaceType === "remote" ? true : null, posted_raw: j.createdAt ?? null,
@@ -64,8 +61,7 @@ const adapters: Record<string, (s: Source) => Promise<NormalizedJob[]>> = {
     }));
   },
   async ashby(s) {
-    const d = (await getJson(`https://api.ashbyhq.com/posting-api/job-board/${s.board_token}`)) as { jobs: any[] };
-    return d.jobs.filter((j) => j.isListed !== false).map((j) => ({
+    return getFeed(`https://api.ashbyhq.com/posting-api/job-board/${s.board_token}`, "$.jobs.*", (j) => j.isListed === false ? null : ({
       source_job_id: j.id, title: String(j.title).trim(), company: s.name, location: j.location ?? null,
       department: j.department ?? null, employment_type: j.employmentType ?? null,
       is_remote: j.isRemote ?? null, posted_raw: j.publishedAt ?? null,
@@ -74,8 +70,7 @@ const adapters: Record<string, (s: Source) => Promise<NormalizedJob[]>> = {
     }));
   },
   async remoteok() {
-    const d = (await getJson("https://remoteok.com/api")) as any[];
-    return d.filter((j) => j && j.id && j.position).map((j) => ({
+    return getFeed("https://remoteok.com/api", "$.*", (j) => !j?.id || !j.position ? null : ({
       source_job_id: String(j.id), title: j.position, company: j.company, location: j.location || "Worldwide (remote)",
       department: (j.tags ?? []).join(" "), employment_type: null, is_remote: true, posted_raw: j.date ?? j.epoch ?? null,
       source_url: j.url, apply_url: j.apply_url || j.url, summary: stripHtml(j.description),
@@ -89,18 +84,17 @@ const adapters: Record<string, (s: Source) => Promise<NormalizedJob[]>> = {
     const country = s.board_token || "in";
     const out: NormalizedJob[] = [];
     for (let page = 1; page <= 4; page++) {
-      const d = (await getJson(`https://api.adzuna.com/v1/api/jobs/${country}/search/${page}?app_id=${encodeURIComponent(id)}&app_key=${encodeURIComponent(key)}&results_per_page=50&max_days_old=7&sort_by=date&content-type=application/json`)) as { results?: any[] };
-      const r = d.results ?? [];
-      for (const j of r) {
-        if (!j?.id || !j.redirect_url || !j.created) continue;
-        out.push({
+      const r = await getFeed(`https://api.adzuna.com/v1/api/jobs/${country}/search/${page}?app_id=${encodeURIComponent(id)}&app_key=${encodeURIComponent(key)}&results_per_page=50&max_days_old=7&sort_by=date&content-type=application/json`, "$.results.*", (j) => {
+        if (!j?.id || !j.redirect_url || !j.created) return null;
+        return {
           source_job_id: String(j.id), title: String(j.title ?? "").replace(/<[^>]+>/g, "").trim(), company: j.company?.display_name ?? "Employer via Adzuna",
           location: j.location?.display_name ? `${j.location.display_name}${country === "in" && !/india/i.test(j.location.display_name) ? ", India" : ""}` : country === "in" ? "India" : null,
           department: j.category?.label ?? null, employment_type: j.contract_time ?? null, is_remote: null, posted_raw: j.created,
           source_url: j.redirect_url, apply_url: j.redirect_url, summary: stripHtml(j.description),
           salary_min: j.salary_min ?? null, salary_max: j.salary_max ?? null, salary_currency: j.salary_min ? (country === "in" ? "INR" : null) : null,
-        });
-      }
+        };
+      });
+      out.push(...r);
       if (r.length < 50) break;
     }
     return out;
@@ -126,15 +120,18 @@ async function mapLimit<T, R>(items: T[], limit: number, fn: (t: T) => Promise<R
 }
 
 export async function runJobSync(opts: { sourceSlug?: string; force?: boolean } = {}) {
+  if (!opts.sourceSlug) throw new Error('Single-source refresh required; dispatch bulk refresh separately');
   const { supabaseAdmin: db } = await import("@/integrations/supabase/client.server");
   let q = db.from("job_sources").select("id,slug,name,provider,board_token,failure_count").eq("active", true).eq("status", "connected");
   if (opts.sourceSlug) q = q.eq("slug", opts.sourceSlug);
   const { data: sources, error } = await q;
   if (error) throw new Error(error.message);
 
-  const results = await mapLimit((sources ?? []) as Source[], 4, async (s) => {
+  const results = await mapLimit((sources ?? []) as Source[], 1, async (s) => {
     const adapter = adapters[s.provider];
     if (!adapter) return { source: s.slug, status: "skipped" };
+    const recovered = await db.rpc("recover_job_source_runs", { p_source: s.id });
+    if (recovered.error) throw new Error("Could not recover interrupted source audit");
     const token = crypto.randomUUID();
     const claim = await db.rpc("claim_job_source", { p_id: s.id, p_token: token, p_force: Boolean(opts.force) });
     if (claim.error) throw new Error("Could not lock source");
@@ -150,15 +147,37 @@ export async function runJobSync(opts: { sourceSlug?: string; force?: boolean } 
       const items = await adapter(s);
       fetched = items.length;
       // Match the 7-day public window so prior checks, slugs and holds are reused for every visible job.
-      const { data: existing, error: existingError } = await db.from("jobs").select("id,source_job_id,slug,admin_hold,career_level,categories,skills,last_application_checked_at,verification_status").eq("source_id", s.id).gt("original_posted_at", new Date(now.getTime()-7*86400_000).toISOString());
-      if (existingError) throw new Error("Could not read prior source snapshot");
+      const existing = [];
+      for (let offset = 0; ; offset += 200) {
+        const page = await db.from("jobs").select("id,source_job_id,slug,admin_hold,career_level,categories,skills,last_application_checked_at,verification_status").eq("source_id", s.id).gt("original_posted_at", new Date(now.getTime()-7*86400_000).toISOString()).order("id").range(offset, offset + 199);
+        if (page.error) throw new Error("Could not read prior source snapshot");
+        existing.push(...(page.data ?? []));
+        if (existing.length > 20000) throw new Error("Prior snapshot limit exceeded");
+        if ((page.data?.length ?? 0) < 200) break;
+      }
       if (!safeSnapshot(existing?.length ?? 0, items.length)) throw new Error("Incomplete source snapshot: closure processing deferred");
       const previous = new Map((existing ?? []).map((j) => [j.source_job_id, j]));
-      const seen: string[] = [];
-      const rows = [];
+      const seen = new Set<string>();
+      const rows: Database['public']['Tables']['jobs']['Insert'][] = [];
       const evidenceRows: { source_job_id: string; status: string; http_status: number | null; final_url: string; evidence: string }[] = [];
+      const flush = async () => {
+        if (!rows.length) return;
+        const saved = await db.from("jobs").upsert(rows, { onConflict: "source_id,source_job_id" }).select("id,source_job_id");
+        if (saved.error) throw new Error(saved.error.message);
+        const ids = new Map((saved.data ?? []).map(r => [r.source_job_id, r.id]));
+        const logs = evidenceRows.flatMap(({source_job_id,...e}) => { const id=ids.get(source_job_id); return id ? [{job_id:id,...e}] : []; });
+        if (logs.length && (await db.from("job_verifications").insert(logs)).error) throw new Error("Could not record verification evidence");
+        rows.length = 0; evidenceRows.length = 0;
+      };
+      let renewed = Date.now();
       for (const j of items) {
-        seen.push(j.source_job_id);
+        if (Date.now() - now.getTime() > 240000) throw new Error('Source time budget exceeded; closure deferred');
+        if (Date.now()-renewed > 60000) {
+          const lease=await db.from("job_sources").update({locked_until:new Date(Date.now()+300000).toISOString()}).eq("id",s.id).eq("lock_token",token).select("id");
+          if (lease.error || !lease.data?.length) throw new Error("Source lease lost");
+          renewed=Date.now();
+        }
+        seen.add(j.source_job_id);
         const posted = parsePostedAt(j.posted_raw);
         if (!posted || !isFresh(posted, now)) { rejected++; staleRejected++; continue; } // no credible timestamp or too old
         if (countryOf(j.location) === "India") indiaMatched++;
@@ -191,25 +210,28 @@ export async function runJobSync(opts: { sourceSlug?: string; force?: boolean } 
           dedupe_key: dedupeKey(j.company, j.title, j.location),
           is_primary: true, updated_at: now.toISOString(),
         });
+        if (rows.length >= 50) await flush();
       }
-      if (rows.length) {
-        // original_posted_at is only ever set from the source; re-imports carry the same value.
-        const { error: upErr } = await db.from("jobs").upsert(rows, { onConflict: "source_id,source_job_id" });
-        if (upErr) throw new Error(upErr.message);
-        const { data: stored } = await db.from("jobs").select("id,source_job_id").eq("source_id", s.id);
-        const ids = new Map((stored ?? []).map((r) => [r.source_job_id, r.id]));
-        const logs = evidenceRows.flatMap(({ source_job_id, ...e }) => { const id = ids.get(source_job_id); return id ? [{ job_id: id, ...e }] : []; });
-        if (logs.length) { const log = await db.from("job_verifications").insert(logs); if (log.error) throw new Error("Could not record verification evidence"); }
+      await flush();
+      // Stable keyset pagination: updates must not shift the next page.
+      let cursor = "";
+      while (s.provider !== 'adzuna') {
+        let query = db.from("jobs").select("id,source_job_id").eq("source_id",s.id).eq("application_status","OPEN").order("id").limit(200);
+        if(cursor) query=query.gt("id",cursor);
+        const page=await query;
+        if(page.error) throw new Error("Could not read open source jobs");
+        const open=page.data??[];
+        if(!open.length) break;
+        const gone=open.filter(o=>!seen.has(o.source_job_id)).map(o=>o.id);
+        if(gone.length) { const result=await db.from("jobs").update({application_status:"CLOSED",updated_at:now.toISOString()}).in("id",gone); if(result.error) throw new Error("Could not close missing jobs"); closed+=gone.length; }
+        cursor=open[open.length-1].id;
       }
-      // Jobs no longer in the feed are closed immediately.
-      const { data: open } = await db.from("jobs").select("id,source_job_id").eq("source_id", s.id).eq("application_status", "OPEN");
-      const gone = (open ?? []).filter((o) => !seen.includes(o.source_job_id)).map((o) => o.id);
-      if (gone.length) {
-        for (let i = 0; i < gone.length; i += 100) await db.from("jobs").update({ application_status: "CLOSED", updated_at: now.toISOString() }).in("id", gone.slice(i, i + 100));
-        closed = gone.length;
-      }
-      await db.from("job_sources").update({ last_synced_at: now.toISOString(), last_error: null, failure_count: 0, retry_after: null, locked_until: null, lock_token: null }).eq("id", s.id).eq("lock_token", token);
-      await db.from("source_sync_runs").update({ finished_at: new Date().toISOString(), status: "completed", fetched, accepted, rejected, closed, stale_rejected: staleRejected, link_rejected: linkRejected, india_matched: indiaMatched }).eq("id", run.id);
+      const dedupe=await db.rpc("dedupe_job_refresh");
+      if(dedupe.error) throw new Error("Could not finalize duplicates");
+      const finish = await db.from("source_sync_runs").update({ finished_at: new Date().toISOString(), status: "completed", fetched, accepted, rejected, closed, stale_rejected: staleRejected, link_rejected: linkRejected, india_matched: indiaMatched }).eq("id", run.id);
+      if (finish.error) throw new Error('Could not finish source audit');
+      const release = await db.from("job_sources").update({ last_synced_at: now.toISOString(), last_error: null, failure_count: 0, retry_after: null, locked_until: null, lock_token: null }).eq("id", s.id).eq("lock_token", token).select('id');
+      if (release.error || !release.data?.length) throw new Error('Could not finalize source lease');
       return { source: s.slug, status: "completed", fetched, accepted, rejected, closed, staleRejected, linkRejected, indiaMatched };
     } catch (e) {
       const msg = e instanceof Error ? e.message : String(e);
@@ -221,29 +243,5 @@ export async function runJobSync(opts: { sourceSlug?: string; force?: boolean } 
     }
   });
 
-  await dedupeAcrossSources();
   return results;
-}
-
-/** Keep one primary card per duplicate group, preferring employer ATS over aggregators. */
-async function dedupeAcrossSources() {
-  const { supabaseAdmin: db } = await import("@/integrations/supabase/client.server");
-  const since = new Date(Date.now() - 7 * 24 * 3600_000).toISOString();
-  const { data } = await db.from("jobs").select("id,dedupe_key,canonical_apply_url,source_id,original_posted_at,job_sources(provider)").gt("original_posted_at", since).eq("application_status", "OPEN").eq("verification_status", "VERIFIED").eq("source_access_status", "AUTHORIZED").eq("admin_hold", false).gt("expires_at", new Date().toISOString());
-  const groups = new Map<string, any[]>();
-  const canonicalGroups = new Map<string,string>();
-  for (const r of data ?? []) {
-    const key = r.canonical_apply_url ? canonicalGroups.get(r.canonical_apply_url) ?? r.dedupe_key : r.dedupe_key;
-    if (r.canonical_apply_url) canonicalGroups.set(r.canonical_apply_url,key);
-    groups.set(key, [...(groups.get(key) ?? []),r]);
-  }
-  const secondary: string[] = [];
-  const primary: string[] = [];
-  for (const g of groups.values()) {
-    g.sort((a, b) => Number((a.job_sources as any)?.provider === "remoteok") - Number((b.job_sources as any)?.provider === "remoteok") || a.original_posted_at.localeCompare(b.original_posted_at));
-    primary.push(g[0].id);
-    secondary.push(...g.slice(1).map((x) => x.id));
-  }
-  for (let i = 0; i < secondary.length; i += 100) await db.from("jobs").update({ is_primary: false }).in("id", secondary.slice(i, i + 100));
-  for (let i = 0; i < primary.length; i += 100) await db.from("jobs").update({ is_primary: true }).in("id", primary.slice(i, i + 100));
 }
