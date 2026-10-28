@@ -1,4 +1,5 @@
 # Roadmap
+- [ ] Execute Future Experience brief: audit/baseline, opt-in themes and reading density, navigation/search/breadcrumbs, pilot workspace improvements, responsive/reduced-motion validation and delivery report; preserve existing behavior and no publication.
 - [x] Master audit: focused code review plus live policy/schedule/source inventory; repair confirmed defects, preserve data, seven-day jobs and four daily refreshes. Findings and limitations recorded in private audit guide.
 - [x] Add transparent internal compatibility estimate, approved PDF and private My Career; authenticated workspace/export verification and 81 regression tests passed.
 - [x] Repair 48/72-hour filter validation/navigation and daily-summary windows; public browser counts 24h=37, 48h=85, 72h=90, 7d=254. Limit source registry to safe public columns; live privilege checks passed.
