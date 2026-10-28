@@ -101,7 +101,7 @@ export function JobActions({ job, showDetails = true }: { job: PublicJob; showDe
 export function JobCard({ job }: { job: PublicJob }) {
   const salary = salaryLabel(job);
   return (
-    <article className="rounded-2xl border border-border bg-card p-5">
+    <article className="job-record rounded-2xl border border-border bg-card p-5">
       <h3 className="font-display text-lg font-semibold">
         <Link to="/jobs/$slug" params={{ slug: job.slug }} className="hover:text-primary">{job.title}</Link>
       </h3>
@@ -116,7 +116,7 @@ export function JobCard({ job }: { job: PublicJob }) {
         <div><dt className="inline font-medium">Source: </dt><dd className="inline">{sourceLabel(job)}</dd></div>
         <div><dt className="inline font-medium">Original posted: </dt><dd className="inline" suppressHydrationWarning>{fmtTime(job.original_posted_at)} ({ageLabel(new Date(job.original_posted_at))})</dd></div>
         <div><dt className="inline font-medium">Application checked: </dt><dd className="inline">{job.last_application_checked_at ? fmtTime(job.last_application_checked_at) : "Not independently checked"}</dd></div>
-        <div className="flex items-center gap-1 text-primary"><ShieldCheck className="h-3.5 w-3.5" aria-hidden /> Verified</div>
+        <div className="flex items-center gap-1 text-primary"><dt className="sr-only">Verification status</dt><dd className="flex items-center gap-1"><ShieldCheck className="h-3.5 w-3.5" aria-hidden />Verified</dd></div>
       </dl>
       {job.work_arrangement === "remote" && <p className="mt-2 text-xs text-muted-foreground">Remote eligibility: {job.remote_eligibility ?? job.location ?? "Not specified by employer; confirm at source"}</p>}
       <div className="mt-4"><JobActions job={job} /></div>

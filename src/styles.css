@@ -1371,6 +1371,8 @@ html[data-experience="future"] .floating-chat-panel { border-radius: var(--radiu
 html[data-experience="future"] .workspace-summary { display: grid; }
 .workspace-summary { display: none; }
 html[data-experience="future"] .workspace-record { padding-block: var(--experience-gap); }
+html[data-experience="future"] .job-record { border-radius: var(--radius); transition: border-color 180ms ease; }
+html[data-experience="future"] .job-record:focus-within { border-color: var(--primary); }
 html[data-experience="future"] :is(.animate-aurora,.animate-pulse-glow,.animate-float) { animation: none; }
 html[data-theme="comfort"] :is(main p, main li) { line-height: 1.85; }
 html[data-theme="comfort"] :is(.shadow-neon,.shadow-glow,.card-flashy) { box-shadow: none !important; }
