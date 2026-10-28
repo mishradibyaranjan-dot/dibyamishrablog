@@ -33,6 +33,7 @@ import cardProjects from "@/assets/collab-projects.jpg";
 import { FutureHomeHero, FutureWorkspaceShowcase } from '@/components/marketing/FutureHomeHero';
 import { useTheme } from '@/components/theme/ThemeProvider';
 import { isFutureTheme } from '@/components/theme/experience';
+import { pageOgImages } from '@/lib/og-images';
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -56,6 +57,10 @@ export const Route = createFileRoute("/")({
       { property: "og:url", content: "https://www.dibyamishra.co.in/" },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
+      { property: "og:image", content: pageOgImages.home },
+      { property: "og:image:width", content: "1200" },
+      { property: "og:image:height", content: "630" },
+      { name: "twitter:image", content: pageOgImages.home },
     ],
     links: [{ rel: "canonical", href: "https://www.dibyamishra.co.in/" }],
     scripts: [

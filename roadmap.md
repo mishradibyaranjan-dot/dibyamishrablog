@@ -1,4 +1,5 @@
 # Roadmap
+- [x] SEO corrections: brand icon and matching homepage share photo verified in preview; all seven reported heading paths already render one H1. Two corrections marked fixed awaiting scanner verification; contradictory heading finding remains for rescan. Not published.
 - [x] Future Experience 2.0 core preview: default for unsaved visitors; rebuilt header/home/projects/jobs/workspace/reports/auth/shared presentation; saved-theme rollback; 107 tests, eight-page Axe checks, real filters/private reads, five-width checks and before/after report. Not published.
 - [ ] V2 exhaustive every-page acceptance: remaining content/admin inner compositions retain existing structure; production performance, external workflows, cross-account and independent assistive-tech checks await authorized release/acceptance environment.
 - [x] Future Experience foundation/pilots: original default/themes preserved; additional themes/system mode/density, dropdown/search/breadcrumbs, private summary, deferred assistant, accessibility fix, seven-width checks, 104 tests and structured delivery report. Not published.

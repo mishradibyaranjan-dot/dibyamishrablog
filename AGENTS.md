@@ -25,3 +25,4 @@
 - Future Experience 2.0 renders redesigned frontend layouts keyed by the theme selection, defaulting only unsaved visitors to the new experience; legacy themes/layout rollback and all backend contracts remain unchanged so visual changes cannot alter business behavior.
 - Deferred assistant loading retains the existing transport, account-scoped persistence and first-session greeting; the lightweight launcher is available immediately so optional chat code does not block first paint.
 - Shared contextual navigation uses only existing public destinations and never links guessed or role-restricted parents; this preserves bookmarked routes and authorization boundaries.
+- Homepage social metadata and the Future hero use the same CDN-hosted share-sized image through the shared image registry; this keeps absolute preview URLs aligned with visible artwork.
