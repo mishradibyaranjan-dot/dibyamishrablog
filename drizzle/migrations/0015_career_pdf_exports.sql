@@ -1,0 +1,3 @@
+ALTER TABLE public.career_generated_documents DROP CONSTRAINT IF EXISTS career_generated_documents_format_check;
+ALTER TABLE public.career_generated_documents ADD CONSTRAINT career_generated_documents_format_check CHECK (format IN ('docx','pptx','pdf'));
+COMMENT ON COLUMN public.career_generated_documents.format IS 'Authorized latest-approved resume export: editable DOCX/PPTX or print-friendly PDF.';
