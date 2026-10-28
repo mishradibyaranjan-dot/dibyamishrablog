@@ -1,19 +1,14 @@
-import { Link, Outlet } from "@tanstack/react-router";
+import { Link, useRouterState } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { ExternalLink, Menu } from "lucide-react";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
-import { NAVIGATION_ITEMS } from '@/lib/navigation-items';
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { DeferredAssistant } from "@/components/chat/DeferredAssistant";
 import { ContextNavigation } from './ContextNavigation';
 import { Sheet, SheetContent, SheetTitle, SheetDescription, SheetTrigger, SheetClose } from '@/components/ui/sheet';
-import { useTheme } from '@/components/theme/ThemeProvider';
-import { isFutureTheme } from '@/components/theme/experience';
 import { FloatingConnectCta } from "@/components/marketing/FloatingConnectCta";
 import { SiteBanner } from "@/components/layout/SiteBanner";
-import { SideRail } from "@/components/layout/SideRail";
 import { AuroraBackground } from "@/components/cinematic/AuroraBackground";
 import { PageTransition } from "@/components/cinematic/PageTransition";
 import { ThemeProvider } from "@/components/theme/ThemeProvider";
@@ -149,64 +144,130 @@ const MORE_NAV = [
 ] as const;
 
 
+const PRIMARY_NAV = [
+  { to: "/about", label: "About" },
+  { to: "/advisory", label: "Advisory" },
+  { to: "/projects", label: "Projects" },
+  { to: "/research", label: "Insights" },
+  { to: "/jobs", label: "Jobs" },
+] as const;
+
+const EXPLORE_GROUPS = [
+  { title: "Profile", items: [
+    { to: "/about", label: "Executive profile" }, { to: "/experience", label: "Experience" },
+    { to: "/leadership", label: "Leadership" }, { to: "/achievements", label: "Achievements" },
+    { to: "/certifications", label: "Certifications" }, { to: "/expertise", label: "Expertise" },
+  ] },
+  { title: "Work & ideas", items: [
+    { to: "/advisory", label: "Advisory" }, { to: "/projects", label: "Projects" },
+    { to: "/research", label: "Research" }, { to: "/learn", label: "Learn" },
+    { to: "/newsletter", label: "Newsletter" }, { to: "/playbook", label: "AI Playbook" },
+  ] },
+  { title: "Careers", items: [
+    { to: "/jobs", label: "Jobs" }, { to: "/jobs/remote", label: "Remote jobs" },
+    { to: "/my-career", label: "My Career" }, { to: "/resume-analyzer", label: "Resume comparison" },
+    { to: "/interview-prep", label: "Interview preparation" },
+  ] },
+  { title: "Site", items: [
+    { to: "/", label: "Home" }, { to: "/guide", label: "Guided tour" },
+    { to: "/contact", label: "Contact" }, { to: "/trust", label: "Trust & privacy" },
+  ] },
+] as const;
 
 function Header() {
   const [scrolled, setScrolled] = useState(false);
-  const { theme } = useTheme();
-  const modern = isFutureTheme(theme);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 8);
     onScroll();
-    window.addEventListener("scroll", onScroll);
+    window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
   return (
-    <header
-      data-site-header
-      className={cn(
-        "premium-header sticky top-0 z-50 w-full overflow-visible transition-all duration-500",
-        scrolled
-          ? "border-b border-border bg-background/85 backdrop-blur-xl shadow-card-soft"
-          : "border-b border-transparent bg-background/70 backdrop-blur",
-      )}
-    >
-      <div className="header-inner mx-auto flex w-full max-w-7xl flex-wrap items-center gap-x-3 gap-y-0 px-4 pb-1.5 pt-2 sm:px-6 lg:h-16 lg:flex-nowrap lg:gap-4 lg:pb-0 lg:pt-0">
-        <Link
-          to="/"
-          className="order-1 flex min-w-0 flex-1 items-center gap-2 font-display text-lg font-bold lg:order-1 lg:flex-none"
-        >
-          <motion.img
-            whileHover={{ rotate: 8, scale: 1.06 }}
-            transition={{ type: "spring", stiffness: 280, damping: 18 }}
-            src={drmLogo.url}
-            alt="Dibya Ranjan Mishra personal brand logo"
-            className="h-9 w-9 shrink-0 rounded-lg object-contain"
-          />
-          <span className="brand-name truncate text-foreground">Dibya Ranjan Mishra{modern && <span className="block text-xs font-normal text-muted-foreground">AI · Cloud · Engineering Leadership</span>}</span>
-        </Link>
-        {modern && <nav aria-label="Primary navigation" className="premium-primary hidden items-center gap-1 xl:flex">{([{to:'/about',label:'Profile'},{to:'/projects',label:'Projects'},{to:'/research',label:'Insights'}] as const).map(n=><Button key={n.to} asChild variant="ghost"><Link to={n.to} activeProps={{className:'nav-selected','aria-current':'page'}}>{n.label}</Link></Button>)}</nav>}
-        <div className="header-account order-2 flex shrink-0 items-center gap-2 lg:order-3">
-          {modern ? <Sheet><SheetTrigger asChild><Button variant="ghost" size="icon" aria-label="Open site navigation"><Menu className="h-5 w-5"/></Button></SheetTrigger><SheetContent className="premium-drawer w-[min(90vw,400px)] overflow-y-auto"><SheetTitle>Explore</SheetTitle><SheetDescription>Dibya Ranjan Mishra</SheetDescription><nav aria-label="All pages" className="mt-6 grid gap-1">{NAVIGATION_ITEMS.map(item=><SheetClose asChild key={item.to}><Link to={item.to} className="drawer-link" activeProps={{'aria-current':'page',className:'drawer-link nav-selected'}}>{item.title}<ExternalLink className="h-4 w-4"/></Link></SheetClose>)}</nav><div className="mt-6 flex flex-wrap gap-2 border-t border-border pt-5"><ThemeToggle/><LanguageToggle/><AccessibilityMenu/></div><Button variant="outline" asChild className="mt-4"><Link to="/auth" search={{mode:'login'}}>Admin Login</Link></Button></SheetContent></Sheet> : <DropdownMenu>
-            <DropdownMenuTrigger asChild><Button variant="ghost" size="icon" aria-label="Open site navigation"><Menu className="h-5 w-5"/></Button></DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="max-h-[70dvh] w-56 overflow-y-auto">
-              {NAVIGATION_ITEMS.map(item => <DropdownMenuItem key={item.to} asChild><Link to={item.to} activeProps={{'aria-current':'page',className:'bg-accent font-semibold'}}>{item.title}</Link></DropdownMenuItem>)}
-            </DropdownMenuContent>
-          </DropdownMenu>}
-          <Button asChild variant={modern ? 'default' : 'outline'}><Link to="/jobs">Jobs</Link></Button>
-          <UserMenu />
-        </div>
-        <div
-          role="group"
-          aria-label="Site controls"
-          className="order-3 flex w-full items-center justify-between gap-1 border-t border-border/50 pb-0.5 pt-2 lg:order-2 lg:w-auto lg:justify-end lg:border-0 lg:pt-0"
-        >
-          <GlobalSearch compact />
-          <ReadAloudButton compact />
-          <ThemeToggle compact />
-          <LanguageToggle compact />
-          <AccessibilityMenu compact />
+    <header data-site-header data-scrolled={scrolled ? "true" : "false"} className="studio-header sticky top-0 z-50 w-full">
+      <div className="studio-bar studio-ink">
+        <div className="studio-bar-row">
+          <Link to="/" className="studio-brand" aria-label="Dibya Ranjan Mishra — home">
+            <motion.img
+              whileHover={{ rotate: -8, scale: 1.08 }}
+              transition={{ type: "spring", stiffness: 280, damping: 18 }}
+              src={drmLogo.url}
+              alt=""
+              width={36}
+              height={36}
+              className="studio-brand-mark"
+            />
+            <span className="studio-brand-text">
+              <span className="studio-brand-name">Dibya Ranjan Mishra</span>
+              <span className="studio-brand-role">AI · Cloud · Engineering</span>
+            </span>
+          </Link>
+
+          <nav aria-label="Primary navigation" className="studio-nav">
+            {PRIMARY_NAV.map((n) => (
+              <Link key={n.to} to={n.to} className="studio-nav-link" activeProps={{ "aria-current": "page", className: "studio-nav-link is-active" }}>
+                {n.label}
+              </Link>
+            ))}
+          </nav>
+
+          <div role="group" aria-label="Site controls" className="studio-tools">
+            <GlobalSearch compact />
+            <ReadAloudButton compact />
+            <ThemeToggle compact />
+            <LanguageToggle compact />
+            <AccessibilityMenu compact />
+            <Link to="/jobs" className="studio-mobile-jobs">Jobs</Link>
+          </div>
+
+          <div className="studio-actions">
+            <Sheet>
+              <SheetTrigger asChild>
+                <Button variant="ghost" className="studio-explore" aria-label="Open site navigation">
+                  <Menu className="h-4 w-4" /><span className="hidden sm:inline">Explore</span>
+                </Button>
+              </SheetTrigger>
+              <SheetContent side="top" className="studio-mega studio-ink max-h-[100dvh] overflow-y-auto">
+                <div className="studio-mega-inner">
+                  <div className="studio-mega-intro">
+                    <SheetTitle className="studio-mega-title">Explore the site</SheetTitle>
+                    <SheetDescription className="studio-mega-description">Every page, grouped by what you came to do.</SheetDescription>
+                    <div role="group" aria-label="Menu display options" className="studio-mega-tools">
+                      <ThemeToggle />
+                      <LanguageToggle />
+                      <AccessibilityMenu />
+                    </div>
+                    <SheetClose asChild>
+                      <Link to="/auth" search={{ mode: "login" }} className="studio-mega-admin">Admin login<ExternalLink className="h-3.5 w-3.5" /></Link>
+                    </SheetClose>
+                  </div>
+                  <nav aria-label="All pages" className="studio-mega-groups">
+                    {EXPLORE_GROUPS.map((group) => (
+                      <div key={group.title}>
+                        <p className="studio-mega-group-title">{group.title}</p>
+                        <ul>
+                          {group.items.map((item) => (
+                            <li key={item.to}>
+                              <SheetClose asChild>
+                                <Link to={item.to} className="studio-mega-link" activeOptions={{ exact: true }} activeProps={{ "aria-current": "page", className: "studio-mega-link is-active" }}>
+                                  {item.label}
+                                </Link>
+                              </SheetClose>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    ))}
+                  </nav>
+                </div>
+              </SheetContent>
+            </Sheet>
+            <UserMenu />
+            <Button asChild className="studio-cta studio-header-cta">
+              <Link to="/contact">Let’s talk</Link>
+            </Button>
+          </div>
         </div>
       </div>
     </header>
@@ -217,7 +278,12 @@ function Header() {
 
 function Footer() {
   return (
-    <footer data-site-footer className="premium-footer relative border-t border-border bg-background text-foreground">
+    <footer data-site-footer className="studio-footer studio-ink relative">
+      <div className="studio-footer-cta mx-auto max-w-7xl px-4 sm:px-6">
+        <p className="studio-eyebrow">Open for conversations</p>
+        <p className="studio-footer-headline">Let’s build what’s <em>next.</em></p>
+        <Button asChild size="lg" className="studio-cta"><Link to="/contact">Start a conversation</Link></Button>
+      </div>
       <div className="mx-auto grid max-w-7xl gap-10 px-4 py-16 sm:px-6 md:grid-cols-4">
         <div className="md:col-span-2">
           <div className="flex items-center gap-2 font-display text-lg font-bold text-foreground">
@@ -302,6 +368,12 @@ function Footer() {
 
 
 
+/** The home hero carries its own guided-tour link, so the announcement strip starts on inner pages. */
+function HomeAwareBanner() {
+  const pathname = useRouterState({ select: (s) => s.location.pathname });
+  return pathname === "/" ? null : <SiteBanner />;
+}
+
 function TrackerMount() {
   const { prefs } = useCookieConsent();
   useActivityTracker();
@@ -328,12 +400,11 @@ export function SiteLayout() {
               <div className="relative flex min-h-dvh flex-col">
                 <SkipToContent />
                 <Header />
-                <SideRail />
                 <div data-a11y-filter-surface className="relative flex flex-1 flex-col">
                   <AuroraBackground />
-                  <SiteBanner />
+                  <HomeAwareBanner />
                   <ContextNavigation />
-                  <main id="main-content" className="experience-main relative flex-1 lg:pl-20">
+                  <main id="main-content" className="experience-main studio-main relative flex-1">
                     <PageTransition />
                   </main>
                   <Footer />

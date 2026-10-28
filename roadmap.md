@@ -33,3 +33,6 @@
 - [ ] Full MFA/admin export browser verification — blocked on owner's fresh sign-in and authenticator enrollment; minted preview session cannot enroll
 - [x] Preserve original timestamps, honor source intervals, durable locks and retry state
 - [x] Account filter/save browser checks on desktop/mobile, 33 rule tests, real-source live checks; engineering and operations guides
+
+- [x] Studio redesign: new header, home hero, footer visible for all saved themes (28 Oct 2026)
+- [ ] Studio redesign: page-specific compositions for inner pages (jobs, about, research, admin) beyond shared header/footer/type/colour

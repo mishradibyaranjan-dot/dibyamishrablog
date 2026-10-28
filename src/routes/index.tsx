@@ -21,7 +21,6 @@ import {
 import { supabase } from "@/integrations/supabase/client";
 import { caseStudies, posts, projects, testimonials } from "@/lib/content";
 import { Reveal } from "@/components/cinematic/Reveal";
-import { MetricStat } from "@/components/marketing/MetricStat";
 import { NewsletterCta } from "@/components/marketing/NewsletterCta";
 import { LeadMagnet } from "@/components/marketing/LeadMagnet";
 import { trackEvent } from "@/lib/analytics";
@@ -30,9 +29,7 @@ import cardLearn from "@/assets/card-learn.jpg";
 import cardCaseStudy from "@/assets/card-case-study.jpg";
 import cardResearch from "@/assets/collab-research.jpg";
 import cardProjects from "@/assets/collab-projects.jpg";
-import { FutureHomeHero, FutureWorkspaceShowcase } from '@/components/marketing/FutureHomeHero';
-import { useTheme } from '@/components/theme/ThemeProvider';
-import { isFutureTheme } from '@/components/theme/experience';
+import { HomeHero, WorkspaceShowcase } from '@/components/marketing/HomeHero';
 import { pageOgImages } from '@/lib/og-images';
 
 export const Route = createFileRoute("/")({
@@ -124,16 +121,12 @@ function useLatestIssue() {
 
 function Home() {
   const latest = useLatestIssue();
-  const { theme } = useTheme();
-  const modern = isFutureTheme(theme);
 
   return (
-    <div className={modern ? 'future-home w-full bg-background text-foreground' : 'w-full bg-background text-foreground'}>
-      {modern && <FutureHomeHero/>}
-      <div className="home-sections mx-auto flex w-full max-w-7xl flex-col gap-16 px-4 py-14 sm:px-6 sm:py-20 lg:gap-24 lg:py-24">
-        {!modern && <Hero />}
-        <MetricsBar />
-        {modern && <FutureWorkspaceShowcase/>}
+    <div className="studio-home w-full bg-background text-foreground">
+      <HomeHero />
+      <div className="home-sections mx-auto flex w-full max-w-7xl flex-col gap-20 px-4 py-16 sm:px-6 sm:py-24 lg:gap-28 lg:py-28">
+        <WorkspaceShowcase />
         <Problems />
         <Outcomes />
         <WaysToWork />
@@ -151,122 +144,6 @@ function Home() {
   );
 }
 
-
-/* ------------------------------- HERO ------------------------------- */
-
-function Hero() {
-  return (
-    <section className="flex max-w-5xl flex-col gap-6">
-      <div className="inline-flex w-fit items-center gap-3 rounded-full border border-chip-border bg-chip px-3 py-1">
-        <span className="h-2 w-2 animate-pulse rounded-full bg-brand-gradient" />
-        <span className="text-[11px] font-semibold uppercase tracking-[0.18em] text-chip-foreground">
-          AI · Cloud · Engineering · GCC · Enterprise Transformation
-        </span>
-      </div>
-
-      <h1 className="font-display text-[clamp(40px,7.5vw,80px)] font-bold leading-[0.95] tracking-[-0.035em] text-foreground">
-        Turning AI, Cloud &amp; Engineering Strategy into{" "}
-        <span className="text-brand-1">Enterprise Outcomes</span>
-      </h1>
-
-      <p className="max-w-3xl text-lg leading-relaxed text-muted-foreground sm:text-xl">
-        I help enterprises adopt Agentic AI, modernize cloud platforms, scale
-        engineering organizations and build high-performing GCC capabilities —
-        from strategy through execution.
-      </p>
-
-      <p className="max-w-3xl text-base text-muted-foreground">
-        20+ years of technology leadership across enterprise platforms, AI, cloud,
-        SaaS and global engineering organizations.
-      </p>
-
-      <div className="mt-2 flex flex-wrap items-center gap-3">
-        <Link
-          to="/contact"
-          onClick={() => trackEvent("hero_cta_click", { cta: "discuss_transformation" })}
-          className="inline-flex min-h-11 items-center gap-2 rounded-xl bg-brand-gradient px-6 py-3.5 text-sm font-semibold text-white transition-transform hover:-translate-y-0.5"
-        >
-          Discuss a Transformation
-          <ArrowRight className="h-4 w-4" />
-        </Link>
-        <Link
-          to="/case-studies"
-          className="inline-flex min-h-11 items-center gap-2 rounded-xl border border-border bg-card px-6 py-3.5 text-sm font-semibold text-foreground transition-colors hover:bg-accent"
-        >
-          Explore Case Studies
-          <ArrowUpRight className="h-4 w-4" />
-        </Link>
-        <Link
-          to="/research"
-          search={{ q: "", category: "All", tag: "", page: 1 }}
-          className="inline-flex min-h-11 items-center gap-1.5 px-1 text-sm font-semibold text-brand-1"
-        >
-          Read My Research
-          <ArrowRight className="h-4 w-4" />
-        </Link>
-      </div>
-
-      <div className="rounded-2xl border border-border bg-card p-5">
-        <p className="font-display text-lg font-semibold text-foreground">Dibya Ranjan Mishra</p>
-        <p className="text-sm text-muted-foreground">
-          Vice President &amp; Country Head | Engineering Leadership | AI | Cloud | GCC &amp; Digital Transformation
-        </p>
-        <nav aria-label="Executive portfolio" className="mt-4 flex flex-wrap gap-2">
-          {([
-            ["/about", "Executive Profile"],
-            ["/experience", "Professional Experience"],
-            ["/leadership", "Leadership"],
-            ["/achievements", "Achievements"],
-            ["/certifications", "Certifications"],
-            ["/blog", "Leadership Insights"],
-            ["/jobs", "Explore Verified Jobs"],
-          ] as const).map(([to, label]) => (
-            <Link key={to} to={to} className="inline-flex min-h-11 items-center rounded-full border border-border px-4 text-sm font-medium text-foreground hover:bg-accent">
-              {label}
-            </Link>
-          ))}
-          <a href="/api/download/pdf?doc=executive-summary" className="inline-flex min-h-11 items-center rounded-full bg-primary px-4 text-sm font-semibold text-primary-foreground">
-            Download Resume
-          </a>
-        </nav>
-      </div>
-
-      <div className="mt-2 flex flex-wrap items-center gap-x-6 gap-y-3 text-sm text-muted-foreground">
-        {[
-          { icon: Bot, label: "Agentic AI · RAG · MCP" },
-          { icon: Cloud, label: "Cloud-native & DevSecOps" },
-          { icon: Users, label: "500+ engineers led" },
-        ].map((t) => (
-          <span key={t.label} className="inline-flex items-center gap-2 font-medium">
-            <t.icon className="h-4 w-4 text-brand-1" />
-            {t.label}
-          </span>
-        ))}
-      </div>
-    </section>
-  );
-}
-
-
-/* ----------------------------- METRICS ------------------------------ */
-
-function MetricsBar() {
-  return (
-    <section aria-labelledby="metrics-heading" className="rounded-3xl border border-border bg-card p-4 sm:p-6">
-      <h2 id="metrics-heading" className="sr-only">
-        Leadership track record in numbers
-      </h2>
-      <div className="grid grid-cols-2 divide-border sm:grid-cols-3 lg:grid-cols-6">
-        <MetricStat to={20} suffix="+" label="Years experience" />
-        <MetricStat to={500} suffix="+" label="Engineers led" />
-        <MetricStat to={5} label="Time zones" />
-        <MetricStat to={28} prefix="$" suffix="M+" label="Budgets owned" />
-        <MetricStat value="$1M → $20M" label="Portfolio growth" />
-        <MetricStat to={72} suffix="%" label="Faster delivery cycles" />
-      </div>
-    </section>
-  );
-}
 
 /* --------------------------- CAPABILITIES --------------------------- */
 
@@ -889,8 +766,8 @@ function SectionEyebrow({
   children: React.ReactNode;
 }) {
   return (
-    <span className="inline-flex items-center gap-2 rounded-full border border-chip-border bg-chip px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.16em] text-chip-foreground">
-      <Icon className="h-3.5 w-3.5" />
+    <span className="studio-eyebrow">
+      <Icon className="h-3.5 w-3.5" aria-hidden="true" />
       {children}
     </span>
   );
