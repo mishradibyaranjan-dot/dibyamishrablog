@@ -21,7 +21,6 @@ import {
 import { supabase } from "@/integrations/supabase/client";
 import { caseStudies, posts, projects, testimonials } from "@/lib/content";
 import { Reveal } from "@/components/cinematic/Reveal";
-import { MetricStat } from "@/components/marketing/MetricStat";
 import { NewsletterCta } from "@/components/marketing/NewsletterCta";
 import { LeadMagnet } from "@/components/marketing/LeadMagnet";
 import { trackEvent } from "@/lib/analytics";
