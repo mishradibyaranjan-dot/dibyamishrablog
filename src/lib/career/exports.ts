@@ -1,11 +1,29 @@
 import JSZip from 'jszip';
 import type { ResumeTemplate } from './schema';
 
-export async function createCareerDocument(format:'docx'|'pptx',text:string,template:ResumeTemplate):Promise<Blob>{
+export async function createCareerDocument(format:'docx'|'pptx'|'pdf',text:string,template:ResumeTemplate):Promise<Blob>{
  if(!text.trim())throw new Error('The approved resume is empty.');
  let blob:Blob;
  const font=template==='Executive Leadership'?'Georgia':'Arial';
- if(format==='docx'){
+ if(format==='pdf'){
+  const {jsPDF}=await import('jspdf');
+  const pdf=new jsPDF({unit:'mm',format:'a4'});
+  // A bundled Unicode font keeps names and non-English approved content searchable.
+  const fontResponse=await fetch('/fonts/resume-unicode.ttf');
+  if(!fontResponse.ok)throw new Error('Could not load the resume PDF font.');
+  const bytes=new Uint8Array(await fontResponse.arrayBuffer());
+  let binary='';for(let i=0;i<bytes.length;i+=8192)binary+=String.fromCharCode(...bytes.slice(i,i+8192));
+  pdf.addFileToVFS('ResumeUnicode.ttf',btoa(binary));pdf.addFont('ResumeUnicode.ttf','ResumeUnicode','normal');pdf.setFont('ResumeUnicode');pdf.setFontSize(11);
+  let y=20;
+  for(const line of text.split('\n')){
+   const lines=pdf.splitTextToSize(line||' ',170) as string[];
+   for(const part of lines){if(y>275){pdf.addPage();y=20;}pdf.text(part,20,y);y+=6;}
+   y+=1;
+  }
+  pdf.setProperties({title:'Approved resume',author:'Career Assistant',subject:template});
+  blob=pdf.output('blob');
+  const header=new TextDecoder().decode((await blob.arrayBuffer()).slice(0,5));if(header!=='%PDF-')throw new Error('PDF validation failed.');
+ }else if(format==='docx'){
   const {Document,Packer,Paragraph,HeadingLevel}=await import('docx');
   const lines=text.split('\n');
   const doc=new Document({creator:'Career Assistant',title:'Approved resume',styles:{default:{document:{run:{font,size:22},paragraph:{spacing:{after:100}}}}},sections:[{properties:{page:{margin:{top:1080,bottom:1080,left:1080,right:1080}}},children:lines.map((line,i)=>new Paragraph({text:line,...(i===0?{heading:HeadingLevel.TITLE}:{}),spacing:{after:template==='Modern Professional'?140:100}}))}]});

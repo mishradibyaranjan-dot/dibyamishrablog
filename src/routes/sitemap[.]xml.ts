@@ -39,7 +39,6 @@ const staticEntries: SitemapEntry[] = [
   { path: "/research", changefreq: "monthly", priority: "0.7" },
   { path: "/learn", changefreq: "weekly", priority: "0.8" },
   { path: "/guide", changefreq: "monthly", priority: "0.7" },
-  { path: "/repository", changefreq: "monthly", priority: "0.7" },
   { path: "/white-paper/agentic-ai-enterprise-automation", changefreq: "monthly", priority: "0.8" },
   { path: "/ai-transformation", changefreq: "monthly", priority: "0.8" },
   { path: "/enterprise-agentic-ai", changefreq: "monthly", priority: "0.8" },
