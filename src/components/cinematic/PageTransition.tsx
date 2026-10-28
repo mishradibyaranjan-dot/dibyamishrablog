@@ -1,6 +1,8 @@
 import { Outlet, useRouterState } from "@tanstack/react-router";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { useRef } from "react";
+import { useTheme } from '@/components/theme/ThemeProvider';
+import { isFutureTheme } from '@/components/theme/experience';
 
 /**
  * Cinematic, movie-style route transitions.
@@ -18,6 +20,8 @@ export function PageTransition() {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const firstPathRef = useRef(pathname);
   const reduceMotion = useReducedMotion();
+  const { theme } = useTheme();
+  if (isFutureTheme(theme)) return <div className="future-page"><Outlet /></div>;
   const isFirstPaint = firstPathRef.current === pathname || !!reduceMotion;
 
   return (

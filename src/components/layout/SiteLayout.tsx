@@ -4,7 +4,8 @@ import { ExternalLink } from "lucide-react";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { FloatingChat } from "@/components/chat/FloatingChat";
+import { DeferredAssistant } from "@/components/chat/DeferredAssistant";
+import { ContextNavigation } from './ContextNavigation';
 import { FloatingConnectCta } from "@/components/marketing/FloatingConnectCta";
 import { SiteBanner } from "@/components/layout/SiteBanner";
 import { SideRail } from "@/components/layout/SideRail";
@@ -322,13 +323,14 @@ export function SiteLayout() {
                 <div data-a11y-filter-surface className="relative flex flex-1 flex-col">
                   <AuroraBackground />
                   <SiteBanner />
+                  <ContextNavigation />
                   <main id="main-content" className="relative flex-1 lg:pl-20">
                     <PageTransition />
                   </main>
                   <Footer />
                 </div>
                 <LiveAnnouncer />
-                <FloatingChat />
+                <DeferredAssistant />
                 <FloatingConnectCta />
                 <CookieConsent />
                 <ConsentGatedScripts />

@@ -121,6 +121,8 @@ export function SideRail() {
         key={item.to}
         to={item.to}
         title={item.label}
+        aria-label={item.label}
+        aria-current={active ? 'page' : undefined}
         className={cn(
           "group relative flex h-11 items-center gap-3 rounded-xl px-3 transition-colors",
           active
@@ -155,7 +157,7 @@ export function SideRail() {
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
       onFocus={() => setHovered(true)}
-      onBlur={() => setHovered(false)}
+      onBlur={(event) => { if (!event.currentTarget.contains(event.relatedTarget)) setHovered(false); }}
       initial={false}
       animate={{ width: expanded ? 224 : 68 }}
       transition={{ type: "spring", stiffness: 320, damping: 30 }}

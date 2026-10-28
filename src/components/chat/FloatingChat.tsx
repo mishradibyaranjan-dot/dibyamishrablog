@@ -43,8 +43,8 @@ function loadInitialMessages(): UIMessage[] {
   }
 }
 
-export function FloatingChat() {
-  const [open, setOpen] = useState(false);
+export function FloatingChat({ initiallyOpen = false }: { initiallyOpen?: boolean }) {
+  const [open, setOpen] = useState(initiallyOpen);
   const [initialMessages] = useState<UIMessage[]>([]);
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
   const { user } = useAuth();
