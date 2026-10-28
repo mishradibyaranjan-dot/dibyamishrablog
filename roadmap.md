@@ -1,4 +1,5 @@
 # Roadmap
+- [ ] Modernize resume comparison and repair upload/analysis feedback; verify signed-in PDF/DOCX/TXT and saved assessment readback.
 - [x] Career assistant preview: job-ID transfer; private PDF/DOCX/TXT analysis; evidence-only observations; supported decisions and immutable approval history; approved DOCX/PPTX exports and interview transfer; 41 targeted tests and engineering suite updated. Seven-day defaults unchanged; not published.
 - [ ] Career production acceptance — malware scanner unavailable (originals quarantined); independent cross-account/deep security review, published callbacks/unattended expiry and exhaustive large-document/all-slide checks pending. Optional PDF not implemented.
 - [x] Marketing master prompt Phases 3–6: scroll-depth research CTA (body-portaled, dismissible), newsletter repositioned "Without the Hype" on research/learn/case studies, 8 SEO landing pages with shared renderer + sitemap entries, consent-gated GA4/GTM-ready event tracking (hero/advisory/newsletter/playbook/contact/search/assistant), QA pass — 76 tests, build OK, browser checks on all 8 pages + mobile 390px; not published
