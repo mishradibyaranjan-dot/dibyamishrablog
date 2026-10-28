@@ -1673,6 +1673,7 @@ html[data-experience="future"] .future-hero-copy h1 .hero-accent { letter-spacin
 
 /* Typography */
 html[data-experience="future"] :is(h1, h2, h3) {
+  font-variation-settings: "opsz" 48;
   font-family: var(--font-display);
   font-optical-sizing: auto;
   font-weight: 560;
@@ -1783,7 +1784,7 @@ html[data-experience="future"] .experience-main.studio-main { padding-left: 0; }
 .studio-live-dot { height: 8px; width: 8px; border-radius: 999px; background: var(--signal); box-shadow: 0 0 0 0 var(--signal); animation: studio-ping 2.4s ease-out infinite; }
 .studio-hero h1 { margin-top: 26px; color: var(--ink-foreground); }
 .studio-hero-name { display: block; margin-bottom: 14px; font-family: var(--font-sans); font-size: clamp(16px, 1.6vw, 20px); font-weight: 600; letter-spacing: 0.02em; color: var(--signal); }
-.studio-hero-line { display: block; font-size: clamp(48px, 8.2vw, 116px); line-height: 0.95; font-weight: 520; letter-spacing: -0.035em; animation: studio-rise 900ms cubic-bezier(.2,.8,.2,1) both; }
+.studio-hero-line { display: block; font-size: clamp(48px, 7.6vw, 108px); line-height: 0.98; font-weight: 500; letter-spacing: -0.03em; font-variation-settings: "opsz" 60; animation: studio-rise 900ms cubic-bezier(.2,.8,.2,1) both; }
 .studio-hero-line + .studio-hero-line { animation-delay: 120ms; }
 .studio-hero-line em { color: var(--signal); }
 .studio-hero-lede { margin-top: 26px; max-width: 34rem; font-size: clamp(17px, 1.5vw, 20px); line-height: 1.6; color: var(--ink-muted); }
