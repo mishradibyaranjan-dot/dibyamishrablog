@@ -190,8 +190,9 @@ export const adminRunSync = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .handler(async ({ context }) => {
     await assertAdmin(context);
-    const { runJobSync } = await import("./sync.server");
-    const results = await runJobSync({ force: true });
+    const { getRequest } = await import('@tanstack/react-start/server');
+    const { dispatchJobRefresh } = await import('./dispatch.server');
+    const results = await dispatchJobRefresh(new URL('/api/public/cron/jobs-sync', getRequest().url).toString(), true);
     const { supabaseAdmin: db } = await import("@/integrations/supabase/client.server");
     await db.from("job_admin_audit").insert({ actor_id: context.userId, action: "manual_sync" });
     return results;
