@@ -1,4 +1,7 @@
 # Roadmap
+- [ ] Master audit: inventory working/partial/broken/missing/blocked/unverified features with evidence; prioritize critical defects, preserve existing data, seven-day jobs and four daily refreshes.
+- [ ] Add evidence-backed internal compatibility estimate with weighted rationale, approved PDF export and private My Career workspace; regression and authenticated workflow verification.
+- [ ] Audit source coverage, admin permissions/MFA, SEO, performance, security and release dependencies; update audit and engineering documentation without publishing.
 - [x] Modernize resume comparison: paired uploads/evidence, visible consent and progress/errors, fresh-session analysis, completion-checked streams and persistent review links; PDF/DOCX/TXT and JD uploads, real analysis/reload and 26 regression tests passed. Not published.
 - [x] Career assistant preview: job-ID transfer; private PDF/DOCX/TXT analysis; evidence-only observations; supported decisions and immutable approval history; approved DOCX/PPTX exports and interview transfer; 41 targeted tests and engineering suite updated. Seven-day defaults unchanged; not published.
 - [ ] Career production acceptance — malware scanner unavailable (originals quarantined); independent cross-account/deep security review, published callbacks/unattended expiry and exhaustive large-document/all-slide checks pending. Optional PDF not implemented.
