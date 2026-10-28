@@ -14,6 +14,12 @@ export const Route = createFileRoute("/_authenticated/admin/security-events")({
     meta: [
       { title: "Security Events — Admin" },
       { name: "robots", content: "noindex" },
+    
+      { name: 'description', content: 'Private security event monitoring and access controls.' },
+      { property: 'og:title', content: 'Security Events — Dibya Mishra' },
+      { property: 'og:description', content: 'Private security event monitoring and access controls.' },
+      { property: 'og:type', content: 'website' },
+      { name: 'twitter:card', content: 'summary' },
     ],
   }),
   component: SecurityEventsAdmin,

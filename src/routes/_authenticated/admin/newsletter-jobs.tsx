@@ -17,6 +17,11 @@ export const Route = createFileRoute("/_authenticated/admin/newsletter-jobs")({
       { title: "Newsletter jobs — Admin" },
       { name: "description", content: "Weekly and monthly newsletter job status." },
       { name: "robots", content: "noindex, nofollow" },
+    
+      { property: 'og:title', content: 'Newsletter Schedules — Dibya Mishra' },
+      { property: 'og:description', content: 'Private weekly and monthly newsletter schedule status.' },
+      { property: 'og:type', content: 'website' },
+      { name: 'twitter:card', content: 'summary' },
     ],
   }),
   component: NewsletterJobsPage,

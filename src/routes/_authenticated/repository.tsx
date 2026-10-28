@@ -40,6 +40,11 @@ export const Route = createFileRoute("/_authenticated/repository")({
         content:
           "Members-only repository of downloadable PDF white papers on AI, Cloud, SaaS, RAG, and enterprise strategy.",
       },
+    
+      { property: 'og:title', content: 'Repository — Dibya Mishra' },
+      { property: 'og:description', content: 'Member library of authorized guides and white papers.' },
+      { property: 'og:type', content: 'website' },
+      { name: 'twitter:card', content: 'summary' },
     ],
   }),
   component: RepositoryPage,

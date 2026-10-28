@@ -35,6 +35,12 @@ export const Route = createFileRoute("/_authenticated/admin/contact-enquiries")(
     meta: [
       { title: "Contact enquiries — Admin" },
       { name: "robots", content: "noindex, nofollow" },
+    
+      { name: 'description', content: 'Private contact enquiries and email delivery history.' },
+      { property: 'og:title', content: 'Contact Enquiries — Dibya Mishra' },
+      { property: 'og:description', content: 'Private contact enquiries and email delivery history.' },
+      { property: 'og:type', content: 'website' },
+      { name: 'twitter:card', content: 'summary' },
     ],
   }),
   component: ContactEnquiriesPage,
