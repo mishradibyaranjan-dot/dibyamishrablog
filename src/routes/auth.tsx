@@ -13,6 +13,7 @@ import { isBlockedEmail, BLOCKED_EMAIL_MESSAGE, refreshBlockedDomains } from "@/
 import { logBlockedLoginAttempt } from "@/lib/spam-audit.functions";
 import { recordClientFailedLogin, checkDisposableEmail } from "@/lib/security-events.functions";
 import { MathCaptcha, useCaptchaGate } from "@/components/security/CaptchaChallenge";
+import enterpriseImage from '@/assets/future-enterprise.jpg';
 
 const authSearchSchema = z.object({
   mode: z.enum(["login", "register"]).optional(),
@@ -26,6 +27,10 @@ export const Route = createFileRoute("/auth")({
       { title: "Sign In or Register — Dibya Ranjan Mishra" },
       { name: "description", content: "Sign in or create your account to access the learning library, research, projects, and case studies." },
       { name: "robots", content: "noindex" },
+      { property: 'og:title', content: 'Sign In — Dibya Ranjan Mishra' },
+      { property: 'og:description', content: 'Access your private career and learning workspace.' },
+      { property: 'og:type', content: 'website' },
+      { name: 'twitter:card', content: 'summary' },
     ],
   }),
   component: AuthPage,
@@ -47,14 +52,15 @@ function AuthPage() {
   }, []);
 
   return (
-    <Section className="pt-20 lg:pt-28">
+    <Section className="auth-section pt-20 lg:pt-28">
+      <div className="auth-introduction"><span className="text-sm font-semibold text-primary">YOUR PERSONAL WORKSPACE</span><h2>Ideas. Opportunities.<br/>Your next chapter.</h2><p>Return to your learning, saved opportunities, resume reviews and interview preparation.</p><img src={enterpriseImage} width={1920} height={1024} loading="lazy" alt="Intelligent enterprise cloud infrastructure"/></div>
       <motion.div
         initial={{ opacity: 0, y: 16 }}
         animate={{ opacity: 1, y: 0 }}
-        className="mx-auto w-full max-w-md rounded-3xl border border-slate-200 bg-white p-7 shadow-xl sm:p-9"
+        className="auth-panel mx-auto w-full max-w-md rounded-lg border border-border bg-card p-7 shadow-card-soft sm:p-9"
       >
-        <h1 className="font-display text-2xl font-bold text-slate-900 sm:text-3xl">Welcome</h1>
-        <p className="mt-2 text-sm text-slate-600">
+        <h1 className="font-display text-2xl font-bold text-foreground sm:text-3xl">Welcome</h1>
+        <p className="mt-2 text-sm text-muted-foreground">
           Sign in or create an account to unlock the Learn library, research, projects, and case studies.
         </p>
 
@@ -71,16 +77,16 @@ function AuthPage() {
           </TabsContent>
         </Tabs>
 
-        <div className="my-5 flex items-center gap-3 text-xs uppercase tracking-widest text-slate-600">
-          <span className="h-px flex-1 bg-slate-200" />
+        <div className="my-5 flex items-center gap-3 text-xs uppercase text-muted-foreground">
+          <span className="h-px flex-1 bg-border" />
           or
-          <span className="h-px flex-1 bg-slate-200" />
+          <span className="h-px flex-1 bg-border" />
         </div>
 
         <SocialButtons redirect={redirect} />
 
-        <p className="mt-6 text-center text-xs text-slate-500">
-          <Link to="/forgot-password" className="hover:text-slate-900">Forgot your password?</Link>
+        <p className="mt-6 text-center text-xs text-muted-foreground">
+          <Link to="/forgot-password" className="hover:text-foreground">Forgot your password?</Link>
         </p>
       </motion.div>
     </Section>
@@ -236,15 +242,17 @@ function Field({
 }) {
   return (
     <div className="relative">
-      <span className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-slate-600">{icon}</span>
+      <label className="mb-2 block text-xs font-semibold text-muted-foreground">{autoComplete === 'name' ? 'Full name' : type === 'email' ? 'Email address' : 'Password'}</label>
+      <span className="pointer-events-none absolute bottom-3 left-3 text-muted-foreground">{icon}</span>
       <input
         type={type}
         value={value}
         onChange={(e) => onChange(e.target.value)}
         placeholder={placeholder}
+        aria-label={autoComplete === 'name' ? 'Full name' : type === 'email' ? 'Email address' : 'Password'}
         autoComplete={autoComplete}
         required
-        className="w-full rounded-md border border-slate-300 bg-white py-2.5 pl-9 pr-3 text-sm text-slate-900 placeholder:text-slate-500 outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/30"
+        className="w-full rounded-md border border-input bg-card py-2.5 pl-9 pr-3 text-sm text-foreground placeholder:text-muted-foreground outline-none focus:border-primary focus:ring-2 focus:ring-ring/30"
       />
     </div>
   );

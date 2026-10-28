@@ -12,6 +12,11 @@ export const Route = createFileRoute("/forgot-password")({
     meta: [
       { title: "Forgot Password — Dibya Ranjan Mishra" },
       { name: "robots", content: "noindex" },
+      { name: "description", content: "Request a password reset for your Dibya Mishra account." },
+      { property: "og:title", content: "Forgot Password — Dibya Ranjan Mishra" },
+      { property: "og:description", content: "Request a password reset for your Dibya Mishra account." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
     ],
   }),
   component: ForgotPassword,
@@ -46,32 +51,33 @@ function ForgotPassword() {
       <motion.div
         initial={{ opacity: 0, y: 16 }}
         animate={{ opacity: 1, y: 0 }}
-        className="mx-auto w-full max-w-md rounded-3xl border border-white/10 bg-white/5 p-7 shadow-glow backdrop-blur-xl sm:p-9"
+        className="auth-panel mx-auto w-full max-w-md rounded-lg border border-border bg-card p-7 shadow-card-soft sm:p-9"
       >
-        <h1 className="font-display text-2xl font-bold text-white sm:text-3xl">Forgot password</h1>
-        <p className="mt-2 text-sm text-white/65">
+        <h1 className="font-display text-2xl font-bold text-foreground sm:text-3xl">Forgot password</h1>
+        <p className="mt-2 text-sm text-muted-foreground">
           Enter your email and we'll send a link to reset your password.
         </p>
         <form onSubmit={onSubmit} className="mt-6 space-y-3">
           <div className="relative">
-            <Mail className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-white/50" />
+            <Mail className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
             <input
+              aria-label="Email address"
               type="email"
               value={email}
               required
               onChange={(e) => setEmail(e.target.value)}
               placeholder="you@example.com"
-              className="w-full rounded-md border border-white/15 bg-white/5 py-2.5 pl-9 pr-3 text-sm text-white placeholder:text-white/40 outline-none focus:border-neon-cyan focus:ring-2 focus:ring-neon-cyan/40"
+              className="w-full rounded-md border border-input bg-card py-2.5 pl-9 pr-3 text-sm text-foreground placeholder:text-muted-foreground outline-none focus:border-primary focus:ring-2 focus:ring-ring/30"
             />
           </div>
-          {err && <p className="text-xs text-red-400">{err}</p>}
-          {info && <p className="text-xs text-emerald-400">{info}</p>}
-          <Button type="submit" disabled={busy} className="w-full bg-brand-gradient text-white shadow-neon">
+          {err && <p className="text-xs text-destructive">{err}</p>}
+          {info && <p className="text-xs text-success">{info}</p>}
+          <Button type="submit" disabled={busy} className="w-full bg-primary text-primary-foreground">
             {busy ? <Loader2 className="h-4 w-4 animate-spin" /> : "Send reset link"}
           </Button>
         </form>
-        <p className="mt-5 text-center text-xs text-white/55">
-          <Link to="/auth" className="hover:text-white">Back to sign in</Link>
+        <p className="mt-5 text-center text-xs text-muted-foreground">
+          <Link to="/auth" className="hover:text-foreground">Back to sign in</Link>
         </p>
       </motion.div>
     </Section>
