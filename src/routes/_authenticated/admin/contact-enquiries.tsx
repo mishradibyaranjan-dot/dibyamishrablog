@@ -462,19 +462,19 @@ function ContactEnquiriesPage() {
             ) : (
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={trend}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
-                  <XAxis dataKey="day" tick={{ fontSize: 11 }} stroke="hsl(var(--muted-foreground))" />
-                  <YAxis allowDecimals={false} tick={{ fontSize: 11 }} stroke="hsl(var(--muted-foreground))" />
+                  <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" />
+                  <XAxis dataKey="day" tick={{ fontSize: 11 }} stroke="var(--muted-foreground)" />
+                  <YAxis allowDecimals={false} tick={{ fontSize: 11 }} stroke="var(--muted-foreground)" />
                   <Tooltip
                     contentStyle={{
-                      background: "hsl(var(--card))",
-                      border: "1px solid hsl(var(--border))",
+                      background: "var(--card)",
+                      border: "1px solid var(--border)",
                       borderRadius: 8,
                       fontSize: 12,
-                      color: "hsl(var(--foreground))",
+                      color: "var(--foreground)",
                     }}
                   />
-                  <Bar dataKey="count" fill="hsl(var(--primary))" radius={[4, 4, 0, 0]} />
+                  <Bar dataKey="count" fill="var(--primary)" radius={[4, 4, 0, 0]} />
                 </BarChart>
               </ResponsiveContainer>
             )}
@@ -646,13 +646,13 @@ function ContactEnquiriesPage() {
                           </h3>
                           {!attempts[r.id] ? (
                             <p className="mt-2 text-xs text-muted-foreground">Loading history…</p>
-                          ) : attempts[r.id]!.length === 0 ? (
+                          ) : attempts[r.id]?.length === 0 ? (
                             <p className="mt-2 text-xs text-muted-foreground">
                               No attempts recorded for this enquiry yet.
                             </p>
                           ) : (
                             <ul className="mt-2 space-y-2">
-                              {attempts[r.id]!.map((a) => (
+                              {attempts[r.id]?.map((a) => (
                                 <li
                                   key={a.id}
                                   className="rounded-lg border border-border bg-background px-3 py-2 text-xs"

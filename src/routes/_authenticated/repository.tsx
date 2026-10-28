@@ -99,7 +99,7 @@ function RepositoryPage() {
   };
 
   return (
-    <Section className="pt-20 lg:pt-28">
+    <Section className="repository-workspace pt-20 lg:pt-28">
       <SectionHeader
         as="h1"
         eyebrow="Members-only"
@@ -107,10 +107,10 @@ function RepositoryPage() {
         description="Downloadable PDF white papers and practitioner guides. Signed-in members can download any document below."
       />
 
-      <div className="mb-8 flex items-center gap-3 rounded-2xl border border-emerald-400/25 bg-emerald-400/5 p-4 text-sm text-emerald-200">
+      <div className="mb-8 flex items-center gap-3 rounded-lg border border-success-border bg-success-soft p-4 text-sm text-foreground">
         <Sparkles className="h-4 w-4 shrink-0" />
         <p>
-          Signed in as <span className="font-medium text-white">{user?.email}</span>. Enjoy full access — each
+          Signed in as <span className="font-medium text-foreground">{user?.email}</span>. Enjoy full access — each
           download is logged for analytics only.
         </p>
       </div>
@@ -122,21 +122,21 @@ function RepositoryPage() {
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: i * 0.05, duration: 0.4 }}
-            className="group relative flex flex-col justify-between overflow-hidden rounded-2xl border border-white/10 bg-white/5 p-6 shadow-glow backdrop-blur-xl transition hover:border-neon-cyan/50"
+            className="repository-record group relative flex flex-col justify-between overflow-hidden rounded-lg border border-border bg-card p-6 shadow-card-soft transition hover:border-primary/50"
           >
             <div>
-              <div className="mb-3 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-[11px] font-medium uppercase tracking-widest text-white/70">
+              <div className="mb-3 inline-flex items-center gap-2 rounded-md border border-chip-border bg-chip px-3 py-1 text-xs font-medium text-chip-foreground">
                 <FileText className="h-3 w-3" />
                 {doc.category}
               </div>
-              <h2 className="font-display text-lg font-semibold text-white sm:text-xl">{doc.title}</h2>
-              <p className="mt-2 text-sm text-white/70">{doc.description}</p>
+              <h2 className="font-display text-lg font-semibold text-foreground sm:text-xl">{doc.title}</h2>
+              <p className="mt-2 text-sm text-muted-foreground">{doc.description}</p>
             </div>
             <div className="mt-5 flex items-center justify-between">
-              <span className="text-xs text-white/50">PDF · Members only</span>
+              <span className="text-xs text-muted-foreground">PDF · Members only</span>
               <Button
                 size="sm"
-                className="bg-brand-gradient text-white shadow-neon"
+                className="bg-primary text-primary-foreground"
                 disabled={busy === doc.key}
                 onClick={() => download(doc)}
               >

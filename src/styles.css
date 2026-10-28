@@ -1555,3 +1555,29 @@ html[data-experience="future"] .auth-panel { border-radius: 8px; background: var
   html[data-experience="future"] .auth-panel { padding: 24px; }
   html[data-experience="future"] .premium-footer > div:first-child { grid-template-columns: 1fr; }
 }
+html[data-experience="future"] .report-metric { position: relative; padding: 26px; border-top: 3px solid var(--primary); }
+html[data-experience="future"] .report-metric p { font-size: 36px; font-weight: 500; }
+html[data-experience="future"] .report-panel { padding: 24px; border-radius: 8px; }
+html[data-experience="future"] .reports-workspace > .grid { gap: 24px; }
+html[data-experience="future"] .reports-workspace table th { padding-block: 14px; }
+html[data-experience="future"] .reports-workspace table td { padding-block: 12px; }
+html[data-experience="future"] .reports-workspace [data-ui="button"] { white-space: normal; }
+html[data-experience="future"] .portfolio-heading { border-bottom: 1px solid var(--border); padding-bottom: 36px; }
+html[data-experience="future"] .portfolio-heading h1 { font-size: 48px; max-width: 900px; }
+html[data-experience="future"] .portfolio-content > .grid > div { border-radius: 8px; border-top: 3px solid var(--primary); background: var(--card); padding: 28px; }
+html[data-experience="future"] .repository-record { border-top: 3px solid var(--primary); }
+html[data-experience="future"] .experience-announcement { margin-left: 92px; }
+html[data-experience="future"] .future-hero-copy h1 .hero-accent { letter-spacing: 0; }
+@media (max-width: 1023px) { html[data-experience="future"] .experience-announcement { margin-left: 0; } }
+@media (max-width: 767px) {
+ html[data-experience="future"] .portfolio-heading h1 { font-size: 32px; }
+ html[data-experience="future"] .header-inner { gap: 6px; padding-inline: 12px; }
+ html[data-experience="future"] .header-account { gap: 2px; }
+ html[data-experience="future"] .header-inner > a { gap: 6px; }
+ html[data-experience="future"] .header-inner > a img { width: 28px; height: 28px; }
+ html[data-experience="future"] .brand-name { max-width: none; font-size: 12px; white-space: normal; }
+ html[data-experience="future"] .brand-name > span { display: none; }
+ html[data-experience="future"] .header-account [data-ui="button"] { padding-inline: 8px; }
+ .future-home-hero::before { background: color-mix(in oklab, var(--hero-ink) 85%, transparent); }
+ html[data-experience="future"] .experience-announcement > div:last-child { gap: 8px; }
+}
