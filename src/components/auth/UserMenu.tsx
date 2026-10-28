@@ -36,7 +36,7 @@ export function UserMenu() {
       <DropdownMenuTrigger asChild>
         <button
           aria-label="Account menu"
-          className="grid h-9 w-9 place-items-center rounded-full bg-brand-gradient text-sm font-bold text-white shadow-neon"
+          className="grid h-9 w-9 place-items-center rounded-full bg-brand-gradient text-sm font-bold text-primary-foreground shadow-neon"
         >
           {initial}
         </button>
@@ -46,6 +46,7 @@ export function UserMenu() {
           {user.email}
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
+        <DropdownMenuItem asChild><Link to="/my-career"><LayoutDashboard className="mr-2 h-4 w-4" /> My Career</Link></DropdownMenuItem>
         <DropdownMenuItem asChild>
           <Link to="/learn"><UserIcon className="mr-2 h-4 w-4" /> Learn</Link>
         </DropdownMenuItem>
