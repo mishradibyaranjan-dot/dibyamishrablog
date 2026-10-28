@@ -1888,3 +1888,15 @@ html[data-experience="future"] .experience-announcement { margin-left: 0; }
 .studio-mega-tools { display: grid; grid-template-columns: repeat(2, minmax(0, max-content)); }
 .studio-mega-tools > * { justify-content: flex-start; }
 .studio-explore, .studio-explore:hover { color: var(--ink-foreground) !important; }
+
+/* Studio footer */
+.studio-footer { margin-top: 48px; border-radius: 36px 36px 0 0; background: var(--ink); color: var(--ink-foreground); }
+.studio-footer h4 { color: var(--signal); font-family: "JetBrains Mono", ui-monospace, monospace; font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; font-weight: 500; }
+.studio-footer .text-muted-foreground { color: var(--ink-muted); }
+.studio-footer .border-border, .studio-footer.border-t { border-color: var(--ink-border); }
+.studio-footer .studio-eyebrow { color: var(--signal); }
+.studio-footer-cta { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 20px; padding-top: 72px; padding-bottom: 48px; border-bottom: 1px solid var(--ink-border); }
+.studio-footer-cta .studio-eyebrow { flex-basis: 100%; }
+.studio-footer-headline { font-family: var(--font-display); font-size: clamp(40px, 7vw, 96px); line-height: 0.95; letter-spacing: -0.03em; font-weight: 500; font-variation-settings: "opsz" 60; color: var(--ink-foreground); }
+.studio-footer-headline em { color: var(--signal); font-style: italic; }
+html[data-a11y-contrast="high"] .studio-footer { background: oklch(0 0 0); }

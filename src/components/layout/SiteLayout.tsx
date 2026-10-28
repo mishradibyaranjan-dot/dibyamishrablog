@@ -278,7 +278,12 @@ function Header() {
 
 function Footer() {
   return (
-    <footer data-site-footer className="premium-footer relative border-t border-border bg-background text-foreground">
+    <footer data-site-footer className="studio-footer studio-ink relative">
+      <div className="studio-footer-cta mx-auto max-w-7xl px-4 sm:px-6">
+        <p className="studio-eyebrow">Open for conversations</p>
+        <p className="studio-footer-headline">Let’s build what’s <em>next.</em></p>
+        <Button asChild size="lg" className="studio-cta"><Link to="/contact">Start a conversation</Link></Button>
+      </div>
       <div className="mx-auto grid max-w-7xl gap-10 px-4 py-16 sm:px-6 md:grid-cols-4">
         <div className="md:col-span-2">
           <div className="flex items-center gap-2 font-display text-lg font-bold text-foreground">
