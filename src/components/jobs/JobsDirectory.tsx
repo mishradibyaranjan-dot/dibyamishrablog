@@ -52,7 +52,7 @@ export function JobsDirectory({ filters, onChange, lockedKeys = [], initial }: {
     if (!locations?.length || filters.city || !show("city") || sessionStorage.getItem("jobs-near-me")) return;
     sessionStorage.setItem("jobs-near-me", "1");
     const near = nearestLocation(Intl.DateTimeFormat().resolvedOptions().timeZone, locations);
-    if (near) { setAuto(true); set({ city: near, hours: 168 }); }
+    if (near) { setAuto(true); set({ city: near }); }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [locations]);
   const totalPages = data ? Math.max(1, Math.ceil(data.total / data.pageSize)) : 1;
@@ -111,7 +111,7 @@ export function JobsDirectory({ filters, onChange, lockedKeys = [], initial }: {
         )}
         <label><span className="sr-only">Posted within</span>
           <select className={sel + " w-full"} value={filters.hours} onChange={(e) => set({ hours: Number(e.target.value) })}>
-            {[1, 3, 6, 12, 24].map((h) => <option key={h} value={h}>Posted within {h}h</option>)}
+            {[1, 3, 6, 12, 24, 48, 72].map((h) => <option key={h} value={h}>Posted within {h}h</option>)}
             <option value={168}>Posted within 7 days</option>
           </select>
         </label>

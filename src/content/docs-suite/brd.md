@@ -115,4 +115,8 @@ Super Admin can download the full documentation suite from within the app.
 
 
 ## Career assistant extension — 27 October 2026
-Job browsing stays public, with seven-day default visibility and 24/48/72/168-hour filters. Career analysis is private and requires processing consent. Match observations are qualitative and evidence-only: no ATS/readiness score or hiring prediction. Users review recommendations, retain originals and immutable versions, and explicitly approve the latest version before editable Word/PowerPoint generation. No malware scanner is connected; originals remain quarantined and unavailable for download. Production acceptance remains pending.
+Job browsing stays public, with seven-day default visibility and 24/48/72/168-hour filters. Career analysis is private and requires processing consent. Match observations are qualitative and evidence-only: a separately labeled internal compatibility estimate, never an official ATS score or hiring prediction. Users review recommendations, retain originals and immutable versions, and explicitly approve the latest version before Word/PowerPoint/PDF generation. No malware scanner is connected; originals remain quarantined and unavailable for download. Production acceptance remains pending.
+
+
+## Career workspace update — 28 October 2026
+Private My Career groups resume reviews, approved version counts, interview sessions, saved jobs/alerts and generated document history. The internal estimate exposes weights, exclusions, exact evidence and limitations, with no hiring prediction. Approved PDF is available alongside editable Word/PowerPoint. Seven-day jobs with 24/48/72-hour selections and four daily refreshes remain unchanged. No publication or scanner certification is claimed.

@@ -51,6 +51,8 @@ export const Route = createFileRoute("/")({
           "20+ years. Shipping Agentic AI in retail supply chains, RAG systems and multi-tenant SaaS at enterprise scale.",
       },
       { property: "og:url", content: "https://www.dibyamishra.co.in/" },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
       {
         property: "og:image",
         content:

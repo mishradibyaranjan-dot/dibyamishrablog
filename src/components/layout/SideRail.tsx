@@ -49,6 +49,9 @@ const PRIMARY: RailItem[] = [
 ];
 
 const SECONDARY: RailItem[] = [
+  { to: "/my-career", label: "My Career", icon: BriefcaseBusiness },
+  { to: "/resume-analyzer", label: "Resume Comparison", icon: FileText },
+  { to: "/interview-prep", label: "AI Interview Prep", icon: GraduationCap },
   { to: "/playbook", label: "AI Playbook", icon: BookOpen },
   { to: "/newsletter", label: "Newsletter", icon: Newspaper },
   { to: "/guide", label: "Guided Tour", icon: PlayCircle },

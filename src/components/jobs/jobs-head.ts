@@ -21,7 +21,7 @@ function parseFull(s: Record<string, unknown>): JobFilters {
     city: str(s.city), region: str(s.region), skill: str(s.skill), industry: str(s.industry), employment: str(s.employment,60), source: str(s.source), currency: str(s.currency,3),
     salary: Math.min(1e9, Math.max(0, Number(s.salary) || 0)), experience: Math.min(80, Math.max(0, Number(s.experience) || 0)), checked: [15,30].includes(Number(s.checked)) ? Number(s.checked) : 0,
     arrangement: (["remote", "hybrid", "onsite"].includes(arr) ? arr : "") as JobFilters["arrangement"],
-    hours: [1, 3, 6, 12, 24, 168].includes(hours) ? hours : 168,
+    hours: [1, 3, 6, 12, 24, 48, 72, 168].includes(hours) ? hours : 168,
     page: Math.min(200, Math.max(1, Number(s.page) || 1)),
   };
 }

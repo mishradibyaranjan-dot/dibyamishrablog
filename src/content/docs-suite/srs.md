@@ -138,7 +138,11 @@ analytics pipeline and the administrative suite.
 ## Career assistant requirements
 - `/resume-analyzer?jobId=...` and `/interview-prep?jobId=...` resolve the same policy-filtered employer excerpt; never put document text in URLs or fabricate missing JD data.
 - PDF/DOCX/TXT inputs require size/integrity checks; resume processing requires consent. Limits: 5 MB, 30 PDF pages, 24,000 extracted characters.
-- Every demonstrated requirement cites exact resume/JD evidence. Missing evidence is not proof of missing ability. No scores or predictions.
+- Every demonstrated requirement cites exact resume/JD evidence. Missing evidence is not proof of missing ability. The separately labeled internal compatibility estimate is a heuristic, not an official ATS score or hiring prediction.
 - Recommendations support accept/reject/edit, bulk verified acceptance, preview, drafts and restoration. Conservative automatic application only removes redundant tokens in order; broader suggestions require evidence and cannot auto-apply.
-- Immutable versions, 7/30/90-day retention, owner-only access and deletion. Latest approved version alone authorizes editable DOCX/PPTX exports and interview transfer.
-- Original binaries have no read policy until an actual scanner is integrated. Optional PDF is not implemented.
+- Immutable versions, 7/30/90-day retention, owner-only access and deletion. Latest approved version alone authorizes DOCX/PPTX/PDF exports and interview transfer.
+- Original binaries have no read policy until an actual scanner is integrated. Approved PDF exports and the private /my-career workspace are available.
+
+
+## Career workspace update — 28 October 2026
+Private My Career groups resume reviews, approved version counts, interview sessions, saved jobs/alerts and generated document history. The internal estimate exposes weights, exclusions, exact evidence and limitations, with no hiring prediction. Approved PDF is available alongside editable Word/PowerPoint. Seven-day jobs with 24/48/72-hour selections and four daily refreshes remain unchanged. No publication or scanner certification is claimed.

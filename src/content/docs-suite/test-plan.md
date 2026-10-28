@@ -130,4 +130,8 @@ primary journey) blocks release. Severity 3/4 are scheduled.
 
 ## Career assistant validation and release gates
 Automated tests cover verbatim evidence, unsupported claims, negation/case/token preservation, ambiguous/overlapping changes, original preservation, file signature/integrity, macros/embedded objects and expanded archive limits. Browser checks exercised real AI assessment, approval, editable DOCX/PPTX downloads, saved review readback, approved-resume interview transfer, template-change/draft export blocking, signed-out analysis 401 and mobile overflow. Synthetic private fixture is deleted after checks.
-Release gates still pending: independent cross-account negative testing, full deep security review, published callbacks and unattended expiry cleanup, large-document/all-slide inspection. No malware-scanning acceptance is claimed. Optional final PDF is not implemented.
+Release gates still pending: independent cross-account negative testing, full deep security review, published callbacks and unattended expiry cleanup, large-document/all-slide inspection. No malware-scanning acceptance is claimed. Approved PDF, Word and PowerPoint synthetic-fixture exports and private workspace history passed signed-in browser checks; all exports retained the approved factual text.
+
+
+## Career workspace update — 28 October 2026
+Private My Career groups resume reviews, approved version counts, interview sessions, saved jobs/alerts and generated document history. The internal estimate exposes weights, exclusions, exact evidence and limitations, with no hiring prediction. Approved PDF is available alongside editable Word/PowerPoint. Seven-day jobs with 24/48/72-hour selections and four daily refreshes remain unchanged. No publication or scanner certification is claimed.

@@ -18,3 +18,7 @@
 - Public jobs additionally require authorized-feed evidence and an approved live application check within 12 hours (aligned with the four daily refreshes); redirects are manually validated against provider/board allowlists before fetching.
 - Source refreshes preserve stable slugs, AI classifications and moderation holds; publication and verification transitions have durable audit records.
 - Sitemap dynamic content uses public credentials, paginated policy-filtered rows and an explicit unavailable response on errors; private utility routes are excluded.
+
+- Career compatibility arithmetic stays in a pure evidence-validating module with transparent factor exclusions and limitations; this keeps estimates reproducible without changing factual recommendations or implying employer ATS validation.
+- My Career aggregates owner-policy reads through one authenticated server function; approved document history links back to a fresh authorization check rather than reusable original-file URLs.
+- Public job source reads have column-level grants only for registry display fields; configuration, lock tokens and operational errors stay service-only to prevent metadata exposure.
