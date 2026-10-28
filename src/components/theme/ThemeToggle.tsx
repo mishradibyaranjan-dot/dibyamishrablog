@@ -35,7 +35,14 @@ export function ThemeToggle({ compact = false }: { compact?: boolean }) {
   const { theme, setTheme, density, setDensity, customColors, setCustomColors, resetCustomColors } = useTheme();
   const [primary, setPrimary] = useState(customColors?.primary ?? DEFAULT_CUSTOM_COLORS.primary);
   const [accent, setAccent] = useState(customColors?.accent ?? DEFAULT_CUSTOM_COLORS.accent);
-  const isDark = theme === 'system' ? documentMode() : themeMode(theme) === "dark";
+  const [systemDark, setSystemDark] = useState(false);
+  useEffect(() => {
+    const media = window.matchMedia('(prefers-color-scheme: dark)');
+    const update = () => setSystemDark(media.matches); update();
+    media.addEventListener('change', update);
+    return () => media.removeEventListener('change', update);
+  }, []);
+  const isDark = theme === 'system' ? systemDark : themeMode(theme) === "dark";
   const quickNext = isDark ? LIGHT_THEME : DARK_THEME;
 
   const dark = THEMES.filter((t) => t.mode === "dark" && !FUTURE_THEMES.some(f => f.id === t.id));
