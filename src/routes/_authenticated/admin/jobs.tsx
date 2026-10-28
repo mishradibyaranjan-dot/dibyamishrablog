@@ -51,8 +51,7 @@ function AdminJobs() {
     setSyncing(true);
     try {
       const r = await sync();
-      const failed = r.filter((x: any) => x.status === "failed").length;
-      toast.success(`Sync finished: ${r.length - failed} sources ok, ${failed} failed`);
+      toast.success(`Refresh queued for ${r.length} sources. Completion appears in sync history.`);
       await refresh();
     } catch (e) { toast.error(e instanceof Error ? e.message : "Sync failed"); }
     setSyncing(false);
