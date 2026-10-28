@@ -50,6 +50,7 @@ import { Route as TrustRouteImport } from './routes/trust'
 import { Route as Char91DotmcpChar93ListToolsRouteImport } from './routes/[.mcp]/list-tools'
 import { Route as Char91DotwellKnownChar93OauthProtectedResourceRouteImport } from './routes/[.well-known]/oauth-protected-resource'
 import { Route as AuthenticatedAdminRouteRouteImport } from './routes/_authenticated/admin/route'
+import { Route as AuthenticatedMyCareerRouteImport } from './routes/_authenticated/my-career'
 import { Route as AuthenticatedReportsRouteImport } from './routes/_authenticated/reports'
 import { Route as AuthenticatedRepositoryRouteImport } from './routes/_authenticated/repository'
 import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
@@ -302,6 +303,11 @@ const Char91DotwellKnownChar93OauthProtectedResourceRoute =
 const AuthenticatedAdminRouteRoute = AuthenticatedAdminRouteRouteImport.update({
   id: '/admin',
   path: '/admin',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedMyCareerRoute = AuthenticatedMyCareerRouteImport.update({
+  id: '/my-career',
+  path: '/my-career',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
 const AuthenticatedReportsRoute = AuthenticatedReportsRouteImport.update({
@@ -590,6 +596,7 @@ export interface FileRoutesByFullPath {
   '/admin': typeof AuthenticatedAdminRouteRouteWithChildren
   '/.mcp/list-tools': typeof Char91DotmcpChar93ListToolsRoute
   '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
+  '/my-career': typeof AuthenticatedMyCareerRoute
   '/reports': typeof AuthenticatedReportsRoute
   '/repository': typeof AuthenticatedRepositoryRoute
   '/blog/$slug': typeof BlogSlugRoute
@@ -678,6 +685,7 @@ export interface FileRoutesByTo {
   '/admin': typeof AuthenticatedAdminRouteRouteWithChildren
   '/.mcp/list-tools': typeof Char91DotmcpChar93ListToolsRoute
   '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
+  '/my-career': typeof AuthenticatedMyCareerRoute
   '/reports': typeof AuthenticatedReportsRoute
   '/repository': typeof AuthenticatedRepositoryRoute
   '/blog/$slug': typeof BlogSlugRoute
@@ -768,6 +776,7 @@ export interface FileRoutesById {
   '/_authenticated/admin': typeof AuthenticatedAdminRouteRouteWithChildren
   '/.mcp/list-tools': typeof Char91DotmcpChar93ListToolsRoute
   '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
+  '/_authenticated/my-career': typeof AuthenticatedMyCareerRoute
   '/_authenticated/reports': typeof AuthenticatedReportsRoute
   '/_authenticated/repository': typeof AuthenticatedRepositoryRoute
   '/blog/$slug': typeof BlogSlugRoute
@@ -858,6 +867,7 @@ export interface FileRouteTypes {
     | '/admin'
     | '/.mcp/list-tools'
     | '/.well-known/oauth-protected-resource'
+    | '/my-career'
     | '/reports'
     | '/repository'
     | '/blog/$slug'
@@ -946,6 +956,7 @@ export interface FileRouteTypes {
     | '/admin'
     | '/.mcp/list-tools'
     | '/.well-known/oauth-protected-resource'
+    | '/my-career'
     | '/reports'
     | '/repository'
     | '/blog/$slug'
@@ -1035,6 +1046,7 @@ export interface FileRouteTypes {
     | '/_authenticated/admin'
     | '/.mcp/list-tools'
     | '/.well-known/oauth-protected-resource'
+    | '/_authenticated/my-career'
     | '/_authenticated/reports'
     | '/_authenticated/repository'
     | '/blog/$slug'
@@ -1450,6 +1462,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminRouteRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/my-career': {
+      id: '/_authenticated/my-career'
+      path: '/my-career'
+      fullPath: '/my-career'
+      preLoaderRoute: typeof AuthenticatedMyCareerRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/reports': {
       id: '/_authenticated/reports'
       path: '/reports'
@@ -1809,12 +1828,14 @@ const AuthenticatedAdminRouteRouteWithChildren =
 
 interface AuthenticatedRouteRouteChildren {
   AuthenticatedAdminRouteRoute: typeof AuthenticatedAdminRouteRouteWithChildren
+  AuthenticatedMyCareerRoute: typeof AuthenticatedMyCareerRoute
   AuthenticatedReportsRoute: typeof AuthenticatedReportsRoute
   AuthenticatedRepositoryRoute: typeof AuthenticatedRepositoryRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedAdminRouteRoute: AuthenticatedAdminRouteRouteWithChildren,
+  AuthenticatedMyCareerRoute: AuthenticatedMyCareerRoute,
   AuthenticatedReportsRoute: AuthenticatedReportsRoute,
   AuthenticatedRepositoryRoute: AuthenticatedRepositoryRoute,
 }
