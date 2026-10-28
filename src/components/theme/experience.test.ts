@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { FUTURE_THEMES, readDensity, resolveAppearance } from './experience';
 describe('optional experience preferences', () => {
   it('offers all requested additions without reusing original theme IDs', () => {
-    expect(FUTURE_THEMES.map(t => t.label)).toEqual(['Original Theme','Future Experience','Future Light','Future Dark','Comfort Reading','System appearance']);
+    expect(FUTURE_THEMES.map(t => t.id)).toEqual(['original','future','future-light','future-dark','comfort','system']);
   });
   it('keeps original appearance out of the future rollout', () => expect(resolveAppearance('glacier', true)).toEqual({ theme:'glacier',future:false }));
   it('follows dark system preference only when selected', () => expect(resolveAppearance('system', true).theme).toBe('future-dark'));
