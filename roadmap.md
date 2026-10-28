@@ -1,4 +1,5 @@
 # Roadmap
+- [ ] Future Experience 2.0: diagnose inactive default; visibly replace header/home/shell/projects/jobs/workspace/forms; preserve saved preferences and functionality; before/after, regression and measured delivery report. Do not publish.
 - [x] Future Experience foundation/pilots: original default/themes preserved; additional themes/system mode/density, dropdown/search/breadcrumbs, private summary, deferred assistant, accessibility fix, seven-width checks, 104 tests and structured delivery report. Not published.
 - [ ] Full Future Experience acceptance: production performance/complete role-specific regression need deployment authorization and owner credentials; exhaustive assistive-technology/zoom review needs independent acceptance. Broader dashboard and contextual refinements remain partial, documented in delivery report.
 - [x] Master audit: focused code review plus live policy/schedule/source inventory; repair confirmed defects, preserve data, seven-day jobs and four daily refreshes. Findings and limitations recorded in private audit guide.
