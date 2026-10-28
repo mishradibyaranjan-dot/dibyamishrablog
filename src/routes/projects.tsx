@@ -10,6 +10,9 @@ import { pageOgImages, SITE_ORIGIN } from "@/lib/og-images";
 import { breadcrumbScript } from "@/lib/breadcrumbs";
 import heroProjects from "@/assets/hero-projects.jpg";
 import collabProjects from "@/assets/collab-projects.jpg";
+import { useTheme } from '@/components/theme/ThemeProvider';
+import { isFutureTheme } from '@/components/theme/experience';
+import enterpriseImage from '@/assets/future-enterprise.jpg';
 
 
 export const Route = createFileRoute("/projects")({
@@ -58,11 +61,15 @@ export const Route = createFileRoute("/projects")({
 
 function Projects() {
   const [active, setActive] = useState<string>("All");
+  const { theme } = useTheme();
+  const modern = isFutureTheme(theme);
   const filtered = active === "All" ? projects : projects.filter((p) => p.area === active);
 
   return (
     <>
-      <Section className="pb-6 pt-16 lg:pt-24">
+      {modern && <section className="projects-hero future-home-hero"><img src={enterpriseImage} alt="Connected cloud and intelligent enterprise architecture" width={1920} height={1024} fetchPriority="high" className="future-hero-image"/><div className="future-hero-copy"><p className="future-kicker">SELECTED WORK / ENTERPRISE TECHNOLOGY</p><h1>Engineering<br/>what’s next.</h1><p className="future-hero-description">Platforms, programs and transformations across AI, cloud, SaaS, data and engineering leadership.</p><a href="#project-directory" className="inline-flex items-center gap-2 font-semibold">Explore the portfolio<ArrowRight className="h-4 w-4"/></a></div><div className="future-hero-caption"><span>ARCHITECTURE WITH PURPOSE</span><span>MEASURABLE OUTCOMES</span></div></section>}
+      <Section id="project-directory" className="pb-6 pt-16 lg:pt-24">
+        {!modern && <>
         <SectionHeader
           as="h1"
           eyebrow="Projects"
@@ -81,7 +88,7 @@ function Projects() {
           className="mb-8 aspect-[16/9] w-full rounded-3xl border border-border/60 object-cover"
         />
 
-        <figure className="mb-8 overflow-hidden rounded-3xl border border-blue-100 bg-gradient-to-br from-blue-50 via-white to-indigo-50 shadow-[0_10px_30px_-16px_rgba(59,130,246,0.35)]">
+        <figure className="mb-8 overflow-hidden rounded-lg border border-border bg-muted shadow-card-soft">
           <img
             src={collabProjects}
             alt="Human engineer and friendly robot building cloud, AI and SaaS components together"
@@ -91,36 +98,39 @@ function Projects() {
             decoding="async"
             className="aspect-[16/7] w-full object-cover"
           />
-          <figcaption className="flex items-center gap-2 border-t border-blue-100 bg-white/70 px-5 py-3 text-sm text-slate-700">
-            <span className="inline-block h-2 w-2 rounded-full bg-blue-500" />
+          <figcaption className="flex items-center gap-2 border-t border-border bg-card px-5 py-3 text-sm text-muted-foreground">
+            <span className="inline-block h-2 w-2 rounded-full bg-primary" />
             Engineering with AI — humans + robots, shipping enterprise-grade platforms.
           </figcaption>
         </figure>
+        </>}
+        {modern && <div className="mb-6 flex flex-wrap items-end justify-between gap-4"><div><p className="text-sm font-semibold text-primary">THE PORTFOLIO</p><h2 className="mt-2 text-3xl font-semibold">Selected platforms &amp; programs</h2></div><span className="text-sm text-muted-foreground">{filtered.length} projects</span></div>}
 
         <div className="flex flex-wrap gap-2">
           {["All", ...categories].map((c) => (
-            <button
+            <Button variant="outline" size="sm"
               key={c}
               onClick={() => setActive(c)}
+              aria-pressed={active === c}
               className={cn(
                 "rounded-full border px-3 py-1.5 text-xs font-medium transition-colors",
                 active === c
-                  ? "border-transparent bg-brand-gradient text-white"
+                  ? "border-transparent bg-primary text-primary-foreground"
                   : "border-border bg-card hover:bg-accent",
               )}
             >
               {c}
-            </button>
+            </Button>
           ))}
         </div>
       </Section>
 
       <Section className="pt-0">
-        <div className="grid gap-6 lg:grid-cols-2">
+        <div className="project-records grid gap-6 lg:grid-cols-2">
           {filtered.map((p) => {
             const cs = caseStudies.find((c) => c.area === p.area);
             return (
-              <div key={p.slug} className="card-flashy flex flex-col rounded-3xl glass-strong p-7 transition-all hover:-translate-y-0.5 hover:shadow-glow">
+              <article key={p.slug} className="project-record card-flashy flex flex-col rounded-lg bg-card p-7 transition-all hover:-translate-y-0.5 hover:shadow-glow">
                 <div className="flex items-center justify-between gap-3">
                   <Badge variant="secondary">{p.area}</Badge>
                   <div className="text-xs font-medium text-muted-foreground">Case study</div>
@@ -128,15 +138,15 @@ function Projects() {
                 <h2 className="mt-3 text-xl font-bold">{p.name}</h2>
                 <div className="mt-4 space-y-3 text-sm">
                   <div>
-                    <div className="text-xs font-semibold uppercase tracking-wider text-gradient">Problem</div>
+                    <div className="text-xs font-semibold uppercase text-primary">Problem</div>
                     <p className="mt-1 text-muted-foreground">{p.problem}</p>
                   </div>
                   <div>
-                    <div className="text-xs font-semibold uppercase tracking-wider text-gradient">Solution</div>
+                    <div className="text-xs font-semibold uppercase text-primary">Solution</div>
                     <p className="mt-1 text-muted-foreground">{p.solution}</p>
                   </div>
                   <div>
-                    <div className="text-xs font-semibold uppercase tracking-wider text-gradient">Impact</div>
+                    <div className="text-xs font-semibold uppercase text-primary">Impact</div>
                     <p className="mt-1 text-muted-foreground">{p.impact}</p>
                   </div>
                 </div>
@@ -147,7 +157,7 @@ function Projects() {
                 </div>
                 <div className="mt-5 flex flex-wrap gap-2">
                   {p.metrics.map((m) => (
-                    <span key={m} className="rounded-full bg-brand-gradient px-3 py-1 text-xs font-semibold text-white">{m}</span>
+                    <span key={m} className="rounded-md bg-primary px-3 py-1 text-xs font-semibold text-primary-foreground">{m}</span>
                   ))}
                 </div>
                 <div className="mt-6">
@@ -160,7 +170,7 @@ function Projects() {
                 {cs && (
                   <div className="sr-only">Related: {cs.title}</div>
                 )}
-              </div>
+              </article>
             );
           })}
           {filtered.length === 0 && (

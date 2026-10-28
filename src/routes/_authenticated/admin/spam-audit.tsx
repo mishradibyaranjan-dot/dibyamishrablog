@@ -11,6 +11,12 @@ export const Route = createFileRoute("/_authenticated/admin/spam-audit")({
     meta: [
       { title: "Spam audit log — Admin" },
       { name: "robots", content: "noindex" },
+    
+      { name: 'description', content: 'Private spam protection audit history.' },
+      { property: 'og:title', content: 'Spam Audit — Dibya Mishra' },
+      { property: 'og:description', content: 'Private spam protection audit history.' },
+      { property: 'og:type', content: 'website' },
+      { name: 'twitter:card', content: 'summary' },
     ],
   }),
   component: SpamAuditPage,

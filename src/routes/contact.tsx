@@ -18,6 +18,8 @@ export const Route = createFileRoute("/contact")({
       { property: "og:title", content: "Contact — Dibya Ranjan Mishra" },
       { property: "og:description", content: "Advisory, architecture reviews, or engineering leadership conversations." },
       { property: "og:url", content: "https://www.dibyamishra.co.in/contact" },
+      { property: 'og:type', content: 'website' },
+      { name: 'twitter:card', content: 'summary' },
     ],
     links: [{ rel: "canonical", href: "https://www.dibyamishra.co.in/contact" }],
     scripts: [breadcrumbScript([{ name: "Contact", path: "/contact" }])],

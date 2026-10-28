@@ -8,6 +8,7 @@ import { listJobs, listJobLocations, jobFilters, type JobFilters } from "@/lib/j
 import { nearestLocation, splitLocations } from "@/lib/jobs/locations";
 import { AdvancedJobFilters } from "./AdvancedJobFilters";
 import { JobCard, type PublicJob } from "./JobCard";
+import { ShieldCheck } from 'lucide-react';
 
 export const DEFAULT_FILTERS: JobFilters = jobFilters.parse({});
 export const jobsQuery = (f: JobFilters) => queryOptions({ queryKey: ["jobs", f], queryFn: () => listJobs({ data: f }), staleTime: 60_000 });
@@ -17,14 +18,15 @@ const sel = "h-10 rounded-md border border-input bg-background px-3 text-sm text
 
 export function JobsHero({ title, subtitle }: { title?: string; subtitle?: string }) {
   return (
-    <header className="mb-8">
+    <header className="jobs-heading mb-8">
+      <p className="jobs-eyebrow"><ShieldCheck className="h-4 w-4"/>VERIFIED OPPORTUNITIES / INDIA &amp; BEYOND</p>
       <h1 className="font-display text-3xl font-bold tracking-tight sm:text-5xl">{title ?? "Verified Jobs — Fresh Opportunities Posted Within the Last 7 Days"}</h1>
       <p className="mt-4 max-w-3xl text-lg text-muted-foreground">
         {subtitle ?? "Discover current career opportunities from entry-level to executive leadership, with verified original sources and direct application links."}
       </p>
       <nav aria-label="Jobs sections" className="mt-5 flex flex-wrap gap-3 text-sm">
-        <Link to="/jobs" className="text-primary underline-offset-4 hover:underline">All jobs</Link>
-        <Link to="/jobs/remote" className="text-primary underline-offset-4 hover:underline">Remote</Link>
+        <Link to="/jobs" activeOptions={{exact:true}} activeProps={{'aria-current':'page'}} className="text-primary underline-offset-4 hover:underline">All jobs</Link>
+        <Link to="/jobs/remote" activeProps={{'aria-current':'page'}} className="text-primary underline-offset-4 hover:underline">Remote</Link>
         <Link to="/jobs/saved" className="text-primary underline-offset-4 hover:underline">Saved</Link>
         <Link to="/jobs/alerts" className="text-primary underline-offset-4 hover:underline">Alerts</Link>
         <Link to="/jobs/sources" className="text-primary underline-offset-4 hover:underline">Sources</Link>
@@ -58,8 +60,8 @@ export function JobsDirectory({ filters, onChange, lockedKeys = [], initial }: {
   const totalPages = data ? Math.max(1, Math.ceil(data.total / data.pageSize)) : 1;
 
   return (
-    <div>
-      <form role="search" className="grid gap-3 rounded-lg border border-border bg-card p-4 md:grid-cols-4" onSubmit={(e) => { e.preventDefault(); set({ q }); }}>
+    <div className="jobs-directory">
+      <form role="search" className="jobs-filters grid gap-3 rounded-lg border border-border bg-card p-4 md:grid-cols-4" onSubmit={(e) => { e.preventDefault(); set({ q }); }}>
         <label className="md:col-span-2"><span className="sr-only">Search jobs</span>
           <Input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Title, company, skill or city" />
         </label>

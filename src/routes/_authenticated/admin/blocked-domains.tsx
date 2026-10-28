@@ -12,6 +12,12 @@ export const Route = createFileRoute("/_authenticated/admin/blocked-domains")({
     meta: [
       { title: "Blocked email domains — Admin" },
       { name: "robots", content: "noindex" },
+    
+      { name: 'description', content: 'Private email-domain security administration.' },
+      { property: 'og:title', content: 'Blocked Email Domains — Dibya Mishra' },
+      { property: 'og:description', content: 'Private email-domain security administration.' },
+      { property: 'og:type', content: 'website' },
+      { name: 'twitter:card', content: 'summary' },
     ],
   }),
   component: BlockedDomainsAdmin,

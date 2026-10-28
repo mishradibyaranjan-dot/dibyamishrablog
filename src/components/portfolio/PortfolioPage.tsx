@@ -15,19 +15,17 @@ const NAV = [
 export function PortfolioPage({ eyebrow, title, intro, children }: { eyebrow: string; title: string; intro: string; children: ReactNode }) {
   return (
     <>
-      <Section className="pb-6 pt-16 lg:pt-24">
+      <Section className="portfolio-heading pb-6 pt-16 lg:pt-24">
         <Badge variant="secondary" className="mb-4">{eyebrow}</Badge>
         <h1 className="font-display text-4xl font-bold tracking-tight sm:text-5xl">{title}</h1>
         <p className="mt-4 max-w-3xl text-lg text-muted-foreground">{intro}</p>
         <nav aria-label="Portfolio sections" className="mt-8 flex flex-wrap gap-2">
           {NAV.map((n) => (
-            <Link key={n.to} to={n.to} className="rounded-full border border-border px-4 py-2 text-sm text-foreground hover:bg-muted" activeProps={{ className: "bg-primary text-primary-foreground border-primary" }}>
-              {n.label}
-            </Link>
+            <Button asChild variant="outline" key={n.to}><Link to={n.to} activeProps={{ className: "bg-primary text-primary-foreground border-primary", 'aria-current':'page' }}>{n.label}</Link></Button>
           ))}
         </nav>
       </Section>
-      <Section className="pt-4">{children}</Section>
+      <Section className="portfolio-content pt-4">{children}</Section>
       <Section className="pt-0">
         <div className="flex flex-wrap gap-3 rounded-2xl border border-border bg-card p-6">
           <Button asChild><a href="/api/download/pdf?doc=executive-summary">Download Resume</a></Button>

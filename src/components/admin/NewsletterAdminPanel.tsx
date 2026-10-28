@@ -232,21 +232,21 @@ export function NewsletterAdminPanel() {
   const isApproved = !!approvedAt && (status === "approved" || status === "published");
 
   return (
-    <div className="rounded-2xl border border-white/10 bg-white/5 p-5 backdrop-blur-xl">
-      <div className="mb-3 flex items-center gap-2 text-sm font-semibold text-white">
+    <div className="rounded-2xl border border-border bg-card p-5 backdrop-blur-xl">
+      <div className="mb-3 flex items-center gap-2 text-sm font-semibold text-foreground">
         <Mail className="h-4 w-4 text-neon-cyan" />
         Newsletter — Compose · Approve · Publish
       </div>
-      <p className="mb-4 text-xs text-white/60">
+      <p className="mb-4 text-xs text-muted-foreground">
         Nothing goes out until you sign off. Drafts (including the monthly AI-generated one) sit in
-        <span className="mx-1 rounded bg-yellow-500/20 px-1.5 py-0.5 font-semibold text-yellow-300">pending_approval</span>
-        until you click <span className="font-semibold text-emerald-300">Approve</span>. Only then can this panel email subscribers or post to LinkedIn.
+        <span className="mx-1 rounded bg-warning-soft px-1.5 py-0.5 font-semibold text-foreground">pending_approval</span>
+        until you click <span className="font-semibold text-foreground">Approve</span>. Only then can this panel email subscribers or post to LinkedIn.
       </p>
 
-      <div className="mb-4 flex flex-wrap items-center justify-between gap-3 rounded-xl border border-neon-cyan/30 bg-gradient-to-r from-neon-cyan/10 to-fuchsia-500/10 p-3">
+      <div className="mb-4 flex flex-wrap items-center justify-between gap-3 rounded-xl border border-neon-cyan/30 bg-gradient-to-r from-neon-cyan/10 to-secondary/10 p-3">
         <div className="min-w-0">
-          <div className="text-sm font-semibold text-white">⚡ One-click auto-send</div>
-          <div className="text-[11px] text-white/60">
+          <div className="text-sm font-semibold text-foreground">⚡ One-click auto-send</div>
+          <div className="text-[11px] text-muted-foreground">
             Generates a fresh newsletter with AI and emails it to every registered user + active subscriber. Skips LinkedIn.
           </div>
         </div>
@@ -254,7 +254,7 @@ export function NewsletterAdminPanel() {
           size="sm"
           onClick={doAutoSend}
           disabled={autoSending}
-          className="bg-brand-gradient text-white shadow-neon"
+          className="bg-primary text-primary-foreground"
         >
           {autoSending ? (
             <Loader2 className="mr-1 h-3.5 w-3.5 animate-spin" />
@@ -270,85 +270,91 @@ export function NewsletterAdminPanel() {
           <div className="mb-2 flex flex-wrap items-center gap-2">
             <input
               type="text"
-              value={topicHint}
+              aria-label="Topic hint"
+            value={topicHint}
               onChange={(e) => setTopicHint(e.target.value)}
               placeholder="Optional topic hint (e.g. 'agentic RAG in retail')"
-              className="flex-1 rounded-md border border-white/15 bg-white/5 px-3 py-2 text-xs text-white placeholder:text-white/40"
+              className="flex-1 rounded-md border border-input bg-card px-3 py-2 text-xs text-foreground placeholder:text-muted-foreground"
             />
-            <Button size="sm" onClick={doGenerate} disabled={generating} className="bg-brand-gradient text-white shadow-neon">
+            <Button size="sm" onClick={doGenerate} disabled={generating} className="bg-primary text-primary-foreground">
               {generating ? <Loader2 className="mr-1 h-3.5 w-3.5 animate-spin" /> : <Sparkles className="mr-1 h-3.5 w-3.5" />}
               Generate with AI
             </Button>
           </div>
 
           {id && (
-            <div className="mb-2 flex flex-wrap items-center gap-2 rounded-md border border-white/10 bg-white/5 px-3 py-2 text-[11px] text-white/70">
+            <div className="mb-2 flex flex-wrap items-center gap-2 rounded-md border border-border bg-card px-3 py-2 text-[11px] text-muted-foreground">
               <StatusPill status={status} />
               {approvedAt ? (
-                <span className="inline-flex items-center gap-1 text-emerald-300">
+                <span className="inline-flex items-center gap-1 text-foreground">
                   <ShieldCheck className="h-3 w-3" /> Signed off {new Date(approvedAt).toLocaleString()}
                 </span>
               ) : (
-                <span className="inline-flex items-center gap-1 text-yellow-300">
+                <span className="inline-flex items-center gap-1 text-foreground">
                   <Clock className="h-3 w-3" /> Awaiting your sign-off
                 </span>
               )}
             </div>
           )}
 
-          <label className="mt-2 block text-xs text-white/60">Title</label>
+          <label className="mt-2 block text-xs text-muted-foreground">Title</label>
           <input
+            aria-label="Newsletter title"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
-            className="mt-1 w-full rounded-md border border-white/15 bg-white/5 px-3 py-2 text-sm text-white"
+            className="mt-1 w-full rounded-md border border-input bg-card px-3 py-2 text-sm text-foreground"
           />
           <div className="mt-2 grid grid-cols-[1fr_80px] gap-2">
             <div>
-              <label className="block text-xs text-white/60">Summary</label>
+              <label className="block text-xs text-muted-foreground">Summary</label>
               <input
-                value={summary}
+                aria-label="Newsletter summary"
+            value={summary}
                 onChange={(e) => setSummary(e.target.value)}
-                className="mt-1 w-full rounded-md border border-white/15 bg-white/5 px-3 py-2 text-sm text-white"
+                className="mt-1 w-full rounded-md border border-input bg-card px-3 py-2 text-sm text-foreground"
               />
             </div>
             <div>
-              <label className="block text-xs text-white/60">Emoji</label>
+              <label className="block text-xs text-muted-foreground">Emoji</label>
               <input
-                value={emoji}
+                aria-label="Newsletter emoji"
+            value={emoji}
                 onChange={(e) => setEmoji(e.target.value)}
                 maxLength={4}
-                className="mt-1 w-full rounded-md border border-white/15 bg-white/5 px-3 py-2 text-center text-lg text-white"
+                className="mt-1 w-full rounded-md border border-input bg-card px-3 py-2 text-center text-lg text-foreground"
               />
             </div>
           </div>
 
-          <label className="mt-2 block text-xs text-white/60">
+          <label className="mt-2 block text-xs text-muted-foreground">
             Body (Markdown — use ## H2 and "- " bullets)
           </label>
           <textarea
+            aria-label="Newsletter body"
             value={body}
             onChange={(e) => setBody(e.target.value)}
             rows={12}
-            className="mt-1 w-full rounded-md border border-white/15 bg-white/5 px-3 py-2 font-mono text-xs text-white"
+            className="mt-1 w-full rounded-md border border-input bg-card px-3 py-2 font-mono text-xs text-foreground"
           />
 
-          <label className="mt-2 block text-xs text-white/60">LinkedIn post</label>
+          <label className="mt-2 block text-xs text-muted-foreground">LinkedIn post</label>
           <textarea
+            aria-label="LinkedIn post"
             value={linkedin}
             onChange={(e) => setLinkedin(e.target.value)}
             rows={6}
-            className="mt-1 w-full rounded-md border border-white/15 bg-white/5 px-3 py-2 text-xs text-white"
+            className="mt-1 w-full rounded-md border border-input bg-card px-3 py-2 text-xs text-foreground"
           />
 
           <div className="mt-3 flex flex-wrap gap-2">
-            <Button size="sm" onClick={doSave} disabled={saving || !title || !body} variant="outline" className="border-white/15 bg-white/5 text-white hover:bg-white/10">
+            <Button size="sm" onClick={doSave} disabled={saving || !title || !body} variant="outline" className="border-input bg-card text-foreground hover:bg-muted">
               {saving ? <Loader2 className="mr-1 h-3.5 w-3.5 animate-spin" /> : null}
               {id ? "Update draft" : "Save draft"}
             </Button>
-            <Button size="sm" onClick={doSubmit} disabled={approving || !id || isApproved} variant="outline" className="border-white/15 bg-white/5 text-white hover:bg-white/10">
+            <Button size="sm" onClick={doSubmit} disabled={approving || !id || isApproved} variant="outline" className="border-input bg-card text-foreground hover:bg-muted">
               Submit for approval
             </Button>
-            <Button size="sm" onClick={doApprove} disabled={approving || !id || isApproved} className="bg-emerald-500 text-white hover:bg-emerald-600">
+            <Button size="sm" onClick={doApprove} disabled={approving || !id || isApproved} className="bg-primary text-foreground hover:bg-primary/90">
               {approving ? <Loader2 className="mr-1 h-3.5 w-3.5 animate-spin" /> : <ShieldCheck className="mr-1 h-3.5 w-3.5" />}
               Approve & sign off
             </Button>
@@ -356,41 +362,41 @@ export function NewsletterAdminPanel() {
               size="sm"
               onClick={() => doPublish(true, true)}
               disabled={publishing || !id || !isApproved}
-              className="bg-brand-gradient text-white shadow-neon disabled:opacity-40"
+              className="bg-primary text-primary-foreground disabled:opacity-40"
               title={isApproved ? "Publish, email subscribers, post to LinkedIn" : "Approve the issue first"}
             >
               {publishing ? <Loader2 className="mr-1 h-3.5 w-3.5 animate-spin" /> : <Send className="mr-1 h-3.5 w-3.5" />}
               Publish + Email + LinkedIn
             </Button>
-            <Button size="sm" onClick={() => doPublish(true, false)} disabled={publishing || !id || !isApproved} variant="outline" className="border-white/15 bg-white/5 text-white hover:bg-white/10">
+            <Button size="sm" onClick={() => doPublish(true, false)} disabled={publishing || !id || !isApproved} variant="outline" className="border-input bg-card text-foreground hover:bg-muted">
               Publish + Email only
             </Button>
-            <Button size="sm" onClick={copyLi} disabled={!linkedin} variant="outline" className="border-white/15 bg-white/5 text-white hover:bg-white/10">
+            <Button size="sm" onClick={copyLi} disabled={!linkedin} variant="outline" className="border-input bg-card text-foreground hover:bg-muted">
               <Copy className="mr-1 h-3.5 w-3.5" /> Copy LinkedIn
             </Button>
           </div>
-          {msg && <p className="mt-3 text-xs text-emerald-400">{msg}</p>}
-          {err && <p className="mt-3 text-xs text-red-400">{err}</p>}
+          {msg && <p className="mt-3 text-xs text-success">{msg}</p>}
+          {err && <p className="mt-3 text-xs text-destructive">{err}</p>}
         </div>
 
         <div>
-          <div className="mb-2 text-xs font-semibold uppercase tracking-widest text-white/60">
+          <div className="mb-2 text-xs font-semibold uppercase tracking-widest text-muted-foreground">
             Recent issues
           </div>
           <div className="max-h-[560px] space-y-2 overflow-y-auto pr-2">
-            {loading && <p className="text-xs text-white/50">Loading…</p>}
-            {!loading && issues.length === 0 && <p className="text-xs text-white/50">No issues yet.</p>}
+            {loading && <p className="text-xs text-muted-foreground">Loading…</p>}
+            {!loading && issues.length === 0 && <p className="text-xs text-muted-foreground">No issues yet.</p>}
             {issues.map((it) => (
-              <div key={it.id} className="rounded-lg border border-white/10 bg-white/5 p-3 text-xs text-white/80">
+              <div key={it.id} className="rounded-lg border border-border bg-card p-3 text-xs text-foreground">
                 <div className="flex items-start justify-between gap-2">
                   <div className="min-w-0">
-                    <div className="truncate font-semibold text-white">{it.title}</div>
-                    <div className="mt-0.5 truncate text-white/50">/{it.slug}</div>
+                    <div className="truncate font-semibold text-foreground">{it.title}</div>
+                    <div className="mt-0.5 truncate text-muted-foreground">/{it.slug}</div>
                   </div>
                   <StatusPill status={it.status} />
                 </div>
-                <div className="mt-2 flex flex-wrap gap-2 text-[10px] text-white/50">
-                  {it.approved_at && <span className="text-emerald-300">✓ Approved</span>}
+                <div className="mt-2 flex flex-wrap gap-2 text-[10px] text-muted-foreground">
+                  {it.approved_at && <span className="text-foreground">✓ Approved</span>}
                   {it.published_at && <span>· Pub {new Date(it.published_at).toLocaleDateString()}</span>}
                   {it.emails_sent_at && <span>· Emailed</span>}
                   {it.linkedin_posted_at && <span>· LinkedIn ✓</span>}
@@ -411,13 +417,13 @@ export function NewsletterAdminPanel() {
 
 function StatusPill({ status }: { status: string }) {
   const map: Record<string, string> = {
-    draft: "bg-white/10 text-white/70",
-    pending_approval: "bg-yellow-500/20 text-yellow-300",
-    approved: "bg-emerald-500/20 text-emerald-300",
-    published: "bg-brand-gradient text-white",
+    draft: "bg-muted text-muted-foreground",
+    pending_approval: "bg-warning-soft text-foreground",
+    approved: "bg-success-soft text-foreground",
+    published: "bg-brand-gradient text-foreground",
   };
   return (
-    <span className={`rounded-full px-2 py-0.5 text-[10px] font-semibold ${map[status] ?? "bg-white/10 text-white/70"}`}>
+    <span className={`rounded-full px-2 py-0.5 text-[10px] font-semibold ${map[status] ?? "bg-muted text-muted-foreground"}`}>
       {status}
     </span>
   );

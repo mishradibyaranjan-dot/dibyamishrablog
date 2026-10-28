@@ -1,8 +1,8 @@
 import { describe, expect, it } from 'vitest';
-import { FUTURE_THEMES, readDensity, resolveAppearance } from './experience';
+import { FUTURE_THEMES, initialExperience, readDensity, resolveAppearance } from './experience';
 describe('optional experience preferences', () => {
   it('offers all requested additions without reusing original theme IDs', () => {
-    expect(FUTURE_THEMES.map(t => t.id)).toEqual(['original','future','future-light','future-dark','comfort','system']);
+    expect(FUTURE_THEMES.map(t => t.id)).toEqual(['future-v2','original','future','future-light','future-dark','comfort','system']);
   });
   it('keeps original appearance out of the future rollout', () => expect(resolveAppearance('glacier', true)).toEqual({ theme:'glacier',future:false }));
   it('follows dark system preference only when selected', () => expect(resolveAppearance('system', true).theme).toBe('future-dark'));
@@ -10,4 +10,7 @@ describe('optional experience preferences', () => {
   it('preserves explicit light preference on dark systems', () => expect(resolveAppearance('future-light', true).theme).toBe('future-light'));
   it('defaults unknown density to comfortable', () => expect(readDensity('unexpected')).toBe('comfortable'));
   it('accepts compact density', () => expect(readDensity('compact')).toBe('compact'));
+  it('defaults an unsaved visitor to Future Experience 2.0', () => expect(initialExperience(null)).toBe('future-v2'));
+  it('preserves an explicitly saved original theme', () => expect(initialExperience('glacier')).toBe('glacier'));
+  it('preserves an explicitly saved dark theme', () => expect(initialExperience('midnight')).toBe('midnight'));
 });

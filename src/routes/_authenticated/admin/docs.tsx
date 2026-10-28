@@ -22,6 +22,12 @@ export const Route = createFileRoute("/_authenticated/admin/docs")({
     meta: [
       { title: "Engineering documentation — Admin" },
       { name: "robots", content: "noindex, nofollow" },
+    
+      { name: 'description', content: 'Owner-only engineering documentation and authorized downloads.' },
+      { property: 'og:title', content: 'Engineering Documentation — Dibya Mishra' },
+      { property: 'og:description', content: 'Owner-only engineering documentation and authorized downloads.' },
+      { property: 'og:type', content: 'website' },
+      { name: 'twitter:card', content: 'summary' },
     ],
   }),
   component: EngineeringDocsPage,

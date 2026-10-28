@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
 import {
   BarChart3,
@@ -37,7 +37,12 @@ import { RequireAdmin } from "@/components/auth/RequireAdmin";
 export const Route = createFileRoute("/_authenticated/reports")({
   head: () => ({
     meta: [
-      { title: "Admin Reports" },
+      { title: "Reports & Analytics — Dibya Mishra Admin" },
+      { name: "description", content: "Private site analytics, activity reporting and authorized exports." },
+      { property: "og:title", content: "Reports & Analytics — Dibya Mishra Admin" },
+      { property: "og:description", content: "Private site analytics and authorized reporting." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
       { name: "robots", content: "noindex, nofollow" },
     ],
   }),
@@ -125,7 +130,7 @@ function Reports() {
   if (loading) {
     return (
       <Section className="pt-24">
-        <div className="mx-auto h-10 w-10 animate-pulse rounded-full bg-slate-200" />
+        <div className="mx-auto h-10 w-10 animate-pulse rounded-full bg-muted" />
       </Section>
     );
   }
@@ -133,18 +138,19 @@ function Reports() {
   if (!isAdmin) {
     return (
       <Section className="pt-20">
-        <div className="mx-auto max-w-md rounded-3xl border border-slate-200 bg-white p-10 text-center shadow-sm">
-          <ShieldAlert className="mx-auto h-10 w-10 text-amber-500" />
-          <h2 className="mt-4 font-display text-2xl font-bold text-slate-900">Admins only</h2>
-          <p className="mt-2 text-sm text-slate-600">You don't have access to this page.</p>
+        <div className="mx-auto max-w-md rounded-3xl border border-border bg-card p-10 text-center shadow-sm">
+          <ShieldAlert className="mx-auto h-10 w-10 text-warning" />
+          <h2 className="mt-4 font-display text-2xl font-bold text-foreground">Admins only</h2>
+          <p className="mt-2 text-sm text-muted-foreground">You don't have access to this page.</p>
         </div>
       </Section>
     );
   }
 
   return (
-    <Section className="pb-12 pt-16 lg:pt-24">
+    <Section className="reports-workspace pb-12 pt-16 lg:pt-24"><nav aria-label="Administration workspace" className="workspace-navigation"><Button variant="secondary" asChild><Link to="/reports" aria-current="page">Analytics</Link></Button><Button variant="ghost" asChild><Link to="/admin/contact-enquiries">Enquiries</Link></Button><Button variant="ghost" asChild><Link to="/admin/security-events">Security</Link></Button><Button variant="ghost" asChild><Link to="/admin/docs">Documentation</Link></Button></nav>
       <SectionHeader
+        as="h1"
         eyebrow="Admin"
         title="Reports & Analytics"
         description="Activity across the site — users, sessions, page visits, learning tabs, and chatbot questions."
@@ -153,31 +159,32 @@ function Reports() {
       <div className="mt-6 flex flex-wrap items-center justify-between gap-3">
         <div className="flex gap-2">
           {[7, 14, 30, 90].map((d) => (
-            <button
+            <Button variant="outline" size="sm"
+              aria-pressed={days === d}
               key={d}
               onClick={() => setDays(d)}
               className={`rounded-full border px-3 py-1.5 text-xs font-medium transition-colors ${
                 days === d
-                  ? "border-blue-600 bg-blue-600 text-white"
-                  : "border-slate-200 bg-white text-slate-700 hover:bg-slate-50"
+                  ? "border-primary bg-primary text-primary-foreground"
+                  : "border-border bg-card text-foreground hover:bg-accent"
               }`}
             >
               Last {d}d
-            </button>
+            </Button>
           ))}
         </div>
-        <Button onClick={exportCsv} variant="outline" size="sm" className="border-slate-200 bg-white text-slate-900 hover:bg-slate-50">
+        <Button onClick={exportCsv} variant="outline" size="sm" className="border-border bg-card text-foreground hover:bg-muted">
           <Download className="mr-2 h-4 w-4" /> Export CSV
         </Button>
       </div>
 
       {err && (
-        <div className="mt-4 rounded-xl border border-red-200 bg-red-50 p-3 text-sm text-red-700">
+        <div className="mt-4 rounded-xl border border-destructive/30 bg-destructive/10 p-3 text-sm text-destructive">
           Failed to load reports: {err}
         </div>
       )}
       {!payload && !err && (
-        <div className="mt-4 rounded-xl border border-slate-200 bg-white p-3 text-sm text-slate-500">
+        <div className="mt-4 rounded-xl border border-border bg-card p-3 text-sm text-muted-foreground">
           Loading analytics…
         </div>
       )}
@@ -199,11 +206,11 @@ function Reports() {
           <div className="h-64">
             <ResponsiveContainer width="100%" height="100%">
               <LineChart data={series} margin={{ top: 8, right: 16, left: 0, bottom: 0 }}>
-                <CartesianGrid stroke="#e2e8f0" strokeDasharray="3 3" />
-                <XAxis dataKey="day" stroke="#475569" fontSize={11} />
-                <YAxis stroke="#475569" fontSize={11} allowDecimals={false} />
-                <Tooltip contentStyle={{ background: "#ffffff", border: "1px solid #e2e8f0", color: "#0f172a" }} />
-                <Line type="monotone" dataKey="visits" stroke="#2563eb" strokeWidth={2} dot={{ r: 3, fill: "#2563eb" }} />
+                <CartesianGrid stroke="var(--border)" strokeDasharray="3 3" />
+                <XAxis dataKey="day" stroke="var(--muted-foreground)" fontSize={11} />
+                <YAxis stroke="var(--muted-foreground)" fontSize={11} allowDecimals={false} />
+                <Tooltip contentStyle={{ background: "var(--card)", border: "1px solid var(--border)", color: "var(--foreground)" }} />
+                <Line type="monotone" dataKey="visits" stroke="var(--primary)" strokeWidth={2} dot={{ r: 3, fill: "var(--primary)" }} />
               </LineChart>
             </ResponsiveContainer>
           </div>
@@ -213,11 +220,11 @@ function Reports() {
           <div className="h-64">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={topPages} layout="vertical" margin={{ top: 8, right: 16, left: 0, bottom: 0 }}>
-                <CartesianGrid stroke="#e2e8f0" strokeDasharray="3 3" />
-                <XAxis type="number" stroke="#475569" fontSize={11} allowDecimals={false} />
-                <YAxis type="category" dataKey="path" stroke="#475569" fontSize={10} width={140} />
-                <Tooltip contentStyle={{ background: "#ffffff", border: "1px solid #e2e8f0", color: "#0f172a" }} />
-                <Bar dataKey="count" fill="#7c3aed" radius={[0, 6, 6, 0]} />
+                <CartesianGrid stroke="var(--border)" strokeDasharray="3 3" />
+                <XAxis type="number" stroke="var(--muted-foreground)" fontSize={11} allowDecimals={false} />
+                <YAxis type="category" dataKey="path" stroke="var(--muted-foreground)" fontSize={10} width={140} />
+                <Tooltip contentStyle={{ background: "var(--card)", border: "1px solid var(--border)", color: "var(--foreground)" }} />
+                <Bar dataKey="count" fill="var(--brand-2)" radius={[0, 6, 6, 0]} />
               </BarChart>
             </ResponsiveContainer>
           </div>
@@ -227,23 +234,23 @@ function Reports() {
           <div className="h-64">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={topTabs} layout="vertical" margin={{ top: 8, right: 16, left: 0, bottom: 0 }}>
-                <CartesianGrid stroke="#e2e8f0" strokeDasharray="3 3" />
-                <XAxis type="number" stroke="#475569" fontSize={11} allowDecimals={false} />
-                <YAxis type="category" dataKey="name" stroke="#475569" fontSize={10} width={180} />
-                <Tooltip contentStyle={{ background: "#ffffff", border: "1px solid #e2e8f0", color: "#0f172a" }} />
-                <Bar dataKey="count" fill="#0891b2" radius={[0, 6, 6, 0]} />
+                <CartesianGrid stroke="var(--border)" strokeDasharray="3 3" />
+                <XAxis type="number" stroke="var(--muted-foreground)" fontSize={11} allowDecimals={false} />
+                <YAxis type="category" dataKey="name" stroke="var(--muted-foreground)" fontSize={10} width={180} />
+                <Tooltip contentStyle={{ background: "var(--card)", border: "1px solid var(--border)", color: "var(--foreground)" }} />
+                <Bar dataKey="count" fill="var(--info)" radius={[0, 6, 6, 0]} />
               </BarChart>
             </ResponsiveContainer>
           </div>
         </Panel>
 
         <Panel title="Top chatbot questions" icon={<MessageSquare className="h-4 w-4" />}>
-          <ul className="max-h-64 space-y-2 overflow-y-auto pr-2 text-sm text-slate-700">
-            {topQuestions.length === 0 && <li className="text-slate-500">No data yet.</li>}
+          <ul className="max-h-64 space-y-2 overflow-y-auto pr-2 text-sm text-foreground">
+            {topQuestions.length === 0 && <li className="text-muted-foreground">No data yet.</li>}
             {topQuestions.map((q) => (
-              <li key={q.q} className="flex justify-between gap-2 border-b border-slate-100 pb-1.5">
+              <li key={q.q} className="flex justify-between gap-2 border-b border-border pb-1.5">
                 <span className="truncate">{q.q}</span>
-                <span className="shrink-0 text-slate-500">×{q.count}</span>
+                <span className="shrink-0 text-muted-foreground">×{q.count}</span>
               </li>
             ))}
           </ul>
@@ -272,7 +279,7 @@ function Reports() {
 
 // ------------------- Traffic Analytics -------------------
 
-const PIE_COLORS = ["#2563eb", "#7c3aed", "#0891b2", "#f59e0b", "#ef4444", "#10b981", "#ec4899", "#64748b"];
+const PIE_COLORS = ["var(--primary)", "var(--brand-2)", "var(--info)", "var(--warning)", "var(--danger)", "var(--success)", "var(--special)", "var(--muted-foreground)"];
 
 function hostFromReferrer(ref: string | null): string {
   if (!ref) return "Direct";
@@ -295,7 +302,7 @@ function TrafficAnalyticsPanel({
   if (!traffic) {
     return (
       <Panel title="Traffic analytics" icon={<BarChart3 className="h-4 w-4" />}>
-        <div className="h-24 animate-pulse rounded-xl bg-slate-100" />
+        <div className="h-24 animate-pulse rounded-xl bg-muted" />
       </Panel>
     );
   }
@@ -322,13 +329,13 @@ function TrafficAnalyticsPanel({
           <div className="h-64">
             <ResponsiveContainer width="100%" height="100%">
               <LineChart data={stats.daily} margin={{ top: 8, right: 16, left: 0, bottom: 0 }}>
-                <CartesianGrid stroke="#e2e8f0" strokeDasharray="3 3" />
-                <XAxis dataKey="day" stroke="#475569" fontSize={11} />
-                <YAxis stroke="#475569" fontSize={11} allowDecimals={false} />
-                <Tooltip contentStyle={{ background: "#ffffff", border: "1px solid #e2e8f0", color: "#0f172a" }} />
+                <CartesianGrid stroke="var(--border)" strokeDasharray="3 3" />
+                <XAxis dataKey="day" stroke="var(--muted-foreground)" fontSize={11} />
+                <YAxis stroke="var(--muted-foreground)" fontSize={11} allowDecimals={false} />
+                <Tooltip contentStyle={{ background: "var(--card)", border: "1px solid var(--border)", color: "var(--foreground)" }} />
                 <Legend wrapperStyle={{ fontSize: 11 }} />
-                <Line type="monotone" dataKey="visitors" stroke="#2563eb" strokeWidth={2} dot={{ r: 2 }} />
-                <Line type="monotone" dataKey="pageviews" stroke="#7c3aed" strokeWidth={2} dot={{ r: 2 }} />
+                <Line type="monotone" dataKey="visitors" stroke="var(--primary)" strokeWidth={2} dot={{ r: 2 }} />
+                <Line type="monotone" dataKey="pageviews" stroke="var(--brand-2)" strokeWidth={2} dot={{ r: 2 }} />
               </LineChart>
             </ResponsiveContainer>
           </div>
@@ -338,11 +345,11 @@ function TrafficAnalyticsPanel({
           <div className="h-64">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={stats.topPages} layout="vertical" margin={{ top: 8, right: 16, left: 0, bottom: 0 }}>
-                <CartesianGrid stroke="#e2e8f0" strokeDasharray="3 3" />
-                <XAxis type="number" stroke="#475569" fontSize={11} allowDecimals={false} />
-                <YAxis type="category" dataKey="label" stroke="#475569" fontSize={10} width={140} />
-                <Tooltip contentStyle={{ background: "#ffffff", border: "1px solid #e2e8f0", color: "#0f172a" }} />
-                <Bar dataKey="value" fill="#2563eb" radius={[0, 6, 6, 0]} />
+                <CartesianGrid stroke="var(--border)" strokeDasharray="3 3" />
+                <XAxis type="number" stroke="var(--muted-foreground)" fontSize={11} allowDecimals={false} />
+                <YAxis type="category" dataKey="label" stroke="var(--muted-foreground)" fontSize={10} width={140} />
+                <Tooltip contentStyle={{ background: "var(--card)", border: "1px solid var(--border)", color: "var(--foreground)" }} />
+                <Bar dataKey="value" fill="var(--primary)" radius={[0, 6, 6, 0]} />
               </BarChart>
             </ResponsiveContainer>
           </div>
@@ -352,11 +359,11 @@ function TrafficAnalyticsPanel({
           <div className="h-64">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={stats.topSources} layout="vertical" margin={{ top: 8, right: 16, left: 0, bottom: 0 }}>
-                <CartesianGrid stroke="#e2e8f0" strokeDasharray="3 3" />
-                <XAxis type="number" stroke="#475569" fontSize={11} allowDecimals={false} />
-                <YAxis type="category" dataKey="label" stroke="#475569" fontSize={10} width={160} />
-                <Tooltip contentStyle={{ background: "#ffffff", border: "1px solid #e2e8f0", color: "#0f172a" }} />
-                <Bar dataKey="value" fill="#7c3aed" radius={[0, 6, 6, 0]} />
+                <CartesianGrid stroke="var(--border)" strokeDasharray="3 3" />
+                <XAxis type="number" stroke="var(--muted-foreground)" fontSize={11} allowDecimals={false} />
+                <YAxis type="category" dataKey="label" stroke="var(--muted-foreground)" fontSize={10} width={160} />
+                <Tooltip contentStyle={{ background: "var(--card)", border: "1px solid var(--border)", color: "var(--foreground)" }} />
+                <Bar dataKey="value" fill="var(--brand-2)" radius={[0, 6, 6, 0]} />
               </BarChart>
             </ResponsiveContainer>
           </div>
@@ -366,11 +373,11 @@ function TrafficAnalyticsPanel({
           <div className="h-64">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={stats.topCountries} margin={{ top: 8, right: 16, left: 0, bottom: 0 }}>
-                <CartesianGrid stroke="#e2e8f0" strokeDasharray="3 3" />
-                <XAxis dataKey="label" stroke="#475569" fontSize={11} />
-                <YAxis stroke="#475569" fontSize={11} allowDecimals={false} />
-                <Tooltip contentStyle={{ background: "#ffffff", border: "1px solid #e2e8f0", color: "#0f172a" }} />
-                <Bar dataKey="value" fill="#0891b2" radius={[6, 6, 0, 0]} />
+                <CartesianGrid stroke="var(--border)" strokeDasharray="3 3" />
+                <XAxis dataKey="label" stroke="var(--muted-foreground)" fontSize={11} />
+                <YAxis stroke="var(--muted-foreground)" fontSize={11} allowDecimals={false} />
+                <Tooltip contentStyle={{ background: "var(--card)", border: "1px solid var(--border)", color: "var(--foreground)" }} />
+                <Bar dataKey="value" fill="var(--info)" radius={[6, 6, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
           </div>
@@ -379,13 +386,13 @@ function TrafficAnalyticsPanel({
         <Panel title="Devices" icon={<BarChart3 className="h-4 w-4" />}>
           <div className="h-64">
             <ResponsiveContainer width="100%" height="100%">
-              <PieChart>
+              <PieChart accessibilityLayer>
                 <Pie data={stats.devices} dataKey="value" nameKey="label" outerRadius={90} label>
                   {stats.devices.map((_, i) => (
-                    <Cell key={i} fill={PIE_COLORS[i % PIE_COLORS.length]} />
+                    <Cell key={i} role="img" aria-label={`${stats.devices[i]?.label}: ${stats.devices[i]?.value}`} fill={PIE_COLORS[i % PIE_COLORS.length]} />
                   ))}
                 </Pie>
-                <Tooltip contentStyle={{ background: "#ffffff", border: "1px solid #e2e8f0", color: "#0f172a" }} />
+                <Tooltip contentStyle={{ background: "var(--card)", border: "1px solid var(--border)", color: "var(--foreground)" }} />
                 <Legend wrapperStyle={{ fontSize: 11 }} />
               </PieChart>
             </ResponsiveContainer>
@@ -395,13 +402,13 @@ function TrafficAnalyticsPanel({
         <Panel title="Browsers" icon={<BarChart3 className="h-4 w-4" />}>
           <div className="h-64">
             <ResponsiveContainer width="100%" height="100%">
-              <PieChart>
+              <PieChart accessibilityLayer>
                 <Pie data={stats.browsers} dataKey="value" nameKey="label" outerRadius={90} label>
                   {stats.browsers.map((_, i) => (
-                    <Cell key={i} fill={PIE_COLORS[(i + 2) % PIE_COLORS.length]} />
+                    <Cell key={i} role="img" aria-label={`${stats.browsers[i]?.label}: ${stats.browsers[i]?.value}`} fill={PIE_COLORS[(i + 2) % PIE_COLORS.length]} />
                   ))}
                 </Pie>
-                <Tooltip contentStyle={{ background: "#ffffff", border: "1px solid #e2e8f0", color: "#0f172a" }} />
+                <Tooltip contentStyle={{ background: "var(--card)", border: "1px solid var(--border)", color: "var(--foreground)" }} />
                 <Legend wrapperStyle={{ fontSize: 11 }} />
               </PieChart>
             </ResponsiveContainer>
@@ -511,7 +518,7 @@ function DataExportPanel() {
 
   return (
     <Panel title="One-click database export" icon={<Download className="h-4 w-4" />}>
-      <p className="mb-3 text-xs text-slate-600">
+      <p className="mb-3 text-xs text-muted-foreground">
         Exports run under your admin session (RLS-scoped). No credentials or service keys needed.
       </p>
       <div className="mb-3 flex flex-wrap gap-2">
@@ -519,7 +526,7 @@ function DataExportPanel() {
           onClick={exportAll}
           disabled={busy !== null}
           size="sm"
-          className="bg-blue-600 text-white hover:bg-blue-700"
+          className="bg-primary text-primary-foreground hover:bg-primary/90"
         >
           <Download className="mr-2 h-4 w-4" />
           {busy === "__all__" ? "Exporting all…" : "Export ALL tables (JSON)"}
@@ -533,35 +540,35 @@ function DataExportPanel() {
             disabled={busy !== null}
             variant="outline"
             size="sm"
-            className="justify-start border-slate-200 bg-white text-slate-900 hover:bg-slate-50"
+            className="justify-start border-border bg-card text-foreground hover:bg-muted"
           >
             <Download className="mr-2 h-3.5 w-3.5" />
             {busy === t ? "…" : t}
           </Button>
         ))}
       </div>
-      {err && <p className="mt-3 text-xs text-red-600">{err}</p>}
+      {err && <p className="mt-3 text-xs text-destructive">{err}</p>}
     </Panel>
   );
 }
 
 function Kpi({ icon, label, value }: { icon: React.ReactNode; label: string; value: React.ReactNode }) {
   return (
-    <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
-      <div className="flex items-center justify-between text-slate-600">
+    <div className="report-metric rounded-lg border border-border bg-card p-5 shadow-card-soft">
+      <div className="flex items-center justify-between text-muted-foreground">
         <span className="text-xs uppercase tracking-widest">{label}</span>
-        <span className="grid h-8 w-8 place-items-center rounded-lg bg-blue-50 text-blue-600">{icon}</span>
+        <span className="grid h-8 w-8 place-items-center rounded-lg bg-accent text-primary">{icon}</span>
       </div>
-      <p className="mt-3 font-display text-3xl font-bold text-slate-900">{value}</p>
+      <p className="mt-3 font-display text-3xl font-bold text-foreground">{value}</p>
     </div>
   );
 }
 
 function Panel({ title, icon, children }: { title: string; icon: React.ReactNode; children: React.ReactNode }) {
   return (
-    <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
-      <div className="mb-3 flex items-center gap-2 text-sm font-semibold text-slate-900">
-        <span className="text-blue-600">{icon}</span>
+    <div className="report-panel rounded-lg border border-border bg-card p-5 shadow-card-soft">
+      <div className="mb-3 flex items-center gap-2 text-sm font-semibold text-foreground">
+        <span className="text-primary">{icon}</span>
         {title}
       </div>
       {children}
@@ -659,11 +666,11 @@ function IdentifiedVisitorsPanel({
 
       {err && (
         <Panel title="Visitors" icon={<Users className="h-4 w-4" />}>
-          <p className="text-sm text-red-600">Failed to load: {err}</p>
+          <p className="text-sm text-destructive">Failed to load: {err}</p>
         </Panel>
       )}
 
-      {!err && !rows && <div className="h-24 animate-pulse rounded-2xl bg-slate-100" />}
+      {!err && !rows && <div className="h-24 animate-pulse rounded-2xl bg-muted" />}
 
       {kpis && (
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
@@ -675,29 +682,30 @@ function IdentifiedVisitorsPanel({
       )}
 
       {rows && (
-        <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+        <div className="report-panel rounded-lg border border-border bg-card p-5 shadow-card-soft">
           <div className="mb-3 flex flex-wrap items-center gap-2">
             <input
               value={query}
               onChange={(e) => setQuery(e.target.value)}
+              aria-label="Search visitors"
               placeholder="Search by email, name, country, city, visitor id"
-              className="w-full max-w-sm rounded-md border border-slate-200 bg-white px-3 py-1.5 text-sm text-slate-900 placeholder-slate-400 focus:border-blue-500 focus:outline-none"
+              className="w-full max-w-sm rounded-md border border-border bg-card px-3 py-1.5 text-sm text-foreground placeholder:text-muted-foreground focus:border-primary focus:outline-none"
             />
-            <label className="flex items-center gap-2 text-xs text-slate-600">
+            <label className="flex items-center gap-2 text-xs text-muted-foreground">
               <input type="checkbox" checked={onlyIdentified} onChange={(e) => setOnlyIdentified(e.target.checked)} />
               Only identified
             </label>
-            <div className="ml-auto text-xs text-slate-500">
+            <div className="ml-auto text-xs text-muted-foreground">
               Showing {filtered.length} of {rows.length}
             </div>
-            <Button onClick={exportCsv} variant="outline" size="sm" className="border-slate-200 bg-white text-slate-900 hover:bg-slate-50">
+            <Button onClick={exportCsv} variant="outline" size="sm" className="border-border bg-card text-foreground hover:bg-muted">
               <Download className="mr-2 h-4 w-4" /> Export CSV
             </Button>
           </div>
 
-          <div className="max-h-[560px] overflow-auto rounded-lg border border-slate-100">
+          <div className="max-h-[560px] overflow-auto rounded-lg border border-border">
             <table className="w-full min-w-[900px] text-left text-xs">
-              <thead className="sticky top-0 bg-slate-50 text-slate-600">
+              <thead className="sticky top-0 bg-muted text-muted-foreground">
                 <tr>
                   <th className="px-3 py-2 font-semibold">User</th>
                   <th className="px-3 py-2 font-semibold">Location</th>
@@ -709,7 +717,7 @@ function IdentifiedVisitorsPanel({
                   <th className="px-3 py-2 font-semibold">Last seen</th>
                 </tr>
               </thead>
-              <tbody className="text-slate-800">
+              <tbody className="text-foreground">
                 {filtered.map((r) => {
                   const primary = r.display_name || r.email || (r.user_id ? "Signed-in user" : "Anonymous");
                   const secondary = r.email && r.display_name ? r.email : `${r.visitor_id.slice(0, 10)}…`;
@@ -717,13 +725,13 @@ function IdentifiedVisitorsPanel({
                   const dev = [r.device, r.browser, r.os].filter(Boolean).join(" · ") || "—";
                   const src = r.first_utm_source || (r.first_referrer ? hostFromReferrer(r.first_referrer) : "Direct");
                   return (
-                    <tr key={r.visitor_id} className="border-t border-slate-100 hover:bg-slate-50/60">
+                    <tr key={r.visitor_id} className="border-t border-border hover:bg-muted/60">
                       <td className="px-3 py-2">
                         <div className="flex items-center gap-2">
-                          <span className={`inline-block h-2 w-2 rounded-full ${r.user_id ? "bg-emerald-500" : "bg-slate-300"}`} />
+                          <span className={`inline-block h-2 w-2 rounded-full ${r.user_id ? "bg-success" : "bg-muted-foreground"}`} />
                           <div>
-                            <div className="font-medium text-slate-900">{primary}</div>
-                            <div className="text-[11px] text-slate-500">{secondary}</div>
+                            <div className="font-medium text-foreground">{primary}</div>
+                            <div className="text-[11px] text-muted-foreground">{secondary}</div>
                           </div>
                         </div>
                       </td>
@@ -732,14 +740,14 @@ function IdentifiedVisitorsPanel({
                       <td className="px-3 py-2">{src}</td>
                       <td className="px-3 py-2 text-right tabular-nums">{r.total_visits}</td>
                       <td className="px-3 py-2 text-right tabular-nums">{r.total_pageviews}</td>
-                      <td className="px-3 py-2 text-slate-600">{new Date(r.first_seen_at).toLocaleDateString()}</td>
-                      <td className="px-3 py-2 text-slate-600">{new Date(r.last_seen_at).toLocaleString()}</td>
+                      <td className="px-3 py-2 text-muted-foreground">{new Date(r.first_seen_at).toLocaleDateString()}</td>
+                      <td className="px-3 py-2 text-muted-foreground">{new Date(r.last_seen_at).toLocaleString()}</td>
                     </tr>
                   );
                 })}
                 {filtered.length === 0 && (
                   <tr>
-                    <td colSpan={8} className="px-3 py-8 text-center text-slate-500">No visitors match your filter.</td>
+                    <td colSpan={8} className="px-3 py-8 text-center text-muted-foreground">No visitors match your filter.</td>
                   </tr>
                 )}
               </tbody>

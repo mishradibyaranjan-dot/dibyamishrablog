@@ -26,6 +26,12 @@ export const Route = createFileRoute("/_authenticated/admin/visitor-audit")({
     meta: [
       { title: "Visitor tracking audit — Admin" },
       { name: "robots", content: "noindex" },
+    
+      { name: 'description', content: 'Private visitor-tracking operations and audit records.' },
+      { property: 'og:title', content: 'Visitor Audit — Dibya Mishra' },
+      { property: 'og:description', content: 'Private visitor-tracking operations and audit records.' },
+      { property: 'og:type', content: 'website' },
+      { name: 'twitter:card', content: 'summary' },
     ],
   }),
   component: VisitorAuditPage,

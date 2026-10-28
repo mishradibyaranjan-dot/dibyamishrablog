@@ -12,6 +12,11 @@ export const Route = createFileRoute("/reset-password")({
     meta: [
       { title: "Reset Password — Dibya Ranjan Mishra" },
       { name: "robots", content: "noindex" },
+      { name: "description", content: "Choose a new password for your Dibya Mishra account." },
+      { property: "og:title", content: "Reset Password — Dibya Ranjan Mishra" },
+      { property: "og:description", content: "Choose a new password for your Dibya Mishra account." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
     ],
   }),
   component: ResetPassword,
@@ -54,17 +59,17 @@ function ResetPassword() {
       <motion.div
         initial={{ opacity: 0, y: 16 }}
         animate={{ opacity: 1, y: 0 }}
-        className="mx-auto w-full max-w-md rounded-3xl border border-white/10 bg-white/5 p-7 shadow-glow backdrop-blur-xl sm:p-9"
+        className="auth-panel mx-auto w-full max-w-md rounded-lg border border-border bg-card p-7 shadow-card-soft sm:p-9"
       >
-        <h1 className="font-display text-2xl font-bold text-white sm:text-3xl">Set a new password</h1>
+        <h1 className="font-display text-2xl font-bold text-foreground sm:text-3xl">Set a new password</h1>
         {!ready && (
-          <p className="mt-2 text-sm text-white/65">Waiting for recovery link to be processed...</p>
+          <p className="mt-2 text-sm text-muted-foreground">Waiting for recovery link to be processed...</p>
         )}
         <form onSubmit={onSubmit} className="mt-6 space-y-3">
           <PwField value={pw} onChange={setPw} placeholder="New password" />
           <PwField value={pw2} onChange={setPw2} placeholder="Confirm new password" />
-          {err && <p className="text-xs text-red-400">{err}</p>}
-          <Button type="submit" disabled={busy || !ready} className="w-full bg-brand-gradient text-white shadow-neon">
+          {err && <p className="text-xs text-destructive">{err}</p>}
+          <Button type="submit" disabled={busy || !ready} className="w-full bg-primary text-primary-foreground">
             {busy ? <Loader2 className="h-4 w-4 animate-spin" /> : "Update password"}
           </Button>
         </form>
@@ -76,14 +81,15 @@ function ResetPassword() {
 function PwField({ value, onChange, placeholder }: { value: string; onChange: (v: string) => void; placeholder: string }) {
   return (
     <div className="relative">
-      <Lock className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-white/50" />
+      <Lock className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
       <input
+        aria-label={placeholder}
         type="password"
         value={value}
         required
         onChange={(e) => onChange(e.target.value)}
         placeholder={placeholder}
-        className="w-full rounded-md border border-white/15 bg-white/5 py-2.5 pl-9 pr-3 text-sm text-white placeholder:text-white/40 outline-none focus:border-neon-cyan focus:ring-2 focus:ring-neon-cyan/40"
+        className="w-full rounded-md border border-input bg-card py-2.5 pl-9 pr-3 text-sm text-foreground placeholder:text-muted-foreground outline-none focus:border-primary focus:ring-2 focus:ring-ring/30"
       />
     </div>
   );

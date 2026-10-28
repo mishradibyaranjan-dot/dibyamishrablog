@@ -1,5 +1,41 @@
 # Future Experience — Delivery and Acceptance Report
 
+## Future Experience 2.0 — October 28, 2026 update
+
+### Diagnosis and implementation
+The earlier release kept Glacier as both the provider and pre-paint default. Future themes were opt-in, and the home/header still rendered the previous composition. That was an intentional preservation choice, not missing CSS. V2 now defaults unsaved visitors to `future-v2` in both paths; explicitly saved local or account themes remain available. No deployment was made, so the published website is unchanged.
+
+Actual structural changes: a full-bleed generated enterprise architecture hero and connected-workspace flow on Home; project showcase and grouped portfolio directory; a sticky premium header, visible desktop destinations, accessible slide-out navigation, top-aligned rail, breadcrumbs and three-column footer; jobs now have a desktop filter column and separate results stream; My Career and Reports have workspace navigation and real-data metrics; auth has a paired introduction/form composition; portfolio, recovery, repository and newsletter administration surfaces have aligned controls and hierarchy. Shared Section/Button/Card/Input hooks apply across other pages. All colors are semantic tokens. Existing forms, queries, calculations, permissions and AI actions were retained.
+
+### Modified implementation files
+- `src/styles.css`, `src/routes/__root.tsx`, `src/components/theme/{experience.ts,experience.test.ts,ThemeProvider.tsx}`.
+- `src/components/layout/{SiteLayout.tsx,SideRail.tsx,ContextNavigation.tsx,Section.tsx,SiteBanner.tsx}`.
+- `src/components/ui/{button.tsx,card.tsx,input.tsx,sheet.tsx}`.
+- `src/components/marketing/FutureHomeHero.tsx`, `src/assets/future-enterprise.jpg`, `src/components/portfolio/PortfolioPage.tsx`, `src/components/jobs/JobsDirectory.tsx`.
+- `src/routes/{index.tsx,projects.tsx,auth.tsx,forgot-password.tsx,reset-password.tsx,contact.tsx,expertise.tsx}` and OAuth consent head metadata.
+- `src/routes/_authenticated/{my-career.tsx,reports.tsx,repository.tsx}`; leaf metadata for blocked domains, enquiries, docs, newsletter schedules, security events, spam audit and visitor audit.
+- `src/components/admin/{NewsletterAdminPanel.tsx,NewsletterScheduler.tsx}`; enquiry chart token formatting.
+
+### Verification
+- 107 regression tests passed across themes, navigation/content, jobs, security headers, interview constraints, and private career evidence/files/completion streams; theme token lint passed. Latest preview compilation: build OK.
+- Real public job filtering: 24h = 37, 48h = 85, 72h = 90, 7 days = 254. Counts are a point-in-time sample, not fixed expected inventory. Project AI category returned two projects.
+- Authenticated owner reads verified My Career's existing reviews, interview session and generated document history; Reports loaded real counts and charts; resume/interview screens remained available. No email, AI generation, publication, deletion or external callback was triggered for visual QA.
+- Saved Glacier restored the legacy projects composition; no saved preference was overwritten. Drawer Escape closes and returns focus to its trigger. Reduced motion stops the new entrance animation.
+- Checked 320, 390, 768, 1187 and 1920px widths: no horizontal page overflow. Final 320px hero ends at 825px in a 937px viewport, revealing the next section. Desktop comparison screenshots use identical 1280 × 1800 viewports.
+- Axe WCAG 2 A/AA, 2.1 AA and 2.2 AA tags: zero detected violations on Home, Projects, Jobs, Auth, Contact, Leadership, authenticated My Career and Reports. Fixed report controls' names, newsletter status contrast, and pie-segment labels. This is not comprehensive accessibility certification.
+- Single local unthrottled development samples: Home LCP 592ms, Projects 172ms, Jobs 612ms, Auth 236ms, Contact 152ms, Leadership 152ms; observed CLS approximately 0.00087. These are local diagnostic samples, not production p75 or Lighthouse scores. INP, production LCP and Lighthouse ≥90 remain unmeasured.
+- Noticeable but bounded motion: CSS hero entrance, existing once-only scroll reveals, card/button feedback, active navigation and drawer transition. No continuous decorative animation was added; the Future announcement stops rotating text and removes its animated backdrop.
+
+### Coverage and remaining acceptance
+The shared visual shell is rendered across site pages. Bespoke composition was changed on Home, Projects, Jobs directory, My Career, Reports, Auth and portfolio wrappers; recovery/repository/newsletter tools received focused presentation updates. Other article, legal, learning, advisory, job-detail and admin screens retain their existing inner content structure under the new shell and shared primitives. They are not claimed as individually rebuilt. The V2 brief's exhaustive every-page reinvention therefore remains partial.
+
+No live 3D renderer was added: the optimized-bundle-safe generated bitmap provides depth without a new runtime. No first-time walkthrough or private-record discovery index was added; existing guide/search remain available. Full production integrations, admin MFA actions, cross-account isolation and independent screen-reader acceptance are outside this frontend check. No security certification or production performance claim is made. Original themes remain selectable for layout rollback, and nothing has been published.
+
+Public before/after Home and Projects contact sheets and mobile capture were saved as user deliverables; private workspace screenshots stay in the sandbox and are not included in those public comparison sheets.
+
+---
+The sections below describe the earlier opt-in release, not V2's updated default or composition.
+
 ## A. Executive summary
 An additional, opt-in visual experience improves neutral surfaces, readable contrast, restrained depth, page navigation and workspace scanning. Existing default/theme IDs, routes, business rules, APIs, account permissions and stored records are preserved. No publication, schema change, new AI call or production setting change occurred.
 

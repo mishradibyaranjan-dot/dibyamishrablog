@@ -30,6 +30,9 @@ import cardLearn from "@/assets/card-learn.jpg";
 import cardCaseStudy from "@/assets/card-case-study.jpg";
 import cardResearch from "@/assets/collab-research.jpg";
 import cardProjects from "@/assets/collab-projects.jpg";
+import { FutureHomeHero, FutureWorkspaceShowcase } from '@/components/marketing/FutureHomeHero';
+import { useTheme } from '@/components/theme/ThemeProvider';
+import { isFutureTheme } from '@/components/theme/experience';
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -53,16 +56,6 @@ export const Route = createFileRoute("/")({
       { property: "og:url", content: "https://www.dibyamishra.co.in/" },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
-      {
-        property: "og:image",
-        content:
-          "https://storage.googleapis.com/gpt-engineer-file-uploads/attachments/og-images/62feb90f-3c19-4765-9fa6-9b7f7701a7c6",
-      },
-      {
-        name: "twitter:image",
-        content:
-          "https://storage.googleapis.com/gpt-engineer-file-uploads/attachments/og-images/62feb90f-3c19-4765-9fa6-9b7f7701a7c6",
-      },
     ],
     links: [{ rel: "canonical", href: "https://www.dibyamishra.co.in/" }],
     scripts: [
@@ -126,12 +119,16 @@ function useLatestIssue() {
 
 function Home() {
   const latest = useLatestIssue();
+  const { theme } = useTheme();
+  const modern = isFutureTheme(theme);
 
   return (
-    <div className="w-full bg-background text-foreground">
-      <div className="mx-auto flex w-full max-w-7xl flex-col gap-16 px-4 py-14 sm:px-6 sm:py-20 lg:gap-24 lg:py-24">
-        <Hero />
+    <div className={modern ? 'future-home w-full bg-background text-foreground' : 'w-full bg-background text-foreground'}>
+      {modern && <FutureHomeHero/>}
+      <div className="home-sections mx-auto flex w-full max-w-7xl flex-col gap-16 px-4 py-14 sm:px-6 sm:py-20 lg:gap-24 lg:py-24">
+        {!modern && <Hero />}
         <MetricsBar />
+        {modern && <FutureWorkspaceShowcase/>}
         <Problems />
         <Outcomes />
         <WaysToWork />

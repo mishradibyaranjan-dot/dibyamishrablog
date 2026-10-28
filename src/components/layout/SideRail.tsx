@@ -30,6 +30,7 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/lib/auth";
+import { Button } from '@/components/ui/button';
 
 type RailItem = { to: string; label: string; icon: LucideIcon };
 
@@ -103,14 +104,14 @@ export function SideRail() {
 
   if (hidden) {
     return (
-      <button
+      <Button variant="ghost"
         type="button"
         onClick={() => setHiddenPersisted(false)}
         aria-label="Show side navigation"
         className="fixed left-0 top-1/2 z-40 hidden h-14 w-6 -translate-y-1/2 items-center justify-center rounded-r-xl border border-l-0 border-border bg-card/80 text-muted-foreground shadow-lg backdrop-blur-xl transition-colors hover:text-foreground lg:flex"
       >
         <ChevronRight className="h-4 w-4" />
-      </button>
+      </Button>
     );
   }
 
@@ -161,7 +162,7 @@ export function SideRail() {
       initial={false}
       animate={{ width: expanded ? 224 : 68 }}
       transition={{ type: "spring", stiffness: 320, damping: 30 }}
-      className="fixed left-3 top-1/2 z-40 hidden max-h-[86vh] -translate-y-1/2 flex-col overflow-hidden rounded-2xl border border-border bg-card/80 p-2 shadow-xl backdrop-blur-xl lg:flex"
+      className="experience-rail fixed left-3 top-1/2 z-40 hidden max-h-[86vh] -translate-y-1/2 flex-col overflow-hidden rounded-2xl border border-border bg-card/80 p-2 shadow-xl backdrop-blur-xl lg:flex"
     >
       <nav className="flex flex-col gap-1 overflow-y-auto no-scrollbar">
         {PRIMARY.map(renderItem)}
@@ -180,7 +181,7 @@ export function SideRail() {
         )}
       </nav>
 
-      <button
+      <Button variant="ghost"
         type="button"
         onClick={() => setHiddenPersisted(true)}
         aria-label="Hide side navigation"
@@ -188,7 +189,7 @@ export function SideRail() {
       >
         <PanelLeftClose className="h-4 w-4 shrink-0" />
         {expanded && <span className="whitespace-nowrap text-xs">Collapse</span>}
-      </button>
+      </Button>
     </motion.aside>
   );
 }

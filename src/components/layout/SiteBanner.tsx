@@ -5,6 +5,9 @@ import { X, PlayCircle, Sparkles, ArrowRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { BannerVideo } from "@/components/layout/BannerVideo";
 import { BannerInfoLinks } from "@/components/layout/BannerInfoLinks";
+import { useTheme } from '@/components/theme/ThemeProvider';
+import { isFutureTheme } from '@/components/theme/experience';
+import { Button } from '@/components/ui/button';
 
 
 const DISMISS_KEY = "drm-site-banner:v1";
@@ -67,6 +70,8 @@ function BannerGraphic({ className }: { className?: string }) {
 }
 
 export function SiteBanner() {
+  const { theme } = useTheme();
+  const modern = isFutureTheme(theme);
   // Rendered on the server so the banner's height is part of the first paint.
   // Mounting it only after hydration pushed the hero heading down mid-load,
   // which reset Largest Contentful Paint and caused a layout shift.
@@ -85,10 +90,10 @@ export function SiteBanner() {
 
 
   useEffect(() => {
-    if (!visible) return;
+    if (!visible || modern) return;
     const t = window.setInterval(() => setIndex((i) => (i + 1) % HEADLINES.length), 4200);
     return () => window.clearInterval(t);
-  }, [visible]);
+  }, [visible, modern]);
 
   const dismiss = () => {
     setSettled(false);
@@ -105,19 +110,19 @@ export function SiteBanner() {
       {visible && (
         <motion.aside
           key="site-banner"
-          initial={{ height: 0, opacity: 0 }}
+          initial={false}
           animate={{ height: "auto", opacity: 1 }}
           exit={{ height: 0, opacity: 0 }}
           transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
           onAnimationComplete={() => setSettled(true)}
           aria-label="Site announcement"
           className={cn(
-            "relative z-[55] border-b border-border bg-gradient-to-r from-primary/10 via-card to-secondary/10",
+            "experience-announcement relative z-[45] border-b border-border bg-card",
             settled ? "overflow-visible" : "overflow-hidden",
           )}
         >
           {/* animated graphics layer (clipped independently of popovers) */}
-          <div aria-hidden className="pointer-events-none absolute inset-0 overflow-hidden">
+          {!modern && <div aria-hidden className="pointer-events-none absolute inset-0 overflow-hidden">
             <div className="absolute inset-0 opacity-70">
               <BannerGraphic />
             </div>
@@ -126,7 +131,7 @@ export function SiteBanner() {
               animate={{ x: ["0%", "400%"] }}
               transition={{ duration: 6, repeat: Infinity, ease: "linear" }}
             />
-          </div>
+          </div>}
 
 
           <div className="relative mx-auto flex max-w-7xl flex-wrap items-center gap-3 px-4 py-2.5 sm:px-6">
@@ -136,7 +141,7 @@ export function SiteBanner() {
             </span>
 
             {/* Highlighted headline with the silent video preview beside it */}
-            <div className="flex min-w-0 flex-1 items-center gap-3">
+            <div className="announcement-preview flex min-w-0 flex-1 items-center gap-3">
               <BannerVideo />
               <div className="min-w-0 flex-1 overflow-hidden">
                 <AnimatePresence mode="wait">
@@ -160,15 +165,12 @@ export function SiteBanner() {
             </div>
 
             <div className="flex items-center gap-2">
-              <Link
-                to="/guide"
-                className="group inline-flex items-center gap-1.5 rounded-full bg-blue-600 px-3 py-1.5 text-xs font-semibold text-white shadow-[0_10px_24px_-12px_rgba(37,99,235,0.9)] transition hover:bg-blue-700"
-              >
+              <Button asChild size="sm" variant="outline"><Link to="/guide">
                 <PlayCircle className="h-4 w-4" />
                 <span className="hidden sm:inline">Watch the tour</span>
                 <span className="sm:hidden">Tour</span>
                 <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
-              </Link>
+              </Link></Button>
               <BannerInfoLinks />
               <button
                 type="button"

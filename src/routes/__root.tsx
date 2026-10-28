@@ -197,12 +197,12 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
  */
 const THEME_BOOTSTRAP = `(function(){try{
 var t=localStorage.getItem('drm-theme');
-var all=['original','future','future-light','future-dark','comfort','system','glacier','cinematic','midnight','aurora','sunset','noir','emerald','light','paper','sand','arctic'];
-if(all.indexOf(t)<0)t='glacier';
-var future=['future','future-light','future-dark','comfort','system'];
+var all=['future-v2','original','future','future-light','future-dark','comfort','system','glacier','cinematic','midnight','aurora','sunset','noir','emerald','light','paper','sand','arctic'];
+if(all.indexOf(t)<0)t='future-v2';
+var future=['future-v2','future','future-light','future-dark','comfort','system'];
 var r=document.documentElement;r.dataset.experience=future.indexOf(t)>=0?'future':'original';
 if(t==='system')t=matchMedia('(prefers-color-scheme: dark)').matches?'future-dark':'future-light';
-var light=['original','future','future-light','comfort','glacier','light','paper','sand','arctic'];
+var light=['future-v2','original','future','future-light','comfort','glacier','light','paper','sand','arctic'];
 var m=light.indexOf(t)>=0?'light':'dark';
 try{r.dataset.density=localStorage.getItem('drm-density')==='compact'?'compact':'comfortable'}catch(e){}
 r.dataset.theme=t;r.classList.toggle('dark',m==='dark');r.style.colorScheme=m;
@@ -217,7 +217,8 @@ function RootShell({ children }: { children: ReactNode }) {
   return (
     <html
       lang="en"
-      data-theme="glacier"
+      data-theme="future-v2"
+      data-experience="future"
       className="light"
       style={{ colorScheme: "light" }}
       suppressHydrationWarning
