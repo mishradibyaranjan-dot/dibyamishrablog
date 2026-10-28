@@ -214,36 +214,39 @@ export function NewsletterScheduler() {
   };
 
   return (
-    <div className="mt-4 rounded-2xl border border-white/10 bg-white/5 p-5 backdrop-blur-xl">
-      <div className="mb-3 flex items-center gap-2 text-sm font-semibold text-white">
+    <div className="mt-4 rounded-2xl border border-border bg-card p-5 backdrop-blur-xl">
+      <div className="mb-3 flex items-center gap-2 text-sm font-semibold text-foreground">
         <Calendar className="h-4 w-4 text-neon-cyan" />
         Recurring newsletter schedules
       </div>
-      <p className="mb-4 text-xs text-white/60">
+      <p className="mb-4 text-xs text-muted-foreground">
         Runs hourly. Each active schedule auto-generates a new newsletter with AI and emails it to every registered user + active subscriber when due.
       </p>
 
       {/* New schedule form */}
-      <div className="mb-4 grid gap-2 rounded-xl border border-white/10 bg-black/20 p-3 md:grid-cols-6">
+      <div className="mb-4 grid gap-2 rounded-xl border border-border bg-muted p-3 md:grid-cols-6">
         <input
+          aria-label="Schedule name"
           value={name}
           onChange={(e) => setName(e.target.value)}
           placeholder="Name"
-          className="rounded-md border border-white/15 bg-white/5 px-3 py-2 text-xs text-white md:col-span-2"
+          className="rounded-md border border-input bg-card px-3 py-2 text-xs text-foreground md:col-span-2"
         />
         <select
+          aria-label="Schedule cadence"
           value={cadence}
           onChange={(e) => setCadence(e.target.value as any)}
-          className="rounded-md border border-white/15 bg-white/5 px-3 py-2 text-xs text-white"
+          className="rounded-md border border-input bg-card px-3 py-2 text-xs text-foreground"
         >
           <option value="daily">Daily</option>
           <option value="weekly">Weekly</option>
           <option value="monthly">Monthly</option>
         </select>
         <select
+          aria-label="Hour UTC"
           value={hour}
           onChange={(e) => setHour(Number(e.target.value))}
-          className="rounded-md border border-white/15 bg-white/5 px-3 py-2 text-xs text-white"
+          className="rounded-md border border-input bg-card px-3 py-2 text-xs text-foreground"
           title="Hour UTC"
         >
           {Array.from({ length: 24 }).map((_, h) => (
@@ -254,9 +257,10 @@ export function NewsletterScheduler() {
         </select>
         {cadence === "weekly" && (
           <select
-            value={dow}
+            aria-label="Day of week"
+          value={dow}
             onChange={(e) => setDow(Number(e.target.value))}
-            className="rounded-md border border-white/15 bg-white/5 px-3 py-2 text-xs text-white"
+            className="rounded-md border border-input bg-card px-3 py-2 text-xs text-foreground"
           >
             {DOW.map((d, i) => (
               <option key={i} value={i}>
@@ -267,9 +271,10 @@ export function NewsletterScheduler() {
         )}
         {cadence === "monthly" && (
           <select
-            value={dom}
+            aria-label="Day of month"
+          value={dom}
             onChange={(e) => setDom(Number(e.target.value))}
-            className="rounded-md border border-white/15 bg-white/5 px-3 py-2 text-xs text-white"
+            className="rounded-md border border-input bg-card px-3 py-2 text-xs text-foreground"
           >
             {Array.from({ length: 28 }).map((_, i) => (
               <option key={i + 1} value={i + 1}>
@@ -280,12 +285,13 @@ export function NewsletterScheduler() {
         )}
         {cadence === "daily" && <div />}
         <input
+          aria-label="Schedule topic"
           value={topic}
           onChange={(e) => setTopic(e.target.value)}
           placeholder="Optional topic hint"
-          className="rounded-md border border-white/15 bg-white/5 px-3 py-2 text-xs text-white md:col-span-5"
+          className="rounded-md border border-input bg-card px-3 py-2 text-xs text-foreground md:col-span-5"
         />
-        <Button size="sm" onClick={addSchedule} disabled={busy || !name} className="bg-brand-gradient text-white shadow-neon">
+        <Button size="sm" onClick={addSchedule} disabled={busy || !name} className="bg-primary text-primary-foreground">
           {busy ? <Loader2 className="mr-1 h-3.5 w-3.5 animate-spin" /> : <Plus className="mr-1 h-3.5 w-3.5" />}
           Add
         </Button>
@@ -293,60 +299,60 @@ export function NewsletterScheduler() {
 
       {/* Schedule rows */}
       <div className="space-y-2">
-        {rows.length === 0 && <p className="text-xs text-white/50">No schedules yet.</p>}
+        {rows.length === 0 && <p className="text-xs text-muted-foreground">No schedules yet.</p>}
         {rows.map((r) => (
-          <div key={r.id} className="rounded-lg border border-white/10 bg-white/5 p-3 text-xs text-white/80">
+          <div key={r.id} className="rounded-lg border border-border bg-card p-3 text-xs text-foreground">
             <div className="flex flex-wrap items-center gap-3">
               <div className="min-w-0 flex-1">
-                <div className="truncate font-semibold text-white">{r.name}</div>
-                <div className="mt-0.5 text-[11px] text-white/50">
+                <div className="truncate font-semibold text-foreground">{r.name}</div>
+                <div className="mt-0.5 text-[11px] text-muted-foreground">
                   {r.cadence}
                   {r.cadence === "weekly" && r.day_of_week !== null && ` · ${DOW[r.day_of_week]}`}
                   {r.cadence === "monthly" && r.day_of_month !== null && ` · day ${r.day_of_month}`}
                   {` · ${String(r.hour_utc).padStart(2, "0")}:00 UTC`}
                   {r.topic_hint && ` · “${r.topic_hint}”`}
                 </div>
-                <div className="mt-0.5 text-[10px] text-white/40">
+                <div className="mt-0.5 text-[10px] text-muted-foreground">
                   Next: {r.next_run_at ? new Date(r.next_run_at).toLocaleString() : "—"}
                   {r.last_run_at && ` · Last: ${new Date(r.last_run_at).toLocaleString()}`}
                 </div>
               </div>
               <button
                 onClick={() => toggle(r)}
-                className={`rounded-full px-2 py-0.5 text-[10px] font-semibold ${r.active ? "bg-emerald-500/20 text-emerald-300" : "bg-white/10 text-white/60"}`}
+                className={`rounded-full px-2 py-0.5 text-[10px] font-semibold ${r.active ? "bg-success-soft text-foreground" : "bg-muted text-muted-foreground"}`}
               >
                 {r.active ? "active" : "paused"}
               </button>
-              <Button size="sm" variant="outline" onClick={() => toggleHistory(r.id)} className="border-white/15 bg-white/5 text-white hover:bg-white/10">
+              <Button size="sm" variant="outline" onClick={() => toggleHistory(r.id)} className="border-input bg-card text-foreground hover:bg-muted">
                 <History className="mr-1 h-3.5 w-3.5" />
                 History
                 {historyOpen[r.id] ? <ChevronUp className="ml-1 h-3.5 w-3.5" /> : <ChevronDown className="ml-1 h-3.5 w-3.5" />}
               </Button>
-              <Button size="sm" variant="outline" onClick={() => runNow(r.id)} disabled={runningId === r.id} className="border-white/15 bg-white/5 text-white hover:bg-white/10">
+              <Button size="sm" variant="outline" onClick={() => runNow(r.id)} disabled={runningId === r.id} className="border-input bg-card text-foreground hover:bg-muted">
                 {runningId === r.id ? <Loader2 className="mr-1 h-3.5 w-3.5 animate-spin" /> : <Play className="mr-1 h-3.5 w-3.5" />}
                 Run now
               </Button>
-              <Button size="sm" variant="outline" onClick={() => remove(r.id)} className="border-red-400/30 bg-red-500/10 text-red-200 hover:bg-red-500/20">
+              <Button size="sm" variant="outline" aria-label={`Delete ${r.name} schedule`} onClick={() => remove(r.id)} className="border-destructive/30 bg-destructive/10 text-destructive hover:bg-destructive/10">
                 <Trash2 className="h-3.5 w-3.5" />
               </Button>
             </div>
 
             {historyOpen[r.id] && (
-              <div className="mt-3 rounded-md border border-white/10 bg-black/30 p-2">
-                <div className="mb-2 flex items-center justify-between text-[10px] uppercase tracking-wide text-white/50">
+              <div className="mt-3 rounded-md border border-border bg-muted p-2">
+                <div className="mb-2 flex items-center justify-between text-[10px] uppercase tracking-wide text-muted-foreground">
                   <span>Send history (last 10)</span>
-                  <button onClick={() => loadHistory(r.id)} className="text-white/60 hover:text-white">
+                  <button onClick={() => loadHistory(r.id)} className="text-muted-foreground hover:text-foreground">
                     Refresh
                   </button>
                 </div>
-                {historyLoading[r.id] && <div className="flex items-center gap-2 text-white/60"><Loader2 className="h-3 w-3 animate-spin" /> Loading…</div>}
+                {historyLoading[r.id] && <div className="flex items-center gap-2 text-muted-foreground"><Loader2 className="h-3 w-3 animate-spin" /> Loading…</div>}
                 {!historyLoading[r.id] && (historyData[r.id]?.length ?? 0) === 0 && (
-                  <p className="text-white/50">No runs yet.</p>
+                  <p className="text-muted-foreground">No runs yet.</p>
                 )}
                 {!historyLoading[r.id] && (historyData[r.id]?.length ?? 0) > 0 && (
                   <div className="overflow-x-auto">
                     <table className="w-full min-w-[560px] text-left text-[11px]">
-                      <thead className="text-white/50">
+                      <thead className="text-muted-foreground">
                         <tr>
                           <th className="py-1 pr-3 font-medium">When</th>
                           <th className="py-1 pr-3 font-medium">Trigger</th>
@@ -360,29 +366,29 @@ export function NewsletterScheduler() {
                       <tbody>
                         {historyData[r.id].map((run) => (
                           <Fragment key={run.id}>
-                            <tr key={run.id} className="border-t border-white/5 align-top">
-                              <td className="py-1 pr-3 text-white/70 whitespace-nowrap">{new Date(run.started_at).toLocaleString()}</td>
-                              <td className="py-1 pr-3 text-white/60">{run.trigger_source}</td>
-                              <td className="py-1 pr-3 text-white/80 truncate max-w-[220px]">{run.title ?? "—"}</td>
-                              <td className="py-1 pr-3 text-right text-emerald-300">{run.queued_count}</td>
-                              <td className={`py-1 pr-3 text-right ${run.failed_count > 0 ? "text-red-300" : "text-white/60"}`}>{run.failed_count}</td>
-                              <td className="py-1 pr-3 text-right text-white/70">{run.recipients_total}</td>
+                            <tr key={run.id} className="border-t border-border align-top">
+                              <td className="py-1 pr-3 text-muted-foreground whitespace-nowrap">{new Date(run.started_at).toLocaleString()}</td>
+                              <td className="py-1 pr-3 text-muted-foreground">{run.trigger_source}</td>
+                              <td className="py-1 pr-3 text-foreground truncate max-w-[220px]">{run.title ?? "—"}</td>
+                              <td className="py-1 pr-3 text-right text-foreground">{run.queued_count}</td>
+                              <td className={`py-1 pr-3 text-right ${run.failed_count > 0 ? "text-destructive" : "text-muted-foreground"}`}>{run.failed_count}</td>
+                              <td className="py-1 pr-3 text-right text-muted-foreground">{run.recipients_total}</td>
                               <td className="py-1 pr-3">
-                                <span className={`rounded px-1.5 py-0.5 text-[10px] ${run.status === "completed" ? "bg-emerald-500/20 text-emerald-300" : run.status === "failed" ? "bg-red-500/20 text-red-300" : "bg-yellow-500/20 text-yellow-200"}`}>
+                                <span className={`rounded px-1.5 py-0.5 text-[10px] ${run.status === "completed" ? "bg-success-soft text-foreground" : run.status === "failed" ? "bg-destructive/10 text-destructive" : "bg-warning-soft text-foreground"}`}>
                                   {run.status}
                                 </span>
                               </td>
                             </tr>
                             {(run.error_message || run.failed_recipients.length > 0) && (
-                              <tr key={`${run.id}-err`} className="border-t border-white/5">
+                              <tr key={`${run.id}-err`} className="border-t border-border">
                                 <td colSpan={7} className="py-1 pr-3">
                                   {run.error_message && (
-                                    <div className="mb-1 text-red-300">Run error: {run.error_message}</div>
+                                    <div className="mb-1 text-destructive">Run error: {run.error_message}</div>
                                   )}
                                   {run.failed_recipients.length > 0 && (
                                     <div className="space-y-1">
                                       <div className="flex items-center gap-2">
-                                        <span className="text-red-300">{run.failed_recipients.length} failed recipient(s)</span>
+                                        <span className="text-destructive">{run.failed_recipients.length} failed recipient(s)</span>
                                         <Button
                                           size="sm"
                                           variant="outline"
@@ -405,13 +411,13 @@ export function NewsletterScheduler() {
                                           Retry failed
                                         </Button>
                                       </div>
-                                      <details className="text-white/70">
-                                        <summary className="cursor-pointer text-red-300/80 text-[10px]">Show recipients</summary>
+                                      <details className="text-muted-foreground">
+                                        <summary className="cursor-pointer text-destructive/80 text-[10px]">Show recipients</summary>
                                         <ul className="mt-1 space-y-0.5 pl-4">
                                           {run.failed_recipients.map((f, i) => (
                                             <li key={i} className="text-[10px]">
-                                              <span className="text-white/80">{f.email}</span>
-                                              {f.error_message && <span className="text-red-300"> — {f.error_message}</span>}
+                                              <span className="text-foreground">{f.email}</span>
+                                              {f.error_message && <span className="text-destructive"> — {f.error_message}</span>}
                                             </li>
                                           ))}
                                         </ul>
@@ -433,39 +439,39 @@ export function NewsletterScheduler() {
         ))}
       </div>
 
-      {msg && <p className="mt-3 text-xs text-emerald-400">{msg}</p>}
-      {err && <p className="mt-3 text-xs text-red-400">{err}</p>}
+      {msg && <p className="mt-3 text-xs text-success">{msg}</p>}
+      {err && <p className="mt-3 text-xs text-destructive">{err}</p>}
 
       <Dialog open={!!pendingRetry} onOpenChange={(open) => !open && setPendingRetry(null)}>
-        <DialogContent className="border-white/10 bg-slate-900 text-white">
+        <DialogContent className="border-border bg-card text-foreground">
           <DialogHeader>
-            <DialogTitle className="flex items-center gap-2 text-white">
+            <DialogTitle className="flex items-center gap-2 text-foreground">
               <AlertTriangle className="h-5 w-5 text-amber-400" />
               Retry failed deliveries?
             </DialogTitle>
-            <DialogDescription className="text-white/60">
+            <DialogDescription className="text-muted-foreground">
               Please review the run summary below before confirming.
             </DialogDescription>
           </DialogHeader>
           {pendingRetry && (
             <div className="space-y-3 py-2 text-sm">
-              <div className="grid grid-cols-[120px_1fr] gap-2 rounded-lg border border-white/10 bg-white/5 p-3">
-                <span className="text-white/60">Run ID</span>
-                <span className="font-mono text-white/90">{pendingRetry.runId}</span>
-                <span className="text-white/60">Failed count</span>
-                <span className="font-semibold text-red-300">{pendingRetry.failedCount}</span>
-                <span className="text-white/60">Estimated recipients</span>
-                <span className="text-emerald-300">{pendingRetry.recipients.length} email(s) will be re-queued</span>
+              <div className="grid grid-cols-[120px_1fr] gap-2 rounded-lg border border-border bg-card p-3">
+                <span className="text-muted-foreground">Run ID</span>
+                <span className="font-mono text-foreground">{pendingRetry.runId}</span>
+                <span className="text-muted-foreground">Failed count</span>
+                <span className="font-semibold text-destructive">{pendingRetry.failedCount}</span>
+                <span className="text-muted-foreground">Estimated recipients</span>
+                <span className="text-foreground">{pendingRetry.recipients.length} email(s) will be re-queued</span>
               </div>
-              <details className="rounded-lg border border-white/10 bg-white/5">
-                <summary className="cursor-pointer p-3 text-xs text-white/70 hover:text-white">
+              <details className="rounded-lg border border-border bg-card">
+                <summary className="cursor-pointer p-3 text-xs text-muted-foreground hover:text-foreground">
                   Preview failed recipients
                 </summary>
                 <ul className="max-h-40 overflow-auto p-3 pt-0 text-xs">
                   {pendingRetry.recipients.map((f, i) => (
                     <li key={i} className="py-0.5">
-                      <span className="text-white/80">{f.email}</span>
-                      {f.error_message && <span className="text-red-300"> — {f.error_message}</span>}
+                      <span className="text-foreground">{f.email}</span>
+                      {f.error_message && <span className="text-destructive"> — {f.error_message}</span>}
                     </li>
                   ))}
                 </ul>
@@ -476,14 +482,14 @@ export function NewsletterScheduler() {
             <Button
               variant="outline"
               onClick={() => setPendingRetry(null)}
-              className="border-white/15 bg-white/5 text-white hover:bg-white/10"
+              className="border-input bg-card text-foreground hover:bg-muted"
             >
               Cancel
             </Button>
             <Button
               onClick={executeRetry}
               disabled={retryingRunId === pendingRetry?.runId}
-              className="bg-amber-500 text-slate-950 hover:bg-amber-400"
+              className="bg-amber-500 text-foreground hover:bg-amber-400"
             >
               {retryingRunId === pendingRetry?.runId ? (
                 <Loader2 className="mr-1 h-4 w-4 animate-spin" />

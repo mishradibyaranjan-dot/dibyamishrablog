@@ -386,10 +386,10 @@ function TrafficAnalyticsPanel({
         <Panel title="Devices" icon={<BarChart3 className="h-4 w-4" />}>
           <div className="h-64">
             <ResponsiveContainer width="100%" height="100%">
-              <PieChart>
+              <PieChart accessibilityLayer>
                 <Pie data={stats.devices} dataKey="value" nameKey="label" outerRadius={90} label>
                   {stats.devices.map((_, i) => (
-                    <Cell key={i} fill={PIE_COLORS[i % PIE_COLORS.length]} />
+                    <Cell key={i} role="img" aria-label={`${stats.devices[i]?.label}: ${stats.devices[i]?.value}`} fill={PIE_COLORS[i % PIE_COLORS.length]} />
                   ))}
                 </Pie>
                 <Tooltip contentStyle={{ background: "var(--card)", border: "1px solid var(--border)", color: "var(--foreground)" }} />
@@ -402,10 +402,10 @@ function TrafficAnalyticsPanel({
         <Panel title="Browsers" icon={<BarChart3 className="h-4 w-4" />}>
           <div className="h-64">
             <ResponsiveContainer width="100%" height="100%">
-              <PieChart>
+              <PieChart accessibilityLayer>
                 <Pie data={stats.browsers} dataKey="value" nameKey="label" outerRadius={90} label>
                   {stats.browsers.map((_, i) => (
-                    <Cell key={i} fill={PIE_COLORS[(i + 2) % PIE_COLORS.length]} />
+                    <Cell key={i} role="img" aria-label={`${stats.browsers[i]?.label}: ${stats.browsers[i]?.value}`} fill={PIE_COLORS[(i + 2) % PIE_COLORS.length]} />
                   ))}
                 </Pie>
                 <Tooltip contentStyle={{ background: "var(--card)", border: "1px solid var(--border)", color: "var(--foreground)" }} />
