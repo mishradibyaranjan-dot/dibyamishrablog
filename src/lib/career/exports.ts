@@ -1,5 +1,6 @@
 import JSZip from 'jszip';
 import type { ResumeTemplate } from './schema';
+import resumeFont from '@/assets/resume-unicode.ttf.asset.json';
 
 export async function createCareerDocument(format:'docx'|'pptx'|'pdf',text:string,template:ResumeTemplate):Promise<Blob>{
  if(!text.trim())throw new Error('The approved resume is empty.');
@@ -9,7 +10,7 @@ export async function createCareerDocument(format:'docx'|'pptx'|'pdf',text:strin
   const {jsPDF}=await import('jspdf');
   const pdf=new jsPDF({unit:'mm',format:'a4'});
   // A bundled Unicode font keeps names and non-English approved content searchable.
-  const fontResponse=await fetch('/fonts/resume-unicode.ttf');
+  const fontResponse=await fetch(resumeFont.url);
   if(!fontResponse.ok)throw new Error('Could not load the resume PDF font.');
   const bytes=new Uint8Array(await fontResponse.arrayBuffer());
   let binary='';for(let i=0;i<bytes.length;i+=8192)binary+=String.fromCharCode(...bytes.slice(i,i+8192));
