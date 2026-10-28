@@ -9,7 +9,7 @@ export async function createCareerDocument(format:'docx'|'pptx'|'pdf',text:strin
  if(format==='pdf'){
   const {jsPDF}=await import('jspdf');
   const pdf=new jsPDF({unit:'mm',format:'a4'});
-  // A bundled Unicode font keeps names and non-English approved content searchable.
+  // The bundled font covers supported glyphs; exhaustive script coverage is not guaranteed.
   const fontResponse=await fetch(resumeFont.url);
   if(!fontResponse.ok)throw new Error('Could not load the resume PDF font.');
   const bytes=new Uint8Array(await fontResponse.arrayBuffer());
