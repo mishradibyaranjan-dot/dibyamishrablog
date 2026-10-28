@@ -134,6 +134,13 @@
       "when": 1793177803893,
       "tag": "0018_restrict_job_sources_public_view",
       "breakpoints": true
+    },
+    {
+      "idx": 19,
+      "version": "7",
+      "when": 1793178106483,
+      "tag": "0019_stop_email_based_admin_grant",
+      "breakpoints": true
     }
   ]
 }

@@ -16,6 +16,15 @@ export const logBlockedLoginAttempt = createServerFn({ method: "POST" })
       if (!domain) return { ok: false };
       const { data: blocked } = await supabaseAdmin.rpc("is_blocked_email", { _email: email });
       if (!blocked) return { ok: false };
+      // Public pre-login endpoint: throttle duplicate entries so it can't flood the audit log.
+      const since = new Date(Date.now() - 15 * 60 * 1000).toISOString();
+      const { count } = await supabaseAdmin
+        .from("spam_audit_log")
+        .select("id", { count: "exact", head: true })
+        .eq("domain", domain)
+        .eq("action_type", "blocked_login_attempt")
+        .gte("created_at", since);
+      if ((count ?? 0) >= 5) return { ok: true };
       await supabaseAdmin.from("spam_audit_log").insert({
         action_type: "blocked_login_attempt",
         email,
