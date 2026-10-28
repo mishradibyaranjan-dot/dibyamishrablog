@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { z } from 'zod';
+import { refreshRequest } from '@/lib/jobs/refresh-request';
 
 /**
  * Called at 07:00, 12:00, 16:00 and 21:00 Asia/Kolkata by pg_cron. Pulls fresh postings from connected
@@ -24,7 +24,7 @@ export const Route = createFileRoute("/api/public/cron/jobs-sync")({
         let input: { mode: 'dispatch' | 'source' | 'maintenance'; sourceSlug?: string; force: boolean };
         try {
           const raw = await request.text();
-          input = z.object({ mode: z.enum(['dispatch','source','maintenance']).default('dispatch'), sourceSlug: z.string().regex(/^[a-z0-9-]+$/).max(100).optional(), force: z.boolean().default(false) }).strict().parse(raw ? JSON.parse(raw) : {});
+          input = refreshRequest.parse(raw ? JSON.parse(raw) : {});
           if (input.mode === 'source' && !input.sourceSlug) return new Response('Missing source', { status: 400 });
         } catch { return new Response('Invalid refresh request', { status: 400 }); }
         try {

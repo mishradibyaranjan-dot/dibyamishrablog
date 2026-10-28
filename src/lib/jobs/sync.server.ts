@@ -120,6 +120,7 @@ async function mapLimit<T, R>(items: T[], limit: number, fn: (t: T) => Promise<R
 }
 
 export async function runJobSync(opts: { sourceSlug?: string; force?: boolean } = {}) {
+  if (!opts.sourceSlug) throw new Error('Single-source refresh required; dispatch bulk refresh separately');
   const { supabaseAdmin: db } = await import("@/integrations/supabase/client.server");
   let q = db.from("job_sources").select("id,slug,name,provider,board_token,failure_count").eq("active", true).eq("status", "connected");
   if (opts.sourceSlug) q = q.eq("slug", opts.sourceSlug);
@@ -226,8 +227,10 @@ export async function runJobSync(opts: { sourceSlug?: string; force?: boolean } 
       }
       const dedupe=await db.rpc("dedupe_job_refresh");
       if(dedupe.error) throw new Error("Could not finalize duplicates");
-      await db.from("job_sources").update({ last_synced_at: now.toISOString(), last_error: null, failure_count: 0, retry_after: null, locked_until: null, lock_token: null }).eq("id", s.id).eq("lock_token", token);
-      await db.from("source_sync_runs").update({ finished_at: new Date().toISOString(), status: "completed", fetched, accepted, rejected, closed, stale_rejected: staleRejected, link_rejected: linkRejected, india_matched: indiaMatched }).eq("id", run.id);
+      const finish = await db.from("source_sync_runs").update({ finished_at: new Date().toISOString(), status: "completed", fetched, accepted, rejected, closed, stale_rejected: staleRejected, link_rejected: linkRejected, india_matched: indiaMatched }).eq("id", run.id);
+      if (finish.error) throw new Error('Could not finish source audit');
+      const release = await db.from("job_sources").update({ last_synced_at: now.toISOString(), last_error: null, failure_count: 0, retry_after: null, locked_until: null, lock_token: null }).eq("id", s.id).eq("lock_token", token).select('id');
+      if (release.error || !release.data?.length) throw new Error('Could not finalize source lease');
       return { source: s.slug, status: "completed", fetched, accepted, rejected, closed, staleRejected, linkRejected, indiaMatched };
     } catch (e) {
       const msg = e instanceof Error ? e.message : String(e);
