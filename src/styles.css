@@ -1668,8 +1668,8 @@ html[data-experience="future"] .future-hero-copy h1 .hero-accent { letter-spacin
 }
 
 /* Plain links inside ink surfaces inherit the light ink text instead of the page primary. */
-:where(.studio-ink) a { color: inherit; }
-:where(.studio-ink) a:hover { color: var(--signal); }
+.studio-ink a:not([class*="studio-"]) { color: var(--ink-foreground); }
+.studio-ink a:not([class*="studio-"]):hover { color: var(--signal); }
 
 /* Typography */
 html[data-experience="future"] :is(h1, h2, h3) {
