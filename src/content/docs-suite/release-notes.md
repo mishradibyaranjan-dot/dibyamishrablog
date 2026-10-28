@@ -81,4 +81,8 @@ not break the running version.
 
 ## Career assistant preview release — 27 October 2026
 Added job-ID transfer, private resume analysis, qualitative requirement evidence, conservative recommendation decisions, immutable drafts/approvals, approved editable Word/PowerPoint exports, approved-resume interview transfer and private deletion/retention. Seven-day jobs defaults and existing refresh schedules are unchanged. No publishing performed.
-Original malware scanning is unavailable; originals remain no-read quarantined. Optional PDF, independent cross-account/security acceptance, production callbacks and unattended retention execution remain unverified. Do not call this production-ready. The additive career schema remains in place on code rollback; do not delete user records or weaken private policies.
+Original malware scanning is unavailable; originals remain no-read quarantined. Independent cross-account/security acceptance, production callbacks and unattended retention execution remain unverified. Do not call this production-ready. The additive career schema remains in place on code rollback; do not delete user records or weaken private policies.
+
+
+## Career workspace update — 28 October 2026
+Private My Career groups resume reviews, approved version counts, interview sessions, saved jobs/alerts and generated document history. The internal estimate exposes weights, exclusions, exact evidence and limitations, with no hiring prediction. Approved PDF is available alongside editable Word/PowerPoint. Seven-day jobs with 24/48/72-hour selections and four daily refreshes remain unchanged. No publication or scanner certification is claimed.

@@ -120,6 +120,13 @@
       "when": 1793159341645,
       "tag": "0016_align_job_summary_public_visibility",
       "breakpoints": true
+    },
+    {
+      "idx": 17,
+      "version": "7",
+      "when": 1793159507194,
+      "tag": "0017_job_source_public_safe_columns",
+      "breakpoints": true
     }
   ]
 }
