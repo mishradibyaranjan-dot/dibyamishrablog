@@ -14,7 +14,10 @@ export function initialExperience(saved: string | null) {
   return saved && known.includes(saved) ? saved : DEFAULT_EXPERIENCE;
 }
 export function readDensity(value: string | null): Density { return value === 'compact' ? 'compact' : 'comfortable'; }
-export function isFutureTheme(theme: string) { return ['future-v2', 'future', 'future-light', 'future-dark', 'comfort', 'system'].includes(theme); }
+/** Every palette now renders the redesigned layout; saved themes change colours only. */
+export function isFutureTheme(_theme: string) { return true; }
+/** Bumping this once clears pre-redesign saved palettes so returning visitors see the new default. */
+export const DESIGN_VERSION = '3';
 export function resolveAppearance(theme: string, darkSystem: boolean) {
   const resolved = theme === 'system' ? (darkSystem ? 'future-dark' : 'future-light') : theme;
   return { theme: resolved, future: isFutureTheme(theme) };

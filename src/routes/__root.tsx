@@ -198,11 +198,11 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
  */
 const THEME_BOOTSTRAP = `(function(){try{
 var t=localStorage.getItem('drm-theme');
-if(localStorage.getItem('drm-design-version')!=='3'){if(t){localStorage.removeItem('drm-theme');localStorage.setItem('drm-design-version','3');}t=null;}
+if(localStorage.getItem('drm-design-version')!=='3'){if(t)localStorage.removeItem('drm-theme');localStorage.setItem('drm-design-version','3');t=null;}
 var all=['future-v2','original','future','future-light','future-dark','comfort','system','glacier','cinematic','midnight','aurora','sunset','noir','emerald','light','paper','sand','arctic'];
 if(all.indexOf(t)<0)t='future-v2';
 var future=['future-v2','future','future-light','future-dark','comfort','system'];
-var r=document.documentElement;r.dataset.experience=future.indexOf(t)>=0?'future':'original';
+var r=document.documentElement;r.dataset.experience='future';
 if(t==='system')t=matchMedia('(prefers-color-scheme: dark)').matches?'future-dark':'future-light';
 var light=['future-v2','original','future','future-light','comfort','glacier','light','paper','sand','arctic'];
 var m=light.indexOf(t)>=0?'light':'dark';
