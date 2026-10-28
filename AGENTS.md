@@ -3,6 +3,7 @@
 - Career resume reviews use a shared policy-filtered job-context resolver, private originals in no-read quarantine, server-validated evidence-only wording changes, atomic immutable approval versions and latest-version export authorization; this prevents fact invention, accidental original overwrite and stale approved downloads. Browser-generated editable documents use only the authorized approved text, while original binaries remain unavailable until a real scanner is integrated.
 - Career retention cleanup reuses existing jobs refresh callbacks and owner reads, deleting quarantine objects before metadata so storage failures remain retryable without extra polling.
 - Resume document selection extracts locally before storage/AI consent; analysis requires explicit consent, refreshes the current bearer session, and accepts success only after the server's committed completion event so uploads and interrupted streams never fail silently.
+- PDF safety checks parse document objects locally and ignore opaque stream bytes; allow local initial-view destinations while blocking executable actions and attachments, without claiming malware scanning.
 
 - Send bulk newsletter email with bounded concurrency and never sleep inside request handlers; managed delivery and explicit retries handle rate limits.
 - Newsletter sends must include a stable per-recipient unsubscribe token and retain the public `/email/unsubscribe` compatibility route.

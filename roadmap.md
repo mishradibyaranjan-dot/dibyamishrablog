@@ -1,4 +1,6 @@
 # Roadmap
+- [ ] Monitoring: refresh memory-risk code confirmed against supplied production errors; recovery needs approved source-isolation plan before changing refresh/closure orchestration.
+- [x] Monitoring: parsed PDF safety replaces raw-byte checks; local destinations and compressed content accepted, active actions/attachments rejected; 13 tests and real upload/extraction passed, build OK. Not published.
 - [x] SEO corrections: brand icon and matching homepage share photo verified in preview; all seven reported heading paths already render one H1. All three findings marked fixed awaiting scanner verification; stale heading finding resolved after fresh seven-path browser/source checks. Rescan HTTP/lint pass; metadata/content confirmation pending. Not published.
 - [x] Future Experience 2.0 core preview: default for unsaved visitors; rebuilt header/home/projects/jobs/workspace/reports/auth/shared presentation; saved-theme rollback; 107 tests, eight-page Axe checks, real filters/private reads, five-width checks and before/after report. Not published.
 - [ ] V2 exhaustive every-page acceptance: remaining content/admin inner compositions retain existing structure; production performance, external workflows, cross-account and independent assistive-tech checks await authorized release/acceptance environment.

@@ -8,8 +8,8 @@ export async function validatePrivateFile(file: File) {
   const prefix = new TextDecoder().decode(bytes.slice(0, 8));
   if (extension === 'pdf') {
     if (!prefix.startsWith('%PDF-')) throw new Error('The file is not a valid PDF.');
-    const raw = new TextDecoder('latin1').decode(bytes);
-    if (/\/(JavaScript|JS|Launch|EmbeddedFile|OpenAction|AA)\b/.test(raw)) throw new Error('Active or embedded PDF content is not accepted.');
+    const { validatePdfStructure } = await import('./pdf-safety');
+    await validatePdfStructure(bytes);
   } else if (extension === 'docx') {
     if (bytes[0] !== 0x50 || bytes[1] !== 0x4b) throw new Error('The file is not a valid Word document.');
     let zip: JSZip;
