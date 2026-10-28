@@ -460,7 +460,8 @@
 
 
 /* Light Blue Glassmorphic Future — white + light-blue glass (light, default) */
-:root[data-theme="glacier"] {
+:root[data-theme="glacier"],
+:root[data-theme="original"] {
   --radius: 1.25rem;
   --background: oklch(0.985 0.008 250);      /* #F8FBFF */
   --foreground: oklch(0.26 0.04 260);        /* #12213A */
@@ -1279,4 +1280,102 @@ html[data-a11y-focus="enhanced"] :focus-visible {
 html[data-a11y-cursor="large"],
 html[data-a11y-cursor="large"] * {
   cursor: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='48' height='48' viewBox='0 0 24 24'><path d='M5 2l14 9-6 1 4 8-3 1-4-8-5 4z' fill='%23000' stroke='%23fff' stroke-width='1.2'/></svg>") 4 2, auto;
+}
+
+
+/* Optional Future Experience: semantic surfaces, no legacy theme replacement. */
+:root[data-theme="future"], :root[data-theme="future-light"], :root[data-theme="comfort"] {
+  --radius: 0.5rem;
+  --background: oklch(0.983 0.004 250);
+  --foreground: oklch(0.25 0.022 255);
+  --card: oklch(1 0 0);
+  --card-foreground: var(--foreground);
+  --popover: var(--card);
+  --popover-foreground: var(--foreground);
+  --primary: oklch(0.47 0.17 260);
+  --primary-foreground: oklch(1 0 0);
+  --secondary: oklch(0.95 0.015 230);
+  --secondary-foreground: var(--foreground);
+  --muted: oklch(0.955 0.006 250);
+  --muted-foreground: oklch(0.44 0.025 255);
+  --accent: oklch(0.94 0.025 210);
+  --accent-foreground: var(--foreground);
+  --destructive: oklch(0.52 0.19 25);
+  --destructive-foreground: oklch(1 0 0);
+  --border: oklch(0.88 0.013 245);
+  --input: oklch(0.72 0.025 245);
+  --ring: var(--primary);
+  --brand: var(--primary);
+  --brand-2: oklch(0.43 0.075 185);
+  --neon-blue: var(--primary);
+  --neon-purple: var(--brand-2);
+  --neon-cyan: var(--brand-2);
+  --gradient-brand: linear-gradient(115deg, var(--primary), oklch(0.43 0.12 240));
+  --gradient-text: linear-gradient(115deg, var(--primary), var(--brand-2));
+  --gradient-hero: linear-gradient(160deg, var(--background), var(--muted));
+  --gradient-aurora: none;
+  --shadow-card: 0 2px 8px oklch(0.25 0.02 255 / 0.04), 0 12px 32px -22px oklch(0.25 0.02 255 / 0.2);
+  --shadow-glow: var(--shadow-card);
+  --shadow-neon: var(--shadow-card);
+  --glass-bg: var(--card);
+  --glass-border: var(--border);
+  --glass-blur: 0px;
+}
+:root[data-theme="future-dark"] {
+  --radius: 0.5rem;
+  --background: oklch(0.18 0.015 255);
+  --foreground: oklch(0.95 0.005 245);
+  --card: oklch(0.23 0.015 255);
+  --card-foreground: var(--foreground);
+  --popover: var(--card);
+  --popover-foreground: var(--foreground);
+  --primary: oklch(0.79 0.1 250);
+  --primary-foreground: oklch(0.2 0.03 255);
+  --secondary: oklch(0.29 0.02 240);
+  --secondary-foreground: var(--foreground);
+  --muted: oklch(0.27 0.012 250);
+  --muted-foreground: oklch(0.77 0.014 245);
+  --accent: oklch(0.3 0.032 190);
+  --accent-foreground: var(--foreground);
+  --border: oklch(0.37 0.015 250);
+  --input: oklch(0.51 0.02 250);
+  --ring: var(--primary);
+  --brand: var(--primary);
+  --brand-2: oklch(0.79 0.1 180);
+  --neon-blue: var(--primary);
+  --neon-purple: var(--brand-2);
+  --neon-cyan: var(--brand-2);
+  --gradient-brand: linear-gradient(115deg, oklch(0.46 0.15 255), oklch(0.41 0.09 215));
+  --gradient-text: linear-gradient(115deg, var(--primary), var(--brand-2));
+  --gradient-hero: linear-gradient(160deg, var(--background), var(--card));
+  --gradient-aurora: none;
+  --shadow-card: 0 8px 28px -16px oklch(0 0 0 / 0.4);
+  --shadow-glow: var(--shadow-card);
+  --shadow-neon: var(--shadow-card);
+  --glass-bg: var(--card);
+  --glass-border: var(--border);
+  --glass-blur: 0px;
+}
+html[data-experience="future"] { --experience-gap: 1.5rem; }
+html[data-experience="future"][data-density="compact"] { --experience-gap: 0.75rem; }
+.experience-breadcrumbs { display: none; }
+html[data-experience="future"] .experience-breadcrumbs { display: block; }
+html[data-experience="future"] .legacy-ambient { display: none; }
+html[data-experience="future"] [data-site-header] { background: var(--background); backdrop-filter: none; border-color: var(--border); }
+html[data-experience="future"] :is(h1,h2,h3,h4,h5,h6) { letter-spacing: 0; }
+html[data-experience="future"] .card-flashy { border: 1px solid var(--border) !important; border-radius: var(--radius) !important; background: var(--card) !important; box-shadow: var(--shadow-card) !important; backdrop-filter: none; }
+html[data-experience="future"] .card-flashy:hover { transform: translateY(-2px); border-color: var(--primary) !important; }
+html[data-experience="future"] :is(.glass-panel,.glass-soft,.glass-strong) { border-radius: var(--radius); backdrop-filter: none !important; }
+html[data-experience="future"] :is(.text-gradient,.shimmer-headline) { background: var(--gradient-text) !important; animation: none; }
+html[data-experience="future"] .floating-chat-panel { border-radius: var(--radius); }
+html[data-experience="future"] .workspace-summary { display: grid; }
+.workspace-summary { display: none; }
+html[data-experience="future"] .workspace-record { padding-block: var(--experience-gap); }
+html[data-experience="future"] :is(.animate-aurora,.animate-pulse-glow,.animate-float) { animation: none; }
+html[data-theme="comfort"] :is(main p, main li) { line-height: 1.85; }
+html[data-theme="comfort"] :is(.shadow-neon,.shadow-glow,.card-flashy) { box-shadow: none !important; }
+html[data-theme="comfort"] *, html[data-theme="comfort"] *::before, html[data-theme="comfort"] *::after { animation: none !important; transition: none !important; }
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto !important; }
+  *, *::before, *::after { animation-duration: 0.001ms !important; animation-iteration-count: 1 !important; transition-duration: 0.001ms !important; scroll-behavior: auto !important; }
 }

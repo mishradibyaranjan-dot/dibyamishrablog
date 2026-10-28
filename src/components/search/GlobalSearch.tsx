@@ -6,6 +6,8 @@ import { Input } from "@/components/ui/input";
 import { searchAll, SEARCH_SECTIONS, type GlobalHit, type SearchSection } from "@/lib/search-index";
 import { trackEvent } from "@/lib/analytics";
 import { cn } from "@/lib/utils";
+import { Button } from '@/components/ui/button';
+import { NAVIGATION_ITEMS } from '@/lib/navigation-items';
 
 /**
  * Site-wide search across Research/Blog, Case Studies, Projects, Expertise and
@@ -56,7 +58,7 @@ export function GlobalSearch({ compact = false }: { compact?: boolean }) {
 
   return (
     <>
-      <button
+      <Button variant="outline"
         type="button"
         onClick={() => setOpen(true)}
         aria-label="Search the site"
@@ -73,7 +75,7 @@ export function GlobalSearch({ compact = false }: { compact?: boolean }) {
             ⌘K
           </kbd>
         )}
-      </button>
+      </Button>
 
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent className="max-w-2xl p-0">
@@ -83,6 +85,7 @@ export function GlobalSearch({ compact = false }: { compact?: boolean }) {
               <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
               <Input
                 autoFocus
+                aria-label="Search site content and pages"
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
                 placeholder="Search research, case studies, projects, expertise, learn…"
@@ -91,7 +94,7 @@ export function GlobalSearch({ compact = false }: { compact?: boolean }) {
             </div>
             <div className="mt-3 flex flex-wrap gap-1.5">
               {(["all", ...SEARCH_SECTIONS] as const).map((s) => (
-                <button
+                <Button variant="ghost" size="sm"
                   key={s}
                   type="button"
                   onClick={() => setSection(s)}
@@ -103,12 +106,15 @@ export function GlobalSearch({ compact = false }: { compact?: boolean }) {
                   )}
                 >
                   {s === "all" ? "All" : s}
-                </button>
+                </Button>
               ))}
             </div>
           </div>
 
           <div className="max-h-[55vh] overflow-y-auto p-2">
+            <nav aria-label="Quick navigation" className="grid gap-1 border-b border-border pb-2 sm:grid-cols-2">
+              {NAVIGATION_ITEMS.filter(item => !query.trim() || item.title.toLowerCase().includes(query.toLowerCase())).map(item => <Button key={item.to} variant="ghost" className="justify-start text-left" onClick={() => {setOpen(false);setQuery('');navigate({to:item.to});}}>{item.title}<CornerDownLeft className="ml-auto h-3 w-3 text-muted-foreground"/></Button>)}
+            </nav>
             {query.trim() === "" && (
               <p className="p-4 text-sm text-muted-foreground">
                 Start typing to search articles, case studies, projects, capabilities and Learn modules.
@@ -125,7 +131,7 @@ export function GlobalSearch({ compact = false }: { compact?: boolean }) {
                 <ul>
                   {list.map((hit) => (
                     <li key={hit.id}>
-                      <button
+                      <Button variant="ghost"
                         type="button"
                         onClick={() => go(hit)}
                         className="group flex w-full flex-col items-start gap-0.5 rounded-xl px-3 py-2.5 text-left transition-colors hover:bg-accent"
@@ -137,7 +143,7 @@ export function GlobalSearch({ compact = false }: { compact?: boolean }) {
                         <span className="line-clamp-2 text-sm text-muted-foreground">
                           {hit.description}
                         </span>
-                      </button>
+                      </Button>
                     </li>
                   ))}
                 </ul>
