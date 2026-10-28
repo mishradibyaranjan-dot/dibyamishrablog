@@ -148,6 +148,13 @@
       "when": 1793212522313,
       "tag": "0020_bounded_job_refresh_dispatch",
       "breakpoints": true
+    },
+    {
+      "idx": 21,
+      "version": "7",
+      "when": 1793212753917,
+      "tag": "0021_restrict_job_dispatch_origins",
+      "breakpoints": true
     }
   ]
 }
