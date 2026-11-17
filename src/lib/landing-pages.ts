@@ -167,6 +167,32 @@ export const landingPages: Record<string, LandingPageContent> = {
     relatedPostSlugs: ["scalable-rag-enterprise", "what-is-agentic-ai"],
     advisoryArea: "Enterprise AI Strategy",
     ctaLabel: "Discuss RAG Architecture",
+    guide: [
+      {
+        heading: "Who This Is For",
+        body: "CIOs, Heads of AI and architecture leaders who already have a RAG pilot or chatbot, and now need it to answer reliably on governed enterprise content for real users.",
+      },
+      {
+        heading: "How Permission-Aware Retrieval Works",
+        body: "Answers must never reveal content the person asking could not open themselves. That means carrying document permissions into the search index and filtering at query time on the user's identity — not trimming results after the model has already seen them.",
+        points: [
+          "Index access-control metadata alongside each chunk",
+          "Filter retrieval on the signed-in user's groups before ranking",
+          "Re-check permissions when source documents change",
+          "Log which sources were used for every answer",
+        ],
+      },
+      {
+        heading: "What Should Happen When the Evidence Is Missing?",
+        body: "A production assistant should say it does not know, rather than invent an answer. Evaluation should test that behaviour as seriously as answer quality.",
+        points: [
+          "Require citations to retrieved sources in every answer",
+          "Set a retrieval confidence threshold below which the assistant declines",
+          "Maintain a test set of questions with no valid answer in the corpus",
+          "Track grounded-answer rate, refusal accuracy and source freshness over time",
+        ],
+      },
+    ],
   },
 
   "cloud-modernization": {
@@ -349,6 +375,33 @@ export const landingPages: Record<string, LandingPageContent> = {
     relatedPostSlugs: ["engineering-leadership-global-teams", "data-platform-bi-at-scale"],
     advisoryArea: "GCC & Engineering Transformation",
     ctaLabel: "Discuss GCC Strategy",
+    guide: [
+      {
+        heading: "Who This Is For",
+        body: "CEOs, CIOs and GCC leaders who are planning a new Global Capability Centre in India, or scaling an existing one from delivery support into product, platform and AI ownership.",
+      },
+      {
+        heading: "Questions to Settle Before Choosing a City",
+        body: "Location matters, but it follows from what the centre will own. Answer these first:",
+        points: [
+          "Which capabilities will the centre own end to end, and which will it support?",
+          "What skills — product, platform, data, AI — are needed in the first two years?",
+          "How will decision rights, reporting lines and governance work with headquarters?",
+          "Which talent markets have depth in those skills at the seniority you need?",
+          "What security, compliance and data-handling requirements apply from day one?",
+        ],
+      },
+      {
+        heading: "What Makes a GCC Move Beyond Cost Arbitrage",
+        body: "Centres that grow in value are given real ownership: a product or platform charter, senior local leadership, shared engineering standards with headquarters and outcome metrics beyond headcount and cost.",
+        points: [
+          "Charter tied to business outcomes, not ticket volume",
+          "Local architecture and engineering leadership with decision rights",
+          "Common platforms, delivery governance and quality metrics across locations",
+          "A deliberate plan for AI-enabled engineering and capability building",
+        ],
+      },
+    ],
   },
 
   "multi-tenant-saas": {
