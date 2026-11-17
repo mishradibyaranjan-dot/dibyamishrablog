@@ -3,6 +3,7 @@ import { ArrowRight, ArrowUpRight, BriefcaseBusiness, FileSearch, GraduationCap,
 import { Button } from '@/components/ui/button';
 import { Reveal } from '@/components/cinematic/Reveal';
 import { trackEvent } from '@/lib/analytics';
+import { profileSummary } from '@/lib/profile';
 
 const PROOF = [
   { value: '20+', label: 'Years leading technology' },
@@ -82,9 +83,13 @@ export function HomeHero() {
             <span className="studio-hero-line">Enterprise AI,</span>
             <span className="studio-hero-line">engineered to <em>ship.</em></span>
           </h1>
+          <p className="studio-hero-summary">{profileSummary}</p>
           <p className="studio-hero-lede">
             AI strategy, cloud-native platforms and engineering leadership — taking enterprise ambition from the boardroom to production.
           </p>
+          <Link to="/about" className="studio-about-link">
+            More about me<ArrowUpRight className="h-4 w-4" />
+          </Link>
           <div className="studio-hero-actions">
             <Button size="lg" asChild className="studio-cta">
               <Link to="/contact" onClick={() => trackEvent('hero_cta_click', { cta: 'discuss_transformation' })}>

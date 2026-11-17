@@ -31,6 +31,7 @@ import cardResearch from "@/assets/collab-research.jpg";
 import cardProjects from "@/assets/collab-projects.jpg";
 import { HomeHero, WorkspaceShowcase } from '@/components/marketing/HomeHero';
 import { pageOgImages } from '@/lib/og-images';
+import { keyAchievements, profileSummary, timeline } from '@/lib/profile';
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -126,6 +127,7 @@ function Home() {
     <div className="studio-home w-full bg-background text-foreground">
       <HomeHero />
       <div className="home-sections mx-auto flex w-full max-w-7xl flex-col gap-20 px-4 py-16 sm:px-6 sm:py-24 lg:gap-28 lg:py-28">
+        <AboutPreview />
         <WorkspaceShowcase />
         <Problems />
         <Outcomes />
@@ -144,6 +146,50 @@ function Home() {
   );
 }
 
+
+/* ----------------------------- ABOUT PREVIEW ------------------------ */
+
+function AboutPreview() {
+  const currentRole = timeline[0];
+  const highlights = keyAchievements.slice(0, 3);
+  return (
+    <section aria-labelledby="about-preview-heading" className="flex flex-col gap-8">
+      <div className="max-w-3xl">
+        <SectionEyebrow icon={Users}>About me</SectionEyebrow>
+        <h2
+          id="about-preview-heading"
+          className="mt-4 font-display text-3xl font-bold tracking-tight text-foreground sm:text-4xl"
+        >
+          Dibya Ranjan Mishra
+        </h2>
+        <p className="mt-2 text-base font-semibold text-brand-1 sm:text-lg">
+          {currentRole.role}
+        </p>
+        <p className="mt-3 text-base leading-relaxed text-muted-foreground sm:text-lg">
+          {profileSummary}
+        </p>
+        <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{currentRole.text}</p>
+        <Link
+          to="/about"
+          className="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-brand-1"
+        >
+          Read my full story
+          <ArrowUpRight className="h-4 w-4" />
+        </Link>
+      </div>
+      <div className="grid gap-4 sm:grid-cols-3">
+        {highlights.map((a, i) => (
+          <Reveal key={a.k} delay={i * 0.05}>
+            <div className="flex h-full flex-col gap-2 rounded-2xl border border-border bg-card p-6">
+              <div className="text-sm font-semibold text-foreground">{a.k}</div>
+              <p className="text-sm leading-relaxed text-muted-foreground">{a.v}</p>
+            </div>
+          </Reveal>
+        ))}
+      </div>
+    </section>
+  );
+}
 
 /* --------------------------- CAPABILITIES --------------------------- */
 

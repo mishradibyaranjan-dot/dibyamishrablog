@@ -64,6 +64,10 @@ export const certifications: Certification[] = [
 
 export const summaryCert = "60+ certifications across AI, Cloud, Leadership & Delivery";
 
+// Verified one-paragraph experience summary shared by the home hero and About page.
+export const profileSummary =
+  "Technology executive with 20+ years leading engineering, product & delivery organisations across Shipping, BFSI, Insurance, Retail/FinTech and Enterprise SaaS. Currently Vice President & Country Head at Crystal Tech Ventures, driving a Global Capability Centre setup in India and retail supply-chain digital transformation — from org design through delivery. Scaled portfolio revenue $1M → $20M in 24 months, managed $28M+ combined budgets, and led 500+ engineers across 5 time zones.";
+
 
 export const languages = [
   { name: "English", level: "C1 — Advanced" },
