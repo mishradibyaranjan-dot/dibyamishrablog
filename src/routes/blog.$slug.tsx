@@ -158,9 +158,9 @@ function BlogPost() {
             {post.slug === "model-context-protocol-mcp-servers" && (
               <p className="mt-6 text-base leading-relaxed">
                 Planning agent integrations? See{" "}
-                <Link to="/enterprise-agentic-ai" className="font-semibold text-primary underline-offset-4 hover:underline">enterprise agentic AI advisory</Link>{" "}
+                <Link to="/enterprise-agentic-ai" className="font-semibold text-primary underline underline-offset-4">enterprise agentic AI advisory</Link>{" "}
                 and{" "}
-                <Link to="/enterprise-rag" className="font-semibold text-primary underline-offset-4 hover:underline">permission-aware enterprise RAG architecture</Link>.
+                <Link to="/enterprise-rag" className="font-semibold text-primary underline underline-offset-4">permission-aware enterprise RAG architecture</Link>.
               </p>
             )}
             <p className="text-base leading-relaxed">
