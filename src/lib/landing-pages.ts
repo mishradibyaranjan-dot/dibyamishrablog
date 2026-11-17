@@ -21,6 +21,8 @@ export interface LandingPageContent {
   relatedPostSlugs: string[];
   advisoryArea: string;
   ctaLabel: string;
+  /** Optional in-depth guide sections rendered after the architecture block. */
+  guide?: { heading: string; body: string; points?: string[] }[];
 }
 
 export const landingPages: Record<string, LandingPageContent> = {
@@ -170,10 +172,10 @@ export const landingPages: Record<string, LandingPageContent> = {
   "cloud-modernization": {
     slug: "cloud-modernization",
     eyebrow: "Cloud & Platform Modernization",
-    title: "Cloud Modernization Without the Big-Bang Risk",
-    metaTitle: "Cloud & Platform Modernization — Dibya Ranjan Mishra",
+    title: "Cloud and Application Modernization Without the Big-Bang Risk",
+    metaTitle: "Cloud & Application Modernization Strategy | Dibya Ranjan Mishra",
     metaDescription:
-      "Modernize legacy platforms into secure, scalable, cloud-native architectures — strangler-fig decomposition, cell-based deployment, internal developer platforms and FinOps guardrails.",
+      "Plan cloud and application modernization without a risky rewrite: migration vs modernization, the 6 Rs, a decision checklist and an incremental roadmap from a hands-on technology leader.",
     heroCopy:
       "Modernization fails when it is treated as a migration project instead of an organizational change. I help enterprises modernize legacy platforms incrementally — while product delivery continues.",
     problem: {
@@ -213,6 +215,44 @@ export const landingPages: Record<string, LandingPageContent> = {
     relatedPostSlugs: ["cloud-native-saas-patterns", "payments-platform-modernization"],
     advisoryArea: "Architecture & Platform Review",
     ctaLabel: "Discuss Modernization",
+    guide: [
+      {
+        heading: "What Is Cloud Modernization?",
+        body: "Cloud modernization is the work of changing how an application is built, deployed and operated so it can take real advantage of cloud platforms — elastic scaling, managed services, automated delivery and pay-for-use cost. Application modernization is the application-level part of that work: restructuring code, data and integrations, not just the servers they run on.",
+      },
+      {
+        heading: "Cloud Migration vs. Application Modernization",
+        body: "Migration moves workloads to the cloud largely as they are. Modernization changes the workloads themselves. Many programs do both, in sequence: migrate to exit a data centre quickly, then modernize the parts of the estate where change delivers business value.",
+        points: [
+          "Migration (rehost): fastest exit from owned infrastructure; little change to cost structure or release speed",
+          "Replatform: small changes such as managed databases or containers; moderate effort, quick operational gains",
+          "Refactor / re-architect: decompose into services behind stable contracts; highest effort, unlocks scale and release velocity",
+          "Repurchase, retain or retire: replace with SaaS, keep as-is for now, or switch off — often the cheapest decisions in the portfolio",
+        ],
+      },
+      {
+        heading: "A Practical Modernization Decision Checklist",
+        body: "Before choosing an approach for each application, answer these questions with the business and engineering owners together:",
+        points: [
+          "Which business outcome does this application block today — SLA, data residency, release speed or cost?",
+          "How often does it change, and how much revenue or risk depends on it?",
+          "Are its data boundaries clear enough to carve out without a flag-day cut-over?",
+          "Do teams have automated tests, CI/CD and observability to change it safely?",
+          "What will run in parallel during transition, and how will success be measured?",
+        ],
+      },
+      {
+        heading: "An Incremental Modernization Roadmap",
+        body: "Modernization works best in thin, measurable slices rather than a single rewrite:",
+        points: [
+          "Assess: portfolio inventory, dependency mapping and a 6 Rs decision per application",
+          "Foundations: landing zone, identity, infrastructure-as-code, CI/CD and cost telemetry",
+          "First slice: carve one bounded context out behind a stable contract and run it in parallel",
+          "Scale: repeat on a paved-road developer platform and track deploy frequency, availability and cost",
+          "Retire: switch off legacy components once traffic and data have moved",
+        ],
+      },
+    ],
   },
 
   "engineering-transformation": {

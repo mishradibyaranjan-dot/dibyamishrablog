@@ -321,29 +321,29 @@ const PROBLEMS = [
     icon: Bot,
     title: "Enterprise AI Transformation",
     body: "Move AI beyond experimentation into scalable enterprise solutions using Agentic AI, LLMs, RAG, AI agents, automation and AI governance.",
-    cta: "Explore AI Transformation",
-    to: "/advisory" as const,
+    cta: "Explore enterprise agentic AI services",
+    to: "/enterprise-agentic-ai" as const,
   },
   {
     icon: Cloud,
     title: "Cloud & Platform Modernization",
     body: "Modernize legacy platforms into secure, scalable and cloud-native architectures without stalling the business.",
-    cta: "Explore Platform Modernization",
-    to: "/advisory" as const,
+    cta: "Explore cloud and application modernization",
+    to: "/cloud-modernization" as const,
   },
   {
     icon: Layers,
     title: "Engineering Transformation",
     body: "Improve engineering delivery, platform practices, architecture governance and global engineering effectiveness.",
-    cta: "Explore Engineering Transformation",
-    to: "/advisory" as const,
+    cta: "Explore engineering transformation advisory",
+    to: "/engineering-transformation" as const,
   },
   {
     icon: Building2,
     title: "GCC Strategy & Scale",
     body: "Establish and scale Global Capability Centres: technology strategy, organization design, capability development, delivery governance and AI adoption.",
-    cta: "Explore GCC Strategy",
-    to: "/advisory" as const,
+    cta: "Explore GCC technology strategy",
+    to: "/gcc-technology-strategy" as const,
   },
   {
     icon: LineChart,
@@ -396,18 +396,26 @@ const WAYS = [
   {
     title: "Enterprise AI Strategy",
     body: "AI opportunity assessment, Agentic AI roadmap, enterprise RAG architecture, AI governance and production readiness.",
+    to: "/enterprise-rag" as const,
+    cta: "Explore enterprise RAG architecture",
   },
   {
     title: "Architecture & Platform Review",
     body: "Cloud architecture assessment, modernization strategy, multi-tenant SaaS design, scalability and security review.",
+    to: "/cloud-modernization" as const,
+    cta: "Explore cloud modernization reviews",
   },
   {
     title: "GCC & Engineering Transformation",
     body: "GCC technology strategy, organization design, operating model, delivery governance and capability development.",
+    to: "/gcc-technology-strategy" as const,
+    cta: "Explore GCC and engineering strategy",
   },
   {
     title: "Executive Technology Advisory",
     body: "Technology strategy, architecture decisions, AI strategy and transformation planning for leadership teams.",
+    to: "/engineering-transformation" as const,
+    cta: "Explore engineering transformation",
   },
 ] as const;
 
@@ -427,13 +435,13 @@ function WaysToWork() {
         {WAYS.map((w, i) => (
           <Reveal key={w.title} delay={i * 0.05}>
             <Link
-              to="/advisory"
+              to={w.to}
               className="card-flashy group flex h-full flex-col gap-3 rounded-2xl border border-border bg-card p-6 transition-all hover:-translate-y-0.5 hover:shadow-glow"
             >
               <h3 className="font-display text-base font-semibold text-foreground">{w.title}</h3>
               <p className="text-sm leading-relaxed text-muted-foreground">{w.body}</p>
               <span className="mt-auto inline-flex items-center gap-1.5 pt-2 text-sm font-semibold text-brand-1">
-                Explore advisory services
+                {w.cta}
                 <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
               </span>
             </Link>

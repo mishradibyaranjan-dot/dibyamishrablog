@@ -96,6 +96,8 @@ function BlogPost() {
 
   const sections = [
     { id: "intro", title: "Introduction" },
+    ...(post.sections ?? []).map((sec, i) => ({ id: `section-${i + 1}`, title: sec.heading })),
+    ...(post.faqs?.length ? [{ id: "questions", title: "Common questions" }] : []),
     { id: "key-takeaways", title: "Key takeaways" },
     { id: "playbook", title: "Playbook" },
     { id: "related", title: "Related reading" },
@@ -124,6 +126,43 @@ function BlogPost() {
           <p id="intro" className="text-lg leading-relaxed text-muted-foreground">{post.summary}</p>
           <div className="prose prose-neutral max-w-none dark:prose-invert">
             <p className="text-base leading-relaxed">{post.content}</p>
+            {post.sections?.map((sec, i) => (
+              <section key={sec.heading} id={`section-${i + 1}`} className="mt-8">
+                <h2 className="font-display text-2xl font-semibold text-foreground">{sec.heading}</h2>
+                <p className="mt-3 text-base leading-relaxed">{sec.body}</p>
+                {sec.points && (
+                  <ul className="mt-3 space-y-2">
+                    {sec.points.map((pt) => (
+                      <li key={pt} className="flex items-start gap-3 text-base">
+                        <CheckCircle2 className="mt-1 h-4 w-4 shrink-0 text-primary" />
+                        <span>{pt}</span>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </section>
+            ))}
+            {post.faqs?.length ? (
+              <section id="questions" className="mt-8">
+                <h2 className="font-display text-2xl font-semibold text-foreground">Common questions</h2>
+                <dl className="mt-3 space-y-4">
+                  {post.faqs.map((f) => (
+                    <div key={f.q}>
+                      <dt className="font-semibold text-foreground">{f.q}</dt>
+                      <dd className="mt-1 text-base leading-relaxed">{f.a}</dd>
+                    </div>
+                  ))}
+                </dl>
+              </section>
+            ) : null}
+            {post.slug === "model-context-protocol-mcp-servers" && (
+              <p className="mt-6 text-base leading-relaxed">
+                Planning agent integrations? See{" "}
+                <Link to="/enterprise-agentic-ai" className="font-semibold text-primary underline-offset-4 hover:underline">enterprise agentic AI advisory</Link>{" "}
+                and{" "}
+                <Link to="/enterprise-rag" className="font-semibold text-primary underline-offset-4 hover:underline">permission-aware enterprise RAG architecture</Link>.
+              </p>
+            )}
             <p className="text-base leading-relaxed">
               This is a working note — expect iteration as the field and our practice evolve. If you
               have feedback, counterexamples, or want to compare implementation notes, reach out.

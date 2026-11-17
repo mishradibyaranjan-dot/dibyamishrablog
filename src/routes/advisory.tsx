@@ -29,6 +29,8 @@ const ENGAGEMENTS = [
   {
     icon: Bot,
     title: "Enterprise AI Strategy",
+    learnTo: "/enterprise-agentic-ai" as const,
+    learnLabel: "Learn about enterprise agentic AI",
     audience: ["CIOs", "CTOs", "Heads of AI"],
     services: [
       "AI opportunity assessment",
@@ -43,6 +45,8 @@ const ENGAGEMENTS = [
   {
     icon: Layers,
     title: "Architecture & Platform Review",
+    learnTo: "/cloud-modernization" as const,
+    learnLabel: "Learn about cloud and application modernization",
     audience: ["CTOs", "Architecture leaders", "Engineering leaders"],
     services: [
       "Cloud architecture assessment",
@@ -57,6 +61,8 @@ const ENGAGEMENTS = [
   {
     icon: Building2,
     title: "GCC & Engineering Transformation",
+    learnTo: "/gcc-technology-strategy" as const,
+    learnLabel: "Learn about GCC technology strategy",
     audience: ["CEOs", "CIOs", "GCC leaders"],
     services: [
       "GCC technology strategy",
@@ -71,6 +77,8 @@ const ENGAGEMENTS = [
   {
     icon: Users,
     title: "Executive Technology Advisory",
+    learnTo: "/engineering-transformation" as const,
+    learnLabel: "Learn about engineering transformation",
     audience: ["Founders", "Executives", "Technology leadership teams"],
     services: [
       "Technology strategy",
@@ -120,13 +128,23 @@ function Advisory() {
                     </li>
                   ))}
                 </ul>
+                <div className="mt-auto flex flex-wrap items-center gap-4">
                 <Link
                   to="/contact"
-                  className="mt-auto inline-flex min-h-11 w-fit items-center gap-2 rounded-xl bg-brand-gradient px-5 py-3 text-sm font-semibold text-white transition-transform hover:-translate-y-0.5"
+                  className="inline-flex min-h-11 w-fit items-center gap-2 rounded-xl bg-brand-gradient px-5 py-3 text-sm font-semibold text-white transition-transform hover:-translate-y-0.5"
                 >
                   {e.cta}
                   <ArrowRight className="h-4 w-4" />
                 </Link>
+                <Link to={e.learnTo} className="text-sm font-semibold text-brand-1 underline-offset-4 hover:underline">
+                  {e.learnLabel}
+                </Link>
+                {e.title === "Enterprise AI Strategy" && (
+                  <Link to="/enterprise-rag" className="text-sm font-semibold text-brand-1 underline-offset-4 hover:underline">
+                    Learn about enterprise RAG
+                  </Link>
+                )}
+                </div>
               </article>
             </Reveal>
           ))}

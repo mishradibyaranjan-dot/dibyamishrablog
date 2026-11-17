@@ -64,6 +64,10 @@ export interface Post {
   featured?: boolean;
   content: string;
   takeaways: string[];
+  /** Optional structured sections rendered after the introduction. */
+  sections?: { heading: string; body: string; points?: string[] }[];
+  /** Optional reader questions answered on the page. */
+  faqs?: { q: string; a: string }[];
 }
 
 export const posts: Post[] = [
@@ -73,8 +77,8 @@ export const posts: Post[] = [
     summary:
       "What Model Context Protocol (MCP) servers are, why they matter for enterprise AI agents, how to design them, secure them, and roll them out across teams.",
     category: "AI & Agentic AI",
-    readingTime: "11 min",
-    date: "2026-07-15",
+    readingTime: "5 min",
+    date: "2026-11-18",
     featured: true,
     takeaways: [
       "MCP is an open protocol that standardizes how LLMs and agents connect to tools, data, and prompts.",
@@ -85,6 +89,78 @@ export const posts: Post[] = [
     ],
     content:
       "Model Context Protocol (MCP) is an open standard that defines how AI assistants and agents connect to external tools, data sources, and prompt libraries. An MCP server is a lightweight process that exposes three primitives — resources (read-only data), tools (typed callable actions), and prompts (reusable templates) — over a well-defined JSON-RPC interface. Any MCP-aware client (Claude Desktop, Cursor, custom agents, or your own orchestration layer) can discover and call them without bespoke glue code. For enterprises this collapses the integration matrix: instead of writing N tool adapters per agent framework, you write one MCP server per system of record (Snowflake, Jira, SAP, your internal knowledge base) and every agent inherits the capability. The design principles that matter in production are the same ones we apply to any typed API surface — clear schemas, idempotency on writes, structured errors, and version negotiation — plus AI-specific concerns: token-efficient resource summaries, deterministic tool naming, and prompt templates that pin the model into a narrow behavior. The security model is where MCP earns its place in a regulated stack: each server runs under scoped credentials, every tool call is authorized against the caller's identity, write actions can be gated behind a human-in-the-loop approval step, and every request/response is logged for audit. The rollout pattern we recommend is incremental: start by exposing read-only resources so agents can ground answers in trusted data, add low-risk tools (search, lookup, draft) behind policy, then unlock write tools (create ticket, post message, execute trade) with explicit approval workflows. As MCP servers proliferate, put them behind an MCP gateway that handles discovery, authentication, quota, and observability — the same shape as an API gateway, adapted for agentic traffic.",
+    sections: [
+      {
+        heading: "How MCP works: hosts, clients and servers",
+        body: "An MCP host (an AI assistant, IDE or your own agent runtime) runs one MCP client per connection. Each client talks to one MCP server using JSON-RPC 2.0 messages. Local servers usually run over standard input/output; remote servers use the Streamable HTTP transport. On connection the client and server negotiate a protocol version and capabilities, then the client can list and call what the server offers.",
+        points: [
+          "Resources: read-only context such as a document, table extract or ticket history",
+          "Tools: typed actions with a JSON Schema input, such as search_orders or create_ticket",
+          "Prompts: reusable, parameterised templates that steer the model for a specific task",
+        ],
+      },
+      {
+        heading: "Practical example: a read-only order-status server",
+        body: "A sensible first enterprise server answers questions without changing anything. For example, a service desk assistant needs order status from an ERP. The server exposes one tool, get_order_status, which accepts an order ID, checks that the caller may see that customer, queries a read replica and returns a short structured result. No write access, no free-text SQL and no data beyond the fields the assistant needs.",
+        points: [
+          "Narrow tool: one purpose, a strict input schema and a small, predictable output",
+          "Scoped credentials: the server's database user can read only the views it needs",
+          "Caller identity: every call is authorised against the end user, not just the agent",
+          "Audit: log who asked, which tool ran, the inputs and the result size",
+        ],
+      },
+      {
+        heading: "Practical example: a write tool behind human approval",
+        body: "Once read-only tools are trusted, add a low-risk write such as create_change_request. The tool drafts the request and returns it for confirmation; a person approves it in the host or in your workflow system before the server submits it. Make the write idempotent with a client-supplied request key so a retried call never creates duplicates.",
+      },
+      {
+        heading: "Implementation steps for an enterprise MCP rollout",
+        body: "Treat MCP servers like any other production API surface, with a few AI-specific additions:",
+        points: [
+          "1. Pick one system of record and one user journey with a measurable outcome",
+          "2. Define the smallest set of resources and tools; write clear names and descriptions the model can follow",
+          "3. Build the server with an official MCP SDK and validate every input against its schema",
+          "4. Add authentication for remote servers (the specification's authorization model is based on OAuth 2.1) and per-tool permission checks",
+          "5. Log every request and response for audit, and add rate limits and timeouts",
+          "6. Evaluate with realistic prompts: does the agent pick the right tool, and does it refuse when it lacks permission?",
+          "7. Pilot with a small group, then add write tools behind approval",
+          "8. As servers multiply, place them behind a gateway or registry for discovery, access policy and monitoring",
+        ],
+      },
+      {
+        heading: "Security checklist",
+        body: "Most MCP risk comes from giving a model more reach than the task needs. Before going live, confirm:",
+        points: [
+          "Least privilege for each server and each tool",
+          "No secrets or tokens returned in tool output",
+          "Treat content from resources and tool results as untrusted input that may contain prompt injection",
+          "Only install servers from sources you have reviewed, and pin their versions",
+          "Human approval for irreversible or high-impact actions",
+        ],
+      },
+    ],
+    faqs: [
+      {
+        q: "Is MCP a replacement for APIs?",
+        a: "No. MCP sits on top of your existing APIs and data stores. It gives AI clients a standard way to discover and call them, while your APIs keep their own security and business rules.",
+      },
+      {
+        q: "Do I need a different MCP server for every AI tool?",
+        a: "No. That is the main benefit: one server per system can be used by any MCP-compatible client, instead of building a separate integration for each agent framework.",
+      },
+      {
+        q: "Should an MCP server run locally or remotely?",
+        a: "Local servers suit developer tools and personal data on one machine. Shared enterprise systems are usually better as remote servers, where you can centralise authentication, logging and updates.",
+      },
+      {
+        q: "How do I stop an agent doing something harmful through MCP?",
+        a: "Limit what each tool can do, check the end user's permissions on every call, require approval for high-impact writes, and log everything. Do not rely on the prompt alone for safety.",
+      },
+      {
+        q: "Where should an enterprise start?",
+        a: "Start with one read-only server for a well-understood workflow, measure whether it improves the outcome, then expand. For grounding answers in documents, pair it with a permission-aware retrieval layer.",
+      },
+    ],
   },
 
 

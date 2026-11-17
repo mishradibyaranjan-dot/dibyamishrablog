@@ -107,6 +107,23 @@ export function LandingPage({ page }: { page: LandingPageContent }) {
         </div>
       </Section>
 
+      {page.guide?.map((g) => (
+        <Section key={g.heading} className="pt-0">
+          <h2 className="font-display text-2xl font-bold tracking-tight sm:text-3xl">{g.heading}</h2>
+          <p className="mt-4 max-w-3xl text-muted-foreground">{g.body}</p>
+          {g.points && (
+            <ul className="mt-6 space-y-3">
+              {g.points.map((point) => (
+                <li key={point} className="flex items-start gap-3 text-sm sm:text-base">
+                  <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
+                  <span>{point}</span>
+                </li>
+              ))}
+            </ul>
+          )}
+        </Section>
+      ))}
+
       <Section className="pt-0">
         <h2 className="font-display text-2xl font-bold tracking-tight sm:text-3xl">
           Relevant Experience
