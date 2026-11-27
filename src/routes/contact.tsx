@@ -1,3 +1,4 @@
+import { shareImageMeta } from "@/lib/og-images";
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { Mail, ExternalLink, Send, CheckCircle2, Loader2 } from "lucide-react";
@@ -19,7 +20,7 @@ export const Route = createFileRoute("/contact")({
       { property: "og:description", content: "Advisory, architecture reviews, or engineering leadership conversations." },
       { property: "og:url", content: "https://www.dibyamishra.co.in/contact" },
       { property: 'og:type', content: 'website' },
-      { name: 'twitter:card', content: 'summary' },
+      ...shareImageMeta(),
     ],
     links: [{ rel: "canonical", href: "https://www.dibyamishra.co.in/contact" }],
     scripts: [breadcrumbScript([{ name: "Contact", path: "/contact" }])],

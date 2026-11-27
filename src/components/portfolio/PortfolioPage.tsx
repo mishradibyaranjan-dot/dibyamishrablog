@@ -1,3 +1,4 @@
+import { shareImageMeta } from "@/lib/og-images";
 import { Link } from "@tanstack/react-router";
 import type { ReactNode } from "react";
 import { Section } from "@/components/layout/Section";
@@ -47,7 +48,7 @@ export function pageHead(path: string, title: string, description: string) {
       { property: "og:description", content: description },
       { property: "og:url", content: url },
       { property: "og:type", content: "profile" },
-      { name: "twitter:card", content: "summary" },
+      ...shareImageMeta(),
       { name: "twitter:title", content: title },
       { name: "twitter:description", content: description },
     ],

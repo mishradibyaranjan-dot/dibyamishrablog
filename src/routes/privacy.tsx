@@ -1,3 +1,4 @@
+import { shareImageMeta } from "@/lib/og-images";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { motion } from "framer-motion";
 import { Database, Mail, Cookie, LineChart, Users, Server } from "lucide-react";
@@ -21,7 +22,7 @@ export const Route = createFileRoute("/privacy")({
       { property: "og:title", content: TITLE },
       { property: "og:description", content: DESC },
       { property: "og:url", content: CANONICAL },
-      { name: "twitter:card", content: "summary_large_image" },
+      ...shareImageMeta(),
       { name: "twitter:title", content: TITLE },
       { name: "twitter:description", content: DESC },
       { name: "author", content: legalConfig.ownerName },

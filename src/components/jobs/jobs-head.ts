@@ -1,3 +1,4 @@
+import { shareImageMeta } from "@/lib/og-images";
 import { DEFAULT_FILTERS } from "./JobsDirectory";
 import type { JobFilters } from "@/lib/jobs/jobs.functions";
 import { breadcrumbScript } from "@/lib/breadcrumbs";
@@ -33,7 +34,7 @@ export function jobsHead(path: string, title: string, description: string, crumb
       { title }, { name: "description", content: description },
       { property: "og:title", content: title }, { property: "og:description", content: description },
       { property: "og:url", content: url }, { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary" },
+      ...shareImageMeta(),
       ...(noindex ? [{ name: "robots", content: "noindex, follow" }] : []),
     ],
     links: [{ rel: "canonical", href: url }],

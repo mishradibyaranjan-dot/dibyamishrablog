@@ -42,3 +42,13 @@ export const pageOgImages = {
   whitePaperAgenticAi: abs(whitePaperAgenticOg),
 };
 
+
+/** Brand share card (the homepage hero image) for pages without their own artwork. */
+export const defaultShareImage = pageOgImages.home;
+export const shareImageMeta = (image: string = defaultShareImage) => [
+  { property: "og:image", content: image },
+  { property: "og:image:width", content: "1200" },
+  { property: "og:image:height", content: "630" },
+  { name: "twitter:card", content: "summary_large_image" },
+  { name: "twitter:image", content: image },
+];

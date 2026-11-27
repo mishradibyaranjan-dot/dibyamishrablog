@@ -1,3 +1,4 @@
+import { shareImageMeta } from "@/lib/og-images";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
@@ -38,7 +39,7 @@ export const Route = createFileRoute("/guide")({
         { property: "og:description", content: DESC },
         { property: "og:url", content: url },
         { property: "og:type", content: "website" },
-        { name: "twitter:card", content: "summary_large_image" },
+        ...shareImageMeta(),
         { name: "twitter:title", content: TITLE },
         { name: "twitter:description", content: DESC },
       ],

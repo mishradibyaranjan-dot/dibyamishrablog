@@ -1,3 +1,4 @@
+import { shareImageMeta } from "@/lib/og-images";
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { Section } from "@/components/layout/Section";
 import { getJob } from "@/lib/jobs/jobs.functions";
@@ -25,7 +26,7 @@ export const Route = createFileRoute("/jobs/$slug")({
       meta: [
         { title }, { name: "description", content: desc }, { property: "og:title", content: title },
         { property: "og:description", content: desc }, { property: "og:url", content: url }, { property: "og:type", content: "article" },
-        { name: "twitter:card", content: "summary" },
+        ...shareImageMeta(),
       ],
       links: [{ rel: "canonical", href: url }],
       scripts: [

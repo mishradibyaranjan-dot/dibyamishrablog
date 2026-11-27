@@ -1,3 +1,4 @@
+import { shareImageMeta } from "@/lib/og-images";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowRight, ArrowUpRight, Bot, Building2, Layers, Users } from "lucide-react";
 import { Section, SectionHeader } from "@/components/layout/Section";
@@ -17,7 +18,7 @@ export const Route = createFileRoute("/advisory")({
       { property: "og:description", content: DESCRIPTION },
       { property: "og:url", content: "https://www.dibyamishra.co.in/advisory" },
       { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary_large_image" },
+      ...shareImageMeta(),
     ],
     links: [{ rel: "canonical", href: "https://www.dibyamishra.co.in/advisory" }],
     scripts: [breadcrumbScript([{ name: "Advisory", path: "/advisory" }])],
