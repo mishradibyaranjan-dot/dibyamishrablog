@@ -15,8 +15,12 @@ export const Route = createFileRoute("/jobs/$slug")({
     if (!loaderData) return { meta: [{ title: "Job unavailable — Dibya Mishra Jobs" }, { name: "description", content: "This opportunity is not currently available." }, { property: "og:title", content: "Job unavailable — Dibya Mishra Jobs" }, { property: "og:description", content: "This opportunity is not currently available." }, { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary" }, { name: "robots", content: "noindex" }] };
     const j = loaderData.job;
     const url = `https://www.dibyamishra.co.in/jobs/${params.slug}`;
-    const title = `${j.title} at ${j.company} — Verified Job`;
-    const desc = `${j.title} at ${j.company}${j.location ? ` in ${j.location}` : ""}. Posted ${fmtTime(j.original_posted_at)}; apply directly at the source.`;
+    const title = `${j.title} — ${j.company}${j.location ? `, ${j.location}` : ""} | Verified Job`;
+    const lead = `${j.title} at ${j.company}${j.location ? ` (${j.location})` : ""}.`;
+    const excerpt = j.summary ? j.summary.replace(/\s+/g, " ").trim() : "";
+    const body = excerpt ? ` ${excerpt}` : ` Posted ${fmtTime(j.original_posted_at)}; apply directly at the employer's site.`;
+    const full = `${lead}${body}`;
+    const desc = full.length > 158 ? `${full.slice(0, 155).replace(/\s+\S*$/, "")}…` : full;
     return {
       meta: [
         { title }, { name: "description", content: desc }, { property: "og:title", content: title },
@@ -48,7 +52,7 @@ export const Route = createFileRoute("/jobs/$slug")({
       <Link to="/jobs" className="mt-6 inline-block text-primary underline">Browse current verified jobs</Link>
     </Section>
   ),
-  errorComponent: () => <Section>Could not load this job. Please try again.</Section>,
+  errorComponent: () => <Section><h1 className="font-display text-3xl font-bold">Could not load this job</h1><p className="mt-3 text-muted-foreground">Please try again.</p></Section>,
   component: JobDetail,
 });
 
@@ -60,6 +64,7 @@ function JobDetail() {
       <Link to="/jobs" className="text-sm text-primary">← All verified jobs</Link>
       <h1 className="mt-4 font-display text-3xl font-bold tracking-tight sm:text-4xl">{job.title}</h1>
       <p className="mt-2 text-lg text-muted-foreground">{job.company} · {job.location ?? "Location not stated"}</p>
+      {job.summary && <p className="mt-4 max-w-3xl text-muted-foreground">{job.summary.length > 220 ? `${job.summary.slice(0, 217).replace(/\s+\S*$/, "")}…` : job.summary}</p>}
       <dl className="mt-6 grid gap-4 rounded-2xl border border-border bg-card p-6 sm:grid-cols-2 lg:grid-cols-3">
         {[
           ["Seniority", job.career_level === "unclassified" ? "Not stated" : job.career_level],
