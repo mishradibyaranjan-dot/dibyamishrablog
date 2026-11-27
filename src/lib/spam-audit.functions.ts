@@ -13,9 +13,10 @@ export const logBlockedLoginAttempt = createServerFn({ method: "POST" })
       const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
       const email = data.email.toLowerCase();
       const domain = email.split("@")[1] ?? "";
-      if (!domain) return { ok: false };
+      // Always return the same response so callers cannot probe the admin-only blocklist.
+      if (!domain) return { ok: true };
       const { data: blocked } = await supabaseAdmin.rpc("is_blocked_email", { _email: email });
-      if (!blocked) return { ok: false };
+      if (!blocked) return { ok: true };
       // Public pre-login endpoint: throttle duplicate entries so it can't flood the audit log.
       const since = new Date(Date.now() - 15 * 60 * 1000).toISOString();
       const { count } = await supabaseAdmin
@@ -33,6 +34,6 @@ export const logBlockedLoginAttempt = createServerFn({ method: "POST" })
       });
       return { ok: true };
     } catch {
-      return { ok: false };
+      return { ok: true };
     }
   });

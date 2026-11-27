@@ -116,6 +116,9 @@ export const reportJob = createServerFn({ method: "POST" })
     details: z.string().max(1000).optional(),
   }).parse(d))
   .handler(async ({ data }) => {
+    // Only jobs the caller can actually see (public visibility policy) may be reported.
+    const { data: visible } = await publicClient().from("jobs").select("id").eq("id", data.jobId).maybeSingle();
+    if (!visible) throw new Error("Could not submit report");
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
     const { error } = await supabaseAdmin.from("reported_jobs").insert({ job_id: data.jobId, reason: data.reason, details: data.details ?? null });
     if (error) throw new Error("Could not submit report");
